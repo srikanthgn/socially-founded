@@ -1,25 +1,15 @@
+// Network Visualization
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Script loaded');
+    console.log('DOM loaded');
     
     const canvas = document.getElementById('network-canvas');
     console.log('Canvas element:', canvas);
     
     if (!canvas) {
-        console.error('Canvas element not found!');
+        console.error('Canvas element not found');
         return;
     }
     
-    const ctx = canvas.getContext('2d');
-    console.log('Canvas context:', ctx);
-    
-    // Rest of your code...
-});
-
-
-//Part 1
-// Network Visualization
-document.addEventListener('DOMContentLoaded', function() {
-    const canvas = document.getElementById('network-canvas');
     const ctx = canvas.getContext('2d');
     const nodes = [];
     const connections = [];
@@ -28,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function resizeCanvas() {
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
+        console.log('Canvas resized to:', canvas.width, 'x', canvas.height);
     }
     
     resizeCanvas();
@@ -68,9 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.globalAlpha = 1;
         }
     }
-
-    // Part 2
-
+    
     // Create initial nodes
     function createNodes(count) {
         for (let i = 0; i < count; i++) {
@@ -78,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const y = Math.random() * canvas.height;
             nodes.push(new Node(x, y));
         }
+        console.log('Created', count, 'nodes');
     }
     
     // Create connections between nodes
@@ -113,11 +103,8 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.globalAlpha = 1;
         }
     }
-
-
-//
-
-// Animation loop
+    
+    // Animation loop
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
@@ -136,8 +123,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Initialize
+    console.log('Initializing network');
     createNodes(30);
     animate();
+    console.log('Animation started');
     
     // Form submission
     const form = document.getElementById('join-form');
@@ -154,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Check captcha
                 if (captchaInput && captchaText && captchaInput.value !== captchaText.textContent) {
                     alert('Captcha does not match. Please try again.');
-                    refreshCaptcha();
                     captchaInput.value = '';
                     return;
                 }
@@ -174,9 +162,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-
-// part 4
-
 // Captcha functionality
 function generateCaptcha() {
     const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -187,13 +172,6 @@ function generateCaptcha() {
     return captcha;
 }
 
-function refreshCaptcha() {
-    const captchaText = document.getElementById('captcha-text');
-    if (captchaText) {
-        captchaText.textContent = generateCaptcha();
-    }
-}
-
 // Initialize captcha when page loads
 document.addEventListener('DOMContentLoaded', function() {
     const captchaText = document.getElementById('captcha-text');
@@ -201,20 +179,3 @@ document.addEventListener('DOMContentLoaded', function() {
         captchaText.textContent = generateCaptcha();
     }
 });
-// Just modify these parts of your script.js file
-
-// Remove or comment out the refreshCaptcha function since we no longer have the button
-// function refreshCaptcha() {
-//     const captchaText = document.getElementById('captcha-text');
-//     if (captchaText) {
-//         captchaText.textContent = generateCaptcha();
-//     }
-// }
-
-// In the form submission handler, replace the captcha refresh call
-if (captchaInput && captchaText && captchaInput.value !== captchaText.textContent) {
-    alert('Captcha does not match. Please try again.');
-    // refreshCaptcha(); -- Remove this line
-    captchaInput.value = '';
-    return;
-}
