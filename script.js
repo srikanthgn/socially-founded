@@ -180,3 +180,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Social authentication handling
+function socialAuth(provider) {
+    console.log(`Authenticating with ${provider}`);
+    alert(`${provider} authentication will be implemented soon!`);
+    // In the future, this will connect to your authentication system
+}
+
+
