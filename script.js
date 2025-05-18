@@ -231,6 +231,132 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Phone number formatting
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            // Get input value and remove non-digits
+            let input = this.value.replace(/\D/g, '');
+            
+            // Format the number as user types
+            if (input.length <= 3) {
+                this.value = input;
+            } else if (input.length <= 6) {
+                this.value = input.substring(0, 3) + '-' + input.substring(3);
+            } else {
+                this.value = input.substring(0, 3) + '-' + input.substring(3, 6) + '-' + input.substring(6, 10);
+            }
+        });
+    }
+    
+    // Update form submission handling to check honeypot
+    const form = document.getElementById('join-form');
+    if (form) {
+        const originalSubmitHandler = form.onsubmit;
+        
+        form.addEventListener('submit', function(e) {
+            // Check if honeypot field was filled (indicates a bot)
+            if (document.getElementById('website') && document.getElementById('website').value !== '') {
+                e.preventDefault(); // Stop the form submission
+                return false;
+            }
+            
+            // Continue with normal form processing
+        });
+    }
+});
+
+// Social authentication handling
+function socialAuth(provider) {
+    console.log(`Authenticating with ${provider}`);
+    alert(`${provider} authentication will be implemented soon!`);
+    // In the future, this will connect to your authentication system
+}
+
+// Cookie Consent Management
+document.addEventListener('DOMContentLoaded', function() {
+    const cookieBanner = document.getElementById('cookie-consent');
+    const settingsPanel = document.getElementById('cookie-settings-panel');
+    const acceptAllBtn = document.getElementById('cookie-accept-all');
+    const necessaryBtn = document.getElementById('cookie-accept-necessary');
+    const settingsBtn = document.getElementById('cookie-settings');
+    const savePreferencesBtn = document.getElementById('save-preferences');
+    
+    // Check if consent was already given
+    if (!localStorage.getItem('cookieConsent')) {
+        // Show cookie banner after slight delay
+        setTimeout(() => {
+            cookieBanner.style.display = 'block';
+        }, 2000);
+    }
+    
+    // Accept all cookies
+    acceptAllBtn.addEventListener('click', function() {
+        setConsent({
+            necessary: true,
+            analytics: true,
+            marketing: true
+        });
+        cookieBanner.style.display = 'none';
+    });
+    
+    // Accept only necessary cookies
+    necessaryBtn.addEventListener('click', function() {
+        setConsent({
+            necessary: true,
+            analytics: false,
+            marketing: false
+        });
+        cookieBanner.style.display = 'none';
+    });
+    
+    // Show cookie settings
+    settingsBtn.addEventListener('click', function() {
+        settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'block' : 'none';
+    });
+    
+    // Save cookie preferences
+    savePreferencesBtn.addEventListener('click', function() {
+        const analyticsConsent = document.getElementById('analytics-cookies').checked;
+        const marketingConsent = document.getElementById('marketing-cookies').checked;
+        
+        setConsent({
+            necessary: true,
+            analytics: analyticsConsent,
+            marketing: marketingConsent
+        });
+        
+        settingsPanel.style.display = 'none';
+        cookieBanner.style.display = 'none';
+    });
+    
+    // Set cookie consent in localStorage
+    function setConsent(preferences) {
+        localStorage.setItem('cookieConsent', JSON.stringify({
+            preferences: preferences,
+            timestamp: new Date().toISOString()
+        }));
+        
+        // Load appropriate scripts based on preferences
+        if (preferences.analytics) {
+            // Load analytics scripts here
+            console.log('Loading analytics scripts...');
+        }
+        
+        if (preferences.marketing) {
+            // Load marketing scripts here
+            console.log('Loading marketing scripts...');
+        }
+    }
+    
+    // For the cookie policy link
+    document.getElementById('cookie-policy-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        // In the future, link to your cookie policy page
+        alert('Cookie Policy page will be available soon.');
+    });
+});
 
 
 
