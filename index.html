@@ -253,6 +253,147 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<!-- Your existing content ends here -->
+    
+    <!-- Network visualization script - ADD THIS -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find the canvas or create one if it doesn't exist
+        let canvas = document.getElementById('network-canvas');
+        if (!canvas) {
+            // If there's no canvas, create one
+            canvas = document.createElement('canvas');
+            canvas.id = 'network-canvas';
+            
+            // Try to find a container to append it to
+            const containers = document.querySelectorAll('.network-visualization, [class*="network"], [class*="visualization"]');
+            if (containers.length > 0) {
+                containers[0].appendChild(canvas);
+            } else {
+                // If no container found, create one in the main content area
+                const mainContent = document.querySelector('main, .content, [class*="content"]');
+                if (mainContent) {
+                    const container = document.createElement('div');
+                    container.className = 'network-visualization';
+                    container.style.width = '100%';
+                    container.style.height = '350px';
+                    container.style.position = 'relative';
+                    container.appendChild(canvas);
+                    mainContent.appendChild(container);
+                }
+            }
+        }
+        
+        // Make sure canvas has proper dimensions
+        canvas.width = canvas.offsetWidth || 800;
+        canvas.height = canvas.offsetHeight || 350;
+        
+        const ctx = canvas.getContext('2d');
+        const nodes = [];
+        const connections = [];
+        
+        // Create nodes
+        function createNodes(count) {
+            for (let i = 0; i < count; i++) {
+                nodes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: 2 + Math.random() * 3,
+                    vx: (Math.random() - 0.5) * 0.7,
+                    vy: (Math.random() - 0.5) * 0.7,
+                    color: '#003554'
+                });
+            }
+        }
+        
+        // Update nodes
+        function updateNodes() {
+            for (const node of nodes) {
+                node.x += node.vx;
+                node.y += node.vy;
+                
+                // Bounce off walls
+                if (node.x < node.radius || node.x > canvas.width - node.radius) {
+                    node.vx *= -1;
+                }
+                
+                if (node.y < node.radius || node.y > canvas.height - node.radius) {
+                    node.vy *= -1;
+                }
+            }
+        }
+        
+        // Find connections between nearby nodes
+        function findConnections() {
+            connections.length = 0;
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        connections.push({
+                            from: nodes[i],
+                            to: nodes[j],
+                            alpha: 1 - distance / 100
+                        });
+                    }
+                }
+            }
+        }
+        
+        // Draw everything
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw connections
+            for (const connection of connections) {
+                ctx.beginPath();
+                ctx.moveTo(connection.from.x, connection.from.y);
+                ctx.lineTo(connection.to.x, connection.to.y);
+                ctx.strokeStyle = `rgba(0, 53, 84, ${connection.alpha * 0.2})`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+            
+            // Draw nodes
+            for (const node of nodes) {
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+                ctx.fillStyle = node.color;
+                ctx.fill();
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            updateNodes();
+            findConnections();
+            draw();
+            requestAnimationFrame(animate);
+        }
+        
+        // Initialize
+        createNodes(25);
+        animate();
+    });
+    </script>
+    
+    <!-- Cookie Banner - This should already be in place -->
+    <div id="cookie-consent">
+        <!-- Your cookie banner content -->
+    </div>
+    
+    <!-- Your cookie banner script should be here -->
+    <script>
+        // Your cookie banner JavaScript
+    </script>
+    
+</body>
+</html>
+
     
 </body>
 </html>
