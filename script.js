@@ -187,4 +187,26 @@ function socialAuth(provider) {
     // In the future, this will connect to your authentication system
 }
 
+//
+// Phone number formatting
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            // Get input value and remove non-digits
+            let input = this.value.replace(/\D/g, '');
+            
+            // Format the number as user types
+            if (input.length <= 3) {
+                // Do nothing yet
+            } else if (input.length <= 6) {
+                this.value = input.substring(0, 3) + '-' + input.substring(3);
+            } else {
+                this.value = input.substring(0, 3) + '-' + input.substring(3, 6) + '-' + input.substring(6, 10);
+            }
+        });
+    }
+});
+
+
 
