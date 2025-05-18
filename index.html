@@ -56,9 +56,20 @@
             </div>
             
             <div class="signup-form">
-                <form id="join-form" action="https://formsubmit.co/your-email@example.com" method="POST">
-                    <input type="hidden" name="_next" value="https://your-domain.com/thanks.html">
+                <form id="join-form" action="https://formsubmit.co/partnerships@4sqcapital.com" method="POST">
+                    <!-- Anti-spam honeypot field -->
+                    <input type="text" name="_honey" style="display:none">
+                    
+                    <!-- Disable captcha -->
+                    <input type="hidden" name="_captcha" value="false">
+                    
+                    <!-- Success page redirect -->
+                    <input type="hidden" name="_next" value="https://sociallyfounded.com/thanks.html">
+                    
+                    <!-- Email subject line -->
                     <input type="hidden" name="_subject" value="New Founder's Circle Member!">
+                    
+                    <!-- Form fields -->
                     <div class="form-group">
                         <input type="text" name="name" id="name" placeholder="Your name" required>
                     </div>
