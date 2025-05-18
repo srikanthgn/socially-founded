@@ -49,62 +49,8 @@ main {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 30px;
     padding: 40px 0;
-}
-
-
-@media (min-width: 900px) {
-    main {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: 
-            "content visualization"
-            "featured featured"
-            "global form";
-        gap: 40px;
-    }
-    
-            .featured-logo {
-    grid-area: featured;
-    max-width: 180px;
-    margin: 10px auto 30px;
-}
-        /* might have other properties here */
-    }
-    
-    /* other grid areas */
-}
-
-
-    
-    
-    
-    .content {
-        grid-area: content;
-    }
-    
-    .network-visualization {
-        grid-area: visualization;
-    }
-    
-    .featured-logo {
-        grid-area: featured;
-        max-width: 400px;
-        margin: 20px auto;
-    }
-    
-    .global-map {
-        grid-area: global;
-        align-self: center;
-        padding-right: 20px;
-    }
-    
-    .signup-form {
-        grid-area: form;
-        margin: 0;
-        width: 100%;
-    }
 }
 
 .content h1 {
@@ -146,29 +92,25 @@ main {
 }
 
 /* Featured Logo */
-/* Featured Logo */
 .featured-logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 30px;
+    margin: 0 auto;
     padding: 0;
-    background: transparent;
-    max-width: 200px; /* Reduced size */
+    width: 180px;
+    height: 180px;
 }
 
 .featured-logo img {
-    width: 100%;
-    height: auto;
-    max-height: 200px;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    background: transparent;
 }
 
 /* Global Map */
 .global-map {
-    text-align: left;
-    margin: 20px 0;
+    padding: 20px 0;
 }
 
 .global-map h3 {
@@ -180,7 +122,7 @@ main {
 .location-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px 30px;
+    gap: 15px 25px;
 }
 
 .location-item {
@@ -215,7 +157,6 @@ main {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
-    max-width: 600px;
     margin: 0 auto;
     border-top: 4px solid var(--navy);
 }
@@ -264,20 +205,51 @@ button:hover {
     opacity: 0.8;
 }
 
-/* Success Message */
-.success-message {
-    text-align: center;
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--navy);
-}
-
 /* Footer */
 footer {
     text-align: center;
     padding: 30px 0;
     font-size: 14px;
     opacity: 0.7;
+}
+
+/* Desktop Layout */
+@media (min-width: 900px) {
+    main {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "content visualization"
+            "featured featured"
+            "global form";
+        gap: 40px;
+    }
+    
+    .content {
+        grid-area: content;
+    }
+    
+    .network-visualization {
+        grid-area: visualization;
+    }
+    
+    .featured-logo {
+        grid-area: featured;
+        width: 150px;
+        height: 150px;
+        margin: 10px auto 30px;
+    }
+    
+    .global-map {
+        grid-area: global;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-self: center;
+    }
+    
+    .signup-form {
+        grid-area: form;
+    }
 }
 
 /* Mobile Responsiveness */
@@ -296,49 +268,11 @@ footer {
     
     .location-list {
         flex-direction: column;
-        align-items: flex-start;
         gap: 15px;
     }
     
-    .global-map {
-        text-align: center;
+    .featured-logo {
+        width: 140px;
+        height: 140px;
     }
-    
-    .location-list {
-        justify-content: center;
-    }
-}
-
-/* Captcha styling */
-.captcha-container {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.captcha-box {
-    background: #f7f7f7;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--accent-gray);
-    flex-grow: 1;
-    text-align: center;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: var(--navy);
-}
-
-.refresh-captcha {
-    background: var(--accent-gray);
-    border: none;
-    border-radius: 6px;
-    width: auto;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.refresh-captcha:hover {
-    background: #d0d0d0;
 }
