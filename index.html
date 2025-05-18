@@ -324,6 +324,87 @@
             box-sizing: border-box !important;
         }
     }
+<style>
+    /* Further reduce field sizes to fit within frame */
+    @media (min-width: 900px) {
+        /* ALL input fields - more compact */
+        .signup-form input,
+        .signup-form select,
+        [class*="form"] input,
+        [class*="form"] select {
+            height: 38px !important; /* Even shorter height */
+            padding: 6px 10px !important; /* Smaller padding */
+            font-size: 13px !important; /* Smaller font */
+            margin-bottom: 10px !important; /* Tighter vertical spacing */
+        }
+        
+        /* Phone inputs specific styling */
+        .phone-input-group,
+        [class*="phone-group"],
+        div:has(> [id*="phone"]) {
+            gap: 3px !important; /* Minimal gap */
+        }
+        
+        /* Country code dropdown - make tiny */
+        [id*="country-code"],
+        select:has(option:contains("+1")),
+        .country-code-container select,
+        select[name="country-code"],
+        div[class*="dropdown"] {
+            width: 70px !important; /* Even smaller */
+            min-width: 70px !important;
+            flex: 0 0 70px !important;
+            padding-left: 4px !important;
+            padding-right: 2px !important;
+            font-size: 12px !important;
+        }
+        
+        /* Better spacing in form */
+        .signup-form > *,
+        [class*="form"] > *,
+        .form-group,
+        [class*="form-group"] {
+            margin-bottom: 8px !important; /* Reduced vertical spacing */
+        }
+        
+        /* Make container narrower */
+        .signup-form,
+        [class*="form-container"],
+        [class*="form-wrapper"] {
+            max-width: 350px !important; /* Even narrower */
+            padding: 15px 12px !important; /* Smaller padding */
+            position: relative !important;
+            right: 0 !important;
+        }
+        
+        /* Button sizing */
+        .signup-form button,
+        [class*="form"] button,
+        button[type="submit"] {
+            height: 40px !important;
+            font-size: 14px !important;
+            margin-top: 5px !important;
+        }
+        
+        /* Labels */
+        label, [class*="label"] {
+            font-size: 12px !important;
+            margin-bottom: 3px !important;
+        }
+        
+        /* Headers and text */
+        .signup-form h3,
+        [class*="form"] h3 {
+            font-size: 18px !important;
+            margin-bottom: 10px !important;
+        }
+        
+        .signup-form p,
+        [class*="form"] p {
+            font-size: 13px !important;
+            margin-bottom: 8px !important;
+        }
+    }
 </style>
     
     
