@@ -1107,6 +1107,59 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add this line at the beginning of your existing DOMContentLoaded function
     updateFlag();
 });
+
+        // Custom dropdown for country codes with flags
+document.addEventListener('DOMContentLoaded', function() {
+    const customSelect = document.getElementById('custom-country-select');
+    const dropdown = document.getElementById('country-dropdown');
+    const selectedCode = document.getElementById('selected-code');
+    const selectedFlag = document.getElementById('selected-flag');
+    const hiddenInput = document.getElementById('country-code-input');
+    const options = document.querySelectorAll('.custom-option');
+    
+    // Toggle dropdown when clicking the select
+    if (customSelect) {
+        customSelect.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+    
+    // Handle option selection
+    options.forEach(option => {
+        option.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            const country = this.getAttribute('data-country');
+            
+            // Update hidden input value
+            hiddenInput.value = value;
+            
+            // Update displayed value
+            selectedCode.textContent = value;
+            
+            // Update flag
+            selectedFlag.src = `https://flagcdn.com/w40/${country}.png`;
+            selectedFlag.alt = `Flag of ${country.toUpperCase()}`;
+            
+            // Update selected state
+            options.forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+            
+            // Close dropdown
+            dropdown.style.display = 'none';
+        });
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function() {
+        dropdown.style.display = 'none';
+    });
+    
+    // Prevent dropdown from closing when clicking inside it
+    dropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+});
         
 
         
