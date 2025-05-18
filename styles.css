@@ -234,22 +234,26 @@ footer {
 }
 
 /* Desktop Layout */
+/* Desktop Layout */
 @media (min-width: 900px) {
     main {
         grid-template-columns: 1fr 1fr;
         grid-template-areas: 
-            "content visualization"
-            "featured featured"
-            "global form";
+            "content form"
+            "visualization form"
+            "featured global";
         gap: 40px;
+        align-items: center;
     }
     
     .content {
         grid-area: content;
+        padding-right: 20px;
     }
     
     .network-visualization {
         grid-area: visualization;
+        height: 350px; /* Make it taller on desktop */
     }
     
     .featured-logo {
@@ -268,8 +272,14 @@ footer {
     
     .signup-form {
         grid-area: form;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 20px;
     }
 }
+
 
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
