@@ -115,7 +115,7 @@ main {
 
 .map-container {
     height: 200px;
-    background-image: url('world-map.png');
+    background-image: url('https://i.imgur.com/RLkMQIO.png');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
