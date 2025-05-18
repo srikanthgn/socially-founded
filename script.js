@@ -405,6 +405,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Add this to your script.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Find the actual phone input that's visible on the page
+    const phoneInputs = document.querySelectorAll('input[placeholder*="phone"]');
+    
+    if (phoneInputs.length > 0) {
+        // Use the last phone input if there are multiple
+        const phoneInput = phoneInputs[phoneInputs.length - 1];
+        
+        phoneInput.addEventListener('input', function() {
+            let input = this.value.replace(/\D/g, '');
+            let formatted = '';
+            
+            if (input.length > 0) {
+                if (input.length <= 3) {
+                    formatted = input;
+                } else if (input.length <= 6) {
+                    formatted = input.substring(0, 3) + '-' + input.substring(3);
+                } else {
+                    formatted = input.substring(0, 3) + '-' + input.substring(3, 6) + '-' + input.substring(6, 10);
+                }
+                
+                this.value = formatted;
+            }
+        });
+    }
+});
 
 
 
