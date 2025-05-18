@@ -851,22 +851,55 @@
 <div class="form-group">
     <label for="phone">Phone Number (Optional)</label>
     <div class="phone-input-group">
-        <div class="flag-select-container">
-            <select id="country-code" name="country-code" class="flag-select" onchange="updateFlag()">
-                <option value="+1" data-country="us">+1</option>
-                <option value="+31" data-country="nl">+31</option>
-                <option value="+44" data-country="gb" selected>+44</option>
-                <option value="+48" data-country="pl">+48</option>
-                <option value="+91" data-country="in">+91</option>
-                <option value="+370" data-country="lt">+370</option>
-                <option value="+372" data-country="ee">+372</option>
-                <option value="+380" data-country="ua">+380</option>
-                <option value="+971" data-country="ae">+971</option>
-            </select>
-            <img src="https://flagcdn.com/w40/gb.png" id="selected-flag" class="flag-icon" alt="Selected country flag">
-        </div>
-        <input type="tel" name="phone" id="phone" placeholder="Your phone number">
+
+<div class="custom-select-wrapper">
+    <div class="custom-select" id="custom-country-select">
+        <span id="selected-code">+44</span>
+        <img src="https://flagcdn.com/w40/gb.png" id="selected-flag" class="flag-icon" alt="Selected country flag">
     </div>
+    <div class="custom-dropdown" id="country-dropdown">
+        <div class="custom-option" data-value="+1" data-country="us">
+            <img src="https://flagcdn.com/w40/us.png" class="custom-option-flag" alt="US Flag">
+            +1
+        </div>
+        <div class="custom-option" data-value="+31" data-country="nl">
+            <img src="https://flagcdn.com/w40/nl.png" class="custom-option-flag" alt="Netherlands Flag">
+            +31
+        </div>
+        <div class="custom-option selected" data-value="+44" data-country="gb">
+            <img src="https://flagcdn.com/w40/gb.png" class="custom-option-flag" alt="UK Flag">
+            +44
+        </div>
+        <div class="custom-option" data-value="+48" data-country="pl">
+            <img src="https://flagcdn.com/w40/pl.png" class="custom-option-flag" alt="Poland Flag">
+            +48
+        </div>
+        <div class="custom-option" data-value="+91" data-country="in">
+            <img src="https://flagcdn.com/w40/in.png" class="custom-option-flag" alt="India Flag">
+            +91
+        </div>
+        <div class="custom-option" data-value="+370" data-country="lt">
+            <img src="https://flagcdn.com/w40/lt.png" class="custom-option-flag" alt="Lithuania Flag">
+            +370
+        </div>
+        <div class="custom-option" data-value="+372" data-country="ee">
+            <img src="https://flagcdn.com/w40/ee.png" class="custom-option-flag" alt="Estonia Flag">
+            +372
+        </div>
+        <div class="custom-option" data-value="+380" data-country="ua">
+            <img src="https://flagcdn.com/w40/ua.png" class="custom-option-flag" alt="Ukraine Flag">
+            +380
+        </div>
+        <div class="custom-option" data-value="+971" data-country="ae">
+            <img src="https://flagcdn.com/w40/ae.png" class="custom-option-flag" alt="UAE Flag">
+            +971
+        </div>
+    </div>
+    <input type="hidden" name="country-code" id="country-code-input" value="+44">
+</div>
+
+
+       
 </div>                 
                     <div class="honeypot-field" style="display:none !important">
                         <input type="text" name="website" id="website" autocomplete="off" tabindex="-1">
