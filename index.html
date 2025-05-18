@@ -203,7 +203,65 @@
     .form-label {
         display: none !important;
     }
-   
+
+    /* Fix form elements staying within container */
+    @media (min-width: 900px) {
+        /* Adjust the form container */
+        .signup-form, 
+        [class*="form-container"],
+        [class*="form-wrapper"] {
+            padding: 15px !important; /* Reduce padding */
+            width: 100% !important;
+            max-width: 400px !important;
+            margin-right: 0 !important;
+            overflow: visible !important;
+            transform: none !important; /* Remove the transform we added earlier */
+        }
+        
+        /* Make form inputs fit within container */
+        .signup-form input, 
+        .signup-form select,
+        .signup-form button,
+        [class*="form"] input,
+        [class*="form"] select,
+        [class*="form"] button {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        
+        /* Fix the phone field layout */
+        .phone-input-group,
+        [class*="phone-group"],
+        div:has(> [id*="phone"]) {
+            display: flex !important;
+            width: 100% !important;
+            gap: 10px !important;
+        }
+        
+        /* Country code select */
+        [id*="country-code"],
+        select:has(option:contains("+1")) {
+            width: 110px !important;
+            min-width: 110px !important;
+            flex: 0 0 110px !important;
+        }
+        
+        /* Phone input */
+        input[type="tel"],
+        [id*="phone"] {
+            flex: 1 !important;
+        }
+        
+        /* Fix inner form container if there's an inner wrapper */
+        [class*="form"] > div,
+        [class*="form"] > section {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    }
 </style>
     
     
