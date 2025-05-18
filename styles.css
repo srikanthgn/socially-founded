@@ -67,7 +67,20 @@ body {
 }
 
 .social-button span {
-    display: none; /* Hide text on mobile */
+    display: inline; /* Show text by default */
+    font-size: 14px; /* Smaller text so it fits */
+}
+/* And maybe adjust button size: */
+.social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px; /* Slightly smaller padding */
+    background-color: var(--white);
+    border: 2px solid var(--accent-gray);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .or-divider {
