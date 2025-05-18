@@ -55,6 +55,55 @@
     h1, h2, h3, p {
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
+
+    /* Layout optimizations */
+    @media (min-width: 900px) {
+        /* Push form more to the right */
+        .signup-form, 
+        [class*="form-container"],
+        [class*="form-wrapper"] {
+            margin-left: auto !important;
+            margin-right: 30px !important;
+            max-width: 450px !important;
+        }
+        
+        /* Give content more room on the left */
+        .content, [class*="content-area"] {
+            max-width: 90% !important;
+            padding-right: 40px !important;
+        }
+        
+        /* Improve text wrapping */
+        h1, h2, p {
+            max-width: 90% !important;
+            margin-bottom: 15px !important;
+        }
+        
+        /* Adjust network visualization height */
+        .network-visualization, 
+        #network-canvas, 
+        canvas {
+            height: 300px !important;
+        }
+        
+        /* Adjust spacing */
+        .global-map {
+            margin-top: 20px !important;
+            margin-bottom: 20px !important;
+        }
+    }
+    
+    /* Style for the moved text */
+    .node-invite, p[class*="node"] {
+        color: #003554;
+        font-size: 18px;
+        margin-top: 10px;
+        font-weight: 500;
+        opacity: 0.9;
+    }
+
+
+    
 </style>
     
     
@@ -200,7 +249,7 @@
 </div>                    
                     <button type="submit">Secure My Spot</button>
                 </form>
-                <p class="form-label">Add your node to our network</p>
+            
             </div>
         </main>
         
