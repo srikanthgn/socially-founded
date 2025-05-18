@@ -39,8 +39,9 @@ header {
 }
 
 .logo img {
-    height: 60px;
+    height: 80px;
     width: auto;
+    border: none;
 }
 
 /* Main Content */
@@ -113,48 +114,27 @@ main {
     font-weight: 500;
 }
 
-.map-container {
-    height: 200px;
-    background-image: url('https://i.imgur.com/JG19T8S.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-    margin: 0 auto;
+.location-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
     max-width: 600px;
+    margin: 0 auto;
 }
 
-.map-dot {
-    position: absolute;
+.location-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.location-dot {
     width: 12px;
     height: 12px;
     background-color: var(--navy);
     border-radius: 50%;
-    transform: translate(-50%, -50%);
-    cursor: pointer;
-    box-shadow: 0 0 0 rgba(0, 53, 84, 0.4);
     animation: pulse 2s infinite;
-}
-
-.map-dot::after {
-    content: attr(data-country);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--navy);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-    white-space: nowrap;
-}
-
-.map-dot:hover::after {
-    opacity: 1;
 }
 
 @keyframes pulse {
@@ -223,6 +203,14 @@ button:hover {
     opacity: 0.8;
 }
 
+/* Success Message */
+.success-message {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--navy);
+}
+
 /* Footer */
 footer {
     text-align: center;
@@ -243,5 +231,11 @@ footer {
     
     .content p {
         font-size: 16px;
+    }
+    
+    .location-list {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
     }
 }
