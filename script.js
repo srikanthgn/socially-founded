@@ -208,5 +208,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Add this to script.js
+document.addEventListener('DOMContentLoaded', function() {
+    const countrySelect = document.getElementById('country-code');
+    const customCodeInput = document.getElementById('custom-code');
+    
+    if (countrySelect && customCodeInput) {
+        countrySelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customCodeInput.style.display = 'block';
+                countrySelect.style.display = 'none';
+            }
+        });
+        
+        customCodeInput.addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                customCodeInput.style.display = 'none';
+                countrySelect.style.display = 'block';
+                countrySelect.value = '+1'; // Default back to US
+            }
+        });
+    }
+});
+
+
 
 
