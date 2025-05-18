@@ -12,21 +12,21 @@
 </head>
 <body>
     <div class="container">
-        <header>
-         <!---   <div class="logo">
-                <img src="sf-logo.png" alt="Socially Founded Logo">
-            </div> --->
-        </header>
-        
+    <!-- Header completely removed -->
         <main>
-            <div class="content">
-                <h1>Join the Founders' Circle</h1>
+--
+<div class="content">
+    <!-- Add this desktop logo -->
+    <div class="desktop-logo">
+        <img src="sf-logo.png" alt="Socially Founded Logo">
+        <span>Socially Founded</span>
+    </div>   
+               <h1>Join the Founders' Circle</h1>
                 <h2>Where entrepreneurial journeys converge and amplify</h2>
                 <p>Every great idea begins with a single connection. Socially Founded is building a revolutionary ecosystem where entrepreneurs find the community, tools, and resources to transform vision into reality.</p>
                 <p class="highlight">Be among the first to shape our entrepreneurial network.</p>
             </div>
-            
-            <div class="network-visualization">
+             <div class="network-visualization">
                 <canvas id="network-canvas"></canvas>
             </div>
             
@@ -58,11 +58,9 @@
             
             <div class="signup-form">
 <div class="signup-form">
-    <!-- Add this at the top of the form: -->
-    <div class="form-header">
-        <img src="sf-logo.png" alt="Socially Founded Logo">
-        <h3>Join SociallyFounded.com</h3>
-    </div>
+    <h3>Join SociallyFounded.com</h3>
+   
+       </div>
     
     <!-- Rest of the form continues here -->
                 
@@ -80,9 +78,10 @@
                     <input type="hidden" name="_subject" value="New Founder's Circle Member!">
                     
                     <!-- Form fields -->
-
-                    <div class="social-login">
-    <p class="social-title">Sign up with</p>
+---
+<!-- Social Login Options -->
+<div class="social-login">
+    <p>Sign up with</p>
     <div class="social-buttons">
         <button type="button" class="social-button" onclick="socialAuth('google')">
             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -111,6 +110,7 @@
         <span>or continue with</span>
     </div>
 </div>
+   
                     <div class="form-group">
                         <input type="text" name="name" id="name" placeholder="Your name" required>
                     </div>
@@ -133,36 +133,16 @@
             <option value="+971">🇦🇪 +971</option> <!-- United Arab Emirates -->
             <option value="custom">Custom...</option>
         </select>
-        <input type="text" id="custom-code" placeholder="+XX" class="custom-code-input" style="display: none;">
-    </div>
+           </div>
     <input type="tel" name="phone" id="phone" placeholder="Your phone number (optional)">
 </div>
     
-    <div class="country-select">
-        <select id="country-code" name="country-code">
-            <option value="+1">🇺🇸 +1</option>
-            <option value="+44">🇬🇧 +44</option>
-            <option value="+91">🇮🇳 +91</option>
-            <option value="+971">🇦🇪 +971</option>
-            <option value="+370">🇱🇹 +370</option>
-            <option value="+380">🇺🇦 +380</option>
-        </select>
-    </div>
-    <input type="tel" name="phone" id="phone" placeholder="Your phone number (optional)">
-</div>
-
-           
-                    
-                    
-                    
-                    <!-- Captcha -->
-                    <div class="captcha-container">
-                        <div class="captcha-box" id="captcha-text">XD4F9Z</div>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" name="captcha" id="captcha" placeholder="Enter captcha above" required>
-                    </div>
-                    
+  <!-- Add this instead (inside the form): -->
+<!-- Anti-spam honeypot field (replaces captcha) -->
+<input type="text" name="_honey" style="display:none">
+<div class="honeypot-field" style="display:none !important">
+    <input type="text" name="website" id="website" autocomplete="off" tabindex="-1">
+</div>                    
                     <button type="submit">Secure My Spot</button>
                 </form>
                 <p class="form-label">Add your node to our network</p>
@@ -170,9 +150,50 @@
         </main>
         
         <footer>
-            <p>Launching Summer 2025 | A 4Square Capital Innovations Enterprise </p>
+            <p>Launching Summer 2025 | A 4Square Capital Innovations Company </p>
         </footer>
     </div>
+
+<!-- Visual Cookie Consent Banner -->
+<div id="cookie-consent" class="cookie-banner">
+    <div class="cookie-content">
+        <div class="cookie-text">
+            <div class="cookie-visual">
+                <div class="cookie-icon">☕</div>
+                <div class="cookie-icon">🍪</div>
+                <div class="cookie-network-icon">🔄</div>
+            </div>
+            <h3>Accept Cookies & Join Our Network!</h3>
+            <p>Like coffee & cookies at a networking event, these enhance your experience as a social founder. <a href="#" id="cookie-policy-link">Learn more</a></p>
+        </div>
+        <div class="cookie-buttons">
+            <button id="cookie-accept-all" class="cookie-button accept">Accept All & Join In</button>
+            <button id="cookie-settings" class="cookie-button settings">Customize Your Order</button>
+            <button id="cookie-accept-necessary" class="cookie-button necessary">Just the Essentials</button>
+        </div>
+    </div>
+    <div id="cookie-settings-panel" class="cookie-settings-panel" style="display: none;">
+        <h3>Customize Your Cookies Menu</h3>
+        <div class="cookie-option">
+            <input type="checkbox" id="necessary-cookies" checked disabled>
+            <label for="necessary-cookies">The Essentials</label>
+            <p class="cookie-description">Like having a cup to hold your coffee - these are necessary for the website to function.</p>
+        </div>
+        <div class="cookie-option">
+            <input type="checkbox" id="analytics-cookies">
+            <label for="analytics-cookies">The Insights Blend</label>
+            <p class="cookie-description">Helps us understand how entrepreneurs like you use our network, so we can brew it better.</p>
+        </div>
+        <div class="cookie-option">
+            <input type="checkbox" id="marketing-cookies">
+            <label for="marketing-cookies">The Founder's Special</label>
+            <p class="cookie-description">Helps us connect you with resources and opportunities tailored to your entrepreneurial journey.</p>
+        </div>
+        <div class="settings-buttons">
+            <button id="save-preferences" class="cookie-button save">Save My Preferences</button>
+        </div>
+    </div>
+</div>
     
     <script src="script.js"></script>
 </body>
