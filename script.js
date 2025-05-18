@@ -183,4 +183,20 @@ document.addEventListener('DOMContentLoaded', function() {
         captchaText.textContent = generateCaptcha();
     }
 });
+// Just modify these parts of your script.js file
 
+// Remove or comment out the refreshCaptcha function since we no longer have the button
+// function refreshCaptcha() {
+//     const captchaText = document.getElementById('captcha-text');
+//     if (captchaText) {
+//         captchaText.textContent = generateCaptcha();
+//     }
+// }
+
+// In the form submission handler, replace the captcha refresh call
+if (captchaInput && captchaText && captchaInput.value !== captchaText.textContent) {
+    alert('Captcha does not match. Please try again.');
+    // refreshCaptcha(); -- Remove this line
+    captchaInput.value = '';
+    return;
+}
