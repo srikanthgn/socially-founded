@@ -130,6 +130,80 @@
             margin-left: auto !important;
         }
     }
+    /* Final refinements for desktop layout */
+    @media (min-width: 900px) {
+        /* Push form more to the right */
+        .signup-form, 
+        [class*="form-container"],
+        [class*="form-wrapper"] {
+            margin-left: auto !important;
+            margin-right: 0 !important; /* Align to the right edge */
+            right: 0 !important;
+            position: relative !important;
+            transform: translateX(20px) !important; /* Push slightly to the right */
+        }
+        
+        /* Superimpose network visualization over global network section */
+        .network-visualization, 
+        #network-canvas, 
+        canvas {
+            height: 250px !important; /* Shorter height */
+            margin-bottom: -50px !important; /* Negative margin to overlap */
+            position: relative !important;
+            z-index: 1 !important;
+            opacity: 0.8 !important; /* Slightly transparent */
+        }
+        
+        /* Style global network section */
+        .global-map, 
+        [class*="global"], 
+        div:contains("Building a Global Network") {
+            position: relative !important;
+            z-index: 2 !important; /* Above the network visualization */
+            padding-top: 30px !important;
+            background: linear-gradient(to bottom, rgba(245, 245, 245, 0), rgba(245, 245, 245, 0.8)) !important;
+        }
+        
+        /* Style global network heading */
+        h3:contains("Building a Global Network"), 
+        [class*="global"] h3, 
+        div:contains("Building a Global Network") h3 {
+            font-size: 22px !important;
+            font-weight: 600 !important;
+            margin-bottom: 15px !important;
+            position: relative !important;
+        }
+        
+        /* Style network dots (Lithuania, India, etc.) */
+        .location-item, 
+        [class*="location"], 
+        div:contains("Lithuania") {
+            display: inline-block !important;
+            margin-right: 20px !important;
+            margin-bottom: 10px !important;
+        }
+    }
+    
+    /* Add the "Add your node" text to the entrepreneurial network paragraph */
+    @media (min-width: 900px) {
+        p:contains("Be among the first to shape our entrepreneurial network."):after {
+            content: "Add your node to our network" !important;
+            display: block !important;
+            color: #003554 !important;
+            font-size: 16px !important;
+            margin-top: 10px !important;
+            font-weight: 400 !important;
+            opacity: 0.85 !important;
+        }
+    }
+    
+    /* Hide the original "Add your node" text if we can target it */
+    [class*="form-label"], 
+    p:contains("Add your node to our network"),
+    .form-label {
+        display: none !important;
+    }
+   
 </style>
     
     
