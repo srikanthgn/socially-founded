@@ -83,6 +83,7 @@ main {
     width: 100%;
     height: 300px;
     position: relative;
+    z-index: 1; /* Ensure it's above other elements */
 }
 
 #network-canvas {
@@ -96,22 +97,10 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
-    padding: 0;
-    width: 150px;
-    height: 150px;
-}
-
-
-/* Featured Logo - Updated for new image */
-.featured-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     margin: 10px auto 30px;
     padding: 0;
-    width: 120px; /* Smaller width */
-    height: auto; /* Let height adjust naturally */
+    width: 120px;
+    height: auto;
 }
 
 .featured-logo img {
@@ -119,16 +108,6 @@ main {
     height: auto;
     object-fit: contain;
 }
-
-@media (min-width: 900px) {
-    .featured-logo {
-        width: 120px;
-        margin: 10px auto 30px;
-    }
-}
-
-
-
 
 /* Global Map */
 .global-map {
@@ -230,40 +209,6 @@ button:hover {
 /* Captcha styling */
 .captcha-container {
     margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.captcha-box {
-    background: #f7f7f7;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--accent-gray);
-    flex-grow: 1;
-    text-align: center;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: var(--navy);
-}
-
-.refresh-captcha {
-    background: var(--accent-gray);
-    border: none;
-    border-radius: 6px;
-    width: auto;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.refresh-captcha:hover {
-    background: #d0d0d0;
-}
-
-/* Updated captcha styling without refresh button */
-.captcha-container {
-    margin-bottom: 20px;
 }
 
 .captcha-box {
@@ -309,8 +254,7 @@ footer {
     
     .featured-logo {
         grid-area: featured;
-        width: 130px;
-        height: 130px;
+        width: 120px;
         margin: 10px auto 30px;
     }
     
@@ -347,7 +291,6 @@ footer {
     }
     
     .featured-logo {
-        width: 120px;
-        height: 120px;
+        width: 100px;
     }
 }
