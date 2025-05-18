@@ -80,6 +80,16 @@
                     <div class="form-group">
                         <input type="tel" name="phone" id="phone" placeholder="Your phone number (optional)">
                     </div>
+                    
+                    <!-- Captcha -->
+                    <div class="captcha-container">
+                        <div class="captcha-box" id="captcha-text">XD4F9Z</div>
+                        <button type="button" class="refresh-captcha" onclick="refreshCaptcha()">↻</button>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="captcha" id="captcha" placeholder="Enter captcha above" required>
+                    </div>
+                    
                     <button type="submit">Secure My Spot</button>
                 </form>
                 <p class="form-label">Add your node to our network</p>
@@ -87,7 +97,7 @@
         </main>
         
         <footer>
-            <p>Launching Summer, 2025 | A 4Square Capital Innovations Enterprise </p>
+            <p>Launching Summer 2025 | A 4Square Capital Initiative</p>
         </footer>
     </div>
     
