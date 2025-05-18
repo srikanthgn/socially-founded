@@ -400,15 +400,18 @@ footer {
 
 /* Desktop Layout */
 /* Desktop Layout */
+---
+/* Update the desktop media query in styles.css */
 @media (min-width: 900px) {
     main {
         grid-template-columns: 1fr 1fr;
         grid-template-areas: 
             "content form"
             "visualization form"
-            "featured global";
-        gap: 40px;
-        align-items: center;
+            "global featured";
+        gap: 30px;
+        align-items: start;
+        padding-top: 20px; /* Reduced top padding */
     }
     
     .content {
@@ -418,30 +421,34 @@ footer {
     
     .network-visualization {
         grid-area: visualization;
-        height: 350px; /* Make it taller on desktop */
+        height: 300px;
     }
     
     .featured-logo {
         grid-area: featured;
-        width: 120px;
-        margin: 10px auto 30px;
+        width: 100px;
+        margin: 30px auto;
+        display: none; /* Hide the duplicate logo */
     }
     
     .global-map {
         grid-area: global;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-self: center;
     }
     
     .signup-form {
         grid-area: form;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin-top: 20px;
+        align-self: start;
+        margin-top: 0; /* Remove top margin */
+    }
+    
+    /* Make headings more compact */
+    .content h1 {
+        margin-bottom: 10px;
+    }
+    
+    .content h2 {
+        margin-bottom: 20px;
     }
 }
 
