@@ -55,13 +55,37 @@ main {
 
 @media (min-width: 900px) {
     main {
+        display: grid;
         grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "content visualization"
+            "featured featured"
+            "global form";
+        gap: 40px;
     }
     
-    .featured-logo,
-    .global-map,
+    .content {
+        grid-area: content;
+    }
+    
+    .network-visualization {
+        grid-area: visualization;
+    }
+    
+    .featured-logo {
+        grid-area: featured;
+    }
+    
+    .global-map {
+        grid-area: global;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
     .signup-form {
-        grid-column: 1 / -1;
+        grid-area: form;
+        margin: 0;
     }
 }
 
@@ -122,7 +146,7 @@ main {
 /* Global Map */
 .global-map {
     text-align: center;
-    margin: 20px 0 40px;
+    margin: 20px 0;
 }
 
 .global-map h3 {
@@ -136,7 +160,6 @@ main {
     justify-content: center;
     flex-wrap: wrap;
     gap: 30px;
-    max-width: 600px;
     margin: 0 auto;
 }
 
@@ -219,6 +242,14 @@ button:hover {
     margin-top: 15px;
     font-size: 16px;
     opacity: 0.8;
+}
+
+/* Success Message */
+.success-message {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--navy);
 }
 
 /* Footer */
