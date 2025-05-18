@@ -101,9 +101,35 @@
         font-weight: 500;
         opacity: 0.9;
     }
-
-
-    
+    /* Specifically address text wrapping on the left side */
+    @media (min-width: 900px) {
+        /* Target main content container */
+        main, [class*="main"], [class*="content"] {
+            grid-template-columns: 1.2fr 0.8fr !important; /* Give left side more space */
+            max-width: 100% !important;
+        }
+        
+        /* Target headings and paragraphs on the left */
+        h1, h2, h3, p, .content p, [class*="content"] p {
+            max-width: 100% !important; /* Allow text to use full width */
+            width: 100% !important;
+            white-space: normal !important;
+        }
+        
+        /* Target the main heading specifically */
+        h1, [class*="title"], [class*="heading"] {
+            font-size: 32px !important; /* Slightly smaller to fit better */
+            line-height: 1.2 !important;
+            max-width: 100% !important;
+        }
+        
+        /* Target form to ensure it's not too wide */
+        .signup-form, [class*="form"] {
+            max-width: 400px !important;
+            width: 400px !important;
+            margin-left: auto !important;
+        }
+    }
 </style>
     
     
