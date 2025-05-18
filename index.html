@@ -136,7 +136,6 @@
                     </div>
 
 <div class="form-group phone-input-group">
-<div class="form-group phone-input-group">
     <div class="country-code-container">
         <select id="country-code" name="country-code">
             <option value="+1">🇺🇸 +1</option> <!-- US & Canada -->
@@ -148,8 +147,9 @@
             <option value="+372">🇪🇪 +372</option> <!-- Estonia -->
             <option value="+380">🇺🇦 +380</option> <!-- Ukraine -->
             <option value="+971">🇦🇪 +971</option> <!-- United Arab Emirates -->
-               
-    <input type="tel" name="phone" id="phone" placeholder="no. opt" style="flex-grow: 1; padding: 15px; border: 2px solid #E0E0E0; border-radius: 6px; font-size: 16px; font-family: 'Poppins', sans-serif;">
+        </select> <!-- This closing tag was missing -->
+    </div> <!-- This div is for the country-code-container -->
+    <input type="tel" name="phone" id="phone" placeholder="Your phone number (optional)" style="flex-grow: 1; padding: 15px; border: 2px solid #E0E0E0; border-radius: 6px; font-size: 16px; font-family: 'Poppins', sans-serif;">
 </div>
                 
   <!-- Add this instead (inside the form): -->
