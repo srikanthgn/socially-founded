@@ -114,6 +114,49 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize
     createNodes(30);
     animate();
+
+    // Simple captcha functionality
+function generateCaptcha() {
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let captcha = '';
+    for (let i = 0; i < 6; i++) {
+        captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return captcha;
+}
+
+function refreshCaptcha() {
+    const captchaText = document.getElementById('captcha-text');
+    if (captchaText) {
+        captchaText.innerText = generateCaptcha();
+    }
+}
+
+// Initialize captcha when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const captchaText = document.getElementById('captcha-text');
+    if (captchaText) {
+        captchaText.innerText = generateCaptcha();
+    }
+    
+    // Validate captcha on form submission
+    const form = document.getElementById('join-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const captchaInput = document.getElementById('captcha');
+            const captchaText = document.getElementById('captcha-text');
+            
+            if (captchaInput && captchaText) {
+                if (captchaInput.value !== captchaText.innerText) {
+                    e.preventDefault();
+                    alert('Captcha does not match. Please try again.');
+                    refreshCaptcha();
+                    captchaInput.value = '';
+                }
+            }
+        });
+    }
+});
     
     // Form submission
     const form = document.getElementById('join-form');
