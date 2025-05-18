@@ -119,6 +119,25 @@
                     </div>
 
 <div class="form-group phone-input-group">
+<div class="form-group phone-input-group">
+    <div class="country-code-container">
+        <select id="country-code" name="country-code">
+            <option value="+1">🇺🇸 +1</option> <!-- US & Canada -->
+            <option value="+31">🇳🇱 +31</option> <!-- Netherlands -->
+            <option value="+44">🇬🇧 +44</option> <!-- United Kingdom -->
+            <option value="+48">🇵🇱 +48</option> <!-- Poland -->
+            <option value="+91">🇮🇳 +91</option> <!-- India -->
+            <option value="+370">🇱🇹 +370</option> <!-- Lithuania -->     
+            <option value="+372">🇪🇪 +372</option> <!-- Estonia -->
+            <option value="+380">🇺🇦 +380</option> <!-- Ukraine -->
+            <option value="+971">🇦🇪 +971</option> <!-- United Arab Emirates -->
+            <option value="custom">Custom...</option>
+        </select>
+        <input type="text" id="custom-code" placeholder="+XX" class="custom-code-input" style="display: none;">
+    </div>
+    <input type="tel" name="phone" id="phone" placeholder="Your phone number (optional)">
+</div>
+    
     <div class="country-select">
         <select id="country-code" name="country-code">
             <option value="+1">🇺🇸 +1</option>
