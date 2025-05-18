@@ -434,5 +434,58 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// Add these at the end of your script.js file
+
+// Cookie Consent Banner
+document.addEventListener('DOMContentLoaded', function() {
+    const cookieBanner = document.getElementById('cookie-consent');
+    const acceptAllBtn = document.getElementById('cookie-accept-all');
+    const necessaryBtn = document.getElementById('cookie-accept-necessary');
+    
+    // Show banner if no consent given yet
+    if (!localStorage.getItem('cookieConsent')) {
+        setTimeout(() => {
+            cookieBanner.style.display = 'block';
+        }, 2000);
+    }
+    
+    // Accept all cookies
+    if (acceptAllBtn) {
+        acceptAllBtn.addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', 'all');
+            cookieBanner.style.display = 'none';
+        });
+    }
+    
+    // Accept only necessary cookies
+    if (necessaryBtn) {
+        necessaryBtn.addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', 'necessary');
+            cookieBanner.style.display = 'none';
+        });
+    }
+    
+    // Phone number formatting
+    const phoneInput = document.querySelector('input[placeholder*="phone"]');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function() {
+            let input = this.value.replace(/\D/g, '');
+            let formatted = '';
+            
+            if (input.length > 0) {
+                if (input.length <= 3) {
+                    formatted = input;
+                } else if (input.length <= 6) {
+                    formatted = input.substring(0, 3) + '-' + input.substring(3);
+                } else {
+                    formatted = input.substring(0, 3) + '-' + input.substring(3, 6) + '-' + input.substring(6, 10);
+                }
+                
+                this.value = formatted;
+            }
+        });
+    }
+});
+
 
 
