@@ -1,3 +1,21 @@
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Script loaded');
+    
+    const canvas = document.getElementById('network-canvas');
+    console.log('Canvas element:', canvas);
+    
+    if (!canvas) {
+        console.error('Canvas element not found!');
+        return;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    console.log('Canvas context:', ctx);
+    
+    // Rest of your code...
+});
+
+
 //Part 1
 // Network Visualization
 document.addEventListener('DOMContentLoaded', function() {
