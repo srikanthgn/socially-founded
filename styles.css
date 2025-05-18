@@ -58,7 +58,7 @@ main {
         grid-template-columns: 1fr 1fr;
     }
     
-    .sf-logo-feature,
+    .featured-logo,
     .global-map,
     .signup-form {
         grid-column: 1 / -1;
@@ -104,7 +104,7 @@ main {
 }
 
 /* Featured Logo */
-.sf-logo-feature {
+.featured-logo {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -113,7 +113,7 @@ main {
     background: transparent;
 }
 
-.sf-logo-feature img {
+.featured-logo img {
     max-width: 300px;
     height: auto;
     background: transparent;
@@ -219,14 +219,6 @@ button:hover {
     margin-top: 15px;
     font-size: 16px;
     opacity: 0.8;
-}
-
-/* Success Message */
-.success-message {
-    text-align: center;
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--navy);
 }
 
 /* Footer */
