@@ -65,8 +65,11 @@ main {
         gap: 40px;
     }
     
-    .featured-logo {
-        grid-area: featured;
+            .featured-logo {
+    grid-area: featured;
+    max-width: 180px;
+    margin: 10px auto 30px;
+}
         /* might have other properties here */
     }
     
