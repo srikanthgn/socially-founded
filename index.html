@@ -463,8 +463,30 @@
             font-size: 12px !important;
         }
     }
-</style>
-    
+    /* Fix left side text wrapping - ADD THIS */
+    @media (min-width: 900px) {
+        /* Content area */
+        .content {
+            max-width: 600px !important;
+            padding-right: 30px !important;
+        }
+        
+        /* Text elements */
+        h1, h2, h3, .content p {
+            max-width: 550px !important;
+            text-wrap: normal !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+        }
+        
+        /* Adjust main grid */
+        main {
+            display: grid !important;
+            grid-template-columns: minmax(60%, 1fr) minmax(320px, 340px) !important;
+            gap: 20px !important;
+        }
+    }
+</style>    
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
