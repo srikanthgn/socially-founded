@@ -1,3 +1,4 @@
+/* Base Styles */
 :root {
     --navy: #003554;
     --light-gray: #F5F5F5;
@@ -34,12 +35,13 @@ header {
 
 .logo {
     display: flex;
-    justify-content: center;
+    align-items: center;
 }
 
 .logo img {
     height: 60px;
     width: auto;
+    border: none;
 }
 
 /* Main Content */
@@ -51,14 +53,11 @@ main {
     padding: 40px 0;
 }
 
-.content {
-    text-align: center;
-}
-
 .content h1 {
     font-size: 42px;
     font-weight: 700;
     margin-bottom: 15px;
+    color: var(--navy);
 }
 
 .content h2 {
@@ -73,11 +72,10 @@ main {
     margin-bottom: 15px;
 }
 
-.highlight {
+.content .highlight {
     font-weight: 500;
     font-size: 20px;
     margin: 30px 0;
-    color: var(--navy);
 }
 
 /* Network Visualization */
@@ -85,35 +83,34 @@ main {
     width: 100%;
     height: 300px;
     position: relative;
-    background: #f8fafc;
-    border-radius: 8px;
-    overflow: hidden;
-    margin: 2rem 0;
+    z-index: 1; /* Ensure it's above other elements */
 }
 
 #network-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
+    display: block;
 }
 
 /* Featured Logo */
 .featured-logo {
     display: flex;
     justify-content: center;
-    margin: 2rem auto;
-}
-
-.featured-logo img {
+    align-items: center;
+    margin: 10px auto 30px;
+    padding: 0;
     width: 120px;
     height: auto;
 }
 
+.featured-logo img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
 /* Global Map */
 .global-map {
-    text-align: center;
     padding: 20px 0;
 }
 
@@ -125,7 +122,6 @@ main {
 
 .location-list {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
     gap: 15px 25px;
 }
@@ -145,9 +141,15 @@ main {
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(0, 53, 84, 0.6); }
-    70% { box-shadow: 0 0 0 10px rgba(0, 53, 84, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(0, 53, 84, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 53, 84, 0.6);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 53, 84, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 53, 84, 0);
+    }
 }
 
 /* Form */
@@ -156,9 +158,8 @@ main {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
-    max-width: 500px;
-    width: 100%;
     margin: 0 auto;
+    border-top: 4px solid var(--navy);
 }
 
 .form-group {
@@ -172,6 +173,12 @@ input {
     border-radius: 6px;
     font-size: 16px;
     font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--navy);
 }
 
 button {
@@ -184,6 +191,12 @@ button {
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
+    transition: opacity 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+button:hover {
+    opacity: 0.9;
 }
 
 .form-label {
@@ -193,7 +206,7 @@ button {
     opacity: 0.8;
 }
 
-/* Captcha */
+/* Captcha styling */
 .captcha-container {
     margin-bottom: 20px;
 }
@@ -203,6 +216,7 @@ button {
     padding: 12px;
     border-radius: 6px;
     border: 1px solid var(--accent-gray);
+    width: 100%;
     text-align: center;
     font-family: 'Courier New', monospace;
     font-weight: bold;
@@ -227,33 +241,56 @@ footer {
             "content visualization"
             "featured featured"
             "global form";
-        align-items: start;
+        gap: 40px;
     }
     
     .content {
         grid-area: content;
-        text-align: left;
-        align-self: center;
     }
     
     .network-visualization {
         grid-area: visualization;
-        height: 400px;
     }
     
     .featured-logo {
         grid-area: featured;
+        width: 120px;
+        margin: 10px auto 30px;
     }
     
     .global-map {
         grid-area: global;
-        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-self: center;
     }
     
     .signup-form {
         grid-area: form;
-        margin: 0;
     }
 }
 
-
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .content h1 {
+        font-size: 32px;
+    }
+    
+    .content h2 {
+        font-size: 20px;
+    }
+    
+    .content p {
+        font-size: 16px;
+    }
+    
+    .location-list {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .featured-logo {
+        width: 100px;
+    }
+}
