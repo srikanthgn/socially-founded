@@ -1,24 +1,34 @@
-
-
+// Network Visualization
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Canvas
+    console.log('DOM loaded');
+    
     const canvas = document.getElementById('network-canvas');
+    console.log('Canvas element:', canvas);
+    
+    if (!canvas) {
+        console.error('Canvas element not found');
+        return;
+    }
+    
     const ctx = canvas.getContext('2d');
     const nodes = [];
     const connections = [];
     
-    // Set initial canvas size
+    // Set canvas dimensions
     function resizeCanvas() {
-        const container = canvas.parentElement;
-        canvas.width = container.offsetWidth;
-        canvas.height = container.offsetHeight;
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        console.log('Canvas resized to:', canvas.width, 'x', canvas.height);
     }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
     
     // Node class
     class Node {
         constructor(x, y) {
-            this.x = x || Math.random() * canvas.width;
-            this.y = y || Math.random() * canvas.height;
+            this.x = x;
+            this.y = y;
             this.radius = 3 + Math.random() * 3;
             this.vx = (Math.random() - 0.5) * 0.5;
             this.vy = (Math.random() - 0.5) * 0.5;
@@ -34,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.x < this.radius || this.x > canvas.width - this.radius) {
                 this.vx *= -1;
             }
+            
             if (this.y < this.radius || this.y > canvas.height - this.radius) {
                 this.vy *= -1;
             }
@@ -48,12 +59,15 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.globalAlpha = 1;
         }
     }
-
+    
     // Create initial nodes
     function createNodes(count) {
         for (let i = 0; i < count; i++) {
-            nodes.push(new Node());
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            nodes.push(new Node(x, y));
         }
+        console.log('Created', count, 'nodes');
     }
     
     // Create connections between nodes
@@ -108,13 +122,13 @@ document.addEventListener('DOMContentLoaded', function() {
         requestAnimationFrame(animate);
     }
     
-    // Initialize canvas and animation
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    // Initialize
+    console.log('Initializing network');
     createNodes(30);
     animate();
+    console.log('Animation started');
     
-    // Form submission handler
+    // Form submission
     const form = document.getElementById('join-form');
     if (form) {
         form.addEventListener('submit', function(e) {
@@ -134,31 +148,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // Add a new node with animation
-                const newNode = new Node(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height
-                );
-                newNode.radius = 6;
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const newNode = new Node(x, y);
+                newNode.radius = 6; // Slightly larger
                 newNode.alpha = 1;
                 nodes.push(newNode);
                 
                 // Submit the form
-                setTimeout(() => form.submit(), 1000);
+                form.submit();
             }
         });
     }
-    
-    // Captcha generation
-    function generateCaptcha() {
-        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        let captcha = '';
-        for (let i = 0; i < 6; i++) {
-            captcha += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return captcha;
+});
+
+// Captcha functionality
+function generateCaptcha() {
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let captcha = '';
+    for (let i = 0; i < 6; i++) {
+        captcha += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    
-    // Initialize captcha
+    return captcha;
+}
+
+// Initialize captcha when page loads
+document.addEventListener('DOMContentLoaded', function() {
     const captchaText = document.getElementById('captcha-text');
     if (captchaText) {
         captchaText.textContent = generateCaptcha();
