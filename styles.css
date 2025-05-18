@@ -53,6 +53,7 @@ main {
     padding: 40px 0;
 }
 
+
 @media (min-width: 900px) {
     main {
         display: grid;
@@ -62,8 +63,19 @@ main {
             "featured featured"
             "global form";
         gap: 40px;
-        align-items: start;
     }
+    
+    .featured-logo {
+        grid-area: featured;
+        /* might have other properties here */
+    }
+    
+    /* other grid areas */
+}
+
+
+    
+    
     
     .content {
         grid-area: content;
@@ -131,19 +143,22 @@ main {
 }
 
 /* Featured Logo */
+/* Featured Logo */
 .featured-logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px auto;
+    margin: 0 auto 30px;
     padding: 0;
     background: transparent;
-    max-width: 250px;
+    max-width: 200px; /* Reduced size */
 }
 
 .featured-logo img {
     width: 100%;
     height: auto;
+    max-height: 200px;
+    object-fit: contain;
     background: transparent;
 }
 
