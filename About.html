@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Socially Founded</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <meta name="description" content="SociallyFounded isn't a company. It's a movement. Join us to bring your ideas to life through community and AI assistance.">
+    <style>
+        :root {
+            --navy: #003554;
+            --light-navy: #004d77;
+            --light-gray: #F5F5F5;
+            --accent-gray: #E0E0E0;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--navy);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 15px 0;
+            margin: -20px -20px 0 -20px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: auto;
+        }
+
+        .logo span {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .nav-links a.active {
+            border-bottom: 2px solid var(--white);
+            opacity: 1;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px 0;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 60px 0;
+            position: relative;
+            margin: 0 -20px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            max-width: 600px;
+            opacity: 0.9;
+        }
+
+        .hero-divider {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: var(--light-gray);
+            clip-path: polygon(0 100%, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        /* Content Sections */
+        .content-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 0;
+        }
+
+        .content-section p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 50px 0;
+            box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
+        }
+
+        .how-it-works h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--navy);
+            text-align: center;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--navy);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .step h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--navy);
+        }
+
+        .step p {
+            font-size: 16px;
+            color: #444;
+        }
+
+        /* VCMBOK Section */
+        .vcmbok-section {
+            margin: 50px 0;
+        }
+
+        .vcmbok-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--navy);
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 50px 0;
+            box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
+        }
+
+        .benefits-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--navy);
+            text-align: center;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .benefit-icon {
+            background-color: var(--navy);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .benefit-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--navy);
+        }
+
+        .benefit-content p {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 0;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            margin: 60px 0 30px;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--navy);
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .cta-section .tagline {
+            font-size: 24px;
+            font-style: italic;
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: var(--navy);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: var(--light-navy);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 53, 84, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 50px 0 20px;
+            margin: 0 -20px -20px -20px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .footer-main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .footer-branding {
+            max-width: 300px;
+        }
+
+        .footer-branding h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .footer-branding p {
+            opacity: 0.8;
+            font-size: 15px;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column ul li a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            
+            .how-it-works, .benefits-section {
+                padding: 30px 20px;
+            }
+            
+            .steps-container, .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .footer-main {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .footer-links {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+            
+            .footer-branding {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-content h1 {
+                font-size: 28px;
+            }
+            
+            .hero-content p {
+                font-size: 18px;
+            }
+            
+            .content-section p {
+                font-size: 16px;
+            }
+            
+            .footer-links {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="favicon.svg" alt="Socially Founded Logo">
+                    <span>SociallyFounded</span>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="about.html" class="active">About Us</a>
+                    <a href="#">Join</a>
+                    <a href="#">Contact</a>
+                </div>
+                <button class="mobile-menu-btn">☰</button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1>SociallyFounded isn't a company. It's a movement.</h1>
+                <p>Where ideas are nurtured through both human connection and AI assistance.</p>
+            </div>
+            <div class="hero-divider"></div>
+        </div>
+
+        <main>
+            <div class="content-section">
+                <p>
+                    We believe founders don't need fancy offices, corporate suits, or VC speak to bring bold ideas to life. 
+                    They need time, space, caffeine (or a pint), and a community.
+                </p>
+                <p>
+                    SF turns your favorite neighborhood cafés and pubs into co-working spaces, startup hubs, and networking zones — with a twist. 
+                    Our loyalty program doesn't reward how much you spend. It rewards how long you stay.
+                </p>
+
+                <!-- How it works section -->
+                <div class="how-it-works">
+                    <h2>How It Works</h2>
+                    <div class="steps-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h3>Stay</h3>
+                            <p>The longer you stay, the more points you earn</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h3>Earn</h3>
+                            <p>Accumulate points through your presence and participation</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h3>Unlock</h3>
+                            <p>Access startup benefits and resources as you progress</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VCMBOK section -->
+                <div class="vcmbok-section">
+                    <h2>VCMBoK — The Vibe Coding Methodology Body of Knowledge</h2>
+                    <p>
+                        Every founder has their own code, their own rhythm, their own vibe. This isn't just for tech bros. 
+                        This is for your aunt with a cookie idea, your neighbor with a local logistics hack, or the cab driver with a real estate app. 
+                        Everyone deserves startup support.
+                    </p>
+                    <p>
+                        We're not here to copy Y Combinator. We're here to democratize it — to bring the spirit of San Francisco to your street corner.
+                    </p>
+                </div>
+
+                <!-- Benefits section -->
+                <div class="benefits-section">
+                    <h2>Unlock Benefits</h2>
+                    <div class="benefits-grid">
+                        <div class="benefit">
+                            <div class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Expert Mentorship</h3>
+                                <p>Connect with seasoned entrepreneurs and industry veterans</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <div class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>AI Tools</h3>
+                                <p>Leverage cutting-edge AI to enhance your ideas and business</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <div class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Pitch Deck Support</h3>
+                                <p>Get assistance crafting compelling presentations for investors</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <div class="benefit-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Investor Access</h3>
+                                <p>Connect with potential investors as your idea matures</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to action -->
+                <div class="cta-section">
+                    <h2>Join the founder's table.</h2>
+                    <p>It's open. It's free. Just bring your idea and vibe. ✨</p>
+                    <p class="tagline">Coffee optional. Conviction required.</p>
+                    <a href="index.html#join-form" class="cta-button">Join The Movement</a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-container">
+                <div class="footer-main">
+                    <div class="footer-branding">
+                        <h3>SociallyFounded</h3>
+                        <p>The intersection of community and entrepreneurship – where founding is socially enhanced.</p>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-column">
+                            <h4>Platform</h4>
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="about.html">About Us</a></li>
+                                <li><a href="#">Join</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Legal</h4>
+                            <ul>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Privacy</a></li>
+                                <li><a href="#">Cookies</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Connect</h4>
+                            <ul>
+                                <li><a href="#">Twitter</a></li>
+                                <li><a href="#">Instagram</a></li>
+                                <li><a href="#">LinkedIn</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; <script>document.write(new Date().getFullYear());</script> SociallyFounded. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Simple mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
