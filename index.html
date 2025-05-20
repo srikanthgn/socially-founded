@@ -1400,5 +1400,103 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<script>
+// Urgent fix for mobile navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile navigation fixes
+    const openMobileNav = document.getElementById('open-mobile-nav');
+    const closeMobileNav = document.getElementById('close-mobile-nav');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileJoinLink = document.getElementById('mobile-join-link');
+    
+    // Toggle scroll when mobile menu is open
+    function toggleScroll(disable) {
+        if (disable) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
+    }
+    
+    // Open mobile menu
+    if (openMobileNav) {
+        openMobileNav.addEventListener('click', function() {
+            console.log('Opening mobile nav');
+            mobileNav.style.display = 'block';
+            toggleScroll(true);
+        });
+    }
+    
+    // Close mobile menu
+    if (closeMobileNav) {
+        closeMobileNav.addEventListener('click', function() {
+            console.log('Closing mobile nav');
+            mobileNav.style.display = 'none';
+            toggleScroll(false);
+        });
+    }
+    
+    // Close when clicking outside
+    if (mobileNav) {
+        mobileNav.addEventListener('click', function(e) {
+            if (e.target === mobileNav) {
+                console.log('Closing mobile nav by clicking outside');
+                mobileNav.style.display = 'none';
+                toggleScroll(false);
+            }
+        });
+    }
+    
+    // Scroll to form when clicking join link
+    if (mobileJoinLink) {
+        mobileJoinLink.addEventListener('click', function() {
+            console.log('Clicked mobile join link');
+            mobileNav.style.display = 'none';
+            toggleScroll(false);
+            
+            setTimeout(function() {
+                const form = document.getElementById('join-form');
+                if (form) {
+                    form.scrollIntoView({behavior: 'smooth'});
+                }
+            }, 100);
+        });
+    }
+    
+    // Fix for custom dropdown on mobile
+    const customSelect = document.getElementById('custom-country-select');
+    const dropdown = document.getElementById('country-dropdown');
+    
+    if (customSelect && dropdown) {
+        customSelect.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+            }
+        });
+    }
+    
+    // Ensure dropdown closes when touching outside
+    document.addEventListener('touchstart', function(e) {
+        if (dropdown && !customSelect.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+    
+    // Adjust canvas for mobile
+    const canvas = document.getElementById('network-canvas');
+    if (canvas) {
+        // Make sure canvas is properly sized
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+});
+</script>
+
+    
 </body>
 </html>
