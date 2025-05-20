@@ -765,26 +765,31 @@
 </head>
 <body>
 <!-- Navigation Bar -->
-<!-- Navigation Bar -->
-<nav style="background-color: #003554; color: white; padding: 15px 0; margin-bottom: 20px;">
+
+<nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
-        <div style="display: flex; align-items: center; gap: 15px;">
+        <!-- Logo/Home Link -->
+        <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
             <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
-            <span style="font-size: 22px; font-weight: 600; color: white;">SociallyFounded</span>
+            <span style="font-size: 22px; font-weight: 600; color: #003554;">SociallyFounded</span>
+        </a>
+        
+        <!-- Mobile Navigation Menu (Hidden by Default) -->
+        <div id="nav-links" style="display: none; flex-direction: column; position: absolute; top: 60px; right: 20px; background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 100;">
+            <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; margin-bottom: 15px; padding-bottom: 5px;">About Us</a>
+            <a href="#join-form" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; margin-bottom: 15px; padding-bottom: 5px;">Join</a>
+            <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 5px;">Contact</a>
         </div>
-        <div id="nav-links" style="display: none; flex-direction: column; position: absolute; top: 60px; right: 20px; background-color: #003554; padding: 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 100;">
-            <a href="index.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-bottom: 10px; border-bottom: 2px solid white;">Home</a>
-            <a href="about.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-bottom: 10px;">About Us</a>
-            <a href="#join-form" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-bottom: 10px;">Join</a>
-            <a href="#" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500;">Contact</a>
+        
+        <!-- Desktop Navigation Links (Hidden on Mobile) -->
+        <div id="desktop-links" style="display: none; gap: 40px;">
+            <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">About Us</a>
+            <a href="#join-form" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Join</a>
+            <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Contact</a>
         </div>
-        <div id="desktop-links" style="display: none;">
-            <a href="index.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; border-bottom: 2px solid white;">Home</a>
-            <a href="about.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-left: 30px;">About Us</a>
-            <a href="#join-form" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-left: 30px;">Join</a>
-            <a href="#" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-left: 30px;">Contact</a>
-        </div>
-        <button id="mobile-menu-btn" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; display: block;">☰</button>
+        
+        <!-- Mobile Menu Button (Right-Aligned) -->
+        <button id="mobile-menu-btn" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block; margin-left: auto;">☰</button>
     </div>
 </nav>
 
@@ -821,8 +826,24 @@ document.addEventListener('DOMContentLoaded', function() {
             navLinks.style.display = 'flex';
         }
     });
+    
+    // Set active page
+    const currentPage = window.location.pathname.split("/").pop();
+    const links = document.querySelectorAll('#desktop-links a, #nav-links a');
+    
+    links.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || 
+            (currentPage === '' && href === 'index.html') || 
+            (currentPage === 'index.html' && href === 'index.html')) {
+            link.style.borderBottom = '2px solid #003554';
+            link.onmouseout = null; // Keep bottom border when this is the active page
+        }
+    });
 });
 </script>
+
+
 
 
     
