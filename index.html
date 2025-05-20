@@ -761,6 +761,105 @@
     padding: 8px 5px;
 }
     </style>
+
+<style>
+/* Fix for mobile navigation */
+#mobile-nav {
+    z-index: 2000 !important;
+}
+
+/* Fix for body scroll */
+body.no-scroll {
+    overflow: hidden !important;
+}
+
+/* Mobile layout fixes */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px !important;
+    }
+    
+    main {
+        gap: 15px !important;
+        padding: 10px 0 20px 0 !important;
+    }
+    
+    .content h1 {
+        font-size: 28px !important;
+        line-height: 1.3 !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .content p {
+        font-size: 16px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .features-section {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .feature-card {
+        padding: 18px !important;
+    }
+    
+    .signup-form {
+        padding: 20px !important;
+    }
+    
+    .network-visualization {
+        height: 200px !important;
+    }
+    
+    .global-map {
+        padding: 15px !important;
+    }
+    
+    .location-list {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .custom-select-wrapper {
+        width: 80px !important;
+    }
+    
+    .custom-select {
+        padding: 12px 10px 12px 35px !important;
+        font-size: 14px !important;
+    }
+    
+    .flag-icon {
+        left: 8px !important;
+        width: 20px !important;
+        height: 14px !important;
+    }
+    
+    .form-group label {
+        font-size: 14px !important;
+    }
+    
+    input, button[type="submit"] {
+        padding: 12px !important;
+        font-size: 15px !important;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    .social-button span {
+        display: none !important;
+    }
+    
+    .location-list {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+
+
 </head>
 <body>
 <!-- Navigation Bar -->
