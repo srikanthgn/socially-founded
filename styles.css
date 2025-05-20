@@ -988,5 +988,219 @@ footer {
     }
 }
 
+/* 
+This is a focused CSS fix that addresses the mobile issues while 
+maintaining all your existing functionality. Add this to the end of your styles.css file.
+*/
 
+/* Mobile Navigation & Layout Fixes */
+@media (max-width: 768px) {
+    /* Container spacing */
+    .container {
+        padding: 15px;
+    }
+    
+    /* Content section */
+    .content h1 {
+        font-size: 30px;
+        line-height: 1.3;
+        margin-bottom: 15px;
+    }
+    
+    .content p {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    
+    .content .highlight {
+        font-size: 18px;
+        margin: 20px 0;
+    }
+    
+    /* Feature cards */
+    .feature-card {
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .feature-title {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+    
+    .feature-description {
+        font-size: 14px;
+    }
+    
+    /* Form section */
+    .signup-form {
+        padding: 25px 20px;
+        margin-bottom: 20px;
+    }
+    
+    .signup-form h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    /* Form inputs */
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+    
+    input, select, button, .custom-select {
+        padding: 12px 15px;
+        font-size: 15px;
+        border-radius: 8px;
+    }
+    
+    /* Phone input group */
+    .phone-input-group {
+        gap: 8px;
+    }
+    
+    .custom-select-wrapper {
+        width: 90px;
+    }
+    
+    .custom-select {
+        padding-left: 40px !important;
+    }
+    
+    .flag-icon {
+        left: 10px;
+        width: 20px;
+        height: 14px;
+    }
+    
+    /* Social login section */
+    .social-login {
+        margin-bottom: 20px;
+    }
+    
+    .social-buttons {
+        gap: 8px;
+    }
+    
+    .social-button {
+        padding: 12px 8px;
+    }
+    
+    .social-button span {
+        font-size: 14px;
+    }
+    
+    /* Global map */
+    .global-map {
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
+    .location-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .location-item {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    /* Cookie banner */
+    #cookie-consent {
+        padding: 20px 15px;
+        left: 10px;
+        right: 10px;
+    }
+    
+    .cookie-buttons {
+        gap: 10px;
+    }
+    
+    .cookie-button {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+    
+    /* Network visualization */
+    .network-visualization {
+        height: 250px;
+        margin-bottom: 20px;
+    }
+    
+    /* Fix spacing between sections */
+    main {
+        gap: 20px;
+        padding: 10px 0 30px 0;
+    }
+    
+    /* Footer */
+    footer {
+        padding: 15px 0;
+        margin-top: 10px;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    .content h1 {
+        font-size: 26px;
+    }
+    
+    .social-button span {
+        display: none; /* Hide text on very small screens */
+    }
+    
+    .location-list {
+        grid-template-columns: 1fr; /* Stack locations on very small screens */
+    }
+    
+    .signup-form {
+        padding: 20px 15px;
+    }
+    
+    .custom-select-wrapper {
+        width: 80px; /* Make country selector even smaller */
+    }
+    
+    .form-group label {
+        font-size: 13px;
+    }
+}
+
+/* Mobile dropdown styles */
+.custom-dropdown {
+    border-radius: 8px;
+    max-height: 250px; /* Limit height on mobile */
+}
+
+.custom-option {
+    padding: 8px 8px 8px 40px; /* More compact padding */
+    font-size: 14px;
+}
+
+.custom-option-flag {
+    left: 10px;
+    width: 20px;
+    height: 14px;
+}
+
+/* Navigation fixes */
+#mobile-nav {
+    z-index: 2000; /* Ensure it displays above everything */
+}
+
+#open-mobile-nav {
+    padding: 5px;
+}
+
+/* Fix for navigation when scrolling */
+body.no-scroll {
+    overflow: hidden;
+}
 
