@@ -765,20 +765,66 @@
 </head>
 <body>
 <!-- Navigation Bar -->
+<!-- Navigation Bar -->
 <nav style="background-color: #003554; color: white; padding: 15px 0; margin-bottom: 20px;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
         <div style="display: flex; align-items: center; gap: 15px;">
             <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
             <span style="font-size: 22px; font-weight: 600; color: white;">SociallyFounded</span>
         </div>
-        <div style="display: flex; gap: 30px;">
-            <a href="index.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; border-bottom: 2px solid white;">Home</a>
-            <a href="about.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500;">About Us</a>
-            <a href="#join-form" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500;">Join</a>
+        <div id="nav-links" style="display: none; flex-direction: column; position: absolute; top: 60px; right: 20px; background-color: #003554; padding: 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 100;">
+            <a href="index.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-bottom: 10px; border-bottom: 2px solid white;">Home</a>
+            <a href="about.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-bottom: 10px;">About Us</a>
+            <a href="#join-form" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-bottom: 10px;">Join</a>
             <a href="#" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500;">Contact</a>
         </div>
+        <div id="desktop-links" style="display: none;">
+            <a href="index.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; border-bottom: 2px solid white;">Home</a>
+            <a href="about.html" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-left: 30px;">About Us</a>
+            <a href="#join-form" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-left: 30px;">Join</a>
+            <a href="#" style="color: white; text-decoration: none; font-size: 16px; font-weight: 500; margin-left: 30px;">Contact</a>
+        </div>
+        <button id="mobile-menu-btn" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; display: block;">☰</button>
     </div>
 </nav>
+
+<!-- Add JavaScript for Navigation -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.getElementById('nav-links');
+    const desktopLinks = document.getElementById('desktop-links');
+    
+    // Check screen size and update navigation display
+    function updateNavigation() {
+        if (window.innerWidth >= 768) {
+            desktopLinks.style.display = 'flex';
+            navLinks.style.display = 'none';
+            mobileMenuBtn.style.display = 'none';
+        } else {
+            desktopLinks.style.display = 'none';
+            mobileMenuBtn.style.display = 'block';
+        }
+    }
+    
+    // Initial check
+    updateNavigation();
+    
+    // Update on window resize
+    window.addEventListener('resize', updateNavigation);
+    
+    // Toggle mobile menu
+    mobileMenuBtn.addEventListener('click', function() {
+        if (navLinks.style.display === 'flex') {
+            navLinks.style.display = 'none';
+        } else {
+            navLinks.style.display = 'flex';
+        }
+    });
+});
+</script>
+
+
     
     <div class="container">
         <main>
