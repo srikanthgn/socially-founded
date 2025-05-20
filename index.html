@@ -1452,8 +1452,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-</script>
-<script>
+
 // Urgent fix for mobile navigation
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile navigation fixes
@@ -1547,6 +1546,56 @@ document.addEventListener('DOMContentLoaded', function() {
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
     }
+});
+
+// Mobile content visibility fix
+document.addEventListener('DOMContentLoaded', function() {
+    function fixMobileLayout() {
+        // Only run on mobile screens
+        if (window.innerWidth <= 768) {
+            console.log("Applying mobile layout fixes");
+            
+            // Get the main container
+            const main = document.querySelector('main');
+            if (!main) return;
+            
+            // Force flex layout
+            main.style.display = 'flex';
+            main.style.flexDirection = 'column';
+            
+            // Get all the main sections
+            const content = document.querySelector('.content');
+            const features = document.querySelector('.features-section');
+            const network = document.querySelector('.network-visualization');
+            const globalMap = document.querySelector('.global-map');
+            const form = document.querySelector('.signup-form');
+            
+            // Make sure all sections are visible
+            [content, features, network, globalMap, form].forEach(section => {
+                if (section) {
+                    section.style.display = 'block';
+                    section.style.width = '100%';
+                    section.style.position = 'static';
+                    
+                    // Remove any CSS grid area settings that might be causing problems
+                    section.style.gridArea = 'auto';
+                }
+            });
+            
+            // Special handling for features section
+            if (features) {
+                features.style.display = 'grid';
+                features.style.gridTemplateColumns = '1fr';
+                features.style.gap = '15px';
+            }
+        }
+    }
+    
+    // Run on load
+    fixMobileLayout();
+    
+    // Run on resize
+    window.addEventListener('resize', fixMobileLayout);
 });
 </script>
 
