@@ -760,9 +760,8 @@
     font-size: 16px;
     padding: 8px 5px;
 }
-    </style>
+    
 
-<style>
 /* Fix for mobile navigation */
 #mobile-nav {
     z-index: 2000 !important;
@@ -857,6 +856,60 @@ body.no-scroll {
         grid-template-columns: 1fr !important;
     }
 }
+
+/* Mobile Layout Fixes - Only applied to mobile screens */
+@media (max-width: 768px) {
+    /* Fix main layout structure */
+    main {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-areas: none !important;
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Ensure all content sections are visible */
+    .content, 
+    .features-section,
+    .network-visualization,
+    .global-map,
+    .signup-form {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        position: static !important;
+        grid-area: auto !important;
+    }
+    
+    /* Make sure grid columns don't interfere */
+    .container {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    /* Adjust margins and padding */
+    .content {
+        margin-bottom: 20px !important;
+    }
+    
+    .features-section {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .network-visualization {
+        height: 250px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .global-map {
+        margin-bottom: 20px !important;
+    }
+}
+</style>
+
+        
 </style>
 
 
