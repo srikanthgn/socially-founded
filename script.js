@@ -487,5 +487,140 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Add this script to fix mobile navigation issues
+// Either add it to your existing script.js file or include it in index.html
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix for mobile navigation
+    const openMobileNav = document.getElementById('open-mobile-nav');
+    const closeMobileNav = document.getElementById('close-mobile-nav');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileJoinLink = document.getElementById('mobile-join-link');
+    
+    // Toggle body scroll when mobile nav is open/closed
+    function toggleBodyScroll(shouldDisable) {
+        if (shouldDisable) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
+    }
+    
+    // Open mobile navigation
+    if (openMobileNav) {
+        openMobileNav.addEventListener('click', function() {
+            mobileNav.style.display = 'block';
+            toggleBodyScroll(true); // Disable scrolling
+        });
+    }
+    
+    // Close mobile navigation
+    if (closeMobileNav) {
+        closeMobileNav.addEventListener('click', function() {
+            mobileNav.style.display = 'none';
+            toggleBodyScroll(false); // Enable scrolling
+        });
+    }
+    
+    // Close mobile nav when clicking outside
+    if (mobileNav) {
+        mobileNav.addEventListener('click', function(e) {
+            if (e.target === mobileNav) {
+                mobileNav.style.display = 'none';
+                toggleBodyScroll(false); // Enable scrolling
+            }
+        });
+    }
+    
+    // Close mobile nav when clicking join link
+    if (mobileJoinLink) {
+        mobileJoinLink.addEventListener('click', function() {
+            mobileNav.style.display = 'none';
+            toggleBodyScroll(false); // Enable scrolling
+            
+            // Smooth scroll to form
+            const formElement = document.getElementById('join-form');
+            if (formElement) {
+                // Allow a moment for the nav to close
+                setTimeout(() => {
+                    formElement.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        });
+    }
+    
+    // Fix for custom dropdown on mobile
+    const customSelect = document.getElementById('custom-country-select');
+    const dropdown = document.getElementById('country-dropdown');
+    const options = document.querySelectorAll('.custom-option');
+    
+    if (customSelect && dropdown) {
+        // Improve mobile touch experience
+        customSelect.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
+            
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+                
+                // Position dropdown appropriately on mobile
+                const selectRect = customSelect.getBoundingClientRect();
+                const spaceBelow = window.innerHeight - selectRect.bottom;
+                const dropdownHeight = 250; // Max dropdown height on mobile
+                
+                if (spaceBelow < dropdownHeight && selectRect.top > dropdownHeight) {
+                    dropdown.classList.add('dropdown-up');
+                } else {
+                    dropdown.classList.remove('dropdown-up');
+                }
+            }
+        });
+        
+        // Close dropdown when touching outside
+        document.addEventListener('touchstart', function(e) {
+            if (dropdown && !customSelect.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
+    
+    // Optimize mobile network visualization
+    const canvas = document.getElementById('network-canvas');
+    if (canvas) {
+        function adjustCanvasForMobile() {
+            // Reduce node count on mobile for better performance
+            if (window.innerWidth <= 768) {
+                // If you already have a nodes variable in your code, you can adjust it here
+                // Example: if (typeof nodes !== 'undefined' && nodes.length > 20) nodes.length = 20;
+                
+                // Make sure canvas is responsive
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+        }
+        
+        // Run on load and resize
+        adjustCanvasForMobile();
+        window.addEventListener('resize', adjustCanvasForMobile);
+    }
+    
+    // Fix for form submission on mobile
+    const form = document.getElementById('join-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Ensure buttons don't get double-clicked on mobile
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.style.opacity = '0.7';
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.style.opacity = '1';
+                }, 2000);
+            }
+        });
+    }
+});
 
 
