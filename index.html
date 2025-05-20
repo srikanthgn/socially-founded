@@ -907,8 +907,95 @@ body.no-scroll {
         margin-bottom: 20px !important;
     }
 }
-</style>
 
+/* Additional mobile fixes */
+@media (max-width: 768px) {
+    /* Fix menu icon alignment */
+    #open-mobile-nav {
+        position: absolute !important;
+        right: 20px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+    }
+    
+    /* Fix navigation container positioning */
+    nav > div {
+        position: relative !important;
+        padding-right: 60px !important; /* Make room for the menu button */
+    }
+    
+    /* Fix content alignment */
+    .content h1 {
+        text-align: left !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        font-size: 26px !important;
+    }
+    
+    /* Fix country code display */
+    .custom-select-wrapper {
+        width: 70px !important; /* Make it more compact */
+    }
+    
+    #selected-code {
+        font-size: 12px !important; /* Smaller font for country code */
+        position: relative !important;
+        top: 0 !important;
+    }
+    
+    .flag-icon {
+        width: 18px !important;
+        height: 12px !important;
+        left: 10px !important;
+    }
+    
+    .custom-select {
+        padding: 14px 5px 14px 35px !important; /* Reduce right padding */
+    }
+    
+    /* Make the flag options in dropdown more compact */
+    .custom-option {
+        padding: 8px 5px 8px 35px !important;
+        font-size: 12px !important;
+    }
+    
+    /* Remove unnecessary margins and improve spacing */
+    .container {
+        padding: 10px 15px !important;
+    }
+    
+    /* Fix phone field */
+    .phone-input-group input {
+        padding-left: 10px !important;
+    }
+}
+
+/* Super small screens fixes */
+@media (max-width: 380px) {
+    /* Very compact country selector */
+    .custom-select-wrapper {
+        width: 60px !important;
+    }
+    
+    #selected-code {
+        font-size: 11px !important;
+    }
+    
+    .custom-select {
+        padding: 14px 2px 14px 30px !important;
+    }
+    
+    /* Adjust logo text */
+    nav a span {
+        font-size: 18px !important;
+    }
+    
+    nav a img {
+        width: 32px !important;
+        height: auto !important;
+    }
+}
         
 </style>
 
@@ -1596,6 +1683,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Run on resize
     window.addEventListener('resize', fixMobileLayout);
+});
+
+// Enhanced mobile country code display
+document.addEventListener('DOMContentLoaded', function() {
+    // Make country codes more compact on mobile
+    function enhanceCountryDisplay() {
+        const selectedCode = document.getElementById('selected-code');
+        const customSelect = document.getElementById('custom-country-select');
+        
+        if (window.innerWidth <= 768 && selectedCode && customSelect) {
+            // Make sure the display is optimized for mobile
+            selectedCode.style.fontSize = '12px';
+            
+            // Prevent text overflow
+            customSelect.style.textOverflow = 'ellipsis';
+            customSelect.style.whiteSpace = 'nowrap';
+            customSelect.style.overflow = 'hidden';
+            
+            // Adjust the dropdown options for better mobile display
+            const options = document.querySelectorAll('.custom-option');
+            options.forEach(option => {
+                option.style.padding = '8px 5px 8px 35px';
+                option.style.fontSize = '12px';
+            });
+        }
+    }
+    
+    enhanceCountryDisplay();
+    window.addEventListener('resize', enhanceCountryDisplay);
 });
 </script>
 
