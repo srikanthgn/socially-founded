@@ -997,7 +997,36 @@ body.no-scroll {
     z-index: 999 !important;
   }
 }
-        
+     /* Target mobile menu button specifically */
+.navbar-toggler, 
+.mobile-menu-icon, 
+[class*="mobile-menu"], 
+[class*="menu-toggle"],
+.hamburger-menu {
+  position: absolute !important;
+  right: 15px !important;
+  top: 15px !important;
+}
+
+/* Target by content */
+*:contains("≡") {
+  position: absolute !important;
+  right: 15px !important;
+  top: 15px !important;
+}
+
+/* Target common hamburger menu markup */
+.navbar-toggle span,
+.hamburger-icon span,
+.menu-icon span,
+.mobile-icon span {
+  position: relative !important;
+}
+
+/* Make sure parent is positioned correctly */
+header, nav, .navbar, .nav-container {
+  position: relative !important;
+}   
 </style>
 
 
