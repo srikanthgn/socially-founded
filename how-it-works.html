@@ -1,1 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works | Socially Founded</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <meta name="description" content="Discover how SociallyFounded transforms entrepreneurship into a social, community-driven experience through the unique SF Passport system.">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: relative;">
+            <!-- Logo/Home Link -->
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                    <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
+                    <span style="font-size: 22px; font-weight: 600; color: #003554; margin-top: -12px;">SociallyFounded</span>
+                </a>
+                <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -15px;">Fusion of Vibe, Entrepreneurship & Community</span>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+                <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
+                        <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">About</a>
+                        <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0; border-left: 3px solid #003554; padding-left: 10px;">How It Works</a>
+                        <a href="#join-form" id="mobile-join-link" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Join</a>
+                        <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desktop Navigation Links -->
+            <div id="desktop-links" style="display: none; gap: 40px;">
+                <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">About</a>
+                <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid #003554;">How It Works</a>
+                <a href="#join-form" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Join</a>
+                <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Contact</a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block;">☰</button>
+        </div>
+    </nav>
 
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>How SociallyFounded Works</h1>
+            <p class="subtitle">Transforming entrepreneurship from isolation to connection - one check-in at a time.</p>
+        </section>
+
+        <!-- The SF Passport Section -->
+        <section class="content-section">
+            <h2><span class="emoji">🛂</span> The SociallyFounded Passport</h2>
+            <div class="passport-container">
+                <div class="passport-image">
+                    <!-- Placeholder for passport image -->
+                    <div class="passport-placeholder">
+                        <div class="passport-cover">
+                            <div class="passport-emblem"></div>
+                            <p>PASSPORT</p>
+                            <p>SociallyFounded</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="passport-description">
+                    <p>Your <strong>SociallyFounded Passport</strong> is your digital entrepreneurial identity - documenting your journey, validating your commitment, and connecting you to the global community of founders.</p>
+                    
+                    <p>Every check-in, contribution, and milestone is recorded in your passport, creating a visible record of your founder journey.</p>
+                    
+                    <h3>Digital & Physical Integration</h3>
+                    <p>Your passport exists both digitally in the app and physically as a premium booklet that collects stamps at venues and events.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Journey Section -->
+        <section class="content-section" id="journey">
+            <h2><span class="emoji">🚶‍♀️</span> Your Founder Journey</h2>
+            
+            <div class="journey-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Check In</h3>
+                        <p>Use the SF app to check in at any café, coworking space, or participating venue when you're working on your venture.</p>
+                        <div class="step-icon check-in-icon"></div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Engage</h3>
+                        <p>Connect with other entrepreneurs at the venue, share your ideas, and receive feedback from the community.</p>
+                        <div class="step-icon engage-icon"></div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Build</h3>
+                        <p>Use SF tools to develop your idea, track progress, and document your journey in your passport.</p>
+                        <div class="step-icon build-icon"></div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Belong</h3>
+                        <p>Become part of a global community of founders, supporting each other and growing together.</p>
+                        <div class="step-icon belong-icon"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Passport Features Section -->
+        <section class="content-section">
+            <h2><span class="emoji">🌟</span> Passport Benefits</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="feature-title">Achievement System</h3>
+                    <p class="feature-description">Earn stamps, badges, and achievements for consistent check-ins, idea development, and community participation.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3 class="feature-title">Community Status</h3>
+                    <p class="feature-description">Build reputation within the community through your visible passport history and contributions.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3 class="feature-title">Idea Registry</h3>
+                    <p class="feature-description">Register and track the development of your entrepreneurial ideas within your passport.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Investor Visibility</h3>
+                    <p class="feature-description">Allow investors to discover your commitment and progress through your passport history.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title">Global Access</h3>
+                    <p class="feature-description">Check in at participating venues worldwide, discovering new communities wherever you go.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔓</div>
+                    <h3 class="feature-title">Progressive Benefits</h3>
+                    <p class="feature-description">Unlock premium features, special offers, and exclusive opportunities as your passport level increases.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Venue Section -->
+        <section class="content-section">
+            <h2><span class="emoji">🏙️</span> Venue Network</h2>
+            
+            <div class="venue-content">
+                <div class="venue-description">
+                    <p>SociallyFounded transforms ordinary spaces into entrepreneurial hubs through our global network of partner venues.</p>
+                    
+                    <p>Any café, coworking space, library, or suitable location can join the SF network, creating opportunities for entrepreneurs to connect and collaborate.</p>
+                    
+                    <h3>For Venue Partners</h3>
+                    <ul class="venue-benefits">
+                        <li>Increase regular customer visits and retention</li>
+                        <li>Differentiate from standard cafés and workspaces</li>
+                        <li>Build community and loyalty among entrepreneurs</li>
+                        <li>Generate additional revenue through the SF platform</li>
+                    </ul>
+                    
+                    <a href="#" class="venue-partner-link">Learn about becoming a venue partner →</a>
+                </div>
+                
+                <div class="venue-map">
+                    <!-- Placeholder for venue map -->
+                    <div class="map-placeholder">
+                        <div class="map-pin map-pin1"></div>
+                        <div class="map-pin map-pin2"></div>
+                        <div class="map-pin map-pin3"></div>
+                        <div class="map-pin map-pin4"></div>
+                    </div>
+                    <p class="map-caption">Growing network of SF venues worldwide</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- VCMBoK Section -->
+        <section class="content-section">
+            <h2><span class="emoji">🔄</span> Vibe Coding Methodology</h2>
+            
+            <div class="vcmbok-content">
+                <p>Everyone has a unique entrepreneurial rhythm. The SociallyFounded <strong>Vibe Coding Methodology Body of Knowledge (VCMBoK)</strong> helps you work with your natural flow, not against it.</p>
+                
+                <p>Whether you're a night owl or early bird, deep thinker or fast mover, solo founder or community builder — SF adapts to your style.</p>
+                
+                <div class="vibe-types">
+                    <div class="vibe-type">
+                        <h3>Daydreamers</h3>
+                        <p>Creative, big-picture thinkers who need space to explore possibilities</p>
+                    </div>
+                    
+                    <div class="vibe-type">
+                        <h3>Night Owls</h3>
+                        <p>Evening productivity peaks with focused innovation during quiet hours</p>
+                    </div>
+                    
+                    <div class="vibe-type">
+                        <h3>Deep Thinkers</h3>
+                        <p>Methodical problem-solvers who thrive on analysis and research</p>
+                    </div>
+                    
+                    <div class="vibe-type">
+                        <h3>Fast Movers</h3>
+                        <p>Quick decision-makers who build momentum through rapid iteration</p>
+                    </div>
+                </div>
+                
+                <p class="vcmbok-quote">"Don't change who you are. You just need a system that gets how you work."</p>
+            </div>
+        </section>
+        
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <h2>Ready to Begin Your Journey?</h2>
+            <p>Get your SociallyFounded Passport and join a community of entrepreneurs building the future.</p>
+            <a href="index.html#join-form" class="cta-button">Join The Movement</a>
+        </section>
+        
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h3 class="faq-question">How do I get my physical passport?</h3>
+                    <p class="faq-answer">After signing up, your digital passport is immediately active. The physical passport will be sent to founding members as part of our launch program.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">Do I need to pay to join SociallyFounded?</h3>
+                    <p class="faq-answer">Basic membership is free. Premium features and physical passport options will be available with tiered membership plans after launch.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">How do I check in at venues?</h3>
+                    <p class="faq-answer">The SF app uses your location to identify nearby venues. Simply tap "Check In" when you arrive, or scan the venue's QR code where available.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">What if there are no SF venues near me?</h3>
+                    <p class="faq-answer">You can suggest local venues to join the network, or use the "Independent Check-in" feature at any suitable workspace.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">How do investors see my passport?</h3>
+                    <p class="faq-answer">You control the visibility of your passport. You can choose to make it discoverable to verified investors or share it directly with specific connections.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">When is SociallyFounded launching?</h3>
+                    <p class="faq-answer">We're launching in Summer 2025. Join the waitlist now to be part of our founding member community.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Launching Summer 2025 | A 4Square Capital Innovations Company</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript for mobile navigation -->
+    <script src="script.js"></script>
+</body>
+</html>
