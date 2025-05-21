@@ -982,6 +982,21 @@ body.no-scroll {
         height: auto !important;
     }
 }
+
+@media (min-width: 768px) {
+  #open-mobile-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  #open-mobile-nav {
+    position: fixed !important;
+    top: 25px !important;
+    right: 25px !important;
+    z-index: 999 !important;
+  }
+}
         
 </style>
 
@@ -1023,7 +1038,7 @@ body.no-scroll {
         </div>
         
         <!-- Mobile Menu Button -->
-        <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);">☰</button>
+       <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block; position: fixed; top: 25px; right: 25px; z-index: 999;">☰</button>
     </div>
 </nav>
 
@@ -1701,6 +1716,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<script>
+// Force correct mobile menu position on all devices
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileBtn = document.getElementById('open-mobile-nav');
+  if (mobileBtn) {
+    // Force the styles inline to override any other CSS
+    mobileBtn.style.position = 'fixed';
+    mobileBtn.style.top = '25px';
+    mobileBtn.style.right = '25px';
+    mobileBtn.style.zIndex = '999';
     
+    // Add viewport check for mobile devices
+    if (window.innerWidth <= 767) {
+      // Additional force for mobile
+      setTimeout(function() {
+        mobileBtn.style.position = 'fixed';
+        mobileBtn.style.top = '25px';
+        mobileBtn.style.right = '25px';
+      }, 100);
+    }
+  }
+});
+</script>    
 </body>
 </html>
