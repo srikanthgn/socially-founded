@@ -1,1 +1,200 @@
+/* Mobile Responsiveness Fixes
+ * 
+ * This CSS file contains fixes for mobile display issues on the SociallyFounded website.
+ * Add these styles to your existing CSS file (styles.css) or create a new file called
+ * mobile-fixes.css and link it in your HTML files.
+ */
 
+/* Fix for mobile menu button positioning */
+#open-mobile-nav {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 1000 !important;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    color: #003554;
+}
+
+/* Mobile navigation overlay */
+#mobile-nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+/* Mobile navigation slide-in menu */
+#mobile-nav > div {
+    background-color: white;
+    width: 80%;
+    max-width: 300px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 20px;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+/* Close button for mobile menu */
+#close-mobile-nav {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #003554;
+}
+
+/* Prevent body scrolling when mobile nav is open */
+body.no-scroll {
+    overflow: hidden !important;
+}
+
+/* Improved container padding for mobile */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px !important;
+    }
+    
+    main {
+        padding: 10px 0 30px 0 !important;
+    }
+    
+    /* Ensure consistent heading sizes on mobile */
+    .content h1 {
+        font-size: 28px !important;
+        line-height: 1.3 !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .content h2 {
+        font-size: 24px !important;
+        line-height: 1.3 !important;
+    }
+    
+    .content h3 {
+        font-size: 20px !important;
+    }
+    
+    /* Fix for social buttons on very small screens */
+    @media (max-width: 360px) {
+        .social-button span {
+            display: none;
+        }
+    }
+    
+    /* Fix country code selector on mobile */
+    .country-code-container {
+        width: 90px !important;
+    }
+    
+    /* Improve form layout on small screens */
+    input, select, button {
+        padding: 12px !important;
+        font-size: 15px !important;
+    }
+    
+    /* Fix spacing in features section */
+    .feature-card {
+        padding: 20px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    /* Fix network visualization height */
+    .network-visualization {
+        height: 250px !important;
+    }
+}
+
+/* Fix for mobile layout structure */
+@media (max-width: 768px) {
+    /* Force flexbox layout for main on mobile */
+    main {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    /* Ensure all content sections are visible */
+    .content, 
+    .features-section,
+    .network-visualization,
+    .global-map,
+    .signup-form {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        position: static !important;
+    }
+    
+    /* Fix for grid columns on mobile */
+    .container {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    /* Adjust margins for better spacing */
+    .content {
+        margin-bottom: 20px !important;
+    }
+    
+    /* Fix features section grid on mobile */
+    .features-section {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+        margin-bottom: 20px !important;
+    }
+}
+
+/* Fix for very small screens */
+@media (max-width: 480px) {
+    /* Further reduce heading size */
+    .content h1 {
+        font-size: 26px !important;
+    }
+    
+    /* Remove text from social buttons */
+    .social-button span {
+        display: none !important;
+    }
+    
+    /* Stack locations in global map */
+    .location-list {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* More compact form */
+    .signup-form {
+        padding: 20px 15px !important;
+    }
+    
+    /* Smaller country selector */
+    .country-code-container {
+        width: 80px !important; 
+    }
+    
+    /* Smaller text in form */
+    .form-group label {
+        font-size: 14px !important;
+    }
+}
+
+/* Desktop navigation visibility */
+@media (min-width: 768px) {
+    #desktop-links {
+        display: flex !important;
+    }
+    
+    #open-mobile-nav {
+        display: none !important;
+    }
+}
