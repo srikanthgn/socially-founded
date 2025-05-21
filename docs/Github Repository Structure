@@ -1,1 +1,251 @@
+# SociallyFounded - GitHub Repository Structure
 
+This document outlines the recommended structure for the SociallyFounded GitHub repository, aligning with our component-based architecture and development approach.
+
+## Repository Setup
+
+### Main Branches
+
+- `main` - Production-ready code
+- `develop` - Development branch for integration
+- `feature/[name]` - Feature branches
+
+### Repository Structure
+
+```
+sociallyfounded/
+├── .github/                      # GitHub specific files
+│   ├── ISSUE_TEMPLATE/           # Issue templates
+│   └── workflows/                # GitHub Actions workflows
+│
+├── docs/                         # Documentation
+│   ├── architecture/             # System architecture documents
+│   │   └── technical-architecture.md
+│   ├── branding/                 # Brand guidelines and assets
+│   │   └── brand-guidelines.md
+│   ├── analysis/                 # Analysis documents
+│   │   └── website-analysis.md
+│   └── planning/                 # Project planning documents
+│       └── development-roadmap.md
+│
+├── website/                      # Current website
+│   ├── about.html
+│   ├── index.html
+│   ├── thanks.html
+│   ├── assets/
+│   │   ├── images/
+│   │   │   └── favicon.svg
+│   │   ├── css/
+│   │   │   ├── styles.css
+│   │   │   └── fresh-styles.css
+│   │   └── js/
+│   │       └── script.js
+│
+├── app/                          # Application code
+│   ├── ui/                       # User interface components
+│   │   ├── passport/             # Digital passport UI
+│   │   ├── venues/               # Venue directory UI
+│   │   ├── auth/                 # Authentication UI
+│   │   └── ideas/                # Idea registry UI
+│   │
+│   ├── core/                     # Core application logic
+│   │   ├── auth/                 # Authentication system
+│   │   ├── passport/             # Passport engine
+│   │   ├── gps/                  # GPS check-in system
+│   │   ├── ideas/                # Idea registry
+│   │   └── users/                # User management
+│   │
+│   └── data/                     # Data and integration layer
+│       ├── storage/              # Client-side storage
+│       ├── firebase/             # Firebase integration
+│       ├── venues/               # Venue API interface
+│       └── location/             # Location services
+│
+├── pwa/                          # Progressive Web App components
+│   ├── manifest.json             # PWA manifest
+│   ├── service-worker.js         # Service worker
+│   └── icons/                    # PWA icons
+│
+├── mobile/                       # Mobile-specific code
+│   ├── capacitor.config.json     # Capacitor configuration
+│   └── native/                   # Native plugins
+│
+├── .gitignore                    # Git ignore file
+├── LICENSE                       # License file
+└── README.md                     # Project readme
+```
+
+## Content Organization
+
+### Documentation Files
+
+Key documentation files to include:
+
+1. `README.md` - Project overview, getting started information
+2. `docs/architecture/technical-architecture.md` - Technical architecture, tech stack, and AI development approach
+3. `docs/analysis/website-analysis.md` - Current website analysis
+4. `docs/planning/development-roadmap.md` - Development roadmap with phases
+5. `docs/branding/brand-guidelines.md` - Brand guidelines and visual identity
+
+### Code Organization
+
+#### Website
+
+Initially, we'll maintain the current website structure while making improvements:
+
+```
+website/
+├── about.html
+├── index.html
+├── thanks.html
+├── assets/
+│   ├── images/
+│   │   └── favicon.svg
+│   ├── css/
+│   │   ├── styles.css
+│   │   └── fresh-styles.css
+│   └── js/
+│       └── script.js
+```
+
+#### App Components
+
+As we develop new features, we'll organize them according to our component architecture:
+
+```
+app/
+├── ui/                           # User interface components
+│   ├── passport/
+│   │   ├── passport-display.js   # Passport visual display
+│   │   ├── stamp-collection.js   # Stamps collection visualization
+│   │   └── achievement-badges.js # Achievement display
+│   ├── venues/
+│   │   ├── map-view.js           # Map view of venues
+│   │   ├── list-view.js          # List view of venues
+│   │   └── venue-detail.js       # Venue detail page
+│   └── auth/
+│       ├── login-form.js         # Login form
+│       ├── signup-form.js        # Signup form
+│       └── profile-editor.js     # Profile editing interface
+│
+├── core/                         # Core application logic
+│   ├── auth/
+│   │   ├── authentication.js     # Authentication logic
+│   │   ├── session-manager.js    # Session management
+│   │   └── permissions.js        # Permission handling
+│   ├── passport/
+│   │   ├── passport-engine.js    # Core passport functionality
+│   │   ├── achievement-tracker.js # Achievement tracking
+│   │   └── progression-system.js # Progression logic
+│   └── gps/
+│       ├── geofencing.js         # Geofencing implementation
+│       ├── check-in-validator.js # Check-in validation
+│       └── location-monitor.js   # Location monitoring
+```
+
+## GitHub Issues Structure
+
+We'll use GitHub Issues to track development tasks, organized by components:
+
+### Issue Labels
+
+- `component: ui` - User Interface components
+- `component: core` - Core application logic
+- `component: data` - Data and integration
+- `component: mobile` - Mobile-specific features
+- `type: bug` - Bug fixes
+- `type: feature` - New features
+- `type: enhancement` - Improvements to existing features
+- `type: documentation` - Documentation updates
+- `priority: high/medium/low` - Priority levels
+
+### Issue Templates
+
+1. **Feature Request Template**
+   ```
+   ## Feature Description
+   [Describe the feature]
+
+   ## User Story
+   As a [type of user], I want [goal] so that [benefit]
+
+   ## Acceptance Criteria
+   - [ ] Criterion 1
+   - [ ] Criterion 2
+
+   ## Technical Requirements
+   - [ ] Requirement 1
+   - [ ] Requirement 2
+
+   ## Related Components
+   - Component 1
+   - Component 2
+   ```
+
+2. **Bug Report Template**
+   ```
+   ## Bug Description
+   [Describe the bug]
+
+   ## Steps to Reproduce
+   1. Step 1
+   2. Step 2
+
+   ## Expected Behavior
+   [What should happen]
+
+   ## Actual Behavior
+   [What actually happens]
+
+   ## Environment
+   - Browser/Device:
+   - OS:
+   - Screen size:
+
+   ## Related Components
+   - Component 1
+   - Component 2
+   ```
+
+## Development Workflow
+
+1. **Issue Creation**
+   - Create detailed issues for each component or feature
+   - Assign appropriate labels
+   - Prioritize issues in the project board
+
+2. **Branch Creation**
+   - Create feature branches from `develop`
+   - Use naming convention: `feature/component-name` or `fix/issue-description`
+
+3. **Development**
+   - Implement component according to specifications
+   - Follow coding standards and documentation requirements
+   - Add tests where appropriate
+
+4. **Pull Request**
+   - Create PR from feature branch to `develop`
+   - Reference related issues in PR description
+   - Ensure all checks pass
+
+5. **Merge & Deploy**
+   - Merge approved PRs into `develop`
+   - Periodically merge `develop` into `main` for releases
+   - Deploy `main` to production environment
+
+## Initial Setup Tasks
+
+1. Create repository with initial structure
+2. Add README.md and documentation files
+3. Set up GitHub Issues templates
+4. Configure GitHub Actions (if needed)
+5. Import current website files
+6. Create initial project board with planned components
+
+## Maintenance Guidelines
+
+- Keep documentation updated as components evolve
+- Regularly review and refine repository structure
+- Ensure consistent naming conventions across components
+- Document all major decisions in the appropriate files
+- Use GitHub discussions for architectural decisions
