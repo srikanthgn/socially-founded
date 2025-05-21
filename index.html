@@ -910,20 +910,6 @@ body.no-scroll {
 
 /* Additional mobile fixes */
 @media (max-width: 768px) {
-    /* Fix menu icon alignment */
-    #open-mobile-nav {
-        position: absolute !important;
-        right: 20px !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-    }
-    
-    /* Fix navigation container positioning */
-    nav > div {
-        position: relative !important;
-        padding-right: 60px !important; /* Make room for the menu button */
-    }
-    
     /* Fix content alignment */
     .content h1 {
         text-align: left !important;
@@ -1003,10 +989,9 @@ body.no-scroll {
 </head>
 <body>
 <!-- Navigation Bar -->
-
 <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
-        <!-- Logo/Home Link (Left Side) -->
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: relative;">
+        <!-- Logo/Home Link -->
         <div style="display: flex; flex-direction: column; align-items: flex-start;">
             <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
                 <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
@@ -1015,33 +1000,32 @@ body.no-scroll {
             <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -15px;">Fusion of Vibe, Entrepreneurship & Community</span>
         </div>
         
-        <!-- Desktop Navigation Links (Middle) -->
-        <div id="desktop-links" style="display: none; gap: 40px; position: absolute; left: 50%; transform: translateX(-50%);">
+        <!-- Mobile Navigation -->
+        <div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+            <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
+                    <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">About</a>
+                    <a href="#join-form" id="mobile-join-link" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Join</a>
+                    <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Desktop Navigation Links -->
+        <div id="desktop-links" style="display: none; gap: 40px;">
             <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">About</a>
             <a href="#join-form" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Join</a>
             <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Contact</a>
         </div>
         
-        <!-- Mobile Menu Button (Right Side - Fixed Position) -->
-      <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; position: fixed; top: 22px; right: 20px; z-index: 999;">☰</button>
+        <!-- Mobile Menu Button -->
+        <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);">☰</button>
     </div>
 </nav>
-
-<!-- Mobile Navigation Overlay -->
-<div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
-    <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
-            <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">About</a>
-            <a href="#join-form" id="mobile-join-link" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Join</a>
-            <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
-        </div>
-    </div>
-</div>
-      
 
 <!-- Add Mobile Navigation Script -->
 <script>
