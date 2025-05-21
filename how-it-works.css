@@ -1,1 +1,543 @@
+/* How It Works Page Specific Styles */
+/* Add these to your existing styles.css or create a new file called how-it-works.css */
 
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 50px 0 30px 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 15px;
+}
+
+.subtitle {
+    font-size: 20px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Content Sections */
+.content-section {
+    margin: 60px 0;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content-section h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.emoji {
+    font-size: 36px;
+    margin-right: 15px;
+}
+
+/* Passport Section */
+.passport-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 53, 84, 0.08);
+}
+
+.passport-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.passport-placeholder {
+    width: 300px;
+    height: 200px;
+    background-color: var(--navy);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 53, 84, 0.3);
+    overflow: hidden;
+}
+
+.passport-cover {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    font-weight: 600;
+}
+
+.passport-emblem {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.passport-emblem:before {
+    content: "SF";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.passport-cover p {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+.passport-description {
+    flex: 2;
+}
+
+.passport-description p {
+    margin-bottom: 20px;
+    font-size: 17px;
+}
+
+.passport-description h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--navy);
+}
+
+/* Journey Steps */
+.journey-steps {
+    margin-top: 40px;
+}
+
+.step {
+    display: flex;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.step:not(:last-child):after {
+    content: "";
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    height: calc(100% + 20px);
+    width: 2px;
+    background-color: var(--accent-gray);
+    z-index: -1;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background-color: var(--navy);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-right: 20px;
+}
+
+.step-content {
+    flex-grow: 1;
+}
+
+.step-content h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--navy);
+}
+
+.step-content p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.feature-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 53, 84, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 53, 84, 0.15);
+}
+
+.feature-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.feature-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--navy);
+}
+
+.feature-description {
+    font-size: 16px;
+    color: #444;
+}
+
+/* Venue Section */
+.venue-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 53, 84, 0.08);
+}
+
+.venue-description {
+    flex: 1;
+}
+
+.venue-benefits {
+    list-style-type: none;
+    margin: 20px 0;
+}
+
+.venue-benefits li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.venue-benefits li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--navy);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.venue-partner-link {
+    display: inline-block;
+    color: var(--navy);
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 15px;
+    transition: transform 0.2s ease;
+}
+
+.venue-partner-link:hover {
+    transform: translateX(5px);
+}
+
+.venue-map {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.map-placeholder {
+    width: 100%;
+    height: 250px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.map-pin {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: var(--navy);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+}
+
+.map-pin:after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.map-pin1 { top: 40%; left: 20%; animation: pulse 2s infinite; }
+.map-pin2 { top: 30%; left: 60%; animation: pulse 2s infinite 0.5s; }
+.map-pin3 { top: 60%; left: 45%; animation: pulse 2s infinite 1s; }
+.map-pin4 { top: 50%; left: 80%; animation: pulse 2s infinite 1.5s; }
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 53, 84, 0.6); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 53, 84, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 53, 84, 0); }
+}
+
+.map-caption {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+}
+
+/* VCMBoK Section */
+.vcmbok-content {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 53, 84, 0.08);
+}
+
+.vibe-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.vibe-type {
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.vibe-type:hover {
+    transform: translateY(-5px);
+}
+
+.vibe-type h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--navy);
+}
+
+.vibe-type p {
+    font-size: 14px;
+}
+
+.vcmbok-quote {
+    font-style: italic;
+    font-size: 20px;
+    text-align: center;
+    margin: 40px 0 10px;
+    color: var(--navy);
+    font-weight: 300;
+}
+
+/* CTA Section */
+.cta-section {
+    text-align: center;
+    padding: 60px 0;
+    margin: 60px 0;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 53, 84, 0.08);
+}
+
+.cta-section h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--navy);
+}
+
+.cta-section p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: var(--navy);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 53, 84, 0.2);
+}
+
+/* FAQ Section */
+.faq-section {
+    margin: 60px 0;
+}
+
+.faq-section h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0, 53, 84, 0.05);
+}
+
+.faq-question {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--navy);
+    position: relative;
+    padding-left: 30px;
+}
+
+.faq-question:before {
+    content: "Q:";
+    position: absolute;
+    left: 0;
+    color: var(--navy);
+    font-weight: 700;
+}
+
+.faq-answer {
+    font-size: 16px;
+    padding-left: 30px;
+    position: relative;
+}
+
+.faq-answer:before {
+    content: "A:";
+    position: absolute;
+    left: 0;
+    color: #666;
+    font-weight: 600;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+    .passport-container {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .venue-content {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 32px;
+    }
+    
+    .subtitle {
+        font-size: 18px;
+    }
+    
+    .content-section h2 {
+        font-size: 28px;
+    }
+    
+    .emoji {
+        font-size: 28px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .vibe-types {
+        grid-template-columns: 1fr;
+    }
+    
+    .vcmbok-quote {
+        font-size: 18px;
+    }
+    
+    .cta-section h2 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 28px;
+    }
+    
+    .content-section {
+        margin: 40px 0;
+    }
+    
+    .passport-placeholder {
+        width: 240px;
+        height: 160px;
+    }
+    
+    .step {
+        flex-direction: column;
+    }
+    
+    .step-number {
+        margin-bottom: 10px;
+    }
+    
+    .faq-question, .faq-answer {
+        padding-left: 25px;
+    }
+}
