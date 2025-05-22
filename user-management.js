@@ -3,22 +3,7 @@
 // Create this file in your root directory
 
 
-import { 
-    auth, 
-    db,
-    doc, 
-    getDoc, 
-    setDoc, 
-    updateDoc,
-    collection,
-    addDoc,
-    query,
-    where,
-    orderBy,
-    getDocs,
-    serverTimestamp,
-    onAuthStateChanged
-} from './firebase-config.js';    
+
 
 // ============================================
 // USER PROFILE MANAGEMENT
