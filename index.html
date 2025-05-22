@@ -12,10 +12,10 @@
     <!-- PWA meta tags -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#003554">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="SociallyFounded">
-    <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" href="/favicon.svg">
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -29,9 +29,6 @@
     
     <!-- Simple Firebase Auth -->
     <script src="firebase-simple.js" defer></script>
-    
-    <!-- PWA registration script -->
-    <script src="/pwa-registration.js" defer></script>
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -273,6 +270,69 @@
 <!-- Scripts -->
 <script src="script.js"></script>
 <script src="mobile-script-fixes.js"></script>
+
+<!-- Mobile Navigation Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const openMobileNav = document.getElementById('open-mobile-nav');
+    const closeMobileNav = document.getElementById('close-mobile-nav');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileJoinLink = document.getElementById('mobile-join-link');
+    const desktopLinks = document.getElementById('desktop-links');
+    
+    // Update navigation based on screen size
+    function updateNavigation() {
+        if (window.innerWidth >= 768) {
+            desktopLinks.style.display = 'flex';
+            openMobileNav.style.display = 'none';
+            if (mobileNav) mobileNav.style.display = 'none';
+        } else {
+            desktopLinks.style.display = 'none';
+            openMobileNav.style.display = 'block';
+        }
+    }
+    
+    // Initial navigation setup
+    updateNavigation();
+    
+    // Update navigation on window resize
+    window.addEventListener('resize', updateNavigation);
+    
+    // Open mobile navigation
+    if (openMobileNav) {
+        openMobileNav.addEventListener('click', function() {
+            mobileNav.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+    
+    // Close mobile navigation
+    if (closeMobileNav) {
+        closeMobileNav.addEventListener('click', function() {
+            mobileNav.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+    }
+    
+    // Close mobile nav when clicking outside
+    if (mobileNav) {
+        mobileNav.addEventListener('click', function(e) {
+            if (e.target === mobileNav) {
+                mobileNav.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        });
+    }
+    
+    // Close mobile nav when clicking join link
+    if (mobileJoinLink) {
+        mobileJoinLink.addEventListener('click', function() {
+            mobileNav.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
 
 </body>
 </html>
