@@ -20,8 +20,6 @@ import {
     onAuthStateChanged
 } from './firebase-config.js';    
 
-import { onAuthStateChanged } from 'firebase/auth';
-
 // ============================================
 // USER PROFILE MANAGEMENT
 // ============================================
