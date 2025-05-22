@@ -7,21 +7,25 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getAnalytics } from "firebase/analytics";
 
 // Your Firebase configuration
 // You'll get these values when you create a Firebase project
 const firebaseConfig = {
-  apiKey: "your-api-key-here",
-  authDomain: "sociallyfounded.firebaseapp.com",
-  projectId: "sociallyfounded",
-  storageBucket: "sociallyfounded.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id-here",
-  measurementId: "your-measurement-id-here"
+  apiKey: "AIzaSyCdaZa0TmP3pJ6qd7gmZEKsl9PEHTE2pMU",
+  authDomain: "sociallyfounded-df98f.firebaseapp.com",
+  projectId: "sociallyfounded-df98f",
+  storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+  messagingSenderId: "994533610259",
+  appId: "1:994533610259:web:fe740378a4c000211e40e6",
+  measurementId: "G-EY0BZE30Q0"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+//google analytics
+const analytics = getAnalytics(app);
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
