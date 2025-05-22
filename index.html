@@ -29,6 +29,67 @@
     
     <!-- Simple Firebase Auth -->
     <script src="firebase-simple.js" defer></script>
+    
+    <style>
+        /* Override CSS to fix layout issues */
+        @media (min-width: 900px) {
+            main {
+                display: grid !important;
+                grid-template-columns: 1fr 400px !important;
+                grid-template-areas: 
+                    "content form"
+                    "features form"
+                    "visualization form"
+                    "global form" !important;
+                gap: 30px !important;
+                align-items: start !important;
+                padding-top: 40px !important;
+            }
+        }
+        
+        @media (max-width: 899px) {
+            main {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 20px !important;
+                padding: 20px 0 !important;
+            }
+            
+            .content, .features-section, .network-visualization, .global-map, .signup-form {
+                width: 100% !important;
+                max-width: 100% !important;
+                position: static !important;
+                display: block !important;
+            }
+        }
+        
+        /* Fix mobile navigation */
+        #open-mobile-nav {
+            position: fixed !important;
+            top: 25px !important;
+            right: 25px !important;
+            z-index: 999 !important;
+            display: none !important;
+        }
+        
+        @media (max-width: 767px) {
+            #open-mobile-nav {
+                display: block !important;
+            }
+            #desktop-links {
+                display: none !important;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            #desktop-links {
+                display: flex !important;
+            }
+            #open-mobile-nav {
+                display: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -43,25 +104,8 @@
             <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -15px;">Fusion of Vibe, Entrepreneurship & Community</span>
         </div>
         
-        <!-- Mobile Navigation -->
-        <div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
-            <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                    <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
-                    <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">About</a>
-                    <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">How It Works</a>
-                    <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Digital Passport</a>
-                    <a href="#join-form" id="mobile-join-link" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Join</a>
-                    <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
-                </div>
-            </div>
-        </div>
-        
         <!-- Desktop Navigation Links -->
-        <div id="desktop-links" style="display: none; gap: 40px;">
+        <div id="desktop-links" style="gap: 40px;">
             <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">About</a>
             <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">How It Works</a>
             <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Digital Passport</a>
@@ -70,9 +114,26 @@
         </div>
         
         <!-- Mobile Menu Button -->
-       <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block; position: fixed; top: 25px; right: 25px; z-index: 999;">☰</button>
+        <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer;">☰</button>
     </div>
 </nav>
+
+<!-- Mobile Navigation -->
+<div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
+            <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">About</a>
+            <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">How It Works</a>
+            <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Digital Passport</a>
+            <a href="#join-form" id="mobile-join-link" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Join</a>
+            <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <main>
@@ -146,12 +207,7 @@
                         </svg>
                         <span>Google</span>
                     </button>
-                    <button type="button" class="social-button" data-provider="apple">
-                        <svg width="20" height="20" viewBox="0 0 24 24">
-                            <path fill="#000" d="M17.05 20.28c-.98.95-2.05.88-3.08.44-1.07-.46-2.07-.48-3.24 0-1.47.62-2.23.53-3.12-.41C3.18 15.25 3.43 7.59 8.92 7.31c1.36.07 2.31.82 3.09.84.84-.06 2.17-.96 3.44-.81 1.3.12 2.29.65 2.96 1.61-2.75 1.68-2.29 5.74.29 6.96-.84 1.69-1.98 3.36-3.65 4.37M12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.26 2.32-2.14 4.26-3.74 4.25" />
-                        </svg>
-                        <span>Apple</span>
-                    </button>
+                    <!-- Temporarily remove Apple button to avoid errors -->
                     <button type="button" class="social-button" data-provider="email">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -278,29 +334,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeMobileNav = document.getElementById('close-mobile-nav');
     const mobileNav = document.getElementById('mobile-nav');
     const mobileJoinLink = document.getElementById('mobile-join-link');
-    const desktopLinks = document.getElementById('desktop-links');
-    
-    // Update navigation based on screen size
-    function updateNavigation() {
-        if (window.innerWidth >= 768) {
-            desktopLinks.style.display = 'flex';
-            openMobileNav.style.display = 'none';
-            if (mobileNav) mobileNav.style.display = 'none';
-        } else {
-            desktopLinks.style.display = 'none';
-            openMobileNav.style.display = 'block';
-        }
-    }
-    
-    // Initial navigation setup
-    updateNavigation();
-    
-    // Update navigation on window resize
-    window.addEventListener('resize', updateNavigation);
     
     // Open mobile navigation
     if (openMobileNav) {
-        openMobileNav.addEventListener('click', function() {
+        openMobileNav.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Opening mobile nav');
             mobileNav.style.display = 'block';
             document.body.style.overflow = 'hidden';
         });
@@ -308,7 +347,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Close mobile navigation
     if (closeMobileNav) {
-        closeMobileNav.addEventListener('click', function() {
+        closeMobileNav.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Closing mobile nav');
             mobileNav.style.display = 'none';
             document.body.style.overflow = '';
         });
@@ -318,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileNav) {
         mobileNav.addEventListener('click', function(e) {
             if (e.target === mobileNav) {
+                console.log('Closing mobile nav - clicked outside');
                 mobileNav.style.display = 'none';
                 document.body.style.overflow = '';
             }
@@ -327,6 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close mobile nav when clicking join link
     if (mobileJoinLink) {
         mobileJoinLink.addEventListener('click', function() {
+            console.log('Closing mobile nav - join clicked');
             mobileNav.style.display = 'none';
             document.body.style.overflow = '';
         });
