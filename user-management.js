@@ -2,9 +2,10 @@
 // Digital Passport User Management System
 // Create this file in your root directory
 
-import {auth, db, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, onAuthStateChanged } from './firebase-config.js';
-    
+
 import { 
+    auth, 
+    db,
     doc, 
     getDoc, 
     setDoc, 
@@ -15,8 +16,10 @@ import {
     where,
     orderBy,
     getDocs,
-    serverTimestamp 
-} from 'firebase/firestore';
+    serverTimestamp,
+    onAuthStateChanged
+} from './firebase-config.js';    
+
 import { onAuthStateChanged } from 'firebase/auth';
 
 // ============================================
