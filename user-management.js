@@ -54,7 +54,7 @@ export async function createUserProfile(user) {
                 stats: {
                     ideasRegistered: 0,
                     venuesVisited: 0,
-                    connectionsMA de: 0,
+                   connectionsMade: 0,
                     hoursLogged: 0
                 },
                 
