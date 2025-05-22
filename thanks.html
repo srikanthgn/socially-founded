@@ -6,23 +6,74 @@
     <title>Thank You | Socially Founded</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="mobile-fixes.css">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="icon" href="favicon.ico" sizes="any">
-<!-- PWA meta tags -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#003554">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="SociallyFounded">
-<link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
-
-<!-- PWA registration script -->
-<script src="/pwa-registration.js" defer></script>
     
+    <!-- PWA meta tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#003554">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SociallyFounded">
+    <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="mobile-fixes.css">
+    <link rel="stylesheet" href="auth-styles.css">
+    
+    <!-- Firebase SDK (v9 modular SDK) -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="auth-service.js"></script>
+    <script type="module" src="auth-ui.js"></script>
+    
+    <!-- PWA registration script -->
+    <script src="/pwa-registration.js" defer></script>
 </head>
 <body>
     <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+                <!-- Logo/Home Link -->
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                        <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
+                        <span style="font-size: 22px; font-weight: 600; color: #003554; margin-top: -12px;">SociallyFounded</span>
+                    </a>
+                    <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -15px;">Fusion of Vibe, Entrepreneurship & Community</span>
+                </div>
+                
+                <!-- Mobile Navigation -->
+                <div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+                    <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                            <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
+                            <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">About</a>
+                            <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">How It Works</a>
+                            <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Digital Passport</a>
+                            <a href="index.html#join-form" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Join</a>
+                            <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation Links -->
+                <div id="desktop-links" style="display: none; gap: 40px;">
+                    <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">About</a>
+                    <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">How It Works</a>
+                    <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Digital Passport</a>
+                    <a href="index.html#join-form" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Join</a>
+                    <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Contact</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block; position: fixed; top: 25px; right: 25px; z-index: 999;">☰</button>
+            </div>
+        </nav>
+
         <header>
             <div class="logo">
                 <img src="sf-logo.png" alt="Socially Founded Logo">
@@ -34,6 +85,17 @@
                 <h1>Welcome to the Founders' Circle!</h1>
                 <p>Your node has been added to our network.</p>
                 <p>We'll keep you updated as we build the future of entrepreneurial communities.</p>
+                
+                <!-- Additional welcome content for authenticated users -->
+                <div id="authenticated-welcome" style="display: none; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid var(--navy);">
+                    <h3 style="color: var(--navy); margin-bottom: 15px;">🎉 Your SociallyFounded Journey Begins!</h3>
+                    <p>We're preparing your digital passport and setting up your founder profile. You'll receive an email with next steps shortly.</p>
+                    <div style="margin-top: 20px;">
+                        <a href="passport.html" style="display: inline-block; padding: 12px 24px; background-color: var(--navy); color: white; text-decoration: none; border-radius: 6px; font-weight: 500; margin-right: 15px;">View My Passport</a>
+                        <a href="how-it-works.html" style="display: inline-block; padding: 12px 24px; border: 2px solid var(--navy); color: var(--navy); text-decoration: none; border-radius: 6px; font-weight: 500;">Learn More</a>
+                    </div>
+                </div>
+                
                 <p style="margin-top: 40px;"><a href="index.html" style="color: var(--navy); text-decoration: none; font-weight: 500;">← Return to homepage</a></p>
             </div>
         </main>
@@ -42,6 +104,77 @@
             <p>Launching Summer 2025 | A 4Square Capital Initiative</p>
         </footer>
     </div>
+
+    <!-- Scripts -->
+    <script>
+        // Navigation script
+        document.addEventListener('DOMContentLoaded', function() {
+            const openMobileNav = document.getElementById('open-mobile-nav');
+            const closeMobileNav = document.getElementById('close-mobile-nav');
+            const mobileNav = document.getElementById('mobile-nav');
+            const desktopLinks = document.getElementById('desktop-links');
+            
+            // Update navigation based on screen size
+            function updateNavigation() {
+                if (window.innerWidth >= 768) {
+                    desktopLinks.style.display = 'flex';
+                    openMobileNav.style.display = 'none';
+                    if (mobileNav) mobileNav.style.display = 'none';
+                } else {
+                    desktopLinks.style.display = 'none';
+                    openMobileNav.style.display = 'block';
+                }
+            }
+            
+            // Initial navigation setup
+            updateNavigation();
+            
+            // Update navigation on window resize
+            window.addEventListener('resize', updateNavigation);
+            
+            // Open mobile navigation
+            if (openMobileNav) {
+                openMobileNav.addEventListener('click', function() {
+                    mobileNav.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            
+            // Close mobile navigation
+            if (closeMobileNav) {
+                closeMobileNav.addEventListener('click', function() {
+                    mobileNav.style.display = 'none';
+                    document.body.style.overflow = '';
+                });
+            }
+            
+            // Close mobile nav when clicking outside
+            if (mobileNav) {
+                mobileNav.addEventListener('click', function(e) {
+                    if (e.target === mobileNav) {
+                        mobileNav.style.display = 'none';
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+        });
+
+        // Check if user came from authentication and show personalized message
+        document.addEventListener('DOMContentLoaded', function() {
+            // Listen for Firebase auth state
+            if (window.firebaseApp && window.firebaseApp.auth) {
+                window.firebaseApp.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        // User is signed in, show authenticated welcome
+                        const authWelcome = document.getElementById('authenticated-welcome');
+                        if (authWelcome) {
+                            authWelcome.style.display = 'block';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
     <script src="mobile-script-fixes.js"></script>
 </body>
 </html>
