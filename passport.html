@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Passport | SociallyFounded</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,6 +13,7 @@
     <!-- PWA meta tags -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#003554">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="SociallyFounded">
@@ -516,12 +517,24 @@
     </div>
 
     <!-- Scripts -->
-    <script type="module" src="firebase-config.js"></script>
-    <script type="module" src="user-management.js"></script>
-    <script type="module" src="passport-app.js"></script>
+    <!-- Firebase CDN Scripts (add before your custom scripts) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+     <!-- Initialize Firebase -->
+     <script src="firebase-init.js"></script>
+
+    <!-- Convert your module scripts to regular scripts -->
+    <script src="auth-system.js"></script>
+    <script src="user-management.js"></script>
+    <script src="passport-app.js"></script>
     <script src="mobile-script-fixes.js"></script>
+
     
-    <!-- PWA registration script -->
+    !-- PWA registration script -->
     <script src="/pwa-registration.js" defer></script>
-</body>
+    
+    </body>
 </html>
