@@ -1,1 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Passport | Socially Founded</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="passport-styles.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    
+    <!-- PWA meta tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#003554">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SociallyFounded">
+    <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
+    
+    <meta name="description" content="View your SociallyFounded Digital Passport - tracking your entrepreneurial journey one check-in at a time.">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: relative;">
+            <!-- Logo/Home Link -->
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                    <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
+                    <span style="font-size: 22px; font-weight: 600; color: #003554; margin-top: -12px;">SociallyFounded</span>
+                </a>
+                <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -15px;">Fusion of Vibe, Entrepreneurship & Community</span>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+                <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
+                        <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">About</a>
+                        <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">How It Works</a>
+                        <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0; border-left: 3px solid #003554; padding-left: 10px;">Digital Passport</a>
+                        <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desktop Navigation Links -->
+            <div id="desktop-links" style="display: none; gap: 40px;">
+                <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">About</a>
+                <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">How It Works</a>
+                <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid #003554;">Digital Passport</a>
+                <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Contact</a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block;">☰</button>
+        </div>
+    </nav>
 
+    <div class="container">
+        <!-- Passport Header -->
+        <header class="passport-header">
+            <h1>Your Digital Passport</h1>
+            <p class="passport-tagline">Track your entrepreneurial journey, one check-in at a time</p>
+        </header>
+
+        <!-- Passport Container -->
+        <div class="passport-container">
+            <!-- Passport Cover -->
+            <div class="passport-book">
+                <div class="passport-cover">
+                    <div class="passport-emblem"></div>
+                    <div class="passport-title">
+                        <div class="passport-name">PASSPORT</div>
+                        <div class="passport-sf">SociallyFounded</div>
+                    </div>
+                    <div class="passport-holder">
+                        <div class="holder-label">PASSPORT HOLDER</div>
+                        <div class="holder-name" id="holder-name">John Doe</div>
+                    </div>
+                    <div class="passport-id">
+                        <div class="id-label">PASSPORT ID</div>
+                        <div class="id-number" id="passport-id">SF-2025-001234</div>
+                    </div>
+                    <div class="passport-date">
+                        <div class="date-label">ISSUED</div>
+                        <div class="date-value" id="issue-date">MAY 21, 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Passport Status -->
+            <div class="passport-status">
+                <div class="status-level">
+                    <h3>Explorer Level 2</h3>
+                    <div class="level-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%"></div>
+                        </div>
+                        <div class="progress-text">45% to Level 3</div>
+                    </div>
+                </div>
+                <div class="status-stats">
+                    <div class="stat">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Check-ins</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Venues</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">Ideas</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Connections</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Passport Tabs -->
+            <div class="passport-tabs">
+                <div class="tab active" data-tab="stamps">Stamps</div>
+                <div class="tab" data-tab="achievements">Achievements</div>
+                <div class="tab" data-tab="ideas">Ideas</div>
+                <div class="tab" data-tab="profile">Profile</div>
+            </div>
+
+            <!-- Passport Content -->
+            <div class="passport-content">
+                <!-- Stamps Tab -->
+                <div class="tab-content active" id="stamps-content">
+                    <h2>Your Venue Stamps</h2>
+                    
+                    <div class="stamps-grid">
+                        <div class="stamp">
+                            <div class="stamp-icon">
+                                <div class="stamp-image"></div>
+                            </div>
+                            <div class="stamp-details">
+                                <div class="stamp-name">Innovation Café</div>
+                                <div class="stamp-location">London, UK</div>
+                                <div class="stamp-date">May 21, 2025</div>
+                                <div class="stamp-visits">6 visits</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stamp">
+                            <div class="stamp-icon">
+                                <div class="stamp-image"></div>
+                            </div>
+                            <div class="stamp-details">
+                                <div class="stamp-name">CoWork Hub</div>
+                                <div class="stamp-location">New York, US</div>
+                                <div class="stamp-date">May 18, 2025</div>
+                                <div class="stamp-visits">4 visits</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stamp">
+                            <div class="stamp-icon">
+                                <div class="stamp-image"></div>
+                            </div>
+                            <div class="stamp-details">
+                                <div class="stamp-name">Startup Lounge</div>
+                                <div class="stamp-location">Berlin, DE</div>
+                                <div class="stamp-date">May 15, 2025</div>
+                                <div class="stamp-visits">2 visits</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stamp stamp-empty">
+                            <div class="stamp-icon empty">
+                                <div class="plus-icon">+</div>
+                            </div>
+                            <div class="stamp-details">
+                                <div class="stamp-name">Check in at a new venue</div>
+                                <div class="stamp-action">Discover more venues</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title">Recent Check-ins</h3>
+                    
+                    <div class="check-ins-timeline">
+                        <div class="check-in">
+                            <div class="check-in-dot"></div>
+                            <div class="check-in-line"></div>
+                            <div class="check-in-card">
+                                <div class="check-in-venue">Innovation Café</div>
+                                <div class="check-in-time">Today, 10:30 AM</div>
+                                <div class="check-in-duration">Duration: 2h 15m</div>
+                            </div>
+                        </div>
+                        
+                        <div class="check-in">
+                            <div class="check-in-dot"></div>
+                            <div class="check-in-line"></div>
+                            <div class="check-in-card">
+                                <div class="check-in-venue">CoWork Hub</div>
+                                <div class="check-in-time">Yesterday, 2:45 PM</div>
+                                <div class="check-in-duration">Duration: 3h 30m</div>
+                            </div>
+                        </div>
+                        
+                        <div class="check-in">
+                            <div class="check-in-dot"></div>
+                            <div class="check-in-line"></div>
+                            <div class="check-in-card">
+                                <div class="check-in-venue">Innovation Café</div>
+                                <div class="check-in-time">May 19, 9:15 AM</div>
+                                <div class="check-in-duration">Duration: 4h 45m</div>
+                            </div>
+                        </div>
+                        
+                        <div class="check-in">
+                            <div class="check-in-dot"></div>
+                            <div class="check-in-card">
+                                <div class="check-in-venue">Startup Lounge</div>
+                                <div class="check-in-time">May 15, 3:00 PM</div>
+                                <div class="check-in-duration">Duration: 2h 30m</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Achievements Tab -->
+                <div class="tab-content" id="achievements-content">
+                    <h2>Your Achievements</h2>
+                    
+                    <div class="achievements-grid">
+                        <div class="achievement unlocked">
+                            <div class="achievement-icon">
+                                <div class="achievement-image"></div>
+                            </div>
+                            <div class="achievement-details">
+                                <div class="achievement-name">First Check-in</div>
+                                <div class="achievement-description">Made your first venue check-in</div>
+                                <div class="achievement-date">Earned: May 15, 2025</div>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement unlocked">
+                            <div class="achievement-icon">
+                                <div class="achievement-image"></div>
+                            </div>
+                            <div class="achievement-details">
+                                <div class="achievement-name">Global Explorer</div>
+                                <div class="achievement-description">Checked in at venues in 3 different countries</div>
+                                <div class="achievement-date">Earned: May 18, 2025</div>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement unlocked">
+                            <div class="achievement-icon">
+                                <div class="achievement-image"></div>
+                            </div>
+                            <div class="achievement-details">
+                                <div class="achievement-name">Idea Creator</div>
+                                <div class="achievement-description">Registered your first idea in the system</div>
+                                <div class="achievement-date">Earned: May 16, 2025</div>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement locked">
+                            <div class="achievement-icon locked">
+                                <div class="lock-icon">🔒</div>
+                            </div>
+                            <div class="achievement-details">
+                                <div class="achievement-name">Consistency Champion</div>
+                                <div class="achievement-description">Check in for 7 consecutive days</div>
+                                <div class="achievement-progress">Progress: 3/7 days</div>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement locked">
+                            <div class="achievement-icon locked">
+                                <div class="lock-icon">🔒</div>
+                            </div>
+                            <div class="achievement-details">
+                                <div class="achievement-name">Community Builder</div>
+                                <div class="achievement-description">Connect with 10 other founders</div>
+                                <div class="achievement-progress">Progress: 5/10 connections</div>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement locked">
+                            <div class="achievement-icon locked">
+                                <div class="lock-icon">🔒</div>
+                            </div>
+                            <div class="achievement-details">
+                                <div class="achievement-name">Venue Explorer</div>
+                                <div class="achievement-description">Check in at 10 different venues</div>
+                                <div class="achievement-progress">Progress: 3/10 venues</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ideas Tab -->
+                <div class="tab-content" id="ideas-content">
+                    <h2>Your Registered Ideas</h2>
+                    
+                    <div class="ideas-list">
+                        <div class="idea-card">
+                            <div class="idea-header">
+                                <h3 class="idea-title">Sustainable Food Delivery Platform</h3>
+                                <div class="idea-date">Registered: May 16, 2025</div>
+                            </div>
+                            <div class="idea-body">
+                                <p class="idea-description">A food delivery service that uses only electric vehicles and compostable packaging to minimize environmental impact.</p>
+                                <div class="idea-stats">
+                                    <div class="idea-stat">
+                                        <div class="stat-label">Development Stage</div>
+                                        <div class="stat-value">Concept</div>
+                                    </div>
+                                    <div class="idea-stat">
+                                        <div class="stat-label">Iterations</div>
+                                        <div class="stat-value">3</div>
+                                    </div>
+                                    <div class="idea-stat">
+                                        <div class="stat-label">Last Updated</div>
+                                        <div class="stat-value">Yesterday</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="idea-footer">
+                                <button class="idea-button">View Details</button>
+                                <div class="idea-privacy">
+                                    <span class="privacy-icon">🔒</span>
+                                    <span class="privacy-text">Private</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="idea-card">
+                            <div class="idea-header">
+                                <h3 class="idea-title">Remote Co-Working App</h3>
+                                <div class="idea-date">Registered: May 20, 2025</div>
+                            </div>
+                            <div class="idea-body">
+                                <p class="idea-description">An app that allows remote workers to create shared virtual spaces with productivity tools and social features.</p>
+                                <div class="idea-stats">
+                                    <div class="idea-stat">
+                                        <div class="stat-label">Development Stage</div>
+                                        <div class="stat-value">Validation</div>
+                                    </div>
+                                    <div class="idea-stat">
+                                        <div class="stat-label">Iterations</div>
+                                        <div class="stat-value">1</div>
+                                    </div>
+                                    <div class="idea-stat">
+                                        <div class="stat-label">Last Updated</div>
+                                        <div class="stat-value">Today</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="idea-footer">
+                                <button class="idea-button">View Details</button>
+                                <div class="idea-privacy">
+                                    <span class="privacy-icon">👁️</span>
+                                    <span class="privacy-text">Public</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="register-idea">
+                            <div class="register-idea-content">
+                                <div class="plus-circle">+</div>
+                                <h3>Register New Idea</h3>
+                                <p>Start documenting your next entrepreneurial concept</p>
+                                <button class="register-button">Get Started</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Tab -->
+                <div class="tab-content" id="profile-content">
+                    <h2>Your Founder Profile</h2>
+                    
+                    <div class="profile-container">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <div class="avatar-placeholder">JD</div>
+                            </div>
+                            <div class="profile-identity">
+                                <h3 class="profile-name">John Doe</h3>
+                                <div class="profile-title">Tech Entrepreneur & Developer</div>
+                                <div class="profile-location">
+                                    <span class="location-icon">📍</span>
+                                    <span class="location-text">London, United Kingdom</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-bio">
+                            <h4>About Me</h4>
+                            <p>Serial entrepreneur passionate about sustainability and technology. Building my third venture with a focus on environmental impact. Expertise in software development, product design, and team leadership.</p>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h4>Skills & Expertise</h4>
+                            <div class="skills-tags">
+                                <span class="skill-tag">Software Development</span>
+                                <span class="skill-tag">UX Design</span>
+                                <span class="skill-tag">Sustainability</span>
+                                <span class="skill-tag">Business Strategy</span>
+                                <span class="skill-tag">Marketing</span>
+                                <span class="skill-tag">Fundraising</span>
+                                <span class="skill-tag">Team Management</span>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h4>Interests</h4>
+                            <div class="skills-tags">
+                                <span class="skill-tag">Climate Tech</span>
+                                <span class="skill-tag">AI/ML</span>
+                                <span class="skill-tag">Remote Work</span>
+                                <span class="skill-tag">Education</span>
+                                <span class="skill-tag">E-commerce</span>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-connections">
+                            <h4>Connections</h4>
+                            <div class="connection-stats">
+                                <div class="connection-count">5 founders in your network</div>
+                                <button class="connection-button">Manage Connections</button>
+                            </div>
+                            <div class="connection-preview">
+                                <div class="connection-avatar">AS</div>
+                                <div class="connection-avatar">MJ</div>
+                                <div class="connection-avatar">LT</div>
+                                <div class="connection-avatar">RK</div>
+                                <div class="connection-avatar">PD</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions">
+                            <button class="profile-button primary">Edit Profile</button>
+                            <button class="profile-button secondary">Privacy Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Check-in Action Button -->
+        <div class="action-button-container">
+            <button class="action-button">
+                <span class="action-icon">📍</span>
+                <span class="action-text">Check In Now</span>
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Launching Summer 2025 | A 4Square Capital Innovations Company</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript for passport functionality -->
+    <script src="script.js"></script>
+    <script src="passport-script.js"></script>
+</body>
+</html>
