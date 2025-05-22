@@ -1,14 +1,6 @@
 // firebase-simple.js
 // Simple Firebase setup using CDN (no modules needed)
-// Create this file as an alternative to the ES6 module version
-
-// This script should be loaded AFTER Firebase CDN scripts
-// Add these script tags to your HTML head BEFORE this file:
-/*
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-*/
+// Fixed version without Apple auth
 
 // Firebase configuration
 const firebaseConfig = {
@@ -30,11 +22,6 @@ const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 googleProvider.setCustomParameters({
   'display': 'popup'
-});
-
-const appleProvider = new firebase.auth.OAuthProvider('apple.com');
-appleProvider.setCustomParameters({
-  'locale': 'en'
 });
 
 // Simple Authentication Manager
@@ -72,13 +59,6 @@ class SimpleAuthManager {
         this.signInWithGoogle();
       }
       
-      // Apple sign-in
-      if (e.target.matches('.social-button[data-provider="apple"]') || 
-          e.target.closest('.social-button[data-provider="apple"]')) {
-        e.preventDefault();
-        this.signInWithApple();
-      }
-      
       // Email sign-in modal
       if (e.target.matches('.social-button[data-provider="email"]') || 
           e.target.closest('.social-button[data-provider="email"]')) {
@@ -97,20 +77,6 @@ class SimpleAuthManager {
     } catch (error) {
       console.error('Google sign-in error:', error);
       this.showNotification('Failed to sign in with Google. Please try again.', 'error');
-    } finally {
-      this.hideLoadingState();
-    }
-  }
-
-  async signInWithApple() {
-    try {
-      this.showLoadingState();
-      const result = await auth.signInWithPopup(appleProvider);
-      console.log('Apple sign-in successful:', result.user);
-      this.showNotification('Successfully signed in with Apple!', 'success');
-    } catch (error) {
-      console.error('Apple sign-in error:', error);
-      this.showNotification('Failed to sign in with Apple. Please try again.', 'error');
     } finally {
       this.hideLoadingState();
     }
