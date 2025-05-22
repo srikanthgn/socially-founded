@@ -1,1 +1,384 @@
+/* auth-styles.css */
+/* Authentication UI styles for SociallyFounded */
+/* Create this file and link it in your HTML files */
 
+/* Authentication Modal */
+.auth-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    font-family: 'Poppins', sans-serif;
+}
+
+.auth-modal {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 53, 84, 0.3);
+    position: relative;
+}
+
+.auth-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--accent-gray);
+}
+
+.auth-modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--navy);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+    background-color: var(--light-gray);
+}
+
+.auth-modal-body {
+    padding: 25px;
+}
+
+.auth-modal .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-modal .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--navy);
+}
+
+.auth-modal input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--accent-gray);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+.auth-modal input:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(0, 53, 84, 0.1);
+}
+
+.auth-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+}
+
+.auth-btn.primary {
+    background-color: var(--navy);
+    color: white;
+}
+
+.auth-btn.primary:hover {
+    background-color: #004d77;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 53, 84, 0.2);
+}
+
+.auth-btn.secondary {
+    background-color: white;
+    color: var(--navy);
+    border: 2px solid var(--navy);
+}
+
+.auth-btn.secondary:hover {
+    background-color: var(--light-gray);
+}
+
+.auth-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: var(--navy);
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: 'Poppins', sans-serif;
+    padding: 5px;
+}
+
+.link-btn:hover {
+    opacity: 0.8;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--light-gray);
+    border-top: 4px solid var(--navy);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--navy);
+}
+
+/* Updated Social Button Styles */
+.social-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.social-button[data-provider] {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-button[data-provider]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 53, 84, 0.15);
+}
+
+/* User Profile Section */
+.user-profile-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
+    margin-bottom: 30px;
+    border-top: 4px solid var(--navy);
+}
+
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid var(--navy);
+}
+
+.user-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+}
+
+.user-info p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.user-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.user-stat {
+    text-align: center;
+    padding: 15px 10px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+}
+
+.user-stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 5px;
+}
+
+.user-stat-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.user-action-btn {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.user-action-btn.primary {
+    background-color: var(--navy);
+    color: white;
+    border: none;
+}
+
+.user-action-btn.primary:hover {
+    background-color: #004d77;
+}
+
+.user-action-btn.secondary {
+    background-color: white;
+    color: var(--navy);
+    border: 1px solid var(--navy);
+}
+
+.user-action-btn.secondary:hover {
+    background-color: var(--light-gray);
+}
+
+/* Notification Styles */
+.notification {
+    max-width: 300px;
+    word-wrap: break-word;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notification-success {
+    background-color: #10b981;
+}
+
+.notification-error {
+    background-color: #ef4444;
+}
+
+.notification-info {
+    background-color: #3b82f6;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+    .auth-modal {
+        width: 95%;
+        margin: 10px;
+    }
+    
+    .auth-modal-header,
+    .auth-modal-body {
+        padding: 20px;
+    }
+    
+    .user-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .user-actions {
+        flex-direction: column;
+    }
+    
+    .notification {
+        left: 10px;
+        right: 10px;
+        max-width: none;
+    }
+}
+
+/* Animation for modal appearance */
+.auth-modal-overlay {
+    animation: fadeIn 0.3s ease;
+}
+
+.auth-modal {
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
