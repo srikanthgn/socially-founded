@@ -194,9 +194,11 @@ window.addEventListener('appinstalled', (event) => {
     deferredPrompt = null;
     
     // Log installation event to analytics if available
-    if (typeof gtag === 'function') {
-        gtag('event', 'pwa_install', {
-            '
+    if (typeof gtag === 'function') 
+    {
+        gtag('event', 'pwa_install', 
+             {
+            
               gtag('event', 'pwa_install', {
             'event_category': 'pwa',
             'event_label': 'install',
