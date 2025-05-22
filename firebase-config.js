@@ -1,16 +1,36 @@
 // firebase-config.js
-// Firebase Configuration for SociallyFounded
-// Create this file in your root directory
+// Firebase Configuration for SociallyFounded - CDN Version
 
-// Firebase SDK imports
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
-import { getAnalytics } from "firebase/analytics";
+// Import Firebase from CDN
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    OAuthProvider,
+    onAuthStateChanged,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { 
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    collection,
+    addDoc,
+    query,
+    where,
+    orderBy,
+    getDocs,
+    serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
 
 // Your Firebase configuration
-// You'll get these values when you create a Firebase project
 const firebaseConfig = {
   apiKey: "AIzaSyCdaZa0TmP3pJ6qd7gmZEKsl9PEHTE2pMU",
   authDomain: "sociallyfounded-df98f.firebaseapp.com",
@@ -24,17 +44,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-//google analytics
-const analytics = getAnalytics(app);
-
-// Initialize Firebase Authentication and get a reference to the service
+// Initialize services
 export const auth = getAuth(app);
-
-// Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
-
-// Initialize Firebase Storage
 export const storage = getStorage(app);
+const analytics = getAnalytics(app);
 
 // Auth providers
 export const googleProvider = new GoogleAuthProvider();
@@ -49,5 +63,25 @@ googleProvider.setCustomParameters({
 appleProvider.setCustomParameters({
   'locale': 'en'
 });
+
+// Export Firebase functions for use in other modules
+export {
+    onAuthStateChanged,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    collection,
+    addDoc,
+    query,
+    where,
+    orderBy,
+    getDocs,
+    serverTimestamp
+};
 
 export default app;
