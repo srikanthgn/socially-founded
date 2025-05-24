@@ -10,7 +10,7 @@
 // ============================================
 
 // Create user profile when they first sign up
-export async function createUserProfile(user) {
+ async function createUserProfile(user) {
     try {
         const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
@@ -67,7 +67,7 @@ export async function createUserProfile(user) {
 }
 
 // Get user profile data
-export async function getUserProfile(uid) {
+ async function getUserProfile(uid) {
     try {
         const userRef = doc(db, 'users', uid);
         const userSnap = await getDoc(userRef);
@@ -85,7 +85,7 @@ export async function getUserProfile(uid) {
 }
 
 // Update user profile
-export async function updateUserProfile(uid, updates) {
+ async function updateUserProfile(uid, updates) {
     try {
         const userRef = doc(db, 'users', uid);
         await updateDoc(userRef, {
@@ -127,7 +127,7 @@ function calculateLevel(experience) {
 }
 
 // Award experience points and update level
-export async function awardExperience(uid, points, reason) {
+ async function awardExperience(uid, points, reason) {
     try {
         const userRef = doc(db, 'users', uid);
         const userSnap = await getDoc(userRef);
@@ -178,7 +178,7 @@ export async function awardExperience(uid, points, reason) {
 // ============================================
 
 // Record a venue check-in
-export async function recordCheckIn(uid, venueData, location = null) {
+ async function recordCheckIn(uid, venueData, location = null) {
     try {
         // Create check-in record
         const checkInData = {
@@ -286,7 +286,7 @@ async function checkStreakAchievements(uid, streak) {
 }
 
 // Add achievements to user profile
-export async function addAchievements(uid, newAchievements) {
+ async function addAchievements(uid, newAchievements) {
     try {
         const userRef = doc(db, 'users', uid);
         const userSnap = await getDoc(userRef);
@@ -316,7 +316,7 @@ export async function addAchievements(uid, newAchievements) {
 // ============================================
 
 // Log user activity
-export async function logActivity(uid, type, data = {}) {
+ async function logActivity(uid, type, data = {}) {
     try {
         const activityData = {
             userId: uid,
@@ -336,7 +336,7 @@ export async function logActivity(uid, type, data = {}) {
 // ============================================
 
 // Initialize user session and passport
-export function initializeUserSession() {
+ function initializeUserSession() {
     return new Promise((resolve) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -456,5 +456,4 @@ function updateUserProfileDisplay(userData) {
     }
 }
 
-// Export initialization function for easy setup
-export { initializeUserSession as default };
+// Export initialization function for easy setup { initializeUserSession as default };
