@@ -202,7 +202,7 @@ if (typeof gtag === 'function') {
         'value': 1
     });
 }
-
+}); 
 // Check for updates to the service worker
 function checkForServiceWorkerUpdates() {
     if ('serviceWorker' in navigator) {
