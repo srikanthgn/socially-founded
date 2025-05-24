@@ -3,7 +3,10 @@
 // Create this file in your root directory
 
 
-
+// Get Firebase references from global scope
+const auth = firebase.auth();
+const db = firebase.firestore();
+const { doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, orderBy, getDocs, serverTimestamp } = firebase.firestore;
 
 // ============================================
 // USER PROFILE MANAGEMENT
