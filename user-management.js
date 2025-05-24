@@ -36,12 +36,13 @@ async function createUserProfile(user) {
                 lastCheckIn: null,
                 achievements: ['founding_member'] // Welcome achievement
             },
-            stats: {
-                ideasRegistered: 0,
-                venuesVisited: 0,
-                connectionsMA de: 0,
-                eventsAttended: 0
-            },
+stats: {
+    ideasRegistered: 0,
+    venuesVisited: 0,
+    connectionsMade: 0,  // ✅ Fixed
+    eventsAttended: 0
+},
+            
             settings: {
                 notifications: true,
                 privacy: 'public',
