@@ -194,18 +194,14 @@ window.addEventListener('appinstalled', (event) => {
     deferredPrompt = null;
     
     // Log installation event to analytics if available
-    if (typeof gtag === 'function') 
-    {
-        gtag('event', 'pwa_install', 
-             {
-            
-              gtag('event', 'pwa_install', {
-            'event_category': 'pwa',
-            'event_label': 'install',
-            'value': 1
-        });
-    }
-});
+    // Log installation event to analytics if available
+if (typeof gtag === 'function') {
+    gtag('event', 'pwa_install', {
+        'event_category': 'pwa',
+        'event_label': 'install',
+        'value': 1
+    });
+}
 
 // Check for updates to the service worker
 function checkForServiceWorkerUpdates() {
