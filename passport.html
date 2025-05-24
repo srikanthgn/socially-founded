@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Passport | SociallyFounded</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="mobile-fixes.css">
-    <link rel="stylesheet" href="auth-styles.css">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     
     <!-- PWA meta tags -->
@@ -435,12 +434,12 @@
             </div>
 
             <!-- Authentication Required Message (shown when not logged in) -->
-            <div id="auth-required" style="display: none;">
+            <div id="auth-required" style="display: block;">
                 <div style="background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);">
                     <div style="font-size: 48px; margin-bottom: 20px;">🛂</div>
                     <h2 style="color: var(--navy); margin-bottom: 15px;">Authentication Required</h2>
                     <p style="margin-bottom: 25px; color: #666;">Sign in to view your SociallyFounded Digital Passport</p>
-                    <button onclick="showAuthModal()" style="padding: 15px 30px; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">Sign In</button>
+                    <button onclick="window.location.href='index.html'" style="padding: 15px 30px; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">Sign In</button>
                 </div>
             </div>
 
@@ -517,24 +516,32 @@
     </div>
 
     <!-- Scripts -->
-    <!-- Firebase CDN Scripts (add before your custom scripts) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase CDN Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-
-     <!-- Initialize Firebase -->
-     <script src="firebase-init.js"></script>
-
-    <!-- Convert your module scripts to regular scripts -->
-    <script src="auth-system.js"></script>
+    
+    <!-- Use the working authentication from index.html -->
+    <script src="firebase-simple.js"></script>
     <script src="user-management.js"></script>
     <script src="passport-app.js"></script>
     <script src="mobile-script-fixes.js"></script>
-
     
-    !-- PWA registration script -->
+    <!-- PWA registration script -->
     <script src="/pwa-registration.js" defer></script>
     
-    </body>
+    <script>
+        // Check authentication state on load
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                document.getElementById('auth-required').style.display = 'none';
+                document.getElementById('passport-content').style.display = 'block';
+                // Passport app will handle loading user data
+            } else {
+                document.getElementById('auth-required').style.display = 'block';
+                document.getElementById('passport-content').style.display = 'none';
+            }
+        });
+    </script>
+</body>
 </html>
