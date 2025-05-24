@@ -252,10 +252,10 @@
             </button>
             
             <button class="user-type-btn" data-type="venue" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
-                <div style="font-size: 24px; margin-bottom: 5px;">🏢</div>
-                <div style="font-weight: 600;">Venue Partner</div>
-                <div style="font-size: 12px; color: #666;">Host entrepreneurs</div>
-            </button>
+    <div style="font-size: 24px; margin-bottom: 5px;">🏢</div>
+    <div style="font-weight: 600;">Host</div>
+    <div style="font-size: 12px; color: #666;">Venue partner</div>
+</button>
         </div>
     </div>
     
@@ -341,7 +341,7 @@
             </div>
             
             <div class="form-group" id="venue-field" style="display: none;">
-                <label for="venue">Venue Name</label>
+                <label for="venue">Host Venue Name</label>
                 <input type="text" name="venue" id="venue" placeholder="Your venue name">
             </div>
             
@@ -436,7 +436,7 @@ function showEmailForm() {
         document.getElementById('passport-type').textContent = 'Investor';
     } else if (selectedUserType === 'venue') {
         document.getElementById('venue-field').style.display = 'block';
-        document.getElementById('passport-type').textContent = 'Venue Partner';
+        document.getElementById('passport-type').textContent = 'Host';
     } else if (selectedUserType === 'mentor') {
         document.getElementById('expertise-field').style.display = 'block';
         document.getElementById('passport-type').textContent = 'Mentor';
