@@ -390,7 +390,7 @@ function getCurrentLocation() {
 
 async function handleSignOut() {
     try {
-        await signOut(auth);
+        await firebase.auth().signOut();
         currentUser = null;
         currentUserData = null;
         showAuthRequired();
@@ -431,8 +431,7 @@ window.debugUnlockAchievement = async function(achievementKey) {
     if (currentUser && ACHIEVEMENTS[achievementKey]) {
         try {
             await addAchievements(currentUser.uid, [achievementKey]);
-            await addAchievements(currentUser.uid, [achievementKey]);
-            await loadPassportData();
+                       await loadPassportData();
             console.log(`✅ Unlocked achievement: ${achievementKey}`);
         } catch (error) {
             console.error('❌ Error unlocking achievement:', error);
