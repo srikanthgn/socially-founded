@@ -2,17 +2,6 @@
 // Digital Passport Application Logic
 // Create this file in your root directory
 
-import { auth } from './firebase-config.js';
-import { signOut } from 'firebase/auth';
-import { 
-    getUserProfile, 
-    recordCheckIn, 
-    awardExperience,
-    logActivity,
-    initializeUserSession 
-} from './user-management.js';
-import { showAuthModal } from './auth-system.js';
-
 // ============================================
 // GLOBAL STATE
 // ============================================
@@ -441,7 +430,7 @@ window.debugAwardXP = async function(points) {
 window.debugUnlockAchievement = async function(achievementKey) {
     if (currentUser && ACHIEVEMENTS[achievementKey]) {
         try {
-            const { addAchievements } = await import('./user-management.js');
+            await addAchievements(currentUser.uid, [achievementKey]);
             await addAchievements(currentUser.uid, [achievementKey]);
             await loadPassportData();
             console.log(`✅ Unlocked achievement: ${achievementKey}`);
@@ -453,13 +442,4 @@ window.debugUnlockAchievement = async function(achievementKey) {
 
 console.log('🚀 Digital Passport app loaded successfully');
 
-// ============================================
-// EXPORT FOR MODULE USAGE
-// ============================================
 
-export {
-    loadPassportData,
-    handleQuickCheckIn,
-    handleSignOut,
-    getCurrentLocation
-};
