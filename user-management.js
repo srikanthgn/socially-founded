@@ -456,4 +456,4 @@ function updateUserProfileDisplay(userData) {
     }
 }
 
-// Export initialization function for easy setup { initializeUserSession as default };
+// Initialization function ready for use
