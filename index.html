@@ -289,6 +289,37 @@ main {
     background: rgba(255, 255, 255, 0.95);
 }
 
+/* Make main transparent so network shows through */
+main {
+    background: transparent !important;
+}
+
+/* Give individual sections subtle backgrounds */
+.content, .features-section, .network-visualization {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Remove the container background */
+.container {
+    background: transparent !important;
+}
+
+/* Make nav slightly transparent */
+nav {
+    background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Ensure the canvas covers full viewport */
+#background-network-canvas {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
     </style>
 </head>
 <body>
