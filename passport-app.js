@@ -407,7 +407,11 @@ async function handleSignOut() {
 // Make functions available globally
 window.handleQuickCheckIn = handleQuickCheckIn;
 window.handleSignOut = handleSignOut;
-window.showAuthModal = showAuthModal;
+window.showAuthModal = typeof showAuthModal !== 'undefined' ? showAuthModal : function() {
+    console.log('Auth modal not available, using fallback');
+    // Fallback: redirect to home page
+    window.location.href = '/';
+};
 
 // ============================================
 // TESTING & DEBUG FUNCTIONS
