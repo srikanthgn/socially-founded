@@ -338,8 +338,8 @@ async function checkStreakAchievements(uid, streak) {
 // Initialize user session and passport
  function initializeUserSession() {
     return new Promise((resolve) => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
+     const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+                    if (user) {
                 try {
                     // Get or create user profile
                     const userData = await createUserProfile(user);
