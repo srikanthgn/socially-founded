@@ -2,29 +2,20 @@
 // User Management System for SociallyFounded
 // This file handles user profiles, passport creation, and data management
 
-// Import Firebase instances from firebase-config.js
-import { auth, db } from './firebase-config.js';
-import { 
-    doc, 
-    setDoc, 
-    getDoc, 
-    updateDoc, 
-    collection, 
-    addDoc, 
-    serverTimestamp,
-    increment,
-    arrayUnion,
-    arrayRemove
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+// Wait for Firebase to be initialized
+if (typeof firebase === 'undefined') {
+    console.error('Firebase not loaded. Make sure firebase-config.js loads first.');
+}
 
 // User profile management
-export async function createUserProfile(user) {
+async function createUserProfile(user) {
     if (!user) return null;
     
-    const userRef = doc(db, 'users', user.uid);
-    const userSnap = await getDoc(userRef);
+    const db = firebase.firestore();
+    const userRef = db.collection('users').doc(user.uid);
+    const userSnap = await userRef.get();
     
-    if (!userSnap.exists()) {
+    if (!userSnap.exists) {
         // Create new user profile
         const userData = {
             profile: {
@@ -32,8 +23,8 @@ export async function createUserProfile(user) {
                 email: user.email || '',
                 displayName: user.displayName || user.email?.split('@')[0] || 'Founder',
                 photoURL: user.photoURL || null,
-                joinDate: serverTimestamp(),
-                lastActive: serverTimestamp()
+                joinDate: firebase.firestore.FieldValue.serverTimestamp(),
+                lastActive: firebase.firestore.FieldValue.serverTimestamp()
             },
             passport: {
                 id: generatePassportId(),
@@ -59,7 +50,7 @@ export async function createUserProfile(user) {
         };
         
         try {
-            await setDoc(userRef, userData);
+            await userRef.set(userData);
             console.log('✅ User profile created successfully');
             
             // Record user creation activity
@@ -74,8 +65,8 @@ export async function createUserProfile(user) {
         }
     } else {
         // Update last active timestamp
-        await updateDoc(userRef, {
-            'profile.lastActive': serverTimestamp()
+        await userRef.update({
+            'profile.lastActive': firebase.firestore.FieldValue.serverTimestamp()
         });
         return userSnap.data();
     }
@@ -89,14 +80,15 @@ function generatePassportId() {
 }
 
 // Get user profile
-export async function getUserProfile(userId) {
+async function getUserProfile(userId) {
     if (!userId) return null;
     
     try {
-        const userRef = doc(db, 'users', userId);
-        const userSnap = await getDoc(userRef);
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(userId);
+        const userSnap = await userRef.get();
         
-        if (userSnap.exists()) {
+        if (userSnap.exists) {
             return userSnap.data();
         } else {
             console.log('No user profile found');
@@ -109,12 +101,13 @@ export async function getUserProfile(userId) {
 }
 
 // Update user profile
-export async function updateUserProfile(userId, updates) {
+async function updateUserProfile(userId, updates) {
     if (!userId || !updates) return false;
     
     try {
-        const userRef = doc(db, 'users', userId);
-        await updateDoc(userRef, updates);
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(userId);
+        await userRef.update(updates);
         console.log('✅ Profile updated successfully');
         return true;
     } catch (error) {
@@ -124,14 +117,15 @@ export async function updateUserProfile(userId, updates) {
 }
 
 // Experience and leveling system
-export async function awardExperience(userId, points, reason) {
+async function awardExperience(userId, points, reason) {
     if (!userId || !points) return false;
     
     try {
-        const userRef = doc(db, 'users', userId);
-        const userSnap = await getDoc(userRef);
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(userId);
+        const userSnap = await userRef.get();
         
-        if (!userSnap.exists()) return false;
+        if (!userSnap.exists) return false;
         
         const currentData = userSnap.data();
         const currentXP = currentData.passport.experience || 0;
@@ -140,7 +134,7 @@ export async function awardExperience(userId, points, reason) {
         const oldLevel = currentData.passport.level || 1;
         
         // Update user XP and level
-        await updateDoc(userRef, {
+        await userRef.update({
             'passport.experience': newXP,
             'passport.level': newLevel
         });
@@ -197,23 +191,25 @@ async function handleLevelUp(userId, oldLevel, newLevel) {
 }
 
 // Check-in system
-export async function recordCheckIn(userId, venueId, location) {
+async function recordCheckIn(userId, venueId, location) {
     if (!userId || !venueId) return false;
     
     try {
+        const db = firebase.firestore();
+        
         // Create check-in record
         const checkInData = {
             userId: userId,
             venueId: venueId,
-            timestamp: serverTimestamp(),
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             location: location || null
         };
         
-        const checkInRef = await addDoc(collection(db, 'checkIns'), checkInData);
+        const checkInRef = await db.collection('checkIns').add(checkInData);
         
         // Update user stats
-        const userRef = doc(db, 'users', userId);
-        const userSnap = await getDoc(userRef);
+        const userRef = db.collection('users').doc(userId);
+        const userSnap = await userRef.get();
         const userData = userSnap.data();
         
         // Calculate streak
@@ -222,11 +218,11 @@ export async function recordCheckIn(userId, venueId, location) {
         const longestStreak = Math.max(currentStreak, userData.passport.longestStreak || 0);
         
         // Update passport data
-        await updateDoc(userRef, {
-            'passport.totalCheckIns': increment(1),
+        await userRef.update({
+            'passport.totalCheckIns': firebase.firestore.FieldValue.increment(1),
             'passport.currentStreak': currentStreak,
             'passport.longestStreak': longestStreak,
-            'passport.lastCheckIn': serverTimestamp()
+            'passport.lastCheckIn': firebase.firestore.FieldValue.serverTimestamp()
         });
         
         // Award check-in XP
@@ -277,14 +273,15 @@ function calculateStreak(lastCheckIn, currentStreak = 0) {
 }
 
 // Achievement system
-export async function addAchievement(userId, achievementKey) {
+async function addAchievement(userId, achievementKey) {
     if (!userId || !achievementKey) return false;
     
     try {
-        const userRef = doc(db, 'users', userId);
-        const userSnap = await getDoc(userRef);
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(userId);
+        const userSnap = await userRef.get();
         
-        if (!userSnap.exists()) return false;
+        if (!userSnap.exists) return false;
         
         const currentAchievements = userSnap.data().passport.achievements || [];
         
@@ -295,8 +292,8 @@ export async function addAchievement(userId, achievementKey) {
         }
         
         // Add achievement
-        await updateDoc(userRef, {
-            'passport.achievements': arrayUnion(achievementKey)
+        await userRef.update({
+            'passport.achievements': firebase.firestore.FieldValue.arrayUnion(achievementKey)
         });
         
         // Award achievement XP
@@ -338,14 +335,15 @@ function getAchievementXP(achievementKey) {
 // Record user activity
 async function recordActivity(userId, type, data = {}) {
     try {
+        const db = firebase.firestore();
         const activityData = {
             userId: userId,
             type: type,
             data: data,
-            timestamp: serverTimestamp()
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };
         
-        await addDoc(collection(db, 'activities'), activityData);
+        await db.collection('activities').add(activityData);
         console.log(`📝 Activity recorded: ${type}`);
     } catch (error) {
         console.error('Error recording activity:', error);
@@ -353,7 +351,7 @@ async function recordActivity(userId, type, data = {}) {
 }
 
 // Session management
-export async function initializeUserSession(user) {
+async function initializeUserSession(user) {
     if (!user) {
         console.log('No user provided for session initialization');
         return null;
@@ -376,6 +374,7 @@ export async function initializeUserSession(user) {
 
 // Export utilities for debugging
 window.debugAwardXP = async (points) => {
+    const auth = firebase.auth();
     const user = auth.currentUser;
     if (!user) {
         console.error('No user logged in');
@@ -387,6 +386,7 @@ window.debugAwardXP = async (points) => {
 };
 
 window.debugUnlockAchievement = async (achievementKey) => {
+    const auth = firebase.auth();
     const user = auth.currentUser;
     if (!user) {
         console.error('No user logged in');
@@ -396,5 +396,14 @@ window.debugUnlockAchievement = async (achievementKey) => {
     const result = await addAchievement(user.uid, achievementKey);
     console.log('Debug achievement unlock result:', result);
 };
+
+// Make functions globally available
+window.createUserProfile = createUserProfile;
+window.getUserProfile = getUserProfile;
+window.updateUserProfile = updateUserProfile;
+window.awardExperience = awardExperience;
+window.recordCheckIn = recordCheckIn;
+window.addAchievement = addAchievement;
+window.initializeUserSession = initializeUserSession;
 
 console.log('✅ User management system loaded');
