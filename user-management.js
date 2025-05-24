@@ -214,7 +214,7 @@ async function recordCheckIn(venueId, venueName, location = null) {
         }
         
         const now = new Date();
-        const lastCheckIn = userData.passport.stats.lastCheckIn;
+        const lastCheckIn = userData.passport.lastCheckIn;
         
         // Calculate streak
         let newStreak = 1;
