@@ -2,40 +2,29 @@
 // Digital Passport User Management System
 // Create this file in your root directory
 
-
-// Get Firebase references from global scope
 // Get Firebase references from global scope
 const auth = firebase.auth();
 const db = firebase.firestore();
-
-// Helper function to get server timestamp
-const serverTimestamp = () => firebase.firestore.FieldValue.serverTimestamp();
-
-
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-const { doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, orderBy, getDocs, serverTimestamp } = firebase.firestore;
 
 // ============================================
 // USER PROFILE MANAGEMENT
 // ============================================
 
 // Create user profile when they first sign up
- async function createUserProfile(user) {
+async function createUserProfile(user) {
     try {
-        const userRef = doc(db, 'users', user.uid);
-        const userSnap = await getDoc(userRef);
+        const userRef = db.doc('users/' + user.uid);
+        const userSnap = await userRef.get();
         
         // Only create if user doesn't exist
-        if (!userSnap.exists()) {
+        if (!userSnap.exists) {
             const userData = {
                 // Basic profile
                 uid: user.uid,
                 email: user.email,
                 displayName: user.displayName || '',
                 photoURL: user.photoURL || '',
-                joinDate: serverTimestamp(),
+                joinDate: firebase.firestore.FieldValue.serverTimestamp(),
                 
                 // Passport data
                 passport: {
@@ -46,14 +35,14 @@ const { doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, orderB
                     currentStreak: 0,
                     longestStreak: 0,
                     achievements: ['founding_member'], // First achievement
-                    createdAt: serverTimestamp()
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 },
                 
                 // User stats
                 stats: {
                     ideasRegistered: 0,
                     venuesVisited: 0,
-                   connectionsMade: 0,
+                    connectionsMade: 0,
                     hoursLogged: 0
                 },
                 
@@ -65,7 +54,7 @@ const { doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, orderB
                 }
             };
             
-            await setDoc(userRef, userData);
+            await userRef.set(userData);
             console.log('✅ User profile created:', user.uid);
             return userData;
         } else {
@@ -79,12 +68,12 @@ const { doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, orderB
 }
 
 // Get user profile data
- async function getUserProfile(uid) {
+async function getUserProfile(uid) {
     try {
-        const userRef = doc(db, 'users', uid);
-        const userSnap = await getDoc(userRef);
+        const userRef = db.doc('users/' + uid);
+        const userSnap = await userRef.get();
         
-        if (userSnap.exists()) {
+        if (userSnap.exists) {
             return userSnap.data();
         } else {
             console.warn('⚠️ User profile not found:', uid);
@@ -97,12 +86,12 @@ const { doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, orderB
 }
 
 // Update user profile
- async function updateUserProfile(uid, updates) {
+async function updateUserProfile(uid, updates) {
     try {
-        const userRef = doc(db, 'users', uid);
-        await updateDoc(userRef, {
+        const userRef = db.doc('users/' + uid);
+        await userRef.update({
             ...updates,
-            updatedAt: serverTimestamp()
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         console.log('✅ User profile updated:', uid);
     } catch (error) {
@@ -139,12 +128,12 @@ function calculateLevel(experience) {
 }
 
 // Award experience points and update level
- async function awardExperience(uid, points, reason) {
+async function awardExperience(uid, points, reason) {
     try {
-        const userRef = doc(db, 'users', uid);
-        const userSnap = await getDoc(userRef);
+        const userRef = db.doc('users/' + uid);
+        const userSnap = await userRef.get();
         
-        if (userSnap.exists()) {
+        if (userSnap.exists) {
             const userData = userSnap.data();
             const currentXP = userData.passport.experience || 0;
             const newXP = currentXP + points;
@@ -155,7 +144,7 @@ function calculateLevel(experience) {
             const updates = {
                 'passport.experience': newXP,
                 'passport.level': newLevel,
-                updatedAt: serverTimestamp()
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
             
             // If leveled up, add achievement
@@ -165,7 +154,7 @@ function calculateLevel(experience) {
                 updates['passport.achievements'] = achievements;
             }
             
-            await updateDoc(userRef, updates);
+            await userRef.update(updates);
             
             // Log the XP gain
             await logActivity(uid, 'xp_gained', {
@@ -190,7 +179,7 @@ function calculateLevel(experience) {
 // ============================================
 
 // Record a venue check-in
- async function recordCheckIn(uid, venueData, location = null) {
+async function recordCheckIn(uid, venueData, location = null) {
     try {
         // Create check-in record
         const checkInData = {
@@ -199,19 +188,19 @@ function calculateLevel(experience) {
             venueName: venueData.name,
             venueAddress: venueData.address,
             location: location,
-            timestamp: serverTimestamp(),
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             duration: null, // Will be updated on check-out
             status: 'active'
         };
         
         // Add to check-ins collection
-        const checkInRef = await addDoc(collection(db, 'checkIns'), checkInData);
+        const checkInRef = await db.collection('checkIns').add(checkInData);
         
         // Update user stats
-        const userRef = doc(db, 'users', uid);
-        const userSnap = await getDoc(userRef);
+        const userRef = db.doc('users/' + uid);
+        const userSnap = await userRef.get();
         
-        if (userSnap.exists()) {
+        if (userSnap.exists) {
             const userData = userSnap.data();
             const totalCheckIns = (userData.passport.totalCheckIns || 0) + 1;
             
@@ -220,12 +209,12 @@ function calculateLevel(experience) {
             const longestStreak = Math.max(currentStreak, userData.passport.longestStreak || 0);
             
             // Update user data
-            await updateDoc(userRef, {
+            await userRef.update({
                 'passport.totalCheckIns': totalCheckIns,
                 'passport.currentStreak': currentStreak,
                 'passport.longestStreak': longestStreak,
-                'passport.lastCheckIn': serverTimestamp(),
-                updatedAt: serverTimestamp()
+                'passport.lastCheckIn': firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
             
             // Award XP for check-in
@@ -233,6 +222,11 @@ function calculateLevel(experience) {
             
             // Check for achievements
             await checkStreakAchievements(uid, currentStreak);
+            
+            // Check for first check-in achievement
+            if (totalCheckIns === 1) {
+                await addAchievements(uid, ['first_checkin']);
+            }
         }
         
         console.log('✅ Check-in recorded:', checkInRef.id);
@@ -248,29 +242,40 @@ function calculateLevel(experience) {
 async function calculateStreak(uid) {
     try {
         // Get recent check-ins
-        const checkInsRef = collection(db, 'checkIns');
-        const q = query(
-            checkInsRef,
-            where('userId', '==', uid),
-            orderBy('timestamp', 'desc')
-        );
+        const checkInsRef = db.collection('checkIns');
+        const snapshot = await checkInsRef
+            .where('userId', '==', uid)
+            .orderBy('timestamp', 'desc')
+            .limit(30)
+            .get();
         
-        const snapshot = await getDocs(q);
-        const checkIns = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
+        if (snapshot.empty) {
+            return 0;
+        }
+        
+        const checkIns = [];
+        snapshot.forEach(doc => {
+            checkIns.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
         
         // Calculate consecutive days (simplified logic)
-        let streak = 0;
+        let streak = 1; // At least one check-in today
         const today = new Date();
-        const oneDayMs = 24 * 60 * 60 * 1000;
+        today.setHours(0, 0, 0, 0);
         
-        for (let i = 0; i < checkIns.length; i++) {
-            const checkInDate = checkIns[i].timestamp.toDate();
-            const daysDiff = Math.floor((today - checkInDate) / oneDayMs);
+        for (let i = 0; i < checkIns.length - 1; i++) {
+            const currentDate = checkIns[i].timestamp.toDate();
+            const nextDate = checkIns[i + 1].timestamp.toDate();
             
-            if (daysDiff === i) {
+            currentDate.setHours(0, 0, 0, 0);
+            nextDate.setHours(0, 0, 0, 0);
+            
+            const daysDiff = Math.floor((currentDate - nextDate) / (1000 * 60 * 60 * 24));
+            
+            if (daysDiff === 1) {
                 streak++;
             } else {
                 break;
@@ -298,21 +303,21 @@ async function checkStreakAchievements(uid, streak) {
 }
 
 // Add achievements to user profile
- async function addAchievements(uid, newAchievements) {
+async function addAchievements(uid, newAchievements) {
     try {
-        const userRef = doc(db, 'users', uid);
-        const userSnap = await getDoc(userRef);
+        const userRef = db.doc('users/' + uid);
+        const userSnap = await userRef.get();
         
-        if (userSnap.exists()) {
+        if (userSnap.exists) {
             const userData = userSnap.data();
             const currentAchievements = userData.passport.achievements || [];
             
             // Add only new achievements
             const uniqueAchievements = [...new Set([...currentAchievements, ...newAchievements])];
             
-            await updateDoc(userRef, {
+            await userRef.update({
                 'passport.achievements': uniqueAchievements,
-                updatedAt: serverTimestamp()
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
             
             console.log('✅ Achievements added:', newAchievements);
@@ -328,16 +333,16 @@ async function checkStreakAchievements(uid, streak) {
 // ============================================
 
 // Log user activity
- async function logActivity(uid, type, data = {}) {
+async function logActivity(uid, type, data = {}) {
     try {
         const activityData = {
             userId: uid,
             type: type,
             data: data,
-            timestamp: serverTimestamp()
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };
         
-        await addDoc(collection(db, 'activities'), activityData);
+        await db.collection('activities').add(activityData);
     } catch (error) {
         console.error('❌ Error logging activity:', error);
     }
@@ -348,10 +353,10 @@ async function checkStreakAchievements(uid, streak) {
 // ============================================
 
 // Initialize user session and passport
- function initializeUserSession() {
+function initializeUserSession() {
     return new Promise((resolve) => {
-     const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-                    if (user) {
+        const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
                 try {
                     // Get or create user profile
                     const userData = await createUserProfile(user);
