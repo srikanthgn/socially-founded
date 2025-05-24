@@ -191,70 +191,89 @@ async function handleLevelUp(userId, oldLevel, newLevel) {
     });
 }
 
-// Check-in system
-async function recordCheckIn(userId, venueId, location) {
-    if (!userId || !venueId) return false;
+async function recordCheckIn(venueId, venueName, location = null) {
+    const user = firebase.auth().currentUser;
+    if (!user) throw new Error('No authenticated user');
+    
+    const db = firebase.firestore();
+    const userRef = db.collection('users').doc(user.uid);
     
     try {
-        const db = firebase.firestore();
+        // Get current user data
+        const userDoc = await userRef.get();
+        const userData = userDoc.data();
         
-        // Create check-in record
-        const checkInData = {
-            userId: userId,
-            venueId: venueId,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            location: location || null
-        };
+        // Initialize passport.stats if it doesn't exist
+        if (!userData.passport.stats) {
+            userData.passport.stats = {
+                lastCheckIn: null,
+                totalCheckIns: 0,
+                currentStreak: 0,
+                longestStreak: 0
+            };
+        }
         
-        const checkInRef = await db.collection('checkIns').add(checkInData);
-        
-        // Update user stats
-        const userRef = db.collection('users').doc(userId);
-        const userSnap = await userRef.get();
-        const userData = userSnap.data();
+        const now = new Date();
+        const lastCheckIn = userData.passport.stats.lastCheckIn;
         
         // Calculate streak
-        const lastCheckIn = userData.passport.lastCheckIn;
-        const currentStreak = calculateStreak(lastCheckIn, userData.passport.currentStreak);
-        const longestStreak = Math.max(currentStreak, userData.passport.longestStreak || 0);
+        let newStreak = 1;
+        if (lastCheckIn) {
+            const lastDate = lastCheckIn.toDate();
+            const daysDiff = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+            
+            if (daysDiff === 1) {
+                // Consecutive day
+                newStreak = userData.passport.stats.currentStreak + 1;
+            } else if (daysDiff === 0) {
+                // Same day
+                newStreak = userData.passport.stats.currentStreak;
+            }
+        }
         
-        // Update passport data
+        // Update user document with check-in data
         await userRef.update({
             'passport.totalCheckIns': firebase.firestore.FieldValue.increment(1),
-            'passport.currentStreak': currentStreak,
-            'passport.longestStreak': longestStreak,
-            'passport.lastCheckIn': firebase.firestore.FieldValue.serverTimestamp()
+            'passport.stats.lastCheckIn': now,
+            'passport.stats.totalCheckIns': firebase.firestore.FieldValue.increment(1),
+            'passport.stats.currentStreak': newStreak,
+            'passport.stats.longestStreak': Math.max(newStreak, userData.passport.stats.longestStreak || 0),
+            'stats.venuesVisited': firebase.firestore.FieldValue.increment(1)
         });
         
-        // Award check-in XP
-        await awardExperience(userId, 10, 'venue_checkin');
+        // Record the check-in
+        const checkInData = {
+            userId: user.uid,
+            venueId: venueId,
+            venueName: venueName,
+            timestamp: now,
+            location: location || { latitude: 0, longitude: 0 },
+            points: 10
+        };
+        
+        await db.collection('checkIns').add(checkInData);
+        
+        // Award XP for check-in
+        await awardExperience(10, 'check_in', { venueId, venueName });
         
         // Check for achievements
-        const totalCheckIns = (userData.passport.totalCheckIns || 0) + 1;
-        if (totalCheckIns === 1) {
-            await addAchievement(userId, 'first_checkin');
-        }
-        
-        if (currentStreak === 7) {
-            await addAchievement(userId, 'streak_week');
-        } else if (currentStreak === 30) {
-            await addAchievement(userId, 'streak_month');
-        }
+        await checkAchievements();
         
         // Record activity
-        await recordActivity(userId, 'venue_checkin', {
-            venueId: venueId,
-            checkInId: checkInRef.id,
-            streak: currentStreak
+        await recordActivity('check_in', {
+            venue: venueName,
+            points: 10
         });
         
         console.log('✅ Check-in recorded successfully');
-        return { checkInId: checkInRef.id, currentStreak, totalCheckIns };
+        return checkInData;
+        
     } catch (error) {
         console.error('❌ Error recording check-in:', error);
-        return false;
+        throw error;
     }
 }
+
 
 // Calculate streak
 function calculateStreak(lastCheckIn, currentStreak = 0) {
