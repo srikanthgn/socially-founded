@@ -24,7 +24,8 @@ async function createUserProfile(user) {
                 displayName: user.displayName || user.email?.split('@')[0] || 'Founder',
                 photoURL: user.photoURL || null,
                 joinDate: firebase.firestore.FieldValue.serverTimestamp(),
-                lastActive: firebase.firestore.FieldValue.serverTimestamp()
+                lastActive: firebase.firestore.FieldValue.serverTimestamp(),
+                userType: localStorage.getItem('sf-user-type') || 'founder' // Store the user type, default to 'founder'
             },
             passport: {
                 id: generatePassportId(),
@@ -51,8 +52,10 @@ stats: {
         };
         
         try {
+            // Log the userType that's about to be saved for a new user
+            console.log('User type from localStorage for new profile:', localStorage.getItem('sf-user-type'));
             await userRef.set(userData);
-            console.log('✅ User profile created successfully');
+            console.log('✅ User profile created successfully with userType:', userData.profile.userType);
             
             // Record user creation activity
             await recordActivity(user.uid, 'account_created', {
