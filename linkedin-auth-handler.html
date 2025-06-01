@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SociallyFounded | Authenticating...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #F5F5F5; /* Light Gray from branding */
+            color: #003554; /* Deep Navy Blue from branding */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .container {
+            padding: 30px;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: #D32F2F; /* A generic error red */
+            font-weight: 500;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #003554; /* Deep Navy Blue */
+            animation: spin 1s ease infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="favicon.svg" alt="Socially Founded Logo" style="width: 50px; height: auto; margin-bottom:20px;">
+        <h1>Authenticating with LinkedIn</h1>
+        <div id="message"><p>Please wait while we complete your sign-in...</p></div>
+        <div id="spinner" class="spinner"></div>
+    </div>
+
+    <!-- Firebase SDKs (ensure these versions are consistent with your project) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+    <!--
+      firebase-simple.js contains the Firebase config and initializes Firebase.
+      It also contains the onAuthStateChanged logic necessary for redirection after custom token sign-in.
+      user-management.js is needed for profile creation triggered by onAuthStateChanged.
+    -->
+    <script src="firebase-simple.js" defer></script>
+    <script src="user-management.js" defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageElement = document.getElementById('message');
+            const spinnerElement = document.getElementById('spinner');
+
+            // Function to display errors
+            function showError(errorMessage) {
+                spinnerElement.style.display = 'none';
+                messageElement.innerHTML = `<p class="error">Error: ${errorMessage}</p><p>Please <a href="index.html" style="color: #005073;">try signing in again</a>.</p>`;
+            }
+
+            // Get custom token from URL query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const customToken = urlParams.get('token');
+            const errorParam = urlParams.get('error');
+            const errorDescriptionParam = urlParams.get('error_description');
+
+            // Clear the LinkedIn specific auth flag now that we are on the handler page
+            localStorage.removeItem('sf-linkedin-auth-in-progress');
+
+            if (errorParam) {
+                console.error('Error received from LinkedIn callback:', errorParam, errorDescriptionParam);
+                showError(`LinkedIn authentication failed. ${errorDescriptionParam || 'Please try again.'}`);
+                // Ensure general auth flag is also cleared on explicit error
+                localStorage.removeItem('sf-auth-in-progress');
+                return;
+            }
+
+            if (customToken) {
+                console.log('Custom token found. Attempting to sign in...');
+                // Set the main auth progress flag for firebase-simple.js's onAuthStateChanged
+                // This signals that a sign-in process is completing and redirection might be needed.
+                localStorage.setItem('sf-auth-in-progress', 'true');
+
+                // Wait for firebase and authManager to be ready from firebase-simple.js
+                const waitForFirebase = setInterval(() => {
+                    if (firebase && firebase.auth && typeof firebase.auth === 'function' && window.authManager) {
+                        clearInterval(waitForFirebase);
+                        const auth = firebase.auth();
+                        auth.signInWithCustomToken(customToken)
+                            .then((userCredential) => {
+                                // Sign-in successful.
+                                console.log('Successfully signed in with custom token:', userCredential.user);
+                                messageElement.innerHTML = '<p>Sign-in successful! We are preparing your passport...</p>';
+                                // onAuthStateChanged in firebase-simple.js should now:
+                                // 1. Detect the new user state.
+                                // 2. Call initializeUserSession (which calls createUserProfile from user-management.js).
+                                // 3. createUserProfile uses 'sf-user-type' from localStorage (set before LinkedIn redirect).
+                                // 4. Redirect to passport.html because 'sf-auth-in-progress' is true.
+                                // No explicit redirect here; let onAuthStateChanged manage it.
+                            })
+                            .catch((error) => {
+                                console.error('Error signing in with custom token:', error);
+                                showError('Failed to complete sign-in. The authentication token may be invalid or expired.');
+                                localStorage.removeItem('sf-auth-in-progress');
+                            });
+                    } else {
+                        console.log('Waiting for Firebase and AuthManager to initialize...');
+                    }
+                }, 100); // Check every 100ms
+
+                // Timeout for waiting for Firebase (e.g., 10 seconds)
+                setTimeout(() => {
+                    if (document.getElementById('spinner').style.display !== 'none' && !firebase?.apps?.length) { // Check if spinner is still visible and firebase not initialized
+                        clearInterval(waitForFirebase);
+                        console.error('Firebase Auth did not initialize in time.');
+                        showError('Authentication service could not be initialized. Please check your connection or try again later.');
+                        localStorage.removeItem('sf-auth-in-progress');
+                    }
+                }, 10000);
+
+            } else {
+                console.error('No custom token or error found in URL.');
+                showError('Authentication token or error parameter was not found. Unable to complete sign-in.');
+                localStorage.removeItem('sf-auth-in-progress'); // Clear if no token and no explicit error
+            }
+        });
+    </script>
+</body>
+</html>
