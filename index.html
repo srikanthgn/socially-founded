@@ -10,9 +10,20 @@
     <link rel="stylesheet" href="mobile-fixes.css">
     
     <!-- Add Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+
+<!-- Firebase SDK -->
+
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
+<!-- Firebase Config MUST come after SDK -->
+<script src="firebase-config.js"></script>
+<!-- Auth System -->
+<script src="firebase-auth-complete.js"></script>
+<!-- User Management -->
+<script src="user-management.js"></script>
+
     
     <!-- Font Awesome for social icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -647,13 +658,11 @@
     <!-- Keep your existing sections below -->
     
     <!-- Scripts -->
-    <script src="firebase-config.js"></script>
-    	<script src="firebase-auth-complete.js"></script>
-    <script src="user-management.js"></script>
+
     
     <script>
         // UI Functions
-        let useWhatsApp = false; // Track which method was selected
+        // Track which method was selected
         
         function showPhoneAuth(isWhatsApp = false) {
             useWhatsApp = isWhatsApp;
@@ -753,9 +762,7 @@
         // Expose showOTPInput function globally
         window.showOTPInput = showOTPInput;
     </script>
-    <script src="firebase-config.js"></script>
-<script src="firebase-auth-complete.js"></script>
-<script src="user-management.js"></script>
+
 <script>
     // UI Functions
     let useWhatsApp = false; // Track which method was selected
