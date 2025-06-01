@@ -86,12 +86,15 @@ function handleAuthenticatedUser(user) {
     const currentPage = window.location.pathname;
     
     if (currentPage === '/' || currentPage === '/index.html') {
-        // On homepage, redirect to passport
-        window.location.href = '/passport.html';
+        // On homepage - DON'T redirect, just update the auth section
+        updateHomepageForAuthenticatedUser(user);
     } else if (currentPage === '/passport.html') {
         // On passport page, show content
-        document.getElementById('auth-required').style.display = 'none';
-        document.getElementById('passport-content').style.display = 'block';
+        const authRequired = document.getElementById('auth-required');
+        const passportContent = document.getElementById('passport-content');
+        
+        if (authRequired) authRequired.style.display = 'none';
+        if (passportContent) passportContent.style.display = 'block';
         
         // Load passport data if function exists
         if (typeof loadPassportData === 'function') {
@@ -103,15 +106,55 @@ function handleAuthenticatedUser(user) {
     }
 }
 
+// Update homepage for authenticated users
+function updateHomepageForAuthenticatedUser(user) {
+    // Find the auth container
+    const authContainer = document.querySelector('.auth-container');
+    if (authContainer) {
+        // Get user display info
+        const displayName = user.displayName || 'Entrepreneur';
+        const displayEmail = user.email || user.phoneNumber || '';
+        
+        // Replace auth options with logged-in state
+        authContainer.innerHTML = `
+            <h2 style="text-align: center; margin-bottom: 1rem; color: #003554;">Welcome Back, ${displayName}!</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 1.5rem;">
+                ${displayEmail ? `Signed in as <strong>${displayEmail}</strong>` : 'You are signed in'}
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button onclick="window.location.href='/passport.html'" 
+                        style="padding: 15px 30px; background: #003554; color: white; border: none; 
+                               border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;
+                               transition: all 0.3s;">
+                    View My Passport
+                </button>
+                <button onclick="handleSignOut()" 
+                        style="padding: 15px 30px; background: transparent; color: #003554; 
+                               border: 2px solid #003554; border-radius: 8px; font-size: 16px; 
+                               font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    Sign Out
+                </button>
+            </div>
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 14px; color: #666;">
+                Continue exploring below or head to your passport to track your journey
+            </p>
+        `;
+    }
+}
+
 // Handle unauthenticated user
 function handleUnauthenticatedUser() {
     const currentPage = window.location.pathname;
     
     if (currentPage === '/passport.html') {
         // Show auth required message
-        document.getElementById('auth-required').style.display = 'block';
-        document.getElementById('passport-content').style.display = 'none';
+        const authRequired = document.getElementById('auth-required');
+        const passportContent = document.getElementById('passport-content');
+        
+        if (authRequired) authRequired.style.display = 'block';
+        if (passportContent) passportContent.style.display = 'none';
     }
+    // On homepage, do nothing - let normal auth UI show
 }
 
 // Check if profile needs completion
@@ -153,14 +196,34 @@ const authProviders = {
                 case 'linkedin':
                     return this.signInWithLinkedIn();
                 default:
-                    throw new Error('Unknown provider');
+                    throw new Error('Unknown provider: ' + providerName);
             }
             
             const result = await firebase.auth().signInWithPopup(provider);
             console.log('Sign in successful:', providerName);
             
+            // Auth state listener will handle the redirect
+            
         } catch (error) {
             console.error(`Error signing in with ${providerName}:`, error);
+            
+            // Handle specific error cases
+            if (error.code === 'auth/popup-closed-by-user') {
+                console.log('User cancelled sign-in');
+                return;
+            }
+            
+            if (error.code === 'auth/account-exists-with-different-credential') {
+                this.showAuthError('An account already exists with the same email address but different sign-in credentials.');
+                return;
+            }
+            
+            // For Facebook when not configured
+            if (providerName === 'facebook' && error.code === 'auth/internal-error') {
+                this.showAuthError('Facebook login is not available yet. Please use another sign-in method.');
+                return;
+            }
+            
             this.showAuthError(error.message);
         }
     },
@@ -174,7 +237,9 @@ const authProviders = {
                 { method: 'GET' }
             );
             
-            if (!response.ok) throw new Error('Failed to start LinkedIn authentication');
+            if (!response.ok) {
+                throw new Error('Failed to start LinkedIn authentication');
+            }
             
             const data = await response.json();
             if (data.authUrl) {
@@ -195,7 +260,9 @@ const authProviders = {
             if (!window.recaptchaVerifier) {
                 window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
                     'size': 'invisible',
-                    'callback': (response) => console.log('reCAPTCHA solved')
+                    'callback': (response) => {
+                        console.log('reCAPTCHA solved');
+                    }
                 });
             }
             
@@ -207,28 +274,60 @@ const authProviders = {
             if (window.showOTPInput) {
                 window.showOTPInput(phoneNumber, useWhatsApp);
             }
+            
         } catch (error) {
             console.error('Phone sign-in error:', error);
-            this.showAuthError(error.message);
+            
+            // Handle specific errors
+            if (error.code === 'auth/invalid-phone-number') {
+                this.showAuthError('Invalid phone number. Please check and try again.');
+            } else if (error.code === 'auth/too-many-requests') {
+                this.showAuthError('Too many attempts. Please try again later.');
+            } else {
+                this.showAuthError(error.message);
+            }
+            
+            // Reset reCAPTCHA on error
+            if (window.recaptchaVerifier) {
+                window.recaptchaVerifier.render();
+            }
         }
     },
     
     // Verify OTP
     async verifyOTP(code) {
         try {
+            if (!window.confirmationResult) {
+                throw new Error('No confirmation result found. Please request a new code.');
+            }
+            
             const result = await window.confirmationResult.confirm(code);
             console.log('Phone authentication successful');
-            // Redirect handled by auth state listener
+            
+            // Set profile completion flag for phone users
+            const user = result.user;
+            if (user && !user.displayName) {
+                // Redirect with profile completion flag
+                window.location.href = '/passport.html?completeProfile=true';
+            }
+            
         } catch (error) {
             console.error('OTP verification error:', error);
-            this.showAuthError('Invalid verification code');
+            
+            if (error.code === 'auth/invalid-verification-code') {
+                this.showAuthError('Invalid verification code. Please try again.');
+            } else if (error.code === 'auth/code-expired') {
+                this.showAuthError('Verification code expired. Please request a new one.');
+            } else {
+                this.showAuthError('Verification failed. Please try again.');
+            }
         }
     },
     
     // WhatsApp OTP (fallback to SMS)
     async sendWhatsAppOTP(phoneNumber) {
         // WhatsApp Business API not implemented, fallback to SMS
-        console.log('WhatsApp API not available, using SMS');
+        console.log('WhatsApp API not available, using SMS fallback');
         return this.signInWithPhone(phoneNumber, false);
     },
     
@@ -241,6 +340,9 @@ const authProviders = {
             setTimeout(() => {
                 errorDiv.style.display = 'none';
             }, 5000);
+        } else {
+            // Fallback to alert if error div not found
+            alert('Error: ' + message);
         }
     }
 };
@@ -249,10 +351,14 @@ const authProviders = {
 async function handleSignOut() {
     try {
         await firebase.auth().signOut();
-        console.log('User signed out');
-        window.location.href = '/';
+        console.log('User signed out successfully');
+        
+        // Reload the page to reset UI
+        window.location.reload();
+        
     } catch (error) {
         console.error('Sign out error:', error);
+        alert('Error signing out. Please try again.');
     }
 }
 
@@ -274,6 +380,7 @@ function handleLinkedInCallback() {
                 // Clear token from URL
                 window.history.replaceState({}, document.title, window.location.pathname);
                 console.log('LinkedIn sign-in successful');
+                // Auth state listener will handle the rest
             })
             .catch((error) => {
                 console.error('LinkedIn token error:', error);
