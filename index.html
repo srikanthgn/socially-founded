@@ -16,6 +16,7 @@
     
     <!-- Font Awesome for social icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* Enhanced authentication styles */
@@ -272,7 +273,249 @@
             justify-content: center;
             margin-top: 1rem;
         }
+
     </style>
+<style>
+    /* Enhanced authentication styles */
+    .auth-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .auth-icons-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .auth-icon-btn {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #f0f0f0;
+        border-radius: 1rem;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.3s ease-out backwards;
+    }
+    
+    .auth-icon-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        border-color: transparent;
+    }
+    
+    .auth-icon-btn i {
+        font-size: 2rem;
+        transition: transform 0.2s;
+    }
+    
+    .auth-icon-btn:hover i {
+        transform: scale(1.1);
+    }
+    
+    /* Icon specific colors and hover effects */
+    .auth-icon-btn.google { color: #4285f4; }
+    .auth-icon-btn.google:hover { background: #4285f4; color: white; }
+    
+    .auth-icon-btn.facebook { color: #1877f2; }
+    .auth-icon-btn.facebook:hover { background: #1877f2; color: white; }
+    
+    .auth-icon-btn.linkedin { color: #0077b5; }
+    .auth-icon-btn.linkedin:hover { background: #0077b5; color: white; }
+    
+    .auth-icon-btn.whatsapp { color: #25d366; }
+    .auth-icon-btn.whatsapp:hover { background: #25d366; color: white; }
+    
+    .auth-icon-btn.phone { color: #6c757d; }
+    .auth-icon-btn.phone:hover { background: #6c757d; color: white; }
+    
+    .auth-icon-btn.email { color: #003554; }
+    .auth-icon-btn.email:hover { background: #003554; color: white; }
+    
+    /* Tooltip on hover */
+    .auth-icon-btn::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 10;
+    }
+    
+    .auth-icon-btn:hover::after {
+        opacity: 1;
+    }
+    
+    .auth-subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Add subtle entrance animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .auth-icon-btn:nth-child(1) { animation-delay: 0.05s; }
+    .auth-icon-btn:nth-child(2) { animation-delay: 0.1s; }
+    .auth-icon-btn:nth-child(3) { animation-delay: 0.15s; }
+    .auth-icon-btn:nth-child(4) { animation-delay: 0.2s; }
+    .auth-icon-btn:nth-child(5) { animation-delay: 0.25s; }
+    .auth-icon-btn:nth-child(6) { animation-delay: 0.3s; }
+    
+    /* Phone auth form styles */
+    .phone-auth-form {
+        display: none;
+    }
+    
+    .phone-input-group {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .country-code {
+        width: 100px;
+        padding: 0.75rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+    }
+    
+    .phone-number {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+    }
+    
+    .otp-input-container {
+        display: none;
+        text-align: center;
+        padding: 2rem 0;
+    }
+    
+    .otp-inputs {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin: 1rem 0;
+    }
+    
+    .otp-input {
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        font-size: 1.5rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 0.5rem;
+        transition: border-color 0.2s;
+    }
+    
+    .otp-input:focus {
+        border-color: #003554;
+        outline: none;
+    }
+    
+    .whatsapp-option, .sms-option {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+        padding: 0.75rem;
+        background: #f9f9f9;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        color: #666;
+    }
+    
+    .whatsapp-option {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+    
+    .sms-option {
+        background: #f3f4f6;
+        color: #4b5563;
+    }
+    
+    #auth-error {
+        display: none;
+        padding: 0.75rem;
+        background: #fee;
+        color: #c00;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+    }
+    
+    #recaptcha-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .auth-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.875rem 1.5rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 0.5rem;
+        background: white;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        color: #333;
+        width: 100%;
+    }
+    
+    @media (max-width: 400px) {
+        .auth-icons-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+        
+        .auth-icon-btn i {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+
+
+
 </head>
 <body>
     <!-- Keep your existing navigation -->
@@ -281,115 +524,125 @@
     </nav>
 
     <!-- Hero Section with Authentication -->
-    <section class="hero">
-        <div class="container">
-            <h1>Where entrepreneurial journeys converge and amplify</h1>
-            <p class="subtitle">Get your Digital Passport and join thousands of founders worldwide</p>
+
+<section class="hero">
+    <div class="container">
+        <h1>Where entrepreneurial journeys converge and amplify</h1>
+        <p class="subtitle">Get your Digital Passport and join thousands of founders worldwide</p>
+        
+        <!-- Authentication Container -->
+        <div class="auth-container">
+            <h2 style="text-align: center; margin-bottom: 1rem; color: #003554;">Get Your Digital Passport</h2>
+            <p class="auth-subtitle">Choose how you'd like to sign in</p>
             
-            <!-- Authentication Container -->
-
-
-<!-- Icon Grid Authentication -->
-                <div class="auth-icons-grid" id="authIconsGrid">
-                    <button class="auth-icon-btn google" data-tooltip="Google" 
-                            onclick="authProviders.signInWithProvider('google')">
-                        <i class="fab fa-google"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn facebook" data-tooltip="Facebook" 
-                            onclick="authProviders.signInWithProvider('facebook')">
-                        <i class="fab fa-facebook-f"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn linkedin" data-tooltip="LinkedIn" 
-                            onclick="authProviders.signInWithProvider('linkedin')">
-                        <i class="fab fa-linkedin-in"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn whatsapp" data-tooltip="WhatsApp" 
-                            onclick="showPhoneAuth(true)">
-                        <i class="fab fa-whatsapp"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn phone" data-tooltip="SMS" 
-                            onclick="showPhoneAuth(false)">
-                        <i class="fas fa-mobile-alt"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn email" data-tooltip="Email" 
-                            onclick="window.location.href='/passport.html'">
-                        <i class="fas fa-envelope"></i>
-                    </button>
-                </div>
-
-                <!-- Phone Authentication Form -->
-                <div class="phone-auth-form" id="phoneAuthForm">
-                    <h3 style="margin-bottom: 1.5rem;">Enter your phone number</h3>
-                    
-                    <div class="phone-input-group">
-                        <select class="country-code" id="countryCode">
-                            <option value="+1">+1 USA</option>
-                            <option value="+44">+44 UK</option>
-                            <option value="+91">+91 India</option>
-                            <option value="+971" selected>+971 UAE</option>
-                            <option value="+65">+65 Singapore</option>
-                            <option value="+61">+61 Australia</option>
-                            <!-- Add more country codes as needed -->
-                        </select>
-                        <input type="tel" class="phone-number" id="phoneNumber" 
-                               placeholder="Phone number" maxlength="15">
-                    </div>
-                    
-                    <div class="whatsapp-option" id="whatsappOption" style="display: none;">
-                        <i class="fab fa-whatsapp" style="color: #25d366; margin-right: 0.5rem;"></i>
-                        <span>We'll send your code via WhatsApp</span>
-                    </div>
-                    
-                    <div class="sms-option" id="smsOption" style="display: none;">
-                        <i class="fas fa-mobile-alt" style="color: #6c757d; margin-right: 0.5rem;"></i>
-                        <span>We'll send your code via SMS</span>
-                    </div>
-                    
-                    <button class="auth-button" style="background: #003554; color: white; margin-top: 1rem;"
-                            onclick="sendPhoneOTP()">
-                        Send Verification Code
-                    </button>
-                    
-                    <button class="auth-button" style="margin-top: 0.5rem;"
-                            onclick="hidePhoneAuth()">
-                        Back to sign-in options
-                    </button>
-                    
-                    <div id="recaptcha-container"></div>
+            <!-- Error message -->
+            <div id="auth-error"></div>
+            
+            <!-- Icon Grid Authentication -->
+            <div class="auth-icons-grid" id="authIconsGrid">
+                <button class="auth-icon-btn google" data-tooltip="Google" 
+                        onclick="authProviders.signInWithProvider('google')">
+                    <i class="fab fa-google"></i>
+                </button>
+                
+                <button class="auth-icon-btn facebook" data-tooltip="Facebook" 
+                        onclick="authProviders.signInWithProvider('facebook')">
+                    <i class="fab fa-facebook-f"></i>
+                </button>
+                
+                <button class="auth-icon-btn linkedin" data-tooltip="LinkedIn" 
+                        onclick="authProviders.signInWithProvider('linkedin')">
+                    <i class="fab fa-linkedin-in"></i>
+                </button>
+                
+                <button class="auth-icon-btn whatsapp" data-tooltip="WhatsApp" 
+                        onclick="showPhoneAuth(true)">
+                    <i class="fab fa-whatsapp"></i>
+                </button>
+                
+                <button class="auth-icon-btn phone" data-tooltip="SMS" 
+                        onclick="showPhoneAuth(false)">
+                    <i class="fas fa-mobile-alt"></i>
+                </button>
+                
+                <button class="auth-icon-btn email" data-tooltip="Email" 
+                        onclick="window.location.href='/passport.html'">
+                    <i class="fas fa-envelope"></i>
+                </button>
+            </div>
+            
+            <!-- Phone Authentication Form -->
+            <div class="phone-auth-form" id="phoneAuthForm">
+                <h3 style="margin-bottom: 1.5rem;">Enter your phone number</h3>
+                
+                <div class="phone-input-group">
+                    <select class="country-code" id="countryCode">
+                        <option value="+1">+1 USA</option>
+                        <option value="+44">+44 UK</option>
+                        <option value="+91">+91 India</option>
+                        <option value="+971" selected>+971 UAE</option>
+                        <option value="+65">+65 Singapore</option>
+                        <option value="+61">+61 Australia</option>
+                        <!-- Add more country codes as needed -->
+                    </select>
+                    <input type="tel" class="phone-number" id="phoneNumber" 
+                           placeholder="Phone number" maxlength="15">
                 </div>
                 
-                <!-- OTP Verification -->
-                <div class="otp-input-container" id="otpContainer">
-                    <h3>Enter verification code</h3>
-                    <p style="color: #666; margin: 0.5rem 0;">We sent a code to <span id="phoneDisplay"></span></p>
-                    
-                    <div class="otp-inputs">
-                        <input type="text" class="otp-input" maxlength="1" id="otp1">
-                        <input type="text" class="otp-input" maxlength="1" id="otp2">
-                        <input type="text" class="otp-input" maxlength="1" id="otp3">
-                        <input type="text" class="otp-input" maxlength="1" id="otp4">
-                        <input type="text" class="otp-input" maxlength="1" id="otp5">
-                        <input type="text" class="otp-input" maxlength="1" id="otp6">
-                    </div>
-                    
-                    <button class="auth-button" style="background: #003554; color: white; margin-top: 1rem;"
-                            onclick="verifyPhoneOTP()">
-                        Verify Code
-                    </button>
-                    
-                    <p style="margin-top: 1rem; font-size: 0.875rem;">
-                        Didn't receive the code? 
-                        <a href="#" onclick="resendOTP()" style="color: #003554;">Resend</a>
-                    </p>
+                <div class="whatsapp-option" id="whatsappOption" style="display: none;">
+                    <i class="fab fa-whatsapp" style="color: #25d366; margin-right: 0.5rem;"></i>
+                    <span>We'll send your code via WhatsApp</span>
                 </div>
+                
+                <div class="sms-option" id="smsOption" style="display: none;">
+                    <i class="fas fa-mobile-alt" style="color: #6c757d; margin-right: 0.5rem;"></i>
+                    <span>We'll send your code via SMS</span>
+                </div>
+                
+                <button class="auth-button" style="background: #003554; color: white; margin-top: 1rem;"
+                        onclick="sendPhoneOTP()">
+                    Send Verification Code
+                </button>
+                
+                <button class="auth-button" style="margin-top: 0.5rem;"
+                        onclick="hidePhoneAuth()">
+                    Back to sign-in options
+                </button>
+                
+                <div id="recaptcha-container"></div>
+            </div>
+            
+            <!-- OTP Verification -->
+            <div class="otp-input-container" id="otpContainer">
+                <h3>Enter verification code</h3>
+                <p style="color: #666; margin: 0.5rem 0;">We sent a code to <span id="phoneDisplay"></span></p>
+                
+                <div class="otp-inputs">
+                    <input type="text" class="otp-input" maxlength="1" id="otp1">
+                    <input type="text" class="otp-input" maxlength="1" id="otp2">
+                    <input type="text" class="otp-input" maxlength="1" id="otp3">
+                    <input type="text" class="otp-input" maxlength="1" id="otp4">
+                    <input type="text" class="otp-input" maxlength="1" id="otp5">
+                    <input type="text" class="otp-input" maxlength="1" id="otp6">
+                </div>
+                
+                <button class="auth-button" style="background: #003554; color: white; margin-top: 1rem;"
+                        onclick="verifyPhoneOTP()">
+                    Verify Code
+                </button>
+                
+                <p style="margin-top: 1rem; font-size: 0.875rem;">
+                    Didn't receive the code? 
+                    <a href="#" onclick="resendOTP()" style="color: #003554;">Resend</a>
+                </p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+
+
+
 
     <!-- Keep your existing sections below -->
     
@@ -502,5 +755,128 @@
     </script>
     <script src="firebase-auth-providers.js"></script>
 <script src="user-management.js"></script>
+<script src="firebase-config.js"></script>
+<script src="firebase-auth-providers.js"></script>
+<script src="user-management.js"></script>
+<script>
+    // UI Functions
+    let useWhatsApp = false; // Track which method was selected
+    
+    function showPhoneAuth(isWhatsApp = false) {
+        useWhatsApp = isWhatsApp;
+        document.getElementById('authIconsGrid').style.display = 'none';
+        document.getElementById('phoneAuthForm').style.display = 'block';
+        
+        // Show appropriate message
+        document.getElementById('whatsappOption').style.display = isWhatsApp ? 'flex' : 'none';
+        document.getElementById('smsOption').style.display = !isWhatsApp ? 'flex' : 'none';
+    }
+    
+    function hidePhoneAuth() {
+        document.getElementById('phoneAuthForm').style.display = 'none';
+        document.getElementById('authIconsGrid').style.display = 'grid';
+    }
+    
+    function showOTPInput(phoneNumber, useWhatsApp) {
+        document.getElementById('phoneAuthForm').style.display = 'none';
+        document.getElementById('otpContainer').style.display = 'block';
+        document.getElementById('phoneDisplay').textContent = phoneNumber;
+        
+        // Focus first OTP input
+        document.getElementById('otp1').focus();
+        
+        // Auto-advance OTP inputs
+        const otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+        });
+    }
+    
+    async function sendPhoneOTP() {
+        const countryCode = document.getElementById('countryCode').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        
+        if (!phoneNumber || phoneNumber.length < 6) {
+            showAuthError('Please enter a valid phone number');
+            return;
+        }
+        
+        const fullNumber = countryCode + phoneNumber;
+        
+        if (useWhatsApp) {
+            await authProviders.sendWhatsAppOTP(fullNumber);
+        } else {
+            await authProviders.signInWithPhone(fullNumber, false);
+        }
+    }
+    
+    function showAuthError(message) {
+        const errorDiv = document.getElementById('auth-error');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+    }
+    
+    async function verifyPhoneOTP() {
+        const otp = Array.from({length: 6}, (_, i) => 
+            document.getElementById(`otp${i + 1}`).value
+        ).join('');
+        
+        if (otp.length !== 6) {
+            showAuthError('Please enter the complete 6-digit code');
+            return;
+        }
+        
+        await authProviders.verifyOTP(otp);
+    }
+    
+    async function resendOTP() {
+        // Implement resend logic
+        await sendPhoneOTP();
+    }
+    
+    // Check if user is already authenticated
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // User is signed in, redirect to passport
+            window.location.href = '/passport.html';
+        }
+    });
+    
+    // Check if coming back from LinkedIn OAuth
+    const urlParams = new URLSearchParams(window.location.search);
+    const customToken = urlParams.get('token');
+    if (customToken) {
+        // Sign in with the custom token from LinkedIn
+        firebase.auth().signInWithCustomToken(customToken)
+            .then(() => {
+                // Clear the token from URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+                // Redirect to passport
+                window.location.href = '/passport.html';
+            })
+            .catch((error) => {
+                console.error('Error signing in with custom token:', error);
+                showAuthError('LinkedIn sign-in failed. Please try again.');
+            });
+    }
+    
+    // Expose showOTPInput function globally
+    window.showOTPInput = showOTPInput;
+</script>
 </body>
 </html>
