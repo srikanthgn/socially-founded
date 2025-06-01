@@ -181,7 +181,7 @@ async function signInWithLinkedIn() {
 // Manual LinkedIn OAuth flow (backup method)
 function signInWithLinkedInManual() {
     // IMPORTANT: Replace this with your actual LinkedIn Client ID from your LinkedIn app
-    const clientId = 'YOUR_LINKEDIN_CLIENT_ID'; // <-- REPLACE THIS!
+    const clientId = '77tpngrlwmwnz7'; // <-- REPLACE THIS!
     
     // For example: const clientId = '77xxxxxxxxxxxxx';
     
