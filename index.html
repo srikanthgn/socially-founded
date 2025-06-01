@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socially Founded | Join the Founders' Circle</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -35,6 +34,16 @@
     <script src="firebase-simple.js" defer></script>
     
     <style>
+        /* Minimal reset and Poppins font for body */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+            background-color: #F5F5F5; /* Light Gray from branding, if desired as page bg */
+        }
+
         /* Override CSS to fix layout issues */
         @media (min-width: 900px) {
             main {
@@ -94,231 +103,174 @@
             }
         }
 
-/* Add hover effects for the social buttons */
-.social-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+        /* Add hover effects for the social buttons */
+        .social-btn:not([disabled]):hover, .auth-method-btn:not([disabled]):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
 
-.submit-btn:hover {
-    background: #00243a !important;
-    transform: translateY(-2px);
-}
+        .submit-btn:hover {
+            background: #00243a !important;
+            transform: translateY(-2px);
+        }
 
-/* User type button styles */
-.user-type-btn:hover {
-    border-color: #003554 !important;
-    background: #f5f5f5 !important;
-}
+        /* User type button styles */
+        .user-type-btn:hover {
+            border-color: #003554 !important;
+            background: #f5f5f5 !important;
+        }
 
-.user-type-btn.selected {
-    border-color: #003554 !important;
-    background: #e8f0f7 !important;
-}
+        .user-type-btn.selected {
+            border-color: #003554 !important;
+            background: #e8f0f7 !important;
+        }
 
-/* Auth method button styles */
-.social-btn:hover, .auth-method-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+        /* Ensure button text uses Poppins if not inherited */
+        .social-btn, .auth-method-btn {
+            font-family: 'Poppins', sans-serif;
+        }
 
-/* Fix for missing user type labels */
-.user-type-btn div {
-    color: #003554 !important;
-    display: block !important;
-    visibility: visible !important;
-}
 
-.user-type-btn div:nth-child(2) {
-    font-weight: 600 !important;
-    font-size: 16px !important;
-    color: #003554 !important;
-    margin: 5px 0 !important;
-}
+        /* Fix for missing user type labels */
+        .user-type-btn div {
+            color: #003554 !important;
+            display: block !important;
+            visibility: visible !important;
+        }
 
-/* Full page network background */
+        .user-type-btn div:nth-child(2) {
+            font-weight: 600 !important;
+            font-size: 16px !important;
+            color: #003554 !important;
+            margin: 5px 0 !important;
+        }
 
-.network-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;  /* Use viewport width */
-    height: 100vh; /* Use viewport height */
-    z-index: -1;
-    overflow: hidden;
-    pointer-events: none; /* Ensure it doesn't block clicks */
-}
+        /* Full page network background */
+        .network-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
 
-#background-network-canvas {
-    width: 100%;
-    height: 100%;
-    opacity: 0.15; /* Very subtle */
-}
+        #background-network-canvas {
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+        }
 
-/* Enhanced Global Ticker */
-.global-ticker-enhanced {
-    position: fixed;
-    bottom: 60px; /* Above footer */
-    left: 0;
-    width: 100%;
-    background: linear-gradient(90deg, #003554, #00547a);
-    color: white;
-    padding: 20px 0;
-    overflow: hidden;
-    z-index: 100;
-    box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
-}
+        /* Enhanced Global Ticker */
+        .global-ticker-enhanced {
+            position: fixed;
+            bottom: 0; /* Moved to very bottom */
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #003554, #00547a);
+            color: white;
+            padding: 20px 0;
+            overflow: hidden;
+            z-index: 100;
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+        }
 
-.ticker-track {
-    display: flex;
-    animation: scroll-infinite 40s linear infinite;
-}
+        .ticker-track {
+            display: flex;
+            animation: scroll-infinite 40s linear infinite;
+        }
 
-.ticker-item {
-    display: flex;
-    align-items: center;
-    padding: 0 40px;
-    white-space: nowrap;
-    font-size: 18px;
-    font-weight: 500;
-}
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            white-space: nowrap;
+            font-size: 18px;
+            font-weight: 500;
+        }
 
-.ticker-item .flag {
-    font-size: 24px;
-    margin-right: 10px;
-}
+        .ticker-item .flag {
+            font-size: 24px;
+            margin-right: 10px;
+        }
 
-@keyframes scroll-infinite {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
-}
+        @keyframes scroll-infinite {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
 
-/* Gradient overlay for smooth edges */
-.global-ticker-enhanced::before,
-.global-ticker-enhanced::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 150px;
-    height: 100%;
-    z-index: 1;
-}
+        .global-ticker-enhanced::before,
+        .global-ticker-enhanced::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 150px;
+            height: 100%;
+            z-index: 1;
+        }
 
-.global-ticker-enhanced::before {
-    left: 0;
-    background: linear-gradient(90deg, #003554, transparent);
-}
+        .global-ticker-enhanced::before {
+            left: 0;
+            background: linear-gradient(90deg, #003554, transparent);
+        }
 
-.global-ticker-enhanced::after {
-    right: 0;
-    background: linear-gradient(90deg, transparent, #00547a);
-}
+        .global-ticker-enhanced::after {
+            right: 0;
+            background: linear-gradient(90deg, transparent, #00547a);
+        }
 
-/* Adjust main content to account for ticker */
-.container {
-    padding-bottom: 120px; /* Make room for ticker */
-}
+        .container {
+            padding-bottom: 80px; /* Make room for ticker, adjusted from 120px */
+        }
 
-/* Hide the old global map section */
-.global-map {
-    display: none;
-}
-/* Fix footer position */
-footer {
-    position: relative;
-    margin-bottom: 100px; /* Space for ticker */
-}
+        .global-map { display: none; } /* Hide old global map */
 
-/* Adjust ticker position */
-.global-ticker-enhanced {
-    position: fixed;
-    bottom: 0; /* Move to very bottom */
-    left: 0;
-    width: 100%;
-    background: linear-gradient(90deg, #003554, #00547a);
-    color: white;
-    padding: 20px 0;
-    overflow: hidden;
-    z-index: 100;
-    box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
-}
+        /* Footer adjustments if ticker is at bottom */
+        footer {
+            position: relative;
+            /* margin-bottom: 100px; /* This might not be needed if ticker is fixed at very bottom */
+        }
 
-/* Force user type labels to show */
-.user-type-btn > div:nth-child(2) {
-    color: #003554 !important;
-    font-weight: 600 !important;
-    font-size: 16px !important;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
 
-/* Ensure body takes full height */
-body {
-    min-height: 100vh;
-    position: relative;
-    margin: 0;
-    padding: 0;
-}
+        /* Ensure body takes full height */
+        body {
+            min-height: 100vh;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
 
-/* Make sure main content doesn't block the background */
-.container {
-    position: relative;
-    background: transparent; /* Don't block the network */
-}
+        .container {
+            position: relative;
+            background: transparent;
+        }
+        main { background: transparent !important; }
 
-/* If you have a white background somewhere, make it slightly transparent */
-main {
-    background: rgba(255, 255, 255, 0.95); /* Slight transparency */
-}
+        .content, .features-section, .network-visualization {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        nav { background-color: rgba(255, 255, 255, 0.98) !important; }
 
-/* Make the signup form have a subtle background */
-.signup-form {
-    background: rgba(255, 255, 255, 0.98);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-}
-
-/* Make feature cards slightly transparent */
-.feature-card {
-    background: rgba(255, 255, 255, 0.95);
-}
-
-/* Make main transparent so network shows through */
-main {
-    background: transparent !important;
-}
-
-/* Give individual sections subtle backgrounds */
-.content, .features-section, .network-visualization {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 8px;
-}
-
-/* Remove the container background */
-.container {
-    background: transparent !important;
-}
-
-/* Make nav slightly transparent */
-nav {
-    background-color: rgba(255, 255, 255, 0.98) !important;
-}
-
-/* Ensure the canvas covers full viewport */
-#background-network-canvas {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-}
+        #background-network-canvas {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+         .signup-form {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+        }
 
     </style>
 </head>
@@ -329,7 +281,6 @@ nav {
 <!-- Navigation Bar -->
 <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: relative;">
-        <!-- Logo/Home Link -->
         <div style="display: flex; flex-direction: column; align-items: flex-start;">
             <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
                 <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
@@ -337,8 +288,6 @@ nav {
             </a>
             <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -15px;">Fusion of Vibe, Entrepreneurship & Community</span>
         </div>
-        
-        <!-- Desktop Navigation Links -->
         <div id="desktop-links" style="gap: 40px;">
             <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">About</a>
             <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">How It Works</a>
@@ -346,8 +295,6 @@ nav {
             <a href="#join-form" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Join</a>
             <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Contact</a>
         </div>
-        
-        <!-- Mobile Menu Button -->
         <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer;">☰</button>
     </div>
 </nav>
@@ -371,14 +318,12 @@ nav {
 
 <div class="container">
     <main>
-        <!-- Content Section -->
         <div class="content" style="grid-area: content;">
             <h1 style="font-size: 36px; font-weight: 600; color: #003554; margin-bottom: 25px; line-height: 1.3;">Where entrepreneurial journeys converge and amplify</h1>
             <p>Every great idea begins with a single connection. Socially Founded is building an ecosystem where entrepreneurs find the community, tools, and resources to transform vision into reality.</p>
             <p class="highlight">Be among the first to shape our entrepreneurial network.</p>
         </div>
         
-        <!-- Features Section -->
         <div class="features-section" style="grid-area: features;">
             <div class="feature-card">
                 <div class="feature-icon">🔄</div>
@@ -397,307 +342,247 @@ nav {
             </div>
         </div>
         
-        <!-- Network Visualization -->
         <div class="network-visualization" style="grid-area: visualization;">
             <canvas id="network-canvas"></canvas>
         </div>
         
-        <!-- Global Map -->
-        <div class="global-map" style="grid-area: global;">
-            <h3>Building a Global Network</h3>
-            <div class="location-list">
-                <div class="location-item">
-                    <div class="location-dot"></div>
-                    <span>Lithuania</span>
+        <div class="signup-form" style="grid-area: form;" id="join-form">
+            <h3>Join SociallyFounded</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Start your entrepreneurial journey today</p>
+            
+            <div id="user-type-selection">
+                <p style="font-weight: 500; margin-bottom: 15px;">I am a:</p>
+                <div class="user-type-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                    <button class="user-type-btn" data-type="founder" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 24px; margin-bottom: 5px;">🚀</div>
+                        <div style="font-weight: 600;">Founder</div>
+                        <div style="font-size: 12px; color: #666;">Build your startup</div>
+                    </button>
+                    <button class="user-type-btn" data-type="mentor" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 24px; margin-bottom: 5px;">🎯</div>
+                        <div style="font-weight: 600;">Mentor</div>
+                        <div style="font-size: 12px; color: #666;">Guide founders</div>
+                    </button>
+                    <button class="user-type-btn" data-type="investor" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 24px; margin-bottom: 5px;">💎</div>
+                        <div style="font-weight: 600;">Investor</div>
+                        <div style="font-size: 12px; color: #666;">Fund innovation</div>
+                    </button>
+                    <button class="user-type-btn" data-type="venue" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
+                        <div style="font-size: 24px; margin-bottom: 5px;">🏢</div>
+                        <div style="font-weight: 600;">Host</div>
+                        <div style="font-size: 12px; color: #666;">Venue partner</div>
+                    </button>
                 </div>
-                <div class="location-item">
-                    <div class="location-dot"></div>
-                    <span>India</span>
-                </div>
-                <div class="location-item">
-                    <div class="location-dot"></div>
-                    <span>UAE</span>
-                </div>
-                <div class="location-item">
-                    <div class="location-dot"></div>
-                    <span>Ukraine</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Signup Form -->
-      
-<!-- Signup Form -->
-<!-- Signup Form -->
-<div class="signup-form" style="grid-area: form;" id="join-form">
-    <h3>Join SociallyFounded</h3>
-    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Start your entrepreneurial journey today</p>
-    
-    <!-- Step 1: User Type Selection -->
-    <div id="user-type-selection">
-        <p style="font-weight: 500; margin-bottom: 15px;">I am a:</p>
-        <div class="user-type-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-            <button class="user-type-btn" data-type="founder" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
-                <div style="font-size: 24px; margin-bottom: 5px;">🚀</div>
-                <div style="font-weight: 600;">Founder</div>
-                <div style="font-size: 12px; color: #666;">Build your startup</div>
-            </button>
-            
-            <button class="user-type-btn" data-type="mentor" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
-                <div style="font-size: 24px; margin-bottom: 5px;">🎯</div>
-                <div style="font-weight: 600;">Mentor</div>
-                <div style="font-size: 12px; color: #666;">Guide founders</div>
-            </button>
-            
-            <button class="user-type-btn" data-type="investor" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
-                <div style="font-size: 24px; margin-bottom: 5px;">💎</div>
-                <div style="font-weight: 600;">Investor</div>
-                <div style="font-size: 12px; color: #666;">Fund innovation</div>
-            </button>
-            
-            <button class="user-type-btn" data-type="venue" style="padding: 15px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;">
-    <div style="font-size: 24px; margin-bottom: 5px;">🏢</div>
-    <div style="font-weight: 600;">Host</div>
-    <div style="font-size: 12px; color: #666;">Venue partner</div>
-</button>
-        </div>
-    </div>
-    
-    <!-- Step 2: Authentication Method (Hidden Initially) -->
-    <div id="auth-method-selection" style="display: none;">
-        <p style="font-weight: 500; margin-bottom: 15px;">How would you like to join?</p>
-        
-        <!-- Google/Apple - Direct to passport -->
-        <a href="/passport.html" class="social-btn google-btn" onclick="saveUserType()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #333; transition: all 0.3s;">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="margin-right: 10px;">
-                <path d="M19.99 10.187c0-.82-.069-1.417-.216-2.037H10.2v3.698h5.62c-.113.92-.725 2.303-2.084 3.233l-.019.124 3.028 2.292.21.02c1.926-1.738 3.037-4.296 3.037-7.33z" fill="#4285F4"/>
-                <path d="M10.2 19.93c2.753 0 5.064-.886 6.753-2.414l-3.218-2.436c-.862.587-2.017.997-3.536.997a6.126 6.126 0 0 1-5.801-4.141l-.12.01-3.148 2.38-.041.112c1.677 3.252 5.122 5.492 9.111 5.492z" fill="#34A853"/>
-                <path d="M4.398 11.936a6.008 6.008 0 0 1-.34-1.971c0-.687.125-1.351.329-1.971l-.006-.132-3.188-2.42-.104.048A9.952 9.952 0 0 0 .001 9.965a9.95 9.95 0 0 0 1.088 4.473l3.309-2.502z" fill="#FBBC05"/>
-                <path d="M10.2 3.853c1.914 0 3.206.808 3.943 1.484l2.878-2.746C15.253.985 12.953 0 10.199 0 6.211 0 2.766 2.24 1.09 5.492l3.297 2.503A6.152 6.152 0 0 1 10.2 3.853z" fill="#EB4335"/>
-            </svg>
-            Continue with Google
-        </a>
-        
-        <a href="/passport.html" class="social-btn apple-btn" onclick="saveUserType()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #000; border-radius: 8px; text-decoration: none; background: #000; color: white; transition: all 0.3s;">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 10px;">
-                <path d="M15.645 13.893c-.297.78-.658 1.498-1.083 2.155-.577.895-1.048 1.514-1.414 1.857-.566.563-1.172.851-1.82.867-.466 0-1.027-.133-1.684-.398-.656-.267-1.26-.398-1.81-.398-.578 0-1.198.131-1.86.398-.663.265-1.197.403-1.604.414-.62.023-1.239-.246-1.857-.81-.394-.373-.886-1.013-1.476-1.92-.633-.973-1.153-2.102-1.56-3.387C.066 11.297-.14 9.972.138 8.69c.197-1.01.58-1.883 1.148-2.618A3.76 3.76 0 0 1 2.706 4.94a3.607 3.607 0 0 1 1.913-.546c.473 0 1.095.147 1.865.439.77.292 1.264.44 1.481.44.162 0 .712-.173 1.65-.518.885-.32 1.632-.452 2.242-.398 1.657.134 2.902.788 3.736 1.961-1.484.9-2.218 2.16-2.203 3.78.014 1.259.47 2.308 1.366 3.145.407.387.862.687.889.65zM13.092.29c.014.098.021.196.021.294 0 .735-.268 1.422-.803 2.06a2.765 2.765 0 0 1-2.337 1.166 2.27 2.27 0 0 1-.02-.282c0-.706.307-1.46.853-2.077a3.19 3.19 0 0 1 1.02-.832A3.065 3.065 0 0 1 13.071 0c.008.097.015.194.021.29z"/>
-            </svg>
-            Continue with Apple
-        </a>
-        
-        <a href="/passport.html" class="social-btn linkedin-btn" onclick="saveUserType()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #0077B5; border-radius: 8px; text-decoration: none; background: #0077B5; color: white; transition: all 0.3s;">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 10px;">
-                <path d="M18.5 0h-17C.7 0 0 .7 0 1.5v17c0 .8.7 1.5 1.5 1.5h17c.8 0 1.5-.7 1.5-1.5v-17c0-.8-.7-1.5-1.5-1.5zM6 17H3V8h3v9zM4.5 6.3c-1 0-1.8-.8-1.8-1.8s.8-1.8 1.8-1.8 1.8.8 1.8 1.8-.8 1.8-1.8 1.8zM17 17h-3v-4.4c0-1.1 0-2.5-1.5-2.5s-1.8 1.2-1.8 2.4V17h-3V8h2.9v1.3h0c.4-.7 1.3-1.5 2.7-1.5 2.9 0 3.4 1.9 3.4 4.4V17z"/>
-            </svg>
-            Continue with LinkedIn
-        </a>
-        
-        <a href="/passport.html" class="social-btn facebook-btn" onclick="saveUserType()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #1877F2; border-radius: 8px; text-decoration: none; background: #1877F2; color: white; transition: all 0.3s;">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 10px;">
-                <path d="M20 10.061C20 4.505 15.523 0 10 0S0 4.505 0 10.061c0 5.022 3.657 9.184 8.438 9.939v-7.03h-2.54v-2.91h2.54V7.845c0-2.522 1.492-3.915 3.777-3.915 1.094 0 2.238.197 2.238.197v2.476h-1.26c-1.243 0-1.63.775-1.63 1.57v1.888h2.773l-.443 2.908h-2.33V20C16.343 19.245 20 15.083 20 10.061z"/>
-            </svg>
-            Continue with Facebook
-        </a>
-        
-        <div class="or-divider">
-            <span>or</span>
-        </div>
-        
-        <!-- Email/Phone Options -->
-        <button class="auth-method-btn" onclick="showEmailForm()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; background: white; color: #333; cursor: pointer; transition: all 0.3s;">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px;">
-                <rect x="2" y="4" width="16" height="12" rx="2"/>
-                <path d="M2 6l8 5 8-5"/>
-            </svg>
-            Continue with Email
-        </button>
-        
-        <button class="auth-method-btn" onclick="showPhoneForm()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; background: white; color: #333; cursor: pointer; transition: all 0.3s;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px;">
-                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                <line x1="12" y1="18" x2="12.01" y2="18"></line>
-            </svg>
-            Continue with Phone
-        </button>
-        
-        <button onclick="goBackToUserType()" style="background: none; border: none; color: #666; cursor: pointer; margin-top: 10px; font-size: 14px;">← Back</button>
-    </div>
-    
-    <!-- Step 3: Email Form (Hidden Initially) -->
-    <div id="email-form" style="display: none;">
-        <form action="/passport.html" method="GET" onsubmit="saveFormData(event)">
-            <input type="hidden" name="userType" id="email-userType">
-            <input type="hidden" name="method" value="email">
-            
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" name="name" id="name" placeholder="Your name" required>
             </div>
             
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" name="email" id="email" placeholder="Your email" required>
+            <div id="auth-method-selection" style="display: none;">
+                <p style="font-weight: 500; margin-bottom: 15px;">How would you like to join?</p>
+
+                <button id="google-signin-btn" class="social-btn google-btn" onclick="initiateGoogleSignInFlow()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #333; transition: all 0.3s; background-color: #fff; cursor: pointer; font-family: inherit; font-size: inherit;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="margin-right: 10px;"><path d="M19.99 10.187c0-.82-.069-1.417-.216-2.037H10.2v3.698h5.62c-.113.92-.725 2.303-2.084 3.233l-.019.124 3.028 2.292.21.02c1.926-1.738 3.037-4.296 3.037-7.33z" fill="#4285F4"/><path d="M10.2 19.93c2.753 0 5.064-.886 6.753-2.414l-3.218-2.436c-.862.587-2.017.997-3.536.997a6.126 6.126 0 0 1-5.801-4.141l-.12.01-3.148 2.38-.041.112c1.677 3.252 5.122 5.492 9.111 5.492z" fill="#34A853"/><path d="M4.398 11.936a6.008 6.008 0 0 1-.34-1.971c0-.687.125-1.351.329-1.971l-.006-.132-3.188-2.42-.104.048A9.952 9.952 0 0 0 .001 9.965a9.95 9.95 0 0 0 1.088 4.473l3.309-2.502z" fill="#FBBC05"/><path d="M10.2 3.853c1.914 0 3.206.808 3.943 1.484l2.878-2.746C15.253.985 12.953 0 10.199 0 6.211 0 2.766 2.24 1.09 5.492l3.297 2.503A6.152 6.152 0 0 1 10.2 3.853z" fill="#EB4335"/></svg>
+                    Continue with Google
+                </button>
+
+                <button class="social-btn apple-btn" onclick="initiateAppleSignInFlow()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #000; border-radius: 8px; text-decoration: none; background: #000; color: white; transition: all 0.3s; cursor: pointer; font-family: inherit; font-size: inherit;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 10px;"><path d="M15.645 13.893c-.297.78-.658 1.498-1.083 2.155-.577.895-1.048 1.514-1.414 1.857-.566.563-1.172.851-1.82.867-.466 0-1.027-.133-1.684-.398-.656-.267-1.26-.398-1.81-.398-.578 0-1.198.131-1.86.398-.663.265-1.197.403-1.604.414-.62.023-1.239-.246-1.857-.81-.394-.373-.886-1.013-1.476-1.92-.633-.973-1.153-2.102-1.56-3.387C.066 11.297-.14 9.972.138 8.69c.197-1.01.58-1.883 1.148-2.618A3.76 3.76 0 0 1 2.706 4.94a3.607 3.607 0 0 1 1.913-.546c.473 0 1.095.147 1.865.439.77.292 1.264.44 1.481.44.162 0 .712-.173 1.65-.518.885-.32 1.632-.452 2.242-.398 1.657.134 2.902.788 3.736 1.961-1.484.9-2.218 2.16-2.203 3.78.014 1.259.47 2.308 1.366 3.145.407.387.862.687.889.65zM13.092.29c.014.098.021.196.021.294 0 .735-.268 1.422-.803 2.06a2.765 2.765 0 0 1-2.337 1.166 2.27 2.27 0 0 1-.02-.282c0-.706.307-1.46.853-2.077a3.19 3.19 0 0 1 1.02-.832A3.065 3.065 0 0 1 13.071 0c.008.097.015.194.021.29z"/></svg>
+                    Continue with Apple
+                </button>
+
+                <button class="social-btn linkedin-btn" onclick="initiateLinkedInFlow()" title="Sign in with LinkedIn" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #0077B5; border-radius: 8px; text-decoration: none; background-color: #0077B5; color: #FFFFFF; transition: all 0.3s; cursor: pointer; font-family: inherit; font-size: inherit;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 10px;"><path d="M18.5 0h-17C.7 0 0 .7 0 1.5v17c0 .8.7 1.5 1.5 1.5h17c.8 0 1.5-.7 1.5-1.5v-17c0-.8-.7-1.5-1.5-1.5zM6 17H3V8h3v9zM4.5 6.3c-1 0-1.8-.8-1.8-1.8s.8-1.8 1.8-1.8 1.8.8 1.8 1.8-.8 1.8-1.8 1.8zM17 17h-3v-4.4c0-1.1 0-2.5-1.5-2.5s-1.8 1.2-1.8 2.4V17h-3V8h2.9v1.3h0c.4-.7 1.3-1.5 2.7-1.5 2.9 0 3.4 1.9 3.4 4.4V17z"/></svg>
+                    Continue with LinkedIn
+                </button>
+
+                <button class="social-btn facebook-btn" disabled title="Coming Soon" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #1877F2; border-radius: 8px; text-decoration: none; background: #1877F2; color: white; transition: all 0.3s; opacity: 0.6; cursor: not-allowed; font-family: inherit; font-size: inherit;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 10px;"><path d="M20 10.061C20 4.505 15.523 0 10 0S0 4.505 0 10.061c0 5.022 3.657 9.184 8.438 9.939v-7.03h-2.54v-2.91h2.54V7.845c0-2.522 1.492-3.915 3.777-3.915 1.094 0 2.238.197 2.238.197v2.476h-1.26c-1.243 0-1.63.775-1.63 1.57v1.888h2.773l-.443 2.908h-2.33V20C16.343 19.245 20 15.083 20 10.061z"/></svg>
+                    Continue with Facebook (Coming Soon)
+                </button>
+
+                <div class="or-divider"><span>or</span></div>
+
+                <button class="auth-method-btn" onclick="initiateEmailSignInFlow()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; background: white; color: #333; cursor: pointer; transition: all 0.3s;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px;"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M2 6l8 5 8-5"/></svg>
+                    Continue with Email
+                </button>
+
+                <button class="auth-method-btn" onclick="initiatePhoneSignInFlow()" style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; background: white; color: #333; cursor: pointer; transition: all 0.3s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 10px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    Continue with Phone
+                </button>
+
+                <button onclick="goBackToUserType()" style="background: none; border: none; color: #666; cursor: pointer; margin-top: 10px; font-size: 14px;">← Back</button>
             </div>
             
-            <div class="form-group" id="company-field" style="display: none;">
-                <label for="company">Company/Organization</label>
-                <input type="text" name="company" id="company" placeholder="Your company">
+            <div id="email-form" style="display: none;">
+                <form action="/passport.html" method="GET" onsubmit="saveFormData(event)">
+                    <input type="hidden" name="userType" id="email-userType">
+                    <input type="hidden" name="method" value="email">
+                    <div class="form-group"><label for="name">Full Name</label><input type="text" name="name" id="name" placeholder="Your name" required></div>
+                    <div class="form-group"><label for="email">Email Address</label><input type="email" name="email" id="email" placeholder="Your email" required></div>
+                    <div class="form-group" id="company-field" style="display: none;"><label for="company">Company/Organization</label><input type="text" name="company" id="company" placeholder="Your company"></div>
+                    <div class="form-group" id="venue-field" style="display: none;"><label for="venue">Host Venue Name</label><input type="text" name="venue" id="venue" placeholder="Your venue name"></div>
+                    <div class="form-group" id="expertise-field" style="display: none;"><label for="expertise">Areas of Expertise</label><input type="text" name="expertise" id="expertise" placeholder="e.g., Marketing, Tech, Finance"></div>
+                    <button type="submit" style="width: 100%; padding: 14px; background: #003554; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px;">Get Your <span id="passport-type">Digital</span> Passport →</button>
+                </form>
+                <button onclick="goBackToAuth()" style="background: none; border: none; color: #666; cursor: pointer; margin-top: 10px; font-size: 14px;">← Back</button>
             </div>
             
-            <div class="form-group" id="venue-field" style="display: none;">
-                <label for="venue">Host Venue Name</label>
-                <input type="text" name="venue" id="venue" placeholder="Your venue name">
-            </div>
-            
-            <div class="form-group" id="expertise-field" style="display: none;">
-                <label for="expertise">Areas of Expertise</label>
-                <input type="text" name="expertise" id="expertise" placeholder="e.g., Marketing, Tech, Finance">
-            </div>
-            
-            <button type="submit" style="width: 100%; padding: 14px; background: #003554; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px;">
-                Get Your <span id="passport-type">Digital</span> Passport →
-            </button>
-        </form>
-        
-        <button onclick="goBackToAuth()" style="background: none; border: none; color: #666; cursor: pointer; margin-top: 10px; font-size: 14px;">← Back</button>
-    </div>
-    
-    <!-- Step 3: Phone Form (Hidden Initially) -->
-    <div id="phone-form" style="display: none;">
-        <form action="/passport.html" method="GET" onsubmit="saveFormData(event)">
-            <input type="hidden" name="userType" id="phone-userType">
-            <input type="hidden" name="method" value="phone">
-            
-            <div class="form-group">
-                <label for="phone-name">Full Name</label>
-                <input type="text" name="name" id="phone-name" placeholder="Your name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <div class="phone-input-group">
-                    <div class="country-code-container">
-                        <select name="country-code" id="country-code-input">
-                            <option value="+1" data-flag="🇺🇸">+1</option>
-                            <option value="+44" data-flag="🇬🇧" selected>+44</option>
-                            <option value="+91" data-flag="🇮🇳">+91</option>
-                            <option value="+971" data-flag="🇦🇪">+971</option>
-                        </select>
+            <div id="phone-form" style="display: none;">
+                <form action="/passport.html" method="GET" onsubmit="saveFormData(event)">
+                    <input type="hidden" name="userType" id="phone-userType">
+                    <input type="hidden" name="method" value="phone">
+                    <div class="form-group"><label for="phone-name">Full Name</label><input type="text" name="name" id="phone-name" placeholder="Your name" required></div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <div class="phone-input-group">
+                            <div class="country-code-container">
+                                <select name="country-code" id="country-code-input"><option value="+1" data-flag="🇺🇸">+1</option><option value="+44" data-flag="🇬🇧" selected>+44</option><option value="+91" data-flag="🇮🇳">+91</option><option value="+971" data-flag="🇦🇪">+971</option></select>
+                            </div>
+                            <input type="tel" name="phone" id="phone" placeholder="Your phone number" required>
+                        </div>
                     </div>
-                    <input type="tel" name="phone" id="phone" placeholder="Your phone number" required>
-                </div>
+                    <div class="form-group" id="phone-company-field" style="display: none;"><label for="phone-company">Company/Organization</label><input type="text" name="company" id="phone-company" placeholder="Your company"></div>
+                    <button type="submit" style="width: 100%; padding: 14px; background: #003554; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px;">Get Your <span id="phone-passport-type">Digital</span> Passport →</button>
+                </form>
+                <button onclick="goBackToAuth()" style="background: none; border: none; color: #666; cursor: pointer; margin-top: 10px; font-size: 14px;">← Back</button>
             </div>
             
-            <div class="form-group" id="phone-company-field" style="display: none;">
-                <label for="phone-company">Company/Organization</label>
-                <input type="text" name="company" id="phone-company" placeholder="Your company">
-            </div>
-            
-            <button type="submit" style="width: 100%; padding: 14px; background: #003554; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px;">
-                Get Your <span id="phone-passport-type">Digital</span> Passport →
-            </button>
-        </form>
-        
-        <button onclick="goBackToAuth()" style="background: none; border: none; color: #666; cursor: pointer; margin-top: 10px; font-size: 14px;">← Back</button>
-    </div>
-    
-    <p class="footer-text" style="text-align: center; font-size: 12px; color: #666; margin-top: 20px;">
-        By joining, you agree to our Terms of Service and Privacy Policy.
-    </p>
-</div>
-
-<script>
-// Global variable to store selected user type
-let selectedUserType = null;
-
-// User type selection
-document.querySelectorAll('.user-type-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        // Remove selected class from all buttons
-        document.querySelectorAll('.user-type-btn').forEach(b => b.classList.remove('selected'));
-        
-        // Add selected class to clicked button
-        this.classList.add('selected');
-        
-        // Store selected type
-        selectedUserType = this.getAttribute('data-type');
-        
-        // Hide user type selection, show auth methods
-        document.getElementById('user-type-selection').style.display = 'none';
-        document.getElementById('auth-method-selection').style.display = 'block';
-    });
-});
-
-// Show email form with dynamic fields based on user type
-function showEmailForm() {
-    document.getElementById('auth-method-selection').style.display = 'none';
-    document.getElementById('email-form').style.display = 'block';
-    document.getElementById('email-userType').value = selectedUserType;
-    
-    // Show/hide fields based on user type
-    if (selectedUserType === 'investor') {
-        document.getElementById('company-field').style.display = 'block';
-        document.getElementById('passport-type').textContent = 'Investor';
-    } else if (selectedUserType === 'venue') {
-        document.getElementById('venue-field').style.display = 'block';
-        document.getElementById('passport-type').textContent = 'Host';
-    } else if (selectedUserType === 'mentor') {
-        document.getElementById('expertise-field').style.display = 'block';
-        document.getElementById('passport-type').textContent = 'Mentor';
-    } else {
-        document.getElementById('passport-type').textContent = 'Founder';
-    }
-}
-
-// Show phone form with dynamic fields
-function showPhoneForm() {
-    document.getElementById('auth-method-selection').style.display = 'none';
-    document.getElementById('phone-form').style.display = 'block';
-    document.getElementById('phone-userType').value = selectedUserType;
-    
-    // Show company field for investors
-    if (selectedUserType === 'investor') {
-        document.getElementById('phone-company-field').style.display = 'block';
-        document.getElementById('phone-passport-type').textContent = 'Investor';
-    } else {
-        document.getElementById('phone-passport-type').textContent = selectedUserType.charAt(0).toUpperCase() + selectedUserType.slice(1);
-    }
-}
-
-// Navigation functions
-function goBackToUserType() {
-    document.getElementById('user-type-selection').style.display = 'block';
-    document.getElementById('auth-method-selection').style.display = 'none';
-    selectedUserType = null;
-    document.querySelectorAll('.user-type-btn').forEach(b => b.classList.remove('selected'));
-}
-
-function goBackToAuth() {
-    document.getElementById('auth-method-selection').style.display = 'block';
-    document.getElementById('email-form').style.display = 'none';
-    document.getElementById('phone-form').style.display = 'none';
-}
-
-// Save user type when using Google/Apple
-function saveUserType() {
-    if (selectedUserType) {
-        localStorage.setItem('sf-user-type', selectedUserType);
-    }
-}
-
-// Save form data before redirect
-function saveFormData(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData);
-    localStorage.setItem('sf-signup-data', JSON.stringify(data));
-    window.location.href = '/passport.html';
-}
-</script>	
-
-            
-           
+            <p class="footer-text" style="text-align: center; font-size: 12px; color: #666; margin-top: 20px;">By joining, you agree to our Terms of Service and Privacy Policy.</p>
         </div>
+
+        <script>
+            // --- Main Authentication and UI Script for index.html ---
+            let selectedUserType = null;
+
+            // User Type Selection Logic
+            document.querySelectorAll('.user-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.user-type-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedUserType = this.getAttribute('data-type');
+                    document.getElementById('user-type-selection').style.display = 'none';
+                    document.getElementById('auth-method-selection').style.display = 'block';
+                });
+            });
+
+            // Legacy Form Display Logic (kept for non-Firebase auth paths if any, or future use)
+            function showEmailForm() {
+                document.getElementById('auth-method-selection').style.display = 'none';
+                document.getElementById('email-form').style.display = 'block';
+                document.getElementById('email-userType').value = selectedUserType;
+                if (selectedUserType === 'investor') {
+                    document.getElementById('company-field').style.display = 'block';
+                    document.getElementById('passport-type').textContent = 'Investor';
+                } else if (selectedUserType === 'venue') {
+                    document.getElementById('venue-field').style.display = 'block';
+                    document.getElementById('passport-type').textContent = 'Host';
+                } else if (selectedUserType === 'mentor') {
+                    document.getElementById('expertise-field').style.display = 'block';
+                    document.getElementById('passport-type').textContent = 'Mentor';
+                } else {
+                    document.getElementById('passport-type').textContent = 'Founder';
+                }
+            }
+
+            function showPhoneForm() {
+                document.getElementById('auth-method-selection').style.display = 'none';
+                document.getElementById('phone-form').style.display = 'block';
+                document.getElementById('phone-userType').value = selectedUserType;
+                if (selectedUserType === 'investor') {
+                    document.getElementById('phone-company-field').style.display = 'block';
+                    document.getElementById('phone-passport-type').textContent = 'Investor';
+                } else {
+                    document.getElementById('phone-passport-type').textContent = selectedUserType ? selectedUserType.charAt(0).toUpperCase() + selectedUserType.slice(1) : 'Digital';
+                }
+            }
+            
+            function saveFormData(event) { // For legacy forms
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const data = Object.fromEntries(formData);
+                localStorage.setItem('sf-signup-data', JSON.stringify(data));
+                window.location.href = '/passport.html'; // Legacy forms redirect directly
+            }
+
+
+            // Navigation within Auth Form Steps
+            function goBackToUserType() {
+                document.getElementById('user-type-selection').style.display = 'block';
+                document.getElementById('auth-method-selection').style.display = 'none';
+                selectedUserType = null;
+                document.querySelectorAll('.user-type-btn').forEach(b => b.classList.remove('selected'));
+            }
+
+            function goBackToAuth() {
+                document.getElementById('auth-method-selection').style.display = 'block';
+                document.getElementById('email-form').style.display = 'none';
+                document.getElementById('phone-form').style.display = 'none';
+            }
+
+            // --- Firebase Auth Initiator Functions ---
+            function saveUserType() {
+                if (selectedUserType) {
+                    localStorage.setItem('sf-user-type', selectedUserType);
+                    console.log('User type saved to localStorage:', selectedUserType);
+                } else {
+                    console.warn('No user type selected when saveUserType was called.');
+                    // Optionally set a default or handle error if userType is strictly required before proceeding
+                    localStorage.removeItem('sf-user-type'); // Ensure no old value persists if none selected now
+                }
+            }
+
+            function initiateGoogleSignInFlow() {
+                saveUserType();
+                // signInWithGoogle() is called by firebase-simple.js event listener on #google-signin-btn
+                // Ensure window.authManager.signInWithGoogle() is available if called directly:
+                // if (window.authManager && typeof window.authManager.signInWithGoogle === 'function') {
+                //   window.authManager.signInWithGoogle();
+                // } else {
+                //   console.error('Google Auth manager or signInWithGoogle is not available.');
+                //   alert('Google sign-in is currently unavailable.');
+                // }
+                console.log("Google Sign-In initiated by click, firebase-simple.js listener will handle authManager call.");
+            }
+
+            function initiateEmailSignInFlow() {
+                saveUserType();
+                if (window.authManager && typeof window.authManager.showEmailModal === 'function') {
+                    window.authManager.showEmailModal();
+                } else {
+                    console.error('Auth manager or showEmailModal is not available.');
+                    alert('Email sign-in is currently unavailable.');
+                }
+            }
+
+            function initiatePhoneSignInFlow() {
+                saveUserType();
+                if (window.authManager && typeof window.authManager.showPhoneModal === 'function') {
+                    window.authManager.showPhoneModal();
+                } else {
+                    console.error('Auth manager or showPhoneModal is not available.');
+                    alert('Phone sign-in is currently unavailable.');
+                }
+            }
+
+            function initiateAppleSignInFlow() {
+                saveUserType();
+                if (window.authManager && typeof window.authManager.signInWithApple === 'function') {
+                    window.authManager.signInWithApple();
+                } else {
+                    console.error('Auth manager or signInWithApple is not available.');
+                    alert('Apple sign-in is currently unavailable.');
+                }
+            }
+
+            function initiateLinkedInFlow() {
+                saveUserType();
+                const startLinkedInAuthUrl = 'https://us-central1-sociallyfounded-df98f.cloudfunctions.net/startLinkedInAuth';
+                console.log('Redirecting to LinkedIn Auth Function:', startLinkedInAuthUrl);
+                localStorage.setItem('sf-linkedin-auth-in-progress', 'true');
+                window.location.href = startLinkedInAuthUrl;
+            }
+        </script>
     </main>
     
     <footer>
@@ -705,7 +590,6 @@ function saveFormData(event) {
     </footer>
 </div>
 
-<!-- Cookie Banner -->
 <div id="cookie-consent" style="display: none;">
     <div class="cookie-text">
         <div style="font-size: 24px; margin-bottom: 10px;">☕ 🍪</div>
@@ -718,227 +602,100 @@ function saveFormData(event) {
     </div>
 </div>
 
-<!-- Scripts -->
 <script src="script.js"></script>
 <script src="mobile-script-fixes.js"></script>
 
-<!-- Mobile Navigation Script -->
 <script>
+// Mobile Navigation Script (already present)
 document.addEventListener('DOMContentLoaded', function() {
     const openMobileNav = document.getElementById('open-mobile-nav');
     const closeMobileNav = document.getElementById('close-mobile-nav');
     const mobileNav = document.getElementById('mobile-nav');
     const mobileJoinLink = document.getElementById('mobile-join-link');
     
-    // Open mobile navigation
     if (openMobileNav) {
         openMobileNav.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Opening mobile nav');
-            mobileNav.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            e.preventDefault(); mobileNav.style.display = 'block'; document.body.style.overflow = 'hidden';
         });
     }
-    
-    // Close mobile navigation
     if (closeMobileNav) {
         closeMobileNav.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Closing mobile nav');
-            mobileNav.style.display = 'none';
-            document.body.style.overflow = '';
+            e.preventDefault(); mobileNav.style.display = 'none'; document.body.style.overflow = '';
         });
     }
-    
-    // Close mobile nav when clicking outside
     if (mobileNav) {
         mobileNav.addEventListener('click', function(e) {
-            if (e.target === mobileNav) {
-                console.log('Closing mobile nav - clicked outside');
-                mobileNav.style.display = 'none';
-                document.body.style.overflow = '';
-            }
+            if (e.target === mobileNav) { mobileNav.style.display = 'none'; document.body.style.overflow = ''; }
         });
     }
-    
-    // Close mobile nav when clicking join link
     if (mobileJoinLink) {
         mobileJoinLink.addEventListener('click', function() {
-            console.log('Closing mobile nav - join clicked');
-            mobileNav.style.display = 'none';
-            document.body.style.overflow = '';
+            mobileNav.style.display = 'none'; document.body.style.overflow = '';
         });
     }
 });
-</script>
-<script>
-// Background network animation
-// Background network animation
+
+// Background network animation (already present)
 function createBackgroundNetwork() {
     const canvas = document.getElementById('background-network-canvas');
     if (!canvas) return;
-    
     const ctx = canvas.getContext('2d');
-    
-    // Nodes array - DEFINE THIS FIRST
     const nodes = [];
-    
-    // Set canvas size
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        
-        // Ensure we have enough nodes for full screen
-        while (nodes.length < 100) {
-            nodes.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.3,
-                vy: (Math.random() - 0.5) * 0.3,
-                radius: Math.random() * 2 + 1,
-            });
+        while (nodes.length < 100) { // Ensure enough nodes
+            nodes.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, radius: Math.random() * 2 + 1 });
         }
     }
-    
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    
-    // Animation loop
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Update and draw nodes
         nodes.forEach((node, i) => {
-            // Update position
-            node.x += node.vx;
-            node.y += node.vy;
-            
-            // Wrap around edges
-            if (node.x < 0) node.x = canvas.width;
-            if (node.x > canvas.width) node.x = 0;
-            if (node.y < 0) node.y = canvas.height;
-            if (node.y > canvas.height) node.y = 0;
-            
-            // Draw connections
+            node.x += node.vx; node.y += node.vy;
+            if (node.x < 0) node.x = canvas.width; if (node.x > canvas.width) node.x = 0;
+            if (node.y < 0) node.y = canvas.height; if (node.y > canvas.height) node.y = 0;
             nodes.forEach((other, j) => {
                 if (i < j) {
-                    const distance = Math.sqrt(
-                        Math.pow(node.x - other.x, 2) + 
-                        Math.pow(node.y - other.y, 2)
-                    );
-                    
+                    const distance = Math.sqrt(Math.pow(node.x - other.x, 2) + Math.pow(node.y - other.y, 2));
                     if (distance < 120) {
-                        ctx.beginPath();
-                        ctx.moveTo(node.x, node.y);
-                        ctx.lineTo(other.x, other.y);
-                        ctx.strokeStyle = `rgba(0, 53, 84, ${0.4 * (1 - distance / 120)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(other.x, other.y);
+                        ctx.strokeStyle = `rgba(0, 53, 84, ${0.4 * (1 - distance / 120)})`; ctx.lineWidth = 0.5; ctx.stroke();
                     }
                 }
             });
-            
-            // Draw node
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(0, 53, 84, 0.6)';
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2); ctx.fillStyle = 'rgba(0, 53, 84, 0.6)'; ctx.fill();
         });
-        
         requestAnimationFrame(animate);
     }
-    
     animate();
 }
-
-// Initialize when page loads
 window.addEventListener('load', createBackgroundNetwork);
 </script>
 <div class="global-ticker-enhanced">
     <div class="ticker-track">
-        <!-- First set -->
-        <div class="ticker-item">
-            <span class="flag">🌍</span>
-            <span>Building a Global Network</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇱🇹</span>
-            <span>Lithuania</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇮🇳</span>
-            <span>India</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇦🇪</span>
-            <span>UAE</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇺🇦</span>
-            <span>Ukraine</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇬🇧</span>
-            <span>United Kingdom</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇺🇸</span>
-            <span>United States</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇸🇬</span>
-            <span>Singapore</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇨🇦</span>
-            <span>Canada</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇦🇺</span>
-            <span>Australia</span>
-        </div>
-        
+        <div class="ticker-item"><span class="flag">🌍</span><span>Building a Global Network</span></div>
+        <div class="ticker-item"><span class="flag">🇱🇹</span><span>Lithuania</span></div>
+        <div class="ticker-item"><span class="flag">🇮🇳</span><span>India</span></div>
+        <div class="ticker-item"><span class="flag">🇦🇪</span><span>UAE</span></div>
+        <div class="ticker-item"><span class="flag">🇺🇦</span><span>Ukraine</span></div>
+        <div class="ticker-item"><span class="flag">🇬🇧</span><span>United Kingdom</span></div>
+        <div class="ticker-item"><span class="flag">🇺🇸</span><span>United States</span></div>
+        <div class="ticker-item"><span class="flag">🇸🇬</span><span>Singapore</span></div>
+        <div class="ticker-item"><span class="flag">🇨🇦</span><span>Canada</span></div>
+        <div class="ticker-item"><span class="flag">🇦🇺</span><span>Australia</span></div>
         <!-- Duplicate for seamless loop -->
-        <div class="ticker-item">
-            <span class="flag">🌍</span>
-            <span>Building a Global Network</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇱🇹</span>
-            <span>Lithuania</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇮🇳</span>
-            <span>India</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇦🇪</span>
-            <span>UAE</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇺🇦</span>
-            <span>Ukraine</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇬🇧</span>
-            <span>United Kingdom</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇺🇸</span>
-            <span>United States</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇸🇬</span>
-            <span>Singapore</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇨🇦</span>
-            <span>Canada</span>
-        </div>
-        <div class="ticker-item">
-            <span class="flag">🇦🇺</span>
-            <span>Australia</span>
-        </div>
+        <div class="ticker-item"><span class="flag">🌍</span><span>Building a Global Network</span></div>
+        <div class="ticker-item"><span class="flag">🇱🇹</span><span>Lithuania</span></div>
+        <div class="ticker-item"><span class="flag">🇮🇳</span><span>India</span></div>
+        <div class="ticker-item"><span class="flag">🇦🇪</span><span>UAE</span></div>
+        <div class="ticker-item"><span class="flag">🇺🇦</span><span>Ukraine</span></div>
+        <div class="ticker-item"><span class="flag">🇬🇧</span><span>United Kingdom</span></div>
+        <div class="ticker-item"><span class="flag">🇺🇸</span><span>United States</span></div>
+        <div class="ticker-item"><span class="flag">🇸🇬</span><span>Singapore</span></div>
+        <div class="ticker-item"><span class="flag">🇨🇦</span><span>Canada</span></div>
+        <div class="ticker-item"><span class="flag">🇦🇺</span><span>Australia</span></div>
     </div>
 </div>
 </body>
