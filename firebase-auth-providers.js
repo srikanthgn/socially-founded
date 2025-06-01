@@ -99,7 +99,9 @@ async function signInWithPhone(phoneNumber, useWhatsApp = false) {
         window.confirmationResult = confirmationResult;
         
         // Show OTP input UI
-        showOTPInput(phoneNumber, useWhatsApp);
+        if (window.showOTPInput) {
+            window.showOTPInput(phoneNumber, useWhatsApp);
+        }
         
     } catch (error) {
         console.error('Error during phone sign-in:', error);
@@ -181,11 +183,9 @@ async function signInWithLinkedIn() {
 // Manual LinkedIn OAuth flow (backup method)
 function signInWithLinkedInManual() {
     // IMPORTANT: Replace this with your actual LinkedIn Client ID from your LinkedIn app
-    const clientId = '77tpngrlwmwnz7'; // <-- REPLACE THIS!
+    const clientId = '77lpngriwmwrz7'; // Your actual LinkedIn Client ID
     
-    // For example: const clientId = '77xxxxxxxxxxxxx';
-    
-    const redirectUri = encodeURIComponent(window.location.origin + '/linkedin-callback.html');
+    const redirectUri = encodeURIComponent('https://us-central1-sociallyfounded-df98f.cloudfunctions.net/linkedinCallback');
     const state = generateRandomString(16);
     const scope = 'r_liteprofile r_emailaddress';
     
@@ -337,5 +337,6 @@ window.authProviders = {
     signInWithPhone,
     verifyOTP,
     sendWhatsAppOTP,
-    handleLinkedInCallback
+    handleLinkedInCallback,
+    showAuthError
 };
