@@ -345,11 +345,7 @@
         <div class="network-visualization" style="grid-area: visualization;">
             <canvas id="network-canvas"></canvas>
         </div>
-        
-        <div class="signup-form" style="grid-area: form;" id="join-form">
-            <h3>Join SociallyFounded</h3>
-            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Start your entrepreneurial journey today</p>
-            
+                  
             <div id="user-type-selection">
                 <p style="font-weight: 500; margin-bottom: 15px;">I am a:</p>
                 <div class="user-type-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
@@ -552,16 +548,6 @@
                 } else {
                     console.error('Auth manager or showEmailModal is not available.');
                     alert('Email sign-in is currently unavailable.');
-                }
-            }
-
-            function initiatePhoneSignInFlow() {
-                saveUserType();
-                if (window.authManager && typeof window.authManager.showPhoneModal === 'function') {
-                    window.authManager.showPhoneModal();
-                } else {
-                    console.error('Auth manager or showPhoneModal is not available.');
-                    alert('Phone sign-in is currently unavailable.');
                 }
             }
 
