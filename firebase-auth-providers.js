@@ -9,7 +9,7 @@ function initializeAuthProviders() {
     // New providers
     const facebookProvider = new firebase.auth.FacebookAuthProvider();
     
-    // LinkedIn requires custom OAuth implementation
+    // LinkedIn uses Cloud Functions
     // Phone auth is built into Firebase
     
     return {
@@ -37,7 +37,7 @@ async function signInWithProvider(providerName) {
                 break;
                 
             case 'linkedin':
-                // LinkedIn requires custom OAuth flow
+                // LinkedIn uses Cloud Functions for OAuth
                 return signInWithLinkedIn();
                 
             default:
@@ -78,6 +78,39 @@ async function signInWithProvider(providerName) {
         showAuthError(error.message);
     }
 }
+
+// LinkedIn OAuth using existing Cloud Functions
+async function signInWithLinkedIn() {
+    try {
+        // Get the return URL to pass to the function
+        const returnUrl = window.location.origin;
+        
+        // Call your startLinkedInAuth function to get the OAuth URL
+        const response = await fetch(`https://us-central1-sociallyfounded-df98f.cloudfunctions.net/startLinkedInAuth?returnUrl=${encodeURIComponent(returnUrl)}`, {
+            method: 'GET'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to start LinkedIn authentication');
+        }
+        
+        const data = await response.json();
+        
+        // Redirect to LinkedIn OAuth URL
+        if (data.authUrl) {
+            window.location.href = data.authUrl;
+        } else {
+            throw new Error('No authentication URL received');
+        }
+        
+    } catch (error) {
+        console.error('Error signing in with LinkedIn:', error);
+        showAuthError('LinkedIn sign-in failed. Please try again.');
+    }
+}
+
+// Handle LinkedIn callback is managed by the Cloud Function
+// The linkedinCallback function will create a custom token and redirect back to your app
 
 // Phone authentication with SMS/WhatsApp
 async function signInWithPhone(phoneNumber, useWhatsApp = false) {
@@ -135,103 +168,6 @@ async function verifyOTP(code) {
         console.error('Error verifying OTP:', error);
         showAuthError('Invalid verification code');
     }
-}
-
-// LinkedIn OAuth (simplified client-side approach)
-async function signInWithLinkedIn() {
-    // Since you've configured LinkedIn in Firebase as a custom OAuth provider
-    // We can use Firebase's OAuthProvider
-    try {
-        const provider = new firebase.auth.OAuthProvider('oidc.linkedin');
-        
-        // LinkedIn OAuth scopes
-        provider.addScope('r_liteprofile');
-        provider.addScope('r_emailaddress');
-        
-        // Sign in with popup
-        const result = await firebase.auth().signInWithPopup(provider);
-        
-        // Extract profile information
-        const user = result.user;
-        const profile = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            providerId: 'linkedin.com'
-        };
-        
-        // Update user profile
-        await updateUserProfile(profile);
-        
-        // Redirect to MyPassport
-        window.location.href = '/passport.html';
-        
-    } catch (error) {
-        console.error('Error signing in with LinkedIn:', error);
-        
-        // If custom OAuth provider doesn't work, fall back to redirect flow
-        if (error.code === 'auth/operation-not-allowed') {
-            // Fallback to manual OAuth flow
-            signInWithLinkedInManual();
-        } else {
-            showAuthError(error.message);
-        }
-    }
-}
-
-// Manual LinkedIn OAuth flow (backup method)
-function signInWithLinkedInManual() {
-    // IMPORTANT: Replace this with your actual LinkedIn Client ID from your LinkedIn app
-    const clientId = '77lpngriwmwrz7'; // Your actual LinkedIn Client ID
-    
-    const redirectUri = encodeURIComponent('https://us-central1-sociallyfounded-df98f.cloudfunctions.net/linkedinCallback');
-    const state = generateRandomString(16);
-    const scope = 'r_liteprofile r_emailaddress';
-    
-    // Store state for CSRF protection
-    sessionStorage.setItem('linkedin_oauth_state', state);
-    
-    // Redirect to LinkedIn OAuth
-    const authUrl = `https://www.linkedin.com/oauth/v2/authorization?` +
-        `response_type=code&` +
-        `client_id=${clientId}&` +
-        `redirect_uri=${redirectUri}&` +
-        `state=${state}&` +
-        `scope=${scope}`;
-    
-    window.location.href = authUrl;
-}
-
-// Handle LinkedIn callback (separate page needed)
-async function handleLinkedInCallback() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    const state = urlParams.get('state');
-    
-    // Verify state
-    const savedState = sessionStorage.getItem('linkedin_oauth_state');
-    if (state !== savedState) {
-        throw new Error('Invalid state parameter');
-    }
-    
-    // Exchange code for token (requires backend)
-    // For now, we'll need a Cloud Function to handle this
-    const response = await fetch('/api/auth/linkedin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code })
-    });
-    
-    const data = await response.json();
-    
-    // Sign in with custom token
-    await firebase.auth().signInWithCustomToken(data.customToken);
-    
-    // Update profile with LinkedIn data
-    await updateUserProfile(data.profile);
-    
-    window.location.href = '/passport.html';
 }
 
 // WhatsApp Business API integration (requires approval)
@@ -337,6 +273,6 @@ window.authProviders = {
     signInWithPhone,
     verifyOTP,
     sendWhatsAppOTP,
-    handleLinkedInCallback,
+    signInWithLinkedIn,
     showAuthError
 };
