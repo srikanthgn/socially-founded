@@ -5,32 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SociallyFounded - Where entrepreneurial journeys converge and amplify</title>
     
-    <!-- Keep your existing head content -->
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="mobile-fixes.css">
     
-    <!-- Add Firebase -->
-
-<!-- Firebase SDK -->
-
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
-<!-- Firebase Config MUST come after SDK -->
-<script src="firebase-config.js"></script>
-<!-- Auth System -->
-<script src="firebase-auth-complete.js"></script>
-<!-- User Management -->
-<script src="user-management.js"></script>
-
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
     
-    <!-- Font Awesome for social icons -->
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+    <script src="firebase-auth-complete.js"></script>
+    <script src="user-management.js"></script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#003554">
     
     <style>
-        /* Enhanced authentication styles */
+        /* Your existing auth styles here */
         .auth-container {
             max-width: 400px;
             margin: 0 auto;
@@ -59,6 +60,7 @@
             transition: all 0.2s;
             position: relative;
             overflow: hidden;
+            animation: fadeInUp 0.3s ease-out backwards;
         }
         
         .auth-icon-btn:hover {
@@ -76,26 +78,26 @@
             transform: scale(1.1);
         }
         
-        /* Icon specific colors and hover effects */
+        /* Icon colors */
         .auth-icon-btn.google { color: #4285f4; }
-        .auth-icon-btn.google:hover { background: #4285f4; color: white; border-color: #4285f4; }
+        .auth-icon-btn.google:hover { background: #4285f4; color: white; }
         
         .auth-icon-btn.facebook { color: #1877f2; }
-        .auth-icon-btn.facebook:hover { background: #1877f2; color: white; border-color: #1877f2; }
+        .auth-icon-btn.facebook:hover { background: #1877f2; color: white; }
         
         .auth-icon-btn.linkedin { color: #0077b5; }
-        .auth-icon-btn.linkedin:hover { background: #0077b5; color: white; border-color: #0077b5; }
+        .auth-icon-btn.linkedin:hover { background: #0077b5; color: white; }
         
         .auth-icon-btn.whatsapp { color: #25d366; }
-        .auth-icon-btn.whatsapp:hover { background: #25d366; color: white; border-color: #25d366; }
+        .auth-icon-btn.whatsapp:hover { background: #25d366; color: white; }
         
         .auth-icon-btn.phone { color: #6c757d; }
-        .auth-icon-btn.phone:hover { background: #6c757d; color: white; border-color: #6c757d; }
+        .auth-icon-btn.phone:hover { background: #6c757d; color: white; }
         
         .auth-icon-btn.email { color: #003554; }
-        .auth-icon-btn.email:hover { background: #003554; color: white; border-color: #003554; }
+        .auth-icon-btn.email:hover { background: #003554; color: white; }
         
-        /* Tooltip on hover */
+        /* Tooltip */
         .auth-icon-btn::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -111,20 +113,13 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s;
+            z-index: 10;
         }
         
         .auth-icon-btn:hover::after {
             opacity: 1;
         }
         
-        .auth-subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 0.875rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        /* Add subtle entrance animation */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -136,137 +131,12 @@
             }
         }
         
-        .auth-icon-btn {
-            animation: fadeInUp 0.3s ease-out backwards;
-        }
-        
-        .auth-icon-btn:nth-child(1) { animation-delay: 0.05s; }
-        .auth-icon-btn:nth-child(2) { animation-delay: 0.1s; }
-        .auth-icon-btn:nth-child(3) { animation-delay: 0.15s; }
-        .auth-icon-btn:nth-child(4) { animation-delay: 0.2s; }
-        .auth-icon-btn:nth-child(5) { animation-delay: 0.25s; }
-        .auth-icon-btn:nth-child(6) { animation-delay: 0.3s; }
-        
-        /* Add pulse effect on hover */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .auth-icon-btn:active {
-            animation: pulse 0.3s ease-out;
-        }
-        
-        @media (max-width: 400px) {
-            .auth-icons-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 0.75rem;
-            }
-            
-            .auth-icon-btn i {
-                font-size: 1.75rem;
-            }
-        }
-        
-        .divider {
-            text-align: center;
-            margin: 2rem 0;
-            position: relative;
-        }
-        
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e0e0e0;
-        }
-        
-        .divider span {
-            background: white;
-            padding: 0 1rem;
-            position: relative;
-            color: #666;
-            font-size: 0.875rem;
-        }
-        
         .phone-auth-form {
             display: none;
         }
         
-        .phone-input-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .country-code {
-            width: 100px;
-            padding: 0.75rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-        }
-        
-        .phone-number {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-        }
-        
         .otp-input-container {
             display: none;
-            text-align: center;
-            padding: 2rem 0;
-        }
-        
-        .otp-inputs {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            margin: 1rem 0;
-        }
-        
-        .otp-input {
-            width: 50px;
-            height: 50px;
-            text-align: center;
-            font-size: 1.5rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 0.5rem;
-            transition: border-color 0.2s;
-        }
-        
-        .otp-input:focus {
-            border-color: #003554;
-            outline: none;
-        }
-        
-        .whatsapp-option, .sms-option {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 1rem;
-            padding: 0.75rem;
-            background: #f9f9f9;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            color: #666;
-        }
-        
-        .whatsapp-option {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-        
-        .sms-option {
-            background: #f3f4f6;
-            color: #4b5563;
         }
         
         #auth-error {
@@ -278,550 +148,177 @@
             margin-bottom: 1rem;
             font-size: 0.875rem;
         }
-        
-        #recaptcha-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-
     </style>
-<style>
-    /* Enhanced authentication styles */
-    .auth-container {
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 2rem;
-        background: white;
-        border-radius: 1rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    
-    .auth-icons-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .auth-icon-btn {
-        aspect-ratio: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid #f0f0f0;
-        border-radius: 1rem;
-        background: white;
-        cursor: pointer;
-        transition: all 0.2s;
-        position: relative;
-        overflow: hidden;
-        animation: fadeInUp 0.3s ease-out backwards;
-    }
-    
-    .auth-icon-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        border-color: transparent;
-    }
-    
-    .auth-icon-btn i {
-        font-size: 2rem;
-        transition: transform 0.2s;
-    }
-    
-    .auth-icon-btn:hover i {
-        transform: scale(1.1);
-    }
-    
-    /* Icon specific colors and hover effects */
-    .auth-icon-btn.google { color: #4285f4; }
-    .auth-icon-btn.google:hover { background: #4285f4; color: white; }
-    
-    .auth-icon-btn.facebook { color: #1877f2; }
-    .auth-icon-btn.facebook:hover { background: #1877f2; color: white; }
-    
-    .auth-icon-btn.linkedin { color: #0077b5; }
-    .auth-icon-btn.linkedin:hover { background: #0077b5; color: white; }
-    
-    .auth-icon-btn.whatsapp { color: #25d366; }
-    .auth-icon-btn.whatsapp:hover { background: #25d366; color: white; }
-    
-    .auth-icon-btn.phone { color: #6c757d; }
-    .auth-icon-btn.phone:hover { background: #6c757d; color: white; }
-    
-    .auth-icon-btn.email { color: #003554; }
-    .auth-icon-btn.email:hover { background: #003554; color: white; }
-    
-    /* Tooltip on hover */
-    .auth-icon-btn::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        bottom: -30px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #333;
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.25rem;
-        font-size: 0.75rem;
-        white-space: nowrap;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s;
-        z-index: 10;
-    }
-    
-    .auth-icon-btn:hover::after {
-        opacity: 1;
-    }
-    
-    .auth-subtitle {
-        text-align: center;
-        color: #666;
-        font-size: 0.875rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    /* Add subtle entrance animation */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .auth-icon-btn:nth-child(1) { animation-delay: 0.05s; }
-    .auth-icon-btn:nth-child(2) { animation-delay: 0.1s; }
-    .auth-icon-btn:nth-child(3) { animation-delay: 0.15s; }
-    .auth-icon-btn:nth-child(4) { animation-delay: 0.2s; }
-    .auth-icon-btn:nth-child(5) { animation-delay: 0.25s; }
-    .auth-icon-btn:nth-child(6) { animation-delay: 0.3s; }
-    
-    /* Phone auth form styles */
-    .phone-auth-form {
-        display: none;
-    }
-    
-    .phone-input-group {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-    }
-    
-    .country-code {
-        width: 100px;
-        padding: 0.75rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-    }
-    
-    .phone-number {
-        flex: 1;
-        padding: 0.75rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-    }
-    
-    .otp-input-container {
-        display: none;
-        text-align: center;
-        padding: 2rem 0;
-    }
-    
-    .otp-inputs {
-        display: flex;
-        gap: 0.5rem;
-        justify-content: center;
-        margin: 1rem 0;
-    }
-    
-    .otp-input {
-        width: 50px;
-        height: 50px;
-        text-align: center;
-        font-size: 1.5rem;
-        border: 2px solid #e0e0e0;
-        border-radius: 0.5rem;
-        transition: border-color 0.2s;
-    }
-    
-    .otp-input:focus {
-        border-color: #003554;
-        outline: none;
-    }
-    
-    .whatsapp-option, .sms-option {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 1rem;
-        padding: 0.75rem;
-        background: #f9f9f9;
-        border-radius: 0.5rem;
-        font-size: 0.875rem;
-        color: #666;
-    }
-    
-    .whatsapp-option {
-        background: #e8f5e9;
-        color: #2e7d32;
-    }
-    
-    .sms-option {
-        background: #f3f4f6;
-        color: #4b5563;
-    }
-    
-    #auth-error {
-        display: none;
-        padding: 0.75rem;
-        background: #fee;
-        color: #c00;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-        font-size: 0.875rem;
-    }
-    
-    #recaptcha-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 1rem;
-    }
-    
-    .auth-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        padding: 0.875rem 1.5rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 0.5rem;
-        background: white;
-        font-size: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s;
-        text-decoration: none;
-        color: #333;
-        width: 100%;
-    }
-    
-    @media (max-width: 400px) {
-        .auth-icons-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-        }
-        
-        .auth-icon-btn i {
-            font-size: 1.75rem;
-        }
-    }
-</style>
-
-
-
 </head>
 <body>
-    <!-- Keep your existing navigation -->
-    <nav>
-        <!-- Your existing nav content -->
+    <!-- Navigation -->
+    <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                    <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
+                    <span style="font-size: 22px; font-weight: 600; color: #003554;">SociallyFounded</span>
+                </a>
+                <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -5px;">Fusion of Vibe, Entrepreneurship & Community</span>
+            </div>
+            
+            <!-- Desktop Navigation Links -->
+            <div id="desktop-links" style="display: flex; gap: 40px;">
+                <a href="about.html" style="color: #003554; text-decoration: none;">About</a>
+                <a href="how-it-works.html" style="color: #003554; text-decoration: none;">How It Works</a>
+                <a href="passport.html" style="color: #003554; text-decoration: none;">Digital Passport</a>
+                <a href="#" style="color: #003554; text-decoration: none;">Join</a>
+                <a href="#" style="color: #003554; text-decoration: none;">Contact</a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="open-mobile-nav" style="display: none; background: none; border: none; color: #003554; font-size: 24px; cursor: pointer;">☰</button>
+        </div>
     </nav>
 
     <!-- Hero Section with Authentication -->
-
-<section class="hero">
-    <div class="container">
-        <h1>Where entrepreneurial journeys converge and amplify</h1>
-        <p class="subtitle">Get your Digital Passport and join thousands of founders worldwide</p>
-        
-        <!-- Authentication Container -->
-        <div class="auth-container">
-            <h2 style="text-align: center; margin-bottom: 1rem; color: #003554;">Get Your Digital Passport</h2>
-            <p class="auth-subtitle">Choose how you'd like to sign in</p>
+    <section class="hero">
+        <div class="container">
+            <h1>Where entrepreneurial journeys converge and amplify</h1>
+            <p class="subtitle">Get your Digital Passport and join thousands of founders worldwide</p>
             
-            <!-- Error message -->
-            <div id="auth-error"></div>
-            
-            <!-- Icon Grid Authentication -->
-            <div class="auth-icons-grid" id="authIconsGrid">
-                <button class="auth-icon-btn google" data-tooltip="Google" 
-                        onclick="authProviders.signInWithProvider('google')">
-                    <i class="fab fa-google"></i>
-                </button>
+            <!-- Authentication Container -->
+            <div class="auth-container">
+                <h2 style="text-align: center; margin-bottom: 1rem; color: #003554;">Get Your Digital Passport</h2>
+                <p class="auth-subtitle" style="text-align: center; color: #666; margin-bottom: 1.5rem;">Choose how you'd like to sign in</p>
                 
-                <button class="auth-icon-btn facebook" data-tooltip="Facebook" 
-                        onclick="authProviders.signInWithProvider('facebook')">
-                    <i class="fab fa-facebook-f"></i>
-                </button>
+                <!-- Error message -->
+                <div id="auth-error"></div>
                 
-                <button class="auth-icon-btn linkedin" data-tooltip="LinkedIn" 
-                        onclick="authProviders.signInWithProvider('linkedin')">
-                    <i class="fab fa-linkedin-in"></i>
-                </button>
-                
-                <button class="auth-icon-btn whatsapp" data-tooltip="WhatsApp" 
-                        onclick="showPhoneAuth(true)">
-                    <i class="fab fa-whatsapp"></i>
-                </button>
-                
-                <button class="auth-icon-btn phone" data-tooltip="SMS" 
-                        onclick="showPhoneAuth(false)">
-                    <i class="fas fa-mobile-alt"></i>
-                </button>
-                
-                <button class="auth-icon-btn email" data-tooltip="Email" 
-                        onclick="window.location.href='/passport.html'">
-                    <i class="fas fa-envelope"></i>
-                </button>
-            </div>
-            
-            <!-- Phone Authentication Form -->
-            <div class="phone-auth-form" id="phoneAuthForm">
-                <h3 style="margin-bottom: 1.5rem;">Enter your phone number</h3>
-                
-                <div class="phone-input-group">
-                    <select class="country-code" id="countryCode">
-                        <option value="+1">+1 USA</option>
-                        <option value="+44">+44 UK</option>
-                        <option value="+91">+91 India</option>
-                        <option value="+971" selected>+971 UAE</option>
-                        <option value="+65">+65 Singapore</option>
-                        <option value="+61">+61 Australia</option>
-                        <!-- Add more country codes as needed -->
-                    </select>
-                    <input type="tel" class="phone-number" id="phoneNumber" 
-                           placeholder="Phone number" maxlength="15">
+                <!-- Icon Grid Authentication -->
+                <div class="auth-icons-grid" id="authIconsGrid">
+                    <button class="auth-icon-btn google" data-tooltip="Google" onclick="authProviders.signInWithProvider('google')">
+                        <i class="fab fa-google"></i>
+                    </button>
+                    
+                    <button class="auth-icon-btn facebook" data-tooltip="Facebook" onclick="authProviders.signInWithProvider('facebook')">
+                        <i class="fab fa-facebook-f"></i>
+                    </button>
+                    
+                    <button class="auth-icon-btn linkedin" data-tooltip="LinkedIn" onclick="authProviders.signInWithProvider('linkedin')">
+                        <i class="fab fa-linkedin-in"></i>
+                    </button>
+                    
+                    <button class="auth-icon-btn whatsapp" data-tooltip="WhatsApp" onclick="showPhoneAuth(true)">
+                        <i class="fab fa-whatsapp"></i>
+                    </button>
+                    
+                    <button class="auth-icon-btn phone" data-tooltip="SMS" onclick="showPhoneAuth(false)">
+                        <i class="fas fa-mobile-alt"></i>
+                    </button>
+                    
+                    <button class="auth-icon-btn email" data-tooltip="Email" onclick="window.location.href='/passport.html'">
+                        <i class="fas fa-envelope"></i>
+                    </button>
                 </div>
                 
-                <div class="whatsapp-option" id="whatsappOption" style="display: none;">
-                    <i class="fab fa-whatsapp" style="color: #25d366; margin-right: 0.5rem;"></i>
-                    <span>We'll send your code via WhatsApp</span>
+                <!-- Phone Authentication Form -->
+                <div class="phone-auth-form" id="phoneAuthForm">
+                    <!-- Your phone auth form content here -->
                 </div>
                 
-                <div class="sms-option" id="smsOption" style="display: none;">
-                    <i class="fas fa-mobile-alt" style="color: #6c757d; margin-right: 0.5rem;"></i>
-                    <span>We'll send your code via SMS</span>
+                <!-- OTP Verification -->
+                <div class="otp-input-container" id="otpContainer">
+                    <!-- Your OTP content here -->
                 </div>
-                
-                <button class="auth-button" style="background: #003554; color: white; margin-top: 1rem;"
-                        onclick="sendPhoneOTP()">
-                    Send Verification Code
-                </button>
-                
-                <button class="auth-button" style="margin-top: 0.5rem;"
-                        onclick="hidePhoneAuth()">
-                    Back to sign-in options
-                </button>
-                
-                <div id="recaptcha-container"></div>
-            </div>
-            
-            <!-- OTP Verification -->
-            <div class="otp-input-container" id="otpContainer">
-                <h3>Enter verification code</h3>
-                <p style="color: #666; margin: 0.5rem 0;">We sent a code to <span id="phoneDisplay"></span></p>
-                
-                <div class="otp-inputs">
-                    <input type="text" class="otp-input" maxlength="1" id="otp1">
-                    <input type="text" class="otp-input" maxlength="1" id="otp2">
-                    <input type="text" class="otp-input" maxlength="1" id="otp3">
-                    <input type="text" class="otp-input" maxlength="1" id="otp4">
-                    <input type="text" class="otp-input" maxlength="1" id="otp5">
-                    <input type="text" class="otp-input" maxlength="1" id="otp6">
-                </div>
-                
-                <button class="auth-button" style="background: #003554; color: white; margin-top: 1rem;"
-                        onclick="verifyPhoneOTP()">
-                    Verify Code
-                </button>
-                
-                <p style="margin-top: 1rem; font-size: 0.875rem;">
-                    Didn't receive the code? 
-                    <a href="#" onclick="resendOTP()" style="color: #003554;">Resend</a>
-                </p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Features Section -->
-<section class="features">
-    <div class="container">
-        <h2>Transform Your Entrepreneurial Journey</h2>
-        <div class="features-grid">
-            <div class="feature">
-                <div class="feature-icon">🤝</div>
-                <h3>Community Connection</h3>
-                <p>Connect with like-minded entrepreneurs and build meaningful relationships.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">💡</div>
-                <h3>Idea Enhancement</h3>
-                <p>Transform concepts into refined opportunities through collective intelligence.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🎯</div>
-                <h3>Resource Access</h3>
-                <p>Gain privileged access to tools, mentorship, and funding opportunities.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Network Visualization Section -->
-<section class="network">
-    <div class="container">
-        <h2>Join Our Growing Network</h2>
-        <p class="subtitle">Connect with entrepreneurs worldwide</p>
-        <canvas id="networkCanvas"></canvas>
-    </div>
-</section>
-
-<!-- Global Map Section -->
-<section class="global-map">
-    <div class="container">
-        <h2>Building a Global Network</h2>
-        <div id="map-container">
-            <div class="map-placeholder">
-                <p>🌍 Active in Lithuania, India, UAE, Ukraine, and growing...</p>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Transform Your Entrepreneurial Journey</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Community Connection</h3>
+                    <p>Connect with like-minded entrepreneurs and build meaningful relationships.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💡</div>
+                    <h3>Idea Enhancement</h3>
+                    <p>Transform concepts into refined opportunities through collective intelligence.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Resource Access</h3>
+                    <p>Gain privileged access to tools, mentorship, and funding opportunities.</p>
+                </div>
             </div>
         </div>
+    </section>
+
+    <!-- Network Visualization Section -->
+    <section class="network">
+        <div class="container">
+            <h2>Join Our Growing Network</h2>
+            <p class="subtitle">Connect with entrepreneurs worldwide</p>
+            <canvas id="networkCanvas"></canvas>
+        </div>
+    </section>
+
+    <!-- Global Map Section -->
+    <section class="global-map">
+        <div class="container">
+            <h2>Building a Global Network</h2>
+            <div id="map-container">
+                <div class="map-placeholder" style="background: #f5f5f5; padding: 100px; text-align: center; border-radius: 10px;">
+                    <p style="font-size: 24px;">🌍 Active in Lithuania, India, UAE, Ukraine, and growing...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #003554; color: white; padding: 40px 0; margin-top: 80px;">
+        <div class="container" style="text-align: center;">
+            <p>&copy; 2025 SociallyFounded | A 4Square Capital Innovations Company</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-nav" style="display: none;">
+        <!-- Mobile nav content here -->
     </div>
-</section>
 
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <p>&copy; 2025 SociallyFounded | A 4Square Capital Innovations Company</p>
-    </div>
-</footer>
-
-
-
-    <!-- Keep your existing sections below -->
-    
     <!-- Scripts -->
-
-
-
-
-<!-- Mobile Navigation Script -->
-<script src="mobile-script-fixes.js"></script>
-
-<!-- Network Animation Script (if you have one) -->
-<script>
-    // Add any network canvas animation code here
-</script>
-
-<!-- Page-specific functions (ONLY ONCE) -->
-<script>
-    let useWhatsApp = false;
+    <script src="mobile-script-fixes.js"></script>
     
-    function showPhoneAuth(isWhatsApp = false) {
-        useWhatsApp = isWhatsApp;
-        document.getElementById('authIconsGrid').style.display = 'none';
-        document.getElementById('phoneAuthForm').style.display = 'block';
-        document.getElementById('whatsappOption').style.display = isWhatsApp ? 'flex' : 'none';
-        document.getElementById('smsOption').style.display = !isWhatsApp ? 'flex' : 'none';
-    }
+    <!-- Add network animation -->
+    <script>
+        // Simple network animation
+        const canvas = document.getElementById('networkCanvas');
+        if (canvas) {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 400;
+            // Add your network animation code here if needed
+        }
+    </script>
     
-    function hidePhoneAuth() {
-        document.getElementById('phoneAuthForm').style.display = 'none';
-        document.getElementById('authIconsGrid').style.display = 'grid';
-    }
-    
-    function showOTPInput(phoneNumber, useWhatsApp) {
-        document.getElementById('phoneAuthForm').style.display = 'none';
-        document.getElementById('otpContainer').style.display = 'block';
-        document.getElementById('phoneDisplay').textContent = phoneNumber;
-        document.getElementById('otp1').focus();
+    <!-- Phone auth functions -->
+    <script>
+        let useWhatsApp = false;
         
-        const otpInputs = document.querySelectorAll('.otp-input');
-        otpInputs.forEach((input, index) => {
-            input.addEventListener('input', (e) => {
-                if (e.target.value && index < otpInputs.length - 1) {
-                    otpInputs[index + 1].focus();
-                }
-            });
-            
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                    otpInputs[index - 1].focus();
-                }
-            });
-        });
-    }
-    
-    async function sendPhoneOTP() {
-        const countryCode = document.getElementById('countryCode').value;
-        const phoneNumber = document.getElementById('phoneNumber').value;
-        
-        if (!phoneNumber || phoneNumber.length < 6) {
-            showAuthError('Please enter a valid phone number');
-            return;
+        function showPhoneAuth(isWhatsApp = false) {
+            useWhatsApp = isWhatsApp;
+            document.getElementById('authIconsGrid').style.display = 'none';
+            document.getElementById('phoneAuthForm').style.display = 'block';
         }
         
-        const fullNumber = countryCode + phoneNumber;
-        
-        if (useWhatsApp) {
-            await authProviders.sendWhatsAppOTP(fullNumber);
-        } else {
-            await authProviders.signInWithPhone(fullNumber, false);
-        }
-    }
-    
-    function showAuthError(message) {
-        const errorDiv = document.getElementById('auth-error');
-        if (errorDiv) {
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            setTimeout(() => {
-                errorDiv.style.display = 'none';
-            }, 5000);
-        }
-    }
-    
-    async function verifyPhoneOTP() {
-        const otp = Array.from({length: 6}, (_, i) => 
-            document.getElementById(`otp${i + 1}`).value
-        ).join('');
-        
-        if (otp.length !== 6) {
-            showAuthError('Please enter the complete 6-digit code');
-            return;
+        function hidePhoneAuth() {
+            document.getElementById('phoneAuthForm').style.display = 'none';
+            document.getElementById('authIconsGrid').style.display = 'grid';
         }
         
-        await authProviders.verifyOTP(otp);
-    }
-    
-    async function resendOTP() {
-        await sendPhoneOTP();
-    }
-    
-    // Handle LinkedIn OAuth callback
-    const urlParams = new URLSearchParams(window.location.search);
-    const customToken = urlParams.get('token');
-    if (customToken) {
-        firebase.auth().signInWithCustomToken(customToken)
-            .then(() => {
-                window.history.replaceState({}, document.title, window.location.pathname);
-                window.location.href = '/passport.html';
-            })
-            .catch((error) => {
-                console.error('Error signing in with custom token:', error);
-                showAuthError('LinkedIn sign-in failed. Please try again.');
-            });
-    }
-    
-    window.showOTPInput = showOTPInput;
-</script>
-
+        window.showOTPInput = function(phoneNumber, useWhatsApp) {
+            // Your OTP input logic
+        };
+    </script>
 </body>
 </html>
