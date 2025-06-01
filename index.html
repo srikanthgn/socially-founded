@@ -651,7 +651,57 @@
     </div>
 </section>
 
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2>Transform Your Entrepreneurial Journey</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">🤝</div>
+                <h3>Community Connection</h3>
+                <p>Connect with like-minded entrepreneurs and build meaningful relationships.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💡</div>
+                <h3>Idea Enhancement</h3>
+                <p>Transform concepts into refined opportunities through collective intelligence.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Resource Access</h3>
+                <p>Gain privileged access to tools, mentorship, and funding opportunities.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
+<!-- Network Visualization Section -->
+<section class="network">
+    <div class="container">
+        <h2>Join Our Growing Network</h2>
+        <p class="subtitle">Connect with entrepreneurs worldwide</p>
+        <canvas id="networkCanvas"></canvas>
+    </div>
+</section>
+
+<!-- Global Map Section -->
+<section class="global-map">
+    <div class="container">
+        <h2>Building a Global Network</h2>
+        <div id="map-container">
+            <div class="map-placeholder">
+                <p>🌍 Active in Lithuania, India, UAE, Ukraine, and growing...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p>&copy; 2025 SociallyFounded | A 4Square Capital Innovations Company</p>
+    </div>
+</footer>
 
 
 
@@ -659,120 +709,25 @@
     
     <!-- Scripts -->
 
-    
-    <script>
-        // UI Functions
-        // Track which method was selected
-        
-        function showPhoneAuth(isWhatsApp = false) {
-            useWhatsApp = isWhatsApp;
-            document.getElementById('authIconsGrid').style.display = 'none';
-            document.getElementById('phoneAuthForm').style.display = 'block';
-            
-            // Show appropriate message
-            document.getElementById('whatsappOption').style.display = isWhatsApp ? 'flex' : 'none';
-            document.getElementById('smsOption').style.display = !isWhatsApp ? 'flex' : 'none';
-        }
-        
-        function hidePhoneAuth() {
-            document.getElementById('phoneAuthForm').style.display = 'none';
-            document.getElementById('authIconsGrid').style.display = 'grid';
-        }
-        
-        function showOTPInput(phoneNumber, useWhatsApp) {
-            document.getElementById('phoneAuthForm').style.display = 'none';
-            document.getElementById('otpContainer').style.display = 'block';
-            document.getElementById('phoneDisplay').textContent = phoneNumber;
-            
-            // Focus first OTP input
-            document.getElementById('otp1').focus();
-            
-            // Auto-advance OTP inputs
-            const otpInputs = document.querySelectorAll('.otp-input');
-            otpInputs.forEach((input, index) => {
-                input.addEventListener('input', (e) => {
-                    if (e.target.value && index < otpInputs.length - 1) {
-                        otpInputs[index + 1].focus();
-                    }
-                });
-                
-                input.addEventListener('keydown', (e) => {
-                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                        otpInputs[index - 1].focus();
-                    }
-                });
-            });
-        }
-        
-        async function sendPhoneOTP() {
-            const countryCode = document.getElementById('countryCode').value;
-            const phoneNumber = document.getElementById('phoneNumber').value;
-            
-            if (!phoneNumber || phoneNumber.length < 6) {
-                showAuthError('Please enter a valid phone number');
-                return;
-            }
-            
-            const fullNumber = countryCode + phoneNumber;
-            
-            if (useWhatsApp) {
-                await authProviders.sendWhatsAppOTP(fullNumber);
-            } else {
-                await authProviders.signInWithPhone(fullNumber, false);
-            }
-        }
-        
-        function showAuthError(message) {
-            const errorDiv = document.getElementById('auth-error');
-            if (errorDiv) {
-                errorDiv.textContent = message;
-                errorDiv.style.display = 'block';
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                }, 5000);
-            }
-        }
-        
-        async function verifyPhoneOTP() {
-            const otp = Array.from({length: 6}, (_, i) => 
-                document.getElementById(`otp${i + 1}`).value
-            ).join('');
-            
-            if (otp.length !== 6) {
-                authProviders.showAuthError('Please enter the complete 6-digit code');
-                return;
-            }
-            
-            await authProviders.verifyOTP(otp);
-        }
-        
-        async function resendOTP() {
-            // Implement resend logic
-            await sendPhoneOTP();
-        }
-        
-        // Check if user is already authenticated
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in, redirect to passport
-                window.location.href = '/passport.html';
-            }
-        });
-        
-        // Expose showOTPInput function globally
-        window.showOTPInput = showOTPInput;
-    </script>
 
+
+
+<!-- Mobile Navigation Script -->
+<script src="mobile-script-fixes.js"></script>
+
+<!-- Network Animation Script (if you have one) -->
 <script>
-    // UI Functions
-    let useWhatsApp = false; // Track which method was selected
+    // Add any network canvas animation code here
+</script>
+
+<!-- Page-specific functions (ONLY ONCE) -->
+<script>
+    let useWhatsApp = false;
     
     function showPhoneAuth(isWhatsApp = false) {
         useWhatsApp = isWhatsApp;
         document.getElementById('authIconsGrid').style.display = 'none';
         document.getElementById('phoneAuthForm').style.display = 'block';
-        
-        // Show appropriate message
         document.getElementById('whatsappOption').style.display = isWhatsApp ? 'flex' : 'none';
         document.getElementById('smsOption').style.display = !isWhatsApp ? 'flex' : 'none';
     }
@@ -786,11 +741,8 @@
         document.getElementById('phoneAuthForm').style.display = 'none';
         document.getElementById('otpContainer').style.display = 'block';
         document.getElementById('phoneDisplay').textContent = phoneNumber;
-        
-        // Focus first OTP input
         document.getElementById('otp1').focus();
         
-        // Auto-advance OTP inputs
         const otpInputs = document.querySelectorAll('.otp-input');
         otpInputs.forEach((input, index) => {
             input.addEventListener('input', (e) => {
@@ -850,28 +802,16 @@
     }
     
     async function resendOTP() {
-        // Implement resend logic
         await sendPhoneOTP();
     }
     
-    // Check if user is already authenticated
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            // User is signed in, redirect to passport
-            window.location.href = '/passport.html';
-        }
-    });
-    
-    // Check if coming back from LinkedIn OAuth
+    // Handle LinkedIn OAuth callback
     const urlParams = new URLSearchParams(window.location.search);
     const customToken = urlParams.get('token');
     if (customToken) {
-        // Sign in with the custom token from LinkedIn
         firebase.auth().signInWithCustomToken(customToken)
             .then(() => {
-                // Clear the token from URL
                 window.history.replaceState({}, document.title, window.location.pathname);
-                // Redirect to passport
                 window.location.href = '/passport.html';
             })
             .catch((error) => {
@@ -880,8 +820,8 @@
             });
     }
     
-    // Expose showOTPInput function globally
     window.showOTPInput = showOTPInput;
 </script>
+
 </body>
 </html>
