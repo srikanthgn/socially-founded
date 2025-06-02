@@ -1,23 +1,19 @@
-// firebase-config.js
-// Firebase configuration - NO IMPORT STATEMENTS
-
-// Initialize Firebase with your config
+// Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBrYn3QTQR-Y5BeYzmfKgUmtMaM6LJfRJo",
+    apiKey: "AIzaSyCdaZa0TmP3pJ6qd7gmZEKsI9PEHTE2pMU",
     authDomain: "sociallyfounded-df98f.firebaseapp.com",
     projectId: "sociallyfounded-df98f",
     storageBucket: "sociallyfounded-df98f.appspot.com",
-    messagingSenderId: "246241399920",
-    appId: "1:246241399920:web:93c7c8978bbf4037b5e4e5",
-    measurementId: "G-W7Q1FRX5RD"
+    messagingSenderId: "994533610259",
+    appId: "1:994533610259:web:d7c9a8c3f9a9e9e9e9e9e9"
 };
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 // Initialize services
-const db = firebase.firestore();
 const auth = firebase.auth();
+const db = firebase.firestore();
 const storage = firebase.storage();
 
-console.log('✅ Firebase initialized successfully');
+console.log("✅ Firebase initialized successfully");
