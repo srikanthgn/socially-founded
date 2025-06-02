@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +9,9 @@
     <link rel="stylesheet" href="mobile-fixes.css">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- PWA meta tags -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#003554">
@@ -18,6 +20,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="SociallyFounded">
     <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
+    
+    <!-- Firebase v8 SDK (SAME AS index.html) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     
     <style>
         /* Digital Passport Specific Styles */
@@ -35,7 +43,7 @@
         .passport-header h1 {
             font-size: 32px;
             font-weight: 700;
-            color: var(--navy);
+            color: #003554;
             margin-bottom: 10px;
         }
         
@@ -46,7 +54,7 @@
         
         /* Passport Card */
         .passport-card {
-            background: linear-gradient(135deg, var(--navy) 0%, #004d77 100%);
+            background: linear-gradient(135deg, #003554 0%, #004d77 100%);
             color: white;
             border-radius: 20px;
             padding: 30px;
@@ -151,7 +159,7 @@
         .achievements-section h2 {
             font-size: 24px;
             font-weight: 600;
-            color: var(--navy);
+            color: #003554;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -165,7 +173,7 @@
         }
         
         .achievement-badge {
-            background: var(--light-gray);
+            background: #f5f5f5;
             border-radius: 12px;
             padding: 20px 15px;
             text-align: center;
@@ -192,7 +200,7 @@
         .achievement-name {
             font-size: 12px;
             font-weight: 600;
-            color: var(--navy);
+            color: #003554;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -209,7 +217,7 @@
         .activity-section h2 {
             font-size: 24px;
             font-weight: 600;
-            color: var(--navy);
+            color: #003554;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -227,14 +235,14 @@
             align-items: center;
             gap: 15px;
             padding: 15px;
-            background: var(--light-gray);
+            background: #f5f5f5;
             border-radius: 10px;
         }
         
         .activity-icon {
             width: 40px;
             height: 40px;
-            background: var(--navy);
+            background: #003554;
             color: white;
             border-radius: 50%;
             display: flex;
@@ -250,7 +258,7 @@
         
         .activity-title {
             font-weight: 600;
-            color: var(--navy);
+            color: #003554;
             margin-bottom: 2px;
         }
         
@@ -271,7 +279,7 @@
         .checkin-section h2 {
             font-size: 24px;
             font-weight: 600;
-            color: var(--navy);
+            color: #003554;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -281,7 +289,7 @@
         .checkin-button {
             width: 100%;
             padding: 20px;
-            background: linear-gradient(135deg, var(--navy) 0%, #004d77 100%);
+            background: linear-gradient(135deg, #003554 0%, #004d77 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -367,8 +375,8 @@
         .sign-out-btn {
             padding: 10px 20px;
             background: transparent;
-            color: var(--navy);
-            border: 2px solid var(--navy);
+            color: #003554;
+            border: 2px solid #003554;
             border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
@@ -377,7 +385,7 @@
         }
         
         .sign-out-btn:hover {
-            background: var(--navy);
+            background: #003554;
             color: white;
         }
     </style>
@@ -385,43 +393,26 @@
 <body>
     <!-- Navigation (same as other pages) -->
     <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: relative;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
             <div style="display: flex; flex-direction: column; align-items: flex-start;">
                 <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
                     <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
-                    <span style="font-size: 22px; font-weight: 600; color: #003554; margin-top: -12px;">SociallyFounded</span>
+                    <span style="font-size: 22px; font-weight: 600; color: #003554;">SociallyFounded</span>
                 </a>
-                <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -15px;">Fusion of Vibe, Entrepreneurship & Community</span>
-            </div>
-            
-            <!-- Mobile Navigation -->
-            <div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
-                <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                        <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
-                        <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">About</a>
-                        <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">How It Works</a>
-                        <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0; border-left: 3px solid #003554; padding-left: 10px;">Digital Passport</a>
-                        <a href="#join-form" id="mobile-join-link" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Join</a>
-                        <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
-                    </div>
-                </div>
+                <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -5px;">Fusion of Vibe, Entrepreneurship & Community</span>
             </div>
             
             <!-- Desktop Navigation Links -->
-            <div id="desktop-links" style="display: none; gap: 40px;">
-                <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">About</a>
-                <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">How It Works</a>
-                <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid #003554;">Digital Passport</a>
-                <a href="index.html#join-form" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Join</a>
-                <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Contact</a>
+            <div id="desktop-links" style="display: flex; gap: 40px;">
+                <a href="about.html" style="color: #003554; text-decoration: none;">About</a>
+                <a href="how-it-works.html" style="color: #003554; text-decoration: none;">How It Works</a>
+                <a href="passport.html" style="color: #003554; text-decoration: none;">Digital Passport</a>
+                <a href="#" style="color: #003554; text-decoration: none;">Join</a>
+                <a href="#" style="color: #003554; text-decoration: none;">Contact</a>
             </div>
             
             <!-- Mobile Menu Button -->
-            <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block;">☰</button>
+            <button id="open-mobile-nav" style="display: none; background: none; border: none; color: #003554; font-size: 24px; cursor: pointer;">☰</button>
         </div>
     </nav>
 
@@ -435,12 +426,12 @@
             </div>
 
             <!-- Authentication Required Message (shown when not logged in) -->
-            <div id="auth-required" style="display: block;">
+            <div id="auth-required" style="display: none;">
                 <div style="background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);">
                     <div style="font-size: 48px; margin-bottom: 20px;">🛂</div>
-                    <h2 style="color: var(--navy); margin-bottom: 15px;">Authentication Required</h2>
+                    <h2 style="color: #003554; margin-bottom: 15px;">Authentication Required</h2>
                     <p style="margin-bottom: 25px; color: #666;">Sign in to view your SociallyFounded Digital Passport</p>
-                    <button onclick="window.location.href='https://sociallyfounded.com/'" style="padding: 15px 30px; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">Sign In</button>
+                    <button onclick="window.location.href='https://sociallyfounded.com/'" style="padding: 15px 30px; background: #003554; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">Sign In</button>
                 </div>
             </div>
 
@@ -462,19 +453,19 @@
                     
                     <div class="passport-stats">
                         <div class="passport-stat">
-                            <span class="passport-stat-value" id="passport-level">1</span>
+                            <span class="passport-stat-value stat-level" id="passport-level">1</span>
                             <span class="passport-stat-label">Level</span>
                         </div>
                         <div class="passport-stat">
-                            <span class="passport-stat-value" id="passport-xp">0</span>
+                            <span class="passport-stat-value stat-xp" id="passport-xp">0</span>
                             <span class="passport-stat-label">Experience</span>
                         </div>
                         <div class="passport-stat">
-                            <span class="passport-stat-value" id="passport-checkins">0</span>
+                            <span class="passport-stat-value stat-checkins" id="passport-checkins">0</span>
                             <span class="passport-stat-label">Check-ins</span>
                         </div>
                         <div class="passport-stat">
-                            <span class="passport-stat-value" id="passport-streak">0</span>
+                            <span class="passport-stat-value stat-streak" id="passport-streak">0</span>
                             <span class="passport-stat-label">Day Streak</span>
                         </div>
                     </div>
@@ -517,34 +508,22 @@
     </div>
 
     <!-- Scripts -->
-    <!-- Firebase CDN Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Load Firebase Config FIRST -->
+    <script src="firebase-config.js"></script>
     
-    <!-- Use the working authentication from index.html -->
-        <script src="user-management.js"></script>
+    <!-- Then load auth and user management -->
+    <script src="firebase-auth-providers.js"></script>
+    <script src="user-management.js"></script>
+    
+    <!-- Then passport-specific scripts -->
     <script src="passport-app.js"></script>
-    <script src="mobile-script-fixes.js"></script>
-    <script src="firebase-auth-complete.js"></script>
-    
-    <!-- PWA registration script -->
-    <script src="/pwa-registration.js" defer></script>
-    
-    <script>
-        // Check authentication state on load
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                document.getElementById('auth-required').style.display = 'none';
-                document.getElementById('passport-content').style.display = 'block';
-                // Passport app will handle loading user data
-            } else {
-                document.getElementById('auth-required').style.display = 'block';
-                document.getElementById('passport-content').style.display = 'none';
-            }
-        });
-    </script>
     <script src="profile-completion.js"></script>
-<script src="passport-profile-integration.js"></script>
+    <script src="passport-profile-integration.js"></script>
+    
+    <!-- Mobile fixes -->
+    <script src="mobile-script-fixes.js"></script>
+    
+    <!-- PWA registration -->
+    <script src="/pwa-registration.js" defer></script>
 </body>
 </html>
