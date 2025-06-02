@@ -32,6 +32,160 @@
     
     <style>
         /* Your existing auth styles here */
+    /* Reset and Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #333;
+        line-height: 1.6;
+        background: #f8f9fa;
+    }
+    
+    /* Navigation */
+    nav {
+        background: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    
+    nav .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    nav a {
+        text-decoration: none;
+        color: #003554;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+    
+    nav a:hover {
+        color: #0056b3;
+    }
+    
+    #desktop-links {
+        display: flex;
+        gap: 2rem;
+    }
+    
+    /* Hero Section */
+    .hero {
+        padding: 4rem 0;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        text-align: center;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+        color: #003554;
+        margin-bottom: 1rem;
+    }
+    
+    .hero .subtitle {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 3rem;
+    }
+    
+    /* Container */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    /* Sections */
+    section {
+        padding: 4rem 0;
+    }
+    
+    .features {
+        background: white;
+    }
+    
+    .features h2, .network h2, .global-map h2 {
+        text-align: center;
+        font-size: 2rem;
+        color: #003554;
+        margin-bottom: 3rem;
+    }
+    
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .feature {
+        text-align: center;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        transition: transform 0.3s;
+    }
+    
+    .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .network {
+        background: #f8f9fa;
+    }
+    
+    .network canvas {
+        width: 100%;
+        height: 400px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    footer {
+        background: #003554;
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+    }
+    
+    /* Mobile */
+    @media (max-width: 768px) {
+        #desktop-links {
+            display: none;
+        }
+        
+        #open-mobile-nav {
+            display: block !important;
+        }
+        
+        .hero h1 {
+            font-size: 1.8rem;
+        }
+        
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
         .auth-container {
             max-width: 400px;
             margin: 0 auto;
@@ -288,37 +442,58 @@
     </div>
 
     <!-- Scripts -->
-    <script src="mobile-script-fixes.js"></script>
+
+<!-- Remove ALL existing script tags and replace with these -->
+
+<!-- Firebase SDK (must be first) -->
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
+
+<!-- Initialize Firebase -->
+<script src="firebase-config.js"></script>
+
+<!-- Auth System -->
+<script src="firebase-auth-complete.js"></script>
+
+<!-- User Management -->
+<script src="user-management.js"></script>
+
+<!-- Mobile fixes -->
+<script src="mobile-script-fixes.js"></script>
+
+<!-- Page Functions -->
+<script>
+    // Add recaptcha container div
+    if (!document.getElementById('recaptcha-container')) {
+        const recaptchaDiv = document.createElement('div');
+        recaptchaDiv.id = 'recaptcha-container';
+        document.body.appendChild(recaptchaDiv);
+    }
     
-    <!-- Add network animation -->
-    <script>
-        // Simple network animation
-        const canvas = document.getElementById('networkCanvas');
-        if (canvas) {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = 400;
-            // Add your network animation code here if needed
-        }
-    </script>
+    // Phone auth functions
+    let useWhatsApp = false;
     
-    <!-- Phone auth functions -->
-    <script>
-        let useWhatsApp = false;
-        
-        function showPhoneAuth(isWhatsApp = false) {
-            useWhatsApp = isWhatsApp;
-            document.getElementById('authIconsGrid').style.display = 'none';
-            document.getElementById('phoneAuthForm').style.display = 'block';
-        }
-        
-        function hidePhoneAuth() {
-            document.getElementById('phoneAuthForm').style.display = 'none';
-            document.getElementById('authIconsGrid').style.display = 'grid';
-        }
-        
-        window.showOTPInput = function(phoneNumber, useWhatsApp) {
-            // Your OTP input logic
-        };
-    </script>
+    function showPhoneAuth(isWhatsApp = false) {
+        useWhatsApp = isWhatsApp;
+        const authGrid = document.getElementById('authIconsGrid');
+        const phoneForm = document.getElementById('phoneAuthForm');
+        if (authGrid) authGrid.style.display = 'none';
+        if (phoneForm) phoneForm.style.display = 'block';
+    }
+    
+    function hidePhoneAuth() {
+        const authGrid = document.getElementById('authIconsGrid');
+        const phoneForm = document.getElementById('phoneAuthForm');
+        if (phoneForm) phoneForm.style.display = 'none';
+        if (authGrid) authGrid.style.display = 'grid';
+    }
+    
+    window.showOTPInput = function(phoneNumber, useWhatsApp) {
+        console.log('OTP requested for:', phoneNumber);
+    };
+</script>
+    
 </body>
 </html>
