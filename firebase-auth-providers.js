@@ -87,7 +87,7 @@ async function signInWithLinkedIn() {
     try 
         // Get the return URL to pass to the function
         const returnUrl = window.location.origin;
-        
+}
         // Call your startLinkedInAuth function to get the OAuth URL
         const response = await fetch(`https://us-central1-sociallyfounded-df98f.cloudfunctions.net/startLinkedInAuth?returnUrl=${encodeURIComponent(returnUrl)}`, {
             method: 'GET'
