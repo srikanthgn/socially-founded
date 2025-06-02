@@ -72,16 +72,19 @@ async function signInWithProvider(providerName) {
         
         // Redirect to MyPassport
         window.location.href = '/passport.html';
-        
-    } catch (error) {
-        console.error(`Error signing in with ${providerName}:`, error);
-        showAuthError(error.message);
-    }
+
+        } catch (error) {
+    console.error(`Error signing in with ${providerName}:`, error);
+    console.error('Full error object:', JSON.stringify(error, null, 2));
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
+    showAuthError(error.message);
 }
+    
 
 // LinkedIn OAuth using existing Cloud Functions
 async function signInWithLinkedIn() {
-    try {
+    try 
         // Get the return URL to pass to the function
         const returnUrl = window.location.origin;
         
