@@ -73,21 +73,21 @@ async function signInWithProvider(providerName) {
         // Redirect to MyPassport
         window.location.href = '/passport.html';
 
-        } catch (error) {
-    console.error(`Error signing in with ${providerName}:`, error);
-    console.error('Full error object:', JSON.stringify(error, null, 2));
-    console.error('Error code:', error.code);
-    console.error('Error message:', error.message);
-    showAuthError(error.message);
+      } catch (error) {
+        console.error(`Error signing in with ${providerName}:`, error);
+        console.error('Full error object:', JSON.stringify(error, null, 2));
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        showAuthError(error.message);
+    }
 }
-    
 
 // LinkedIn OAuth using existing Cloud Functions
 async function signInWithLinkedIn() {
-    try 
+    try {
         // Get the return URL to pass to the function
         const returnUrl = window.location.origin;
-}
+        
         // Call your startLinkedInAuth function to get the OAuth URL
         const response = await fetch(`https://us-central1-sociallyfounded-df98f.cloudfunctions.net/startLinkedInAuth?returnUrl=${encodeURIComponent(returnUrl)}`, {
             method: 'GET'
@@ -111,7 +111,6 @@ async function signInWithLinkedIn() {
         showAuthError('LinkedIn sign-in failed. Please try again.');
     }
 }
-
 // Handle LinkedIn callback is managed by the Cloud Function
 // The linkedinCallback function will create a custom token and redirect back to your app
 
