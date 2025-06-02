@@ -71,7 +71,7 @@ async function signInWithProvider(providerName) {
         await updateUserProfile(profile);
         
         // Redirect to MyPassport
-        window.location.href = '/passport.html';
+      window.location.href = 'https://sociallyfounded.com/passport.html';
 
       } catch (error) {
         console.error(`Error signing in with ${providerName}:`, error);
