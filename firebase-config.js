@@ -1,6 +1,6 @@
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCdaZa0TmP3pJ6qd7gmZEKsI9PEHTE2pMU",
+    apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
     authDomain: "sociallyfounded-df98f.firebaseapp.com",
     projectId: "sociallyfounded-df98f",
     storageBucket: "sociallyfounded-df98f.appspot.com",
