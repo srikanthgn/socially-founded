@@ -497,5 +497,61 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 });
+
+<script>
+// Handle LinkedIn OAuth callback - Run immediately when page loads
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const customToken = urlParams.get('token');
+    const error = urlParams.get('error');
+    
+    console.log('URL params:', window.location.search);
+    console.log('Custom token present:', !!customToken);
+    console.log('Error present:', error);
+    
+    if (error) {
+        console.error('LinkedIn auth error:', error);
+        const errorDesc = urlParams.get('error_description');
+        if (typeof showAuthError === 'function') {
+            showAuthError(errorDesc || 'LinkedIn sign-in failed. Please try again.');
+        }
+        return;
+    }
+    
+    if (customToken) {
+        console.log('Token found, waiting for Firebase to initialize...');
+        
+        // Wait for Firebase to be ready
+        const signInWithToken = () => {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                console.log('Firebase ready, signing in with custom token...');
+                firebase.auth().signInWithCustomToken(customToken)
+                    .then((userCredential) => {
+                        console.log('Sign in successful:', userCredential.user);
+                        // Clear the URL parameters
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        // Redirect to passport
+                        window.location.href = '/passport.html';
+                    })
+                    .catch((error) => {
+                        console.error('Error signing in with custom token:', error);
+                        console.error('Error code:', error.code);
+                        console.error('Error message:', error.message);
+                        if (typeof showAuthError === 'function') {
+                            showAuthError('LinkedIn sign-in failed. Please try again.');
+                        }
+                    });
+            } else {
+                console.log('Firebase not ready yet, retrying in 100ms...');
+                setTimeout(signInWithToken, 100);
+            }
+        };
+        
+        // Start the sign-in process
+        signInWithToken();
+    }
+})();
+</script>
+    
 </body>
 </html>
