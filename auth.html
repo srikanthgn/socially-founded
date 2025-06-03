@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Your Digital Passport - SociallyFounded</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --sf-navy: #003554;
+            --sf-navy-dark: #001f3f;
+            --sf-gold: #D4AF37;
+            --sf-burgundy: #800020;
+            --sf-platinum: #E5E4E2;
+            --sf-white: #ffffff;
+            --sf-gray-light: #f8f9fa;
+            --sf-gray: #6c757d;
+            --sf-success: #28a745;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--sf-navy), var(--sf-gold), var(--sf-burgundy));
+        }
+        
+        .logo-section {
+            margin-bottom: 30px;
+        }
+        
+        .logo-section img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-section h1 {
+            color: var(--sf-navy);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .logo-section p {
+            color: var(--sf-gray);
+            font-size: 1.1rem;
+        }
+        
+        .auth-methods {
+            margin: 40px 0;
+        }
+        
+        .auth-methods h3 {
+            color: var(--sf-navy);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .social-auth-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .auth-btn {
+            background: var(--sf-gray-light);
+            border: 2px solid transparent;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--sf-navy);
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--sf-navy);
+        }
+        
+        .auth-btn i {
+            font-size: 1.5rem;
+        }
+        
+        .auth-btn span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Brand colors for auth buttons */
+        .auth-google:hover { border-color: #4285f4; color: #4285f4; }
+        .auth-linkedin:hover { border-color: #0077b5; color: #0077b5; }
+        .auth-facebook:hover { border-color: #1877f2; color: #1877f2; }
+        .auth-whatsapp:hover { border-color: #25d366; color: #25d366; }
+        .auth-sms:hover { border-color: var(--sf-gold); color: var(--sf-gold); }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        
+        .divider span {
+            padding: 0 15px;
+            color: var(--sf-gray);
+            font-size: 0.9rem;
+        }
+        
+        .email-auth {
+            width: 100%;
+        }
+        
+        .email-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: var(--sf-navy);
+        }
+        
+        .btn-email {
+            width: 100%;
+            background: var(--sf-navy);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-email:hover {
+            background: var(--sf-navy-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,53,84,0.3);
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--sf-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 30px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: var(--sf-navy);
+        }
+        
+        .trust-text {
+            font-size: 0.85rem;
+            color: var(--sf-gray);
+            margin-top: 20px;
+        }
+        
+        .trust-text i {
+            color: var(--sf-success);
+            margin-right: 5px;
+        }
+        
+        /* Loading state */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.95);
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+        }
+        
+        .loading.active {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--sf-gray-light);
+            border-top-color: var(--sf-navy);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 30px 20px;
+            }
+            
+            .social-auth-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo-section">
+            <img src="favicon.svg" alt="SociallyFounded">
+            <h1>Get Your Digital Passport</h1>
+            <p>Join the global community of entrepreneurs</p>
+        </div>
+        
+        <div class="auth-methods">
+            <h3>Choose your sign-in method</h3>
+            
+            <div class="social-auth-grid">
+                <a href="#" class="auth-btn auth-google" onclick="signInWithGoogle()">
+                    <i class="fab fa-google"></i>
+                    <span>Google</span>
+                </a>
+                
+                <a href="#" class="auth-btn auth-linkedin" onclick="signInWithLinkedIn()">
+                    <i class="fab fa-linkedin"></i>
+                    <span>LinkedIn</span>
+                </a>
+                
+                <a href="#" class="auth-btn auth-facebook" onclick="signInWithFacebook()">
+                    <i class="fab fa-facebook-f"></i>
+                    <span>Facebook</span>
+                </a>
+                
+                <a href="#" class="auth-btn auth-whatsapp" onclick="signInWithPhone('whatsapp')">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+                
+                <a href="#" class="auth-btn auth-sms" onclick="signInWithPhone('sms')">
+                    <i class="fas fa-sms"></i>
+                    <span>SMS</span>
+                </a>
+                
+                <a href="#" class="auth-btn auth-email" onclick="showEmailForm()">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </a>
+            </div>
+            
+            <div class="divider" id="emailDivider" style="display: none;">
+                <span>or continue with email</span>
+            </div>
+            
+            <form class="email-auth" id="emailForm" style="display: none;" onsubmit="signInWithEmail(event)">
+                <input type="email" class="email-input" placeholder="Enter your email" required>
+                <button type="submit" class="btn-email">
+                    Continue with Email <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+        
+        <p class="trust-text">
+            <i class="fas fa-lock"></i> Secure authentication powered by Firebase
+        </p>
+        
+        <a href="/index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="loading" id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    
+    <!-- Your Firebase config and auth scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="firebase-auth-providers.js"></script>
+    
+    <script>
+        // Show email form when email button clicked
+        function showEmailForm() {
+            document.getElementById('emailDivider').style.display = 'flex';
+            document.getElementById('emailForm').style.display = 'block';
+            document.querySelector('.email-input').focus();
+        }
+        
+        // Handle auth methods
+        function signInWithGoogle() {
+            showLoading();
+            if (window.authProviders && window.authProviders.signInWithProvider) {
+                window.authProviders.signInWithProvider('google');
+            }
+        }
+        
+        function signInWithLinkedIn() {
+            showLoading();
+            if (window.authProviders && window.authProviders.signInWithLinkedIn) {
+                window.authProviders.signInWithLinkedIn();
+            }
+        }
+        
+        function signInWithFacebook() {
+            alert('Facebook login coming soon!');
+        }
+        
+        function signInWithPhone(type) {
+            showLoading();
+            // Redirect to phone auth page or show phone auth modal
+            window.location.href = '/phone-auth.html?type=' + type;
+        }
+        
+        function signInWithEmail(event) {
+            event.preventDefault();
+            showLoading();
+            const email = document.querySelector('.email-input').value;
+            // Handle email auth
+            window.location.href = '/passport.html?email=' + encodeURIComponent(email);
+        }
+        
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+        
+        // Check if user is already authenticated
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in, redirect to passport
+                window.location.href = '/passport.html';
+            }
+        });
+    </script>
+</body>
+</html>
