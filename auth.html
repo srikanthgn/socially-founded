@@ -416,16 +416,7 @@
                 </a>
             </div>
             
-            <div class="divider" id="emailDivider" style="display: none;">
-                <span>or continue with email</span>
-            </div>
             
-            <form class="email-auth" id="emailForm" style="display: none;" onsubmit="signInWithEmail(event)">
-                <input type="email" class="email-input" placeholder="Enter your email" required>
-                <button type="submit" class="btn-email">
-                    Continue with Email <i class="fas fa-arrow-right"></i>
-                </button>
-            </form>
         </div>
         
         <p class="trust-text">
@@ -477,132 +468,369 @@
     <script src="firebase-auth-providers.js"></script>
     
     <script>
-        // Global variables
-        let currentPhoneType = 'sms';
+    // Global variables
+    let currentPhoneType = 'sms';
+    
+    // Show email form when email button clicked
+    function showEmailForm() {
+        // Show email auth modal instead of the simple form
+        showEmailAuthModal();
+    }
+    
+    // Create and show email authentication modal
+    function showEmailAuthModal() {
+        const modal = document.createElement('div');
+        modal.className = 'phone-modal active';
+        modal.id = 'emailAuthModal';
+        modal.innerHTML = `
+            <div class="phone-modal-content" style="position: relative; max-width: 450px;">
+                <button class="close-modal" onclick="closeEmailAuthModal()">&times;</button>
+                <h3 id="emailModalTitle">Sign In with Email</h3>
+                
+                <!-- Sign In Form -->
+                <div id="signInForm">
+                    <p>Enter your email and password to continue</p>
+                    <input type="email" class="phone-input" id="signInEmail" placeholder="Email address" style="margin-bottom: 15px;">
+                    <input type="password" class="phone-input" id="signInPassword" placeholder="Password" style="margin-bottom: 20px;">
+                    <button class="phone-modal-btn" onclick="handleEmailSignIn()">Sign In</button>
+                    <p style="margin-top: 20px; font-size: 0.9rem;">
+                        Don't have an account? <a href="#" onclick="switchToSignUp()" style="color: var(--sf-navy); text-decoration: underline;">Sign up</a>
+                    </p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">
+                        <a href="#" onclick="showForgotPassword()" style="color: var(--sf-navy); text-decoration: underline;">Forgot password?</a>
+                    </p>
+                </div>
+                
+                <!-- Sign Up Form -->
+                <div id="signUpForm" style="display: none;">
+                    <p>Create your account</p>
+                    <input type="text" class="phone-input" id="signUpName" placeholder="Full name" style="margin-bottom: 15px;">
+                    <input type="email" class="phone-input" id="signUpEmail" placeholder="Email address" style="margin-bottom: 15px;">
+                    <input type="password" class="phone-input" id="signUpPassword" placeholder="Password (min 6 characters)" style="margin-bottom: 15px;">
+                    <input type="password" class="phone-input" id="signUpPasswordConfirm" placeholder="Confirm password" style="margin-bottom: 20px;">
+                    <button class="phone-modal-btn" onclick="handleEmailSignUp()">Create Account</button>
+                    <p style="margin-top: 20px; font-size: 0.9rem;">
+                        Already have an account? <a href="#" onclick="switchToSignIn()" style="color: var(--sf-navy); text-decoration: underline;">Sign in</a>
+                    </p>
+                </div>
+                
+                <!-- Forgot Password Form -->
+                <div id="forgotPasswordForm" style="display: none;">
+                    <p>Enter your email to reset your password</p>
+                    <input type="email" class="phone-input" id="resetEmail" placeholder="Email address" style="margin-bottom: 20px;">
+                    <button class="phone-modal-btn" onclick="handlePasswordReset()">Send Reset Email</button>
+                    <p style="margin-top: 20px; font-size: 0.9rem;">
+                        <a href="#" onclick="switchToSignIn()" style="color: var(--sf-navy); text-decoration: underline;">Back to sign in</a>
+                    </p>
+                </div>
+                
+                <!-- Error/Success Messages -->
+                <div id="emailAuthMessage" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
         
-        // Show email form when email button clicked
-        function showEmailForm() {
-            document.getElementById('emailDivider').style.display = 'flex';
-            document.getElementById('emailForm').style.display = 'block';
-            document.querySelector('.email-input').focus();
+        // Focus on email input
+        setTimeout(() => {
+            document.getElementById('signInEmail').focus();
+        }, 100);
+    }
+    
+    // Close email auth modal
+    function closeEmailAuthModal() {
+        const modal = document.getElementById('emailAuthModal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    
+    // Switch between forms
+    function switchToSignUp() {
+        document.getElementById('signInForm').style.display = 'none';
+        document.getElementById('signUpForm').style.display = 'block';
+        document.getElementById('forgotPasswordForm').style.display = 'none';
+        document.getElementById('emailModalTitle').textContent = 'Create Account';
+        document.getElementById('signUpName').focus();
+        clearEmailAuthMessage();
+    }
+    
+    function switchToSignIn() {
+        document.getElementById('signInForm').style.display = 'block';
+        document.getElementById('signUpForm').style.display = 'none';
+        document.getElementById('forgotPasswordForm').style.display = 'none';
+        document.getElementById('emailModalTitle').textContent = 'Sign In with Email';
+        document.getElementById('signInEmail').focus();
+        clearEmailAuthMessage();
+    }
+    
+    function showForgotPassword() {
+        document.getElementById('signInForm').style.display = 'none';
+        document.getElementById('signUpForm').style.display = 'none';
+        document.getElementById('forgotPasswordForm').style.display = 'block';
+        document.getElementById('emailModalTitle').textContent = 'Reset Password';
+        document.getElementById('resetEmail').focus();
+        clearEmailAuthMessage();
+    }
+    
+    // Handle email sign in
+    async function handleEmailSignIn() {
+        const email = document.getElementById('signInEmail').value.trim();
+        const password = document.getElementById('signInPassword').value;
+        
+        if (!email || !password) {
+            showEmailAuthMessage('Please fill in all fields', 'error');
+            return;
         }
         
-        // Handle auth methods
-        function signInWithGoogle() {
-            showLoading();
-            if (window.authProviders && window.authProviders.signInWithProvider) {
-                window.authProviders.signInWithProvider('google');
-            }
-        }
+        showLoading();
+        closeEmailAuthModal();
         
-        function signInWithLinkedIn() {
-            showLoading();
-            if (window.authProviders && window.authProviders.signInWithLinkedIn) {
-                window.authProviders.signInWithLinkedIn();
-            }
-        }
-        
-        function signInWithFacebook() {
-            alert('Facebook login coming soon!');
-        }
-        
-        function signInWithPhone(type) {
-            currentPhoneType = type;
-            document.getElementById('phoneModal').classList.add('active');
-            document.getElementById('phoneNumberInput').focus();
-        }
-        
-        function closePhoneModal() {
-            document.getElementById('phoneModal').classList.remove('active');
-            document.getElementById('phoneNumberInput').value = '';
-        }
-        
-        function closeOTPModal() {
-            document.getElementById('otpModal').classList.remove('active');
-            document.getElementById('otpInput').value = '';
-        }
-        
-        async function sendOTP() {
-            const phoneNumber = document.getElementById('phoneNumberInput').value.trim();
-            
-            if (!phoneNumber) {
-                alert('Please enter a phone number');
-                return;
-            }
-            
-            // Basic phone number validation
-            const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-            if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
-                alert('Please enter a valid phone number with country code (e.g., +1234567890)');
-                return;
-            }
-            
-            showLoading();
-            closePhoneModal();
-            
-            // Call Firebase phone auth
-            if (window.authProviders && window.authProviders.signInWithPhone) {
-                await window.authProviders.signInWithPhone(phoneNumber, currentPhoneType === 'whatsapp');
-            }
-        }
-        
-        function verifyOTP() {
-            const code = document.getElementById('otpInput').value.trim();
-            
-            if (!code || code.length !== 6) {
-                alert('Please enter the 6-digit verification code');
-                return;
-            }
-            
-            showLoading();
-            closeOTPModal();
-            
-            // Verify the OTP
-            if (window.authProviders && window.authProviders.verifyOTP) {
-                window.authProviders.verifyOTP(code);
-            }
-        }
-        
-        // Helper function for phone auth UI
-        window.showOTPInput = function(phoneNumber, useWhatsApp) {
+        try {
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+            // Auth state observer will handle redirect
+        } catch (error) {
             hideLoading();
+            showEmailAuthModal();
+            switchToSignIn();
+            
+            let message = 'Sign in failed. Please try again.';
+            if (error.code === 'auth/user-not-found') {
+                message = 'No account found with this email.';
+            } else if (error.code === 'auth/wrong-password') {
+                message = 'Incorrect password.';
+            } else if (error.code === 'auth/invalid-email') {
+                message = 'Invalid email address.';
+            }
+            
+            showEmailAuthMessage(message, 'error');
+        }
+    }
+    
+    // Handle email sign up
+    async function handleEmailSignUp() {
+        const name = document.getElementById('signUpName').value.trim();
+        const email = document.getElementById('signUpEmail').value.trim();
+        const password = document.getElementById('signUpPassword').value;
+        const confirmPassword = document.getElementById('signUpPasswordConfirm').value;
+        
+        if (!name || !email || !password || !confirmPassword) {
+            showEmailAuthMessage('Please fill in all fields', 'error');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            showEmailAuthMessage('Passwords do not match', 'error');
+            return;
+        }
+        
+        if (password.length < 6) {
+            showEmailAuthMessage('Password must be at least 6 characters', 'error');
+            return;
+        }
+        
+        showLoading();
+        closeEmailAuthModal();
+        
+        try {
+            const result = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            
+            // Update display name
+            await result.user.updateProfile({
+                displayName: name
+            });
+            
+            // Create user profile (if the function exists)
+            if (window.authProviders && window.authProviders.updateUserProfile) {
+                await window.authProviders.updateUserProfile({
+                    uid: result.user.uid,
+                    email: email,
+                    displayName: name,
+                    photoURL: null
+                });
+            }
+            
+            // Auth state observer will handle redirect
+        } catch (error) {
+            hideLoading();
+            showEmailAuthModal();
+            switchToSignUp();
+            
+            let message = 'Sign up failed. Please try again.';
+            if (error.code === 'auth/email-already-in-use') {
+                message = 'An account already exists with this email.';
+            } else if (error.code === 'auth/weak-password') {
+                message = 'Password is too weak. Use at least 6 characters.';
+            } else if (error.code === 'auth/invalid-email') {
+                message = 'Invalid email address.';
+            }
+            
+            showEmailAuthMessage(message, 'error');
+        }
+    }
+    
+    // Handle password reset
+    async function handlePasswordReset() {
+        const email = document.getElementById('resetEmail').value.trim();
+        
+        if (!email) {
+            showEmailAuthMessage('Please enter your email address', 'error');
+            return;
+        }
+        
+        try {
+            await firebase.auth().sendPasswordResetEmail(email);
+            showEmailAuthMessage('Password reset email sent! Check your inbox.', 'success');
+            
+            // Switch back to sign in after 3 seconds
+            setTimeout(() => {
+                switchToSignIn();
+            }, 3000);
+        } catch (error) {
+            let message = 'Failed to send reset email.';
+            if (error.code === 'auth/user-not-found') {
+                message = 'No account found with this email.';
+            } else if (error.code === 'auth/invalid-email') {
+                message = 'Invalid email address.';
+            }
+            
+            showEmailAuthMessage(message, 'error');
+        }
+    }
+    
+    // Show message in email auth modal
+    function showEmailAuthMessage(message, type) {
+        const messageDiv = document.getElementById('emailAuthMessage');
+        if (messageDiv) {
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = type === 'error' ? '#fee' : '#efe';
+            messageDiv.style.color = type === 'error' ? '#c33' : '#363';
+            messageDiv.style.border = `1px solid ${type === 'error' ? '#fcc' : '#cfc'}`;
+        }
+    }
+    
+    function clearEmailAuthMessage() {
+        const messageDiv = document.getElementById('emailAuthMessage');
+        if (messageDiv) {
+            messageDiv.style.display = 'none';
+        }
+    }
+    
+    // Handle auth methods
+    function signInWithGoogle() {
+        showLoading();
+        if (window.authProviders && window.authProviders.signInWithProvider) {
+            window.authProviders.signInWithProvider('google');
+        }
+    }
+    
+    function signInWithLinkedIn() {
+        showLoading();
+        if (window.authProviders && window.authProviders.signInWithLinkedIn) {
+            window.authProviders.signInWithLinkedIn();
+        }
+    }
+    
+    function signInWithFacebook() {
+        alert('Facebook login coming soon!');
+    }
+    
+    function signInWithPhone(type) {
+        currentPhoneType = type;
+        document.getElementById('phoneModal').classList.add('active');
+        document.getElementById('phoneNumberInput').focus();
+    }
+    
+    function closePhoneModal() {
+        document.getElementById('phoneModal').classList.remove('active');
+        document.getElementById('phoneNumberInput').value = '';
+    }
+    
+    function closeOTPModal() {
+        document.getElementById('otpModal').classList.remove('active');
+        document.getElementById('otpInput').value = '';
+    }
+    
+    async function sendOTP() {
+        const phoneNumber = document.getElementById('phoneNumberInput').value.trim();
+        
+        if (!phoneNumber) {
+            alert('Please enter a phone number');
+            return;
+        }
+        
+        // Basic phone number validation
+        const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+        if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
+            alert('Please enter a valid phone number with country code (e.g., +1234567890)');
+            return;
+        }
+        
+        showLoading();
+        closePhoneModal();
+        
+        // Call Firebase phone auth
+        if (window.authProviders && window.authProviders.signInWithPhone) {
+            await window.authProviders.signInWithPhone(phoneNumber, currentPhoneType === 'whatsapp');
+        }
+    }
+    
+    function verifyOTP() {
+        const code = document.getElementById('otpInput').value.trim();
+        
+        if (!code || code.length !== 6) {
+            alert('Please enter the 6-digit verification code');
+            return;
+        }
+        
+        showLoading();
+        closeOTPModal();
+        
+        // Verify the OTP
+        if (window.authProviders && window.authProviders.verifyOTP) {
+            window.authProviders.verifyOTP(code);
+        }
+    }
+    
+    // Helper function for phone auth UI
+    window.showOTPInput = function(phoneNumber, useWhatsApp) {
+        hideLoading();
+        closePhoneModal();
+        document.getElementById('phoneDisplay').textContent = `Code sent to ${phoneNumber}`;
+        document.getElementById('otpModal').classList.add('active');
+        document.getElementById('otpInput').focus();
+    }
+    
+    function signInWithEmail(event) {
+        event.preventDefault();
+        // This function is no longer used - remove the form
+        return false;
+    }
+    
+    function showLoading() {
+        document.getElementById('loadingOverlay').classList.add('active');
+    }
+    
+    function hideLoading() {
+        document.getElementById('loadingOverlay').classList.remove('active');
+    }
+    
+    // Check if user is already authenticated
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            // User is signed in, redirect to passport
+            window.location.href = '/passport.html';
+        }
+    });
+    
+    // Close modals on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
             closePhoneModal();
-            document.getElementById('phoneDisplay').textContent = `Code sent to ${phoneNumber}`;
-            document.getElementById('otpModal').classList.add('active');
-            document.getElementById('otpInput').focus();
+            closeOTPModal();
+            closeEmailAuthModal();
         }
-        
-        function signInWithEmail(event) {
-            event.preventDefault();
-            showLoading();
-            const email = document.querySelector('.email-input').value;
-            // Handle email auth
-            window.location.href = '/passport.html?email=' + encodeURIComponent(email);
-        }
-        
-        function showLoading() {
-            document.getElementById('loadingOverlay').classList.add('active');
-        }
-        
-        function hideLoading() {
-            document.getElementById('loadingOverlay').classList.remove('active');
-        }
-        
-        // Check if user is already authenticated
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                // User is signed in, redirect to passport
-                window.location.href = '/passport.html';
-            }
-        });
-        
-        // Close modals on escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closePhoneModal();
-                closeOTPModal();
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
