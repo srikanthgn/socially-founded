@@ -260,6 +260,107 @@
             to { transform: rotate(360deg); }
         }
         
+        /* Phone Auth Modal */
+        .phone-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .phone-modal.active {
+            display: flex;
+        }
+        
+        .phone-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        
+        .phone-modal h3 {
+            color: var(--sf-navy);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .phone-modal p {
+            color: var(--sf-gray);
+            margin-bottom: 25px;
+        }
+        
+        .phone-input, .otp-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        
+        .phone-input:focus, .otp-input:focus {
+            outline: none;
+            border-color: var(--sf-navy);
+        }
+        
+        .otp-input {
+            letter-spacing: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .phone-modal-btn {
+            width: 100%;
+            background: var(--sf-navy);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .phone-modal-btn:hover {
+            background: var(--sf-navy-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,53,84,0.3);
+        }
+        
+        .phone-modal-btn:disabled {
+            background: var(--sf-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--sf-gray);
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--sf-navy);
+        }
+        
         /* Mobile Responsive */
         @media (max-width: 480px) {
             .auth-container {
@@ -338,17 +439,47 @@
         <div class="loading" id="loadingOverlay">
             <div class="spinner"></div>
         </div>
+        
+        <!-- Hidden reCAPTCHA container for phone auth -->
+        <div id="recaptcha-container"></div>
+    </div>
+    
+    <!-- Phone Number Modal -->
+    <div class="phone-modal" id="phoneModal">
+        <div class="phone-modal-content" style="position: relative;">
+            <button class="close-modal" onclick="closePhoneModal()">&times;</button>
+            <h3>Enter Your Phone Number</h3>
+            <p>We'll send you a verification code</p>
+            <input type="tel" class="phone-input" id="phoneNumberInput" placeholder="+1 234 567 8900">
+            <button class="phone-modal-btn" onclick="sendOTP()">Send Code</button>
+        </div>
+    </div>
+    
+    <!-- OTP Verification Modal -->
+    <div class="phone-modal" id="otpModal">
+        <div class="phone-modal-content" style="position: relative;">
+            <button class="close-modal" onclick="closeOTPModal()">&times;</button>
+            <h3>Enter Verification Code</h3>
+            <p id="phoneDisplay">Code sent to your phone</p>
+            <input type="text" class="otp-input" id="otpInput" placeholder="000000" maxlength="6">
+            <button class="phone-modal-btn" onclick="verifyOTP()">Verify Code</button>
+        </div>
     </div>
     
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     
     <!-- Your Firebase config and auth scripts -->
     <script src="firebase-config.js"></script>
     <script src="firebase-auth-providers.js"></script>
     
     <script>
+        // Global variables
+        let currentPhoneType = 'sms';
+        
         // Show email form when email button clicked
         function showEmailForm() {
             document.getElementById('emailDivider').style.display = 'flex';
@@ -376,9 +507,69 @@
         }
         
         function signInWithPhone(type) {
+            currentPhoneType = type;
+            document.getElementById('phoneModal').classList.add('active');
+            document.getElementById('phoneNumberInput').focus();
+        }
+        
+        function closePhoneModal() {
+            document.getElementById('phoneModal').classList.remove('active');
+            document.getElementById('phoneNumberInput').value = '';
+        }
+        
+        function closeOTPModal() {
+            document.getElementById('otpModal').classList.remove('active');
+            document.getElementById('otpInput').value = '';
+        }
+        
+        async function sendOTP() {
+            const phoneNumber = document.getElementById('phoneNumberInput').value.trim();
+            
+            if (!phoneNumber) {
+                alert('Please enter a phone number');
+                return;
+            }
+            
+            // Basic phone number validation
+            const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+            if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
+                alert('Please enter a valid phone number with country code (e.g., +1234567890)');
+                return;
+            }
+            
             showLoading();
-            // Redirect to phone auth page or show phone auth modal
-            window.location.href = '/phone-auth.html?type=' + type;
+            closePhoneModal();
+            
+            // Call Firebase phone auth
+            if (window.authProviders && window.authProviders.signInWithPhone) {
+                await window.authProviders.signInWithPhone(phoneNumber, currentPhoneType === 'whatsapp');
+            }
+        }
+        
+        function verifyOTP() {
+            const code = document.getElementById('otpInput').value.trim();
+            
+            if (!code || code.length !== 6) {
+                alert('Please enter the 6-digit verification code');
+                return;
+            }
+            
+            showLoading();
+            closeOTPModal();
+            
+            // Verify the OTP
+            if (window.authProviders && window.authProviders.verifyOTP) {
+                window.authProviders.verifyOTP(code);
+            }
+        }
+        
+        // Helper function for phone auth UI
+        window.showOTPInput = function(phoneNumber, useWhatsApp) {
+            hideLoading();
+            closePhoneModal();
+            document.getElementById('phoneDisplay').textContent = `Code sent to ${phoneNumber}`;
+            document.getElementById('otpModal').classList.add('active');
+            document.getElementById('otpInput').focus();
         }
         
         function signInWithEmail(event) {
@@ -402,6 +593,14 @@
             if (user) {
                 // User is signed in, redirect to passport
                 window.location.href = '/passport.html';
+            }
+        });
+        
+        // Close modals on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePhoneModal();
+                closeOTPModal();
             }
         });
     </script>
