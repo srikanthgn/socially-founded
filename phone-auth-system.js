@@ -8,22 +8,52 @@ let useWhatsApp = false;
 
 // Initialize reCAPTCHA verifier
 function initializeRecaptcha() {
-    if (!phoneAuthVerifier) {
+    // Create container if it doesn't exist
+    let recaptchaContainer = document.getElementById('recaptcha-container');
+    if (!recaptchaContainer) {
+        recaptchaContainer = document.createElement('div');
+        recaptchaContainer.id = 'recaptcha-container';
+        document.body.appendChild(recaptchaContainer);
+    }
+    
+    // Clear any existing verifier
+    if (phoneAuthVerifier) {
+        phoneAuthVerifier.clear();
+        phoneAuthVerifier = null;
+    }
+    
+    try {
         phoneAuthVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
             'size': 'invisible',
             'callback': (response) => {
                 console.log('reCAPTCHA solved');
             },
             'expired-callback': () => {
-                console.log('reCAPTCHA expired');
-                initializeRecaptcha();
+                console.log('reCAPTCHA expired, reinitializing...');
+                phoneAuthVerifier = null;
             }
         });
+        
+        // Render it immediately
+        phoneAuthVerifier.render().then((widgetId) => {
+            console.log('reCAPTCHA widget rendered with ID:', widgetId);
+        }).catch((error) => {
+            console.error('Error rendering reCAPTCHA:', error);
+        });
+    } catch (error) {
+        console.error('Error initializing reCAPTCHA:', error);
     }
 }
 
 // Show phone authentication form
 function showPhoneAuth(isWhatsApp = false) {
+    // Check if Firebase is loaded
+    if (typeof firebase === 'undefined' || !firebase.auth) {
+        console.error('Firebase not loaded yet');
+        showAuthError('Authentication system is still loading. Please try again in a moment.');
+        return;
+    }
+    
     useWhatsApp = isWhatsApp;
     
     // Hide auth grid
@@ -47,7 +77,9 @@ function showPhoneAuth(isWhatsApp = false) {
     }
     
     // Initialize reCAPTCHA
-    initializeRecaptcha();
+    setTimeout(() => {
+        initializeRecaptcha();
+    }, 500);
 }
 
 // Hide phone authentication form
@@ -169,10 +201,20 @@ async function sendPhoneOTP(event) {
         const errorDiv = document.getElementById('auth-error');
         if (errorDiv) errorDiv.style.display = 'none';
         
+        // Make sure reCAPTCHA is initialized
+        if (!phoneAuthVerifier) {
+            console.log('Initializing reCAPTCHA verifier...');
+            initializeRecaptcha();
+            
+            // Wait a bit for initialization
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
         // Send OTP
+        console.log('Sending OTP to:', fullPhoneNumber);
         confirmationResult = await firebase.auth().signInWithPhoneNumber(fullPhoneNumber, phoneAuthVerifier);
         
-        console.log('OTP sent successfully to:', fullPhoneNumber);
+        console.log('OTP sent successfully');
         
         // Show OTP input form
         showOTPInput(fullPhoneNumber);
@@ -198,6 +240,9 @@ async function sendPhoneOTP(event) {
             case 'auth/operation-not-allowed':
                 errorMessage = 'Phone authentication is not enabled. Please contact support.';
                 break;
+            case 'auth/app-not-authorized':
+                errorMessage = 'This app is not authorized to use Firebase Authentication. Please check your Firebase configuration.';
+                break;
             default:
                 errorMessage += error.message;
         }
@@ -205,11 +250,8 @@ async function sendPhoneOTP(event) {
         showAuthError(errorMessage);
         
         // Reset reCAPTCHA
-        if (phoneAuthVerifier) {
-            phoneAuthVerifier.render().then(widgetId => {
-                grecaptcha.reset(widgetId);
-            });
-        }
+        phoneAuthVerifier = null;
+        initializeRecaptcha();
     } finally {
         setButtonLoading(submitBtn, false);
     }
