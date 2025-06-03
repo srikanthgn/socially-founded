@@ -476,6 +476,26 @@
         console.log('OTP requested for:', phoneNumber);
     };
 </script>
+    // Handle LinkedIn callback token
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const linkedinToken = urlParams.get('token');
     
+    if (linkedinToken) {
+        console.log('LinkedIn token received, signing in...');
+        
+        // Sign in with custom token
+        firebase.auth().signInWithCustomToken(linkedinToken)
+            .then((result) => {
+                console.log('LinkedIn sign-in successful:', result.user.email);
+                // Redirect to passport
+                window.location.href = '/passport.html';
+            })
+            .catch((error) => {
+                console.error('LinkedIn token sign-in error:', error);
+                alert('LinkedIn sign-in failed: ' + error.message);
+            });
+    }
+});
 </body>
 </html>
