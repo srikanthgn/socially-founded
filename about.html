@@ -3,760 +3,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Socially Founded</title>
+    <title>About - SociallyFounded</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="icon" href="favicon.ico" sizes="any">
-    <meta name="description" content="SociallyFounded: A startup movement creating spaces where vibe meets business. The fusion of entrepreneurship, community, and innovation - check in, engage, build, belong.">
-    
-    <!-- PWA meta tags -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#003554">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="SociallyFounded">
-    <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="mobile-fixes.css">
-    <link rel="stylesheet" href="auth-styles.css">
-    
-    <!-- Firebase SDK (v9 modular SDK) -->
-    <script type="module" src="firebase-config.js"></script>
-    <script type="module" src="auth-service.js"></script>
-    <script type="module" src="auth-ui.js"></script>
-    
-    <!-- PWA registration script -->
-    <script src="/pwa-registration.js" defer></script>
     
     <style>
-        :root {
-            --navy: #003554;
-            --light-navy: #004d77;
-            --light-gray: #F5F5F5;
-            --accent-gray: #E0E0E0;
-            --white: #FFFFFF;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
+        :root {
+            --sf-navy: #003554;
+            --sf-navy-dark: #001f3f;
+            --sf-gold: #D4AF37;
+            --sf-burgundy: #800020;
+            --sf-platinum: #E5E4E2;
+            --sf-white: #ffffff;
+            --sf-gray-light: #f8f9fa;
+            --sf-gray: #6c757d;
+            --sf-success: #28a745;
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--light-gray);
-            color: var(--navy);
+            color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Navigation */
+        
+        /* Navigation - Same as index.html */
         nav {
-            background-color: var(--navy);
-            color: var(--white);
-            padding: 15px 0;
-            margin: -20px -20px 0 -20px;
+            background: var(--sf-white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
         }
-
+        
+        nav.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+        }
+        
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
         }
-
+        
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--sf-navy);
         }
-
+        
         .logo img {
             width: 40px;
-            height: auto;
+            height: 40px;
         }
-
-        .logo span {
-            font-size: 22px;
+        
+        .logo-text {
+            font-size: 1.5rem;
             font-weight: 600;
-            color: var(--white);
         }
-
+        
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 2rem;
+            align-items: center;
         }
-
+        
         .nav-links a {
-            color: var(--white);
             text-decoration: none;
-            font-size: 16px;
+            color: var(--sf-navy);
             font-weight: 500;
-            opacity: 0.9;
-            transition: opacity 0.3s;
+            transition: color 0.3s;
         }
-
+        
         .nav-links a:hover {
-            opacity: 1;
+            color: var(--sf-gold);
         }
-
+        
         .nav-links a.active {
-            border-bottom: 2px solid var(--white);
-            opacity: 1;
+            color: var(--sf-gold);
+            border-bottom: 2px solid var(--sf-gold);
+            padding-bottom: 2px;
         }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 24px;
-            cursor: pointer;
+        
+        .get-started-btn {
+            background: var(--sf-navy);
+            color: white !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
         }
-
-        /* Main Content */
-        main {
-            flex: 1;
-            padding: 40px 0;
+        
+        .get-started-btn:hover {
+            background: var(--sf-navy-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,53,84,0.3);
         }
-
+        
+        /* Main Content Area */
+        .content-wrapper {
+            margin-top: 80px; /* Account for fixed nav */
+            min-height: calc(100vh - 80px);
+        }
+        
         /* Hero Section */
         .hero-section {
-            background-color: var(--navy);
-            color: var(--white);
-            padding: 60px 0;
-            position: relative;
-            margin: 0 -20px;
+            background: linear-gradient(135deg, var(--sf-navy) 0%, var(--sf-navy-dark) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
         }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
+        
         .hero-content h1 {
-            font-size: 42px;
+            font-size: 3rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
-
+        
         .hero-content p {
-            font-size: 20px;
-            max-width: 600px;
-            opacity: 0.9;
-        }
-
-        .hero-divider {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            background-color: var(--light-gray);
-            clip-path: polygon(0 100%, 100% 0, 100% 100%, 0% 100%);
-        }
-
-        /* Content Sections */
-        .content-section {
-            max-width: 800px;
+            font-size: 1.3rem;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 50px 0;
-        }
-
-        .content-section p {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        /* Section Styles */
-        .section-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 25px;
-            color: var(--navy);
+            opacity: 0.9;
+            line-height: 1.8;
         }
         
-        .section-subtitle {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--navy);
+        /* About Content */
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
         }
         
-        .emoji-heading {
-            margin-right: 10px;
+        .section {
+            margin-bottom: 60px;
         }
         
-        .feature-list {
-            list-style-type: none;
-            margin: 20px 0 30px 0;
+        .section h2 {
+            font-size: 2rem;
+            color: var(--sf-navy);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .feature-list li {
-            margin-bottom: 12px;
-            padding-left: 25px;
-            position: relative;
+        .section h3 {
+            font-size: 1.5rem;
+            color: var(--sf-navy);
+            margin: 2rem 0 1rem;
         }
         
-        .feature-list li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: var(--navy);
-            font-weight: bold;
+        .section p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.8;
         }
-
-        /* How It Works Section */
-        .how-it-works {
-            background-color: var(--white);
-            border-radius: 12px;
-            padding: 40px;
-            margin: 50px 0;
-            box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
-        }
-
-        .how-it-works h2 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: var(--navy);
-            text-align: center;
-        }
-
-        .steps-container {
+        
+        /* How It Works Grid */
+        .steps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
+            margin: 40px 0;
         }
-
-        .step {
+        
+        .step-card {
+            background: var(--sf-gray-light);
+            padding: 30px;
+            border-radius: 15px;
             text-align: center;
+            transition: all 0.3s;
         }
-
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
         .step-number {
             width: 60px;
             height: 60px;
-            background-color: var(--navy);
-            color: var(--white);
+            background: var(--sf-navy);
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: 700;
         }
-
-        .step h3 {
-            font-size: 22px;
-            font-weight: 600;
+        
+        .step-card h4 {
+            font-size: 1.3rem;
+            color: var(--sf-navy);
             margin-bottom: 15px;
-            color: var(--navy);
         }
-
-        .step p {
-            font-size: 16px;
-            color: #444;
+        
+        .step-card p {
+            font-size: 1rem;
+            color: #666;
         }
-
-        /* Benefits Section */
-        .benefits-section {
-            background-color: var(--white);
-            border-radius: 12px;
-            padding: 40px;
-            margin: 50px 0;
-            box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
+        
+        /* VCMBoK Section */
+        .vcmbok-section {
+            background: var(--sf-gray-light);
+            padding: 60px 20px;
+            margin: 60px -20px;
         }
-
-        .benefits-section h2 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: var(--navy);
+        
+        .vcmbok-content {
+            max-width: 900px;
+            margin: 0 auto;
             text-align: center;
         }
-
+        
+        .vcmbok-content h2 {
+            font-size: 2.5rem;
+            color: var(--sf-navy);
+            margin-bottom: 2rem;
+        }
+        
+        .vcmbok-content .subtitle {
+            font-size: 1.3rem;
+            color: var(--sf-gold);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .builder-types {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .builder-type {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 50px;
+            font-weight: 500;
+            color: var(--sf-navy);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Benefits Grid */
         .benefits-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
+            margin: 40px 0;
         }
-
-        .benefit {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
+        
+        .benefit-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
         }
-
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
         .benefit-icon {
-            background-color: var(--navy);
-            color: var(--white);
-            width: 40px;
-            height: 40px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
-
-        .benefit-content h3 {
-            font-size: 20px;
-            font-weight: 600;
+        
+        .benefit-card h4 {
+            font-size: 1.3rem;
+            color: var(--sf-navy);
             margin-bottom: 10px;
-            color: var(--navy);
         }
-
-        .benefit-content p {
-            font-size: 16px;
-            color: #444;
-            margin-bottom: 0;
+        
+        .benefit-card p {
+            font-size: 1rem;
+            color: #666;
         }
-
+        
         /* CTA Section */
         .cta-section {
+            background: var(--sf-navy);
+            color: white;
+            padding: 80px 20px;
             text-align: center;
-            margin: 60px 0 30px;
+            margin-top: 80px;
         }
-
+        
         .cta-section h2 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--navy);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
         }
-
+        
         .cta-section p {
-            font-size: 20px;
-            margin-bottom: 15px;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
-
-        .cta-section .tagline {
-            font-size: 24px;
-            font-style: italic;
-            font-weight: 300;
-            margin-bottom: 30px;
-            color: #555;
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-
-        .cta-button {
-            display: inline-block;
-            padding: 15px 40px;
-            background-color: var(--navy);
-            color: var(--white);
+        
+        .btn-cta {
+            background: white;
+            color: var(--sf-navy);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
             text-decoration: none;
-            font-size: 18px;
             font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .cta-button:hover {
-            background-color: var(--light-navy);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 53, 84, 0.2);
-        }
-
-        /* Audience Sections */
-        .audience-section {
-            background-color: var(--white);
-            border-radius: 12px;
-            padding: 40px;
-            margin: 30px 0;
-            box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .audience-section h2 {
-            font-size: 28px;
-            font-weight: 700;
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.3);
+        }
+        
+        .btn-secondary-cta {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid white;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary-cta:hover {
+            background: white;
+            color: var(--sf-navy);
+        }
+        
+        /* Footer */
+        footer {
+            background: #001f3f;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
             margin-bottom: 20px;
-            color: var(--navy);
         }
         
-        .audience-section h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--navy);
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
         }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 900px) {
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
             
-            .mobile-menu-btn {
-                display: block;
-            }
-            
             .hero-content h1 {
-                font-size: 36px;
-            }
-            
-            .how-it-works, .benefits-section, .audience-section {
-                padding: 30px 20px;
-            }
-            
-            .steps-container, .benefits-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            
-            .footer-main {
-                flex-direction: column;
-                gap: 40px;
-            }
-            
-            .footer-links {
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-            }
-            
-            .footer-branding {
-                max-width: 100%;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .hero-content h1 {
-                font-size: 28px;
+                font-size: 2rem;
             }
             
             .hero-content p {
-                font-size: 18px;
+                font-size: 1.1rem;
             }
             
-            .content-section p {
-                font-size: 16px;
+            .section h2 {
+                font-size: 1.5rem;
             }
             
-            .footer-links {
-                grid-template-columns: 1fr;
-                gap: 30px;
+            .vcmbok-content h2 {
+                font-size: 2rem;
+            }
+            
+            .builder-types {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Navigation -->
-        <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-            <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
-                <!-- Logo/Home Link -->
-                <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                    <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
-                        <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
-                        <span style="font-size: 22px; font-weight: 600; color: #003554; margin-top: -12px;">SociallyFounded</span>
-                    </a>
-                    <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -15px;">Fusion of Vibe, Entrepreneurship & Community</span>
-                </div>
-                
-                <!-- Mobile Navigation -->
-                <div id="mobile-nav" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000;">
-                    <div style="background-color: white; width: 80%; max-width: 300px; height: 100%; position: absolute; right: 0; top: 0; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                            <span style="font-size: 18px; font-weight: 600; color: #003554;">Menu</span>
-                            <button id="close-mobile-nav" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 20px;">
-                            <a href="about.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0; border-left: 3px solid #003554; padding-left: 10px;">About</a>
-                            <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">How It Works</a>
-                            <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Digital Passport</a>
-                            <a href="index.html#join-form" id="mobile-join-link" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid #E0E0E0;">Join</a>
-                            <a href="#" style="color: #003554; text-decoration: none; font-size: 18px; font-weight: 500;">Contact</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Desktop Navigation Links -->
-                <div id="desktop-links" style="display: none; gap: 40px;">
-                    <a href="about.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid #003554;">About</a>
-                    <a href="how-it-works.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">How It Works</a>
-                    <a href="passport.html" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Digital Passport</a>
-                    <a href="index.html#join-form" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Join</a>
-                    <a href="#" style="color: #003554; text-decoration: none; font-size: 16px; font-weight: 500; padding-bottom: 3px; border-bottom: 2px solid transparent; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#003554'" onmouseout="this.style.borderColor='transparent'">Contact</a>
-                </div>
-                
-                <!-- Mobile Menu Button -->
-                <button id="open-mobile-nav" style="background: none; border: none; color: #003554; font-size: 24px; cursor: pointer; display: block; position: absolute; right: 20px;">☰</button>
+    <!-- Navigation - Updated to match new index.html -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="/index.html" class="logo">
+                <img src="favicon.svg" alt="SociallyFounded">
+                <span class="logo-text">SociallyFounded</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="/index.html#how-it-works">How It Works</a>
+                <a href="/index.html#features">Features</a>
+                <a href="/about.html" class="active">About</a>
+                <a href="/auth.html" class="get-started-btn">Get Your Passport</a>
             </div>
-        </nav>
-
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <div class="hero-content">
-                <h2>SociallyFounded isn't a company. It's a startup movement.</h2>
-                <p style="max-width: none;">Launchpads just about anywhere & everywhere - cafés, pubs, libraries, public parks. It's your imagination. It's where <strong>ideas take shape</strong>, <strong>founders build</strong>, and <strong>founding communities grow</strong> — one check-in at a time.</p>
-            </div>
-            <div class="hero-divider"></div>
         </div>
-
-        <main>
-            <div class="content-section">
-                <!-- How it works section -->
-                <div class="how-it-works">
-                    <h3 class="section-subtitle" style="text-align: center; margin-bottom: 30px;">Check in. Engage. Build. Belong.</h3>
-                    <p style="text-align: center; margin-bottom: 30px;">SociallyFounded is your entry point into real-world startup creation.</p>
-                    
-                    <div class="steps-container">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <h3>Check In</h3>
-                            <p>Show up for your startup journey wherever inspiration strikes</p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <h3>Engage</h3>
-                            <p>With your ideas, shape them using AI tools, and share them with others</p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <h3>Build</h3>
-                            <p>Turn your commitment into momentum and concrete progress</p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">4</div>
-                            <h3>Unlock</h3>
-                            <p>Access to mentors, investors, pitch tools, and community support</p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">5</div>
-                            <h3>Transform</h3>
-                            <p>Create investor decks, access deal rooms, turn dreams into realities</p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">6</div>
-                            <h3>Thrive</h3>
-                            <p>Grow your venture while helping others on their journey</p>
-                        </div>
+    </nav>
+    
+    <div class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>SociallyFounded isn't a company.<br>It's a startup movement.</h1>
+                <p>Launchpads just about anywhere & everywhere - cafés, pubs, libraries, public parks. It's where ideas take shape, founders build, and communities grow — one check-in at a time.</p>
+            </div>
+        </section>
+        
+        <!-- About Content -->
+        <div class="about-content">
+            <!-- How It Works Section -->
+            <section class="section">
+                <h2>🚀 How SociallyFounded Works</h2>
+                <p style="font-size: 1.3rem; text-align: center; color: var(--sf-navy); font-weight: 600; margin-bottom: 2rem;">
+                    Check in. Engage. Build. Belong.
+                </p>
+                <p style="text-align: center; margin-bottom: 3rem;">
+                    SociallyFounded is your entry point into real-world startup creation.
+                </p>
+                
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h4>Check In</h4>
+                        <p>Show up for your startup journey wherever inspiration strikes</p>
                     </div>
-                    
-                    <p style="text-align: center; margin-top: 30px; font-weight: 500;">It's about how much you <strong>believe in what you're building</strong>.</p>
-                </div>
-
-                <!-- VCMBOK section -->
-                <div class="benefits-section">
-                    <h2>🔄 VCMBoK – Vibe Coding Methodology Body of Knowledge</h2>
-                    <p>Everyone has a creative rhythm — a <strong>vibe</strong> that drives how they think, build, and thrive. SociallyFounded's Vibe Code Framework helps you <strong>work with your flow</strong>, not against it.</p>
-                    
-                    <p style="margin-top: 20px;"><strong>We support all builder types:</strong></p>
-                    <ul class="feature-list">
-                        <li>Daydreamers and night owls</li>
-                        <li>Deep thinkers and fast movers</li>
-                        <li>Lone starters and community sparkers</li>
-                    </ul>
-                    
-                    <p><strong>VCMBoK</strong> gives structure to your journey — while honoring your style.</p>
-                    <p style="font-style: italic; margin-top: 20px;">Don't change who you are. You just need a system that gets how you work.</p>
-                </div>
-
-                <!-- What You Unlock section -->
-                <div class="benefits-section">
-                    <h2>🎁 What You Unlock</h2>
-                    <p>The more time and energy you put in, the more you unlock:</p>
-                    
-                    <div class="benefits-grid">
-                        <div class="benefit">
-                            <div class="benefit-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                </svg>
-                            </div>
-                            <div class="benefit-content">
-                                <h3>✨ AI tools</h3>
-                                <p>Shape your idea with precision and insight</p>
-                            </div>
-                        </div>
-                        <div class="benefit">
-                            <div class="benefit-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-                            <div class="benefit-content">
-                                <h3>🤝 Mentorship</h3>
-                                <p>Learn from people who've built before</p>
-                            </div>
-                        </div>
-                        <div class="benefit">
-                            <div class="benefit-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                </svg>
-                            </div>
-                            <div class="benefit-content">
-                                <h3>📊 Pitch readiness</h3>
-                                <p>Programs to make your story investor-grade</p>
-                            </div>
-                        </div>
-                        <div class="benefit">
-                            <div class="benefit-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="benefit-content">
-                                <h3>🔍 Investor visibility</h3>
-                                <p>That follows your progress over time</p>
-                            </div>
-                        </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h4>Engage</h4>
+                        <p>Shape ideas using AI tools and share them with others</p>
                     </div>
-                    
-                    <p style="text-align: center; margin-top: 30px; font-weight: 500;">Your effort doesn't disappear into the void. It <strong>builds toward something real.</strong></p>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h4>Build</h4>
+                        <p>Turn commitment into momentum and concrete progress</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h4>Unlock</h4>
+                        <p>Access mentors, investors, pitch tools, and community support</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <h4>Transform</h4>
+                        <p>Create investor decks, access deal rooms, turn dreams into realities</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">6</div>
+                        <h4>Thrive</h4>
+                        <p>Grow your venture while helping others on their journey</p>
+                    </div>
                 </div>
-
-                <!-- For Partner Venues section -->
-                <div class="audience-section">
-                    <h2>🏪 For Partner Venues</h2>
-                    <h3>Turn your space into a founder hotspot. Grow a loyal customer base.</h3>
-                    <p>When members engage at your place, they create <strong>real community</strong>, <strong>Loyalty </strong> — not just transactions.</p>
-                    
-                    <p style="margin-top: 20px;"><strong>You benefit through:</strong></p>
-                    <ul class="feature-list">
-                        <li>📈 <strong>Increased dwell time and repeat visits</strong></li>
-                        <li>💬 <strong>Word-of-mouth momentum</strong> as members invite peers</li>
-                        <li>🌱 <strong>An identity as a creative, innovation-driven venue</strong></li>
-			<li>📈 <strong>An Opportunity to differentiate</strong></li>
-                    </ul>
-                    
-                    <p style="font-style: italic; margin-top: 15px;">You're not just brewing coffee or barley. You're brewing companies.</p>
+            </section>
+        </div>
+        
+        <!-- VCMBoK Section -->
+        <section class="vcmbok-section">
+            <div class="vcmbok-content">
+                <h2>🔄 VCMBoK</h2>
+                <p class="subtitle">Vibe Coding Methodology Body of Knowledge</p>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                    Everyone has a creative rhythm — a <strong>vibe</strong> that drives how they think, build, and thrive. 
+                    SociallyFounded's Vibe Code Framework helps you work with your flow, not against it.
+                </p>
+                
+                <h3 style="color: var(--sf-navy); margin-bottom: 2rem;">We support all builder types:</h3>
+                <div class="builder-types">
+                    <div class="builder-type">🌙 Night Owls</div>
+                    <div class="builder-type">☀️ Early Birds</div>
+                    <div class="builder-type">🤔 Deep Thinkers</div>
+                    <div class="builder-type">⚡ Fast Movers</div>
+                    <div class="builder-type">🧘 Solo Builders</div>
+                    <div class="builder-type">🤝 Team Players</div>
                 </div>
                 
-                <!-- For Investors section -->
-                <div class="audience-section">
-                    <h2>💰 For Investors</h2>
-                    <h3>Watch the idea before the pitch. Back the founder before the hype.</h3>
-                    <p>SociallyFounded is your pipeline into the <strong>rawest, realest phase of startup building</strong> — where belief and effort outweigh polish and decks.</p>
-                    
-                    <ul class="feature-list">
-                        <li>👀 Track founders <em>as they build</em></li>
-                        <li>📈 Watch their consistency, growth, and traction signals</li>
-                        <li>🧠 Leverage AI to surface high-potential creators</li>
-                        <li>💡 Invest with insight — not just instinct</li>
-                    </ul>
-                    
-                    <p style="font-style: italic; margin-top: 15px;">This is <strong>pre-seed at the speed of presence</strong>. Real people. Real progress. Real early.</p>
-                </div>
-
-                <!-- Call to action -->
-                <div class="cta-section">
-                    <h2>🙌 Join the Movement</h2>
-                    <ul style="list-style: none; text-align: left; max-width: 500px; margin: 0 auto 30px auto;">
-                        <li style="margin-bottom: 15px;">• <strong>Founders</strong> — Show up with your idea. We'll help shape it.</li>
-                        <li style="margin-bottom: 15px;">• <strong>Venues</strong> — Host the vibe. Fuel the build. Grow your crowd.</li>
-                        <li style="margin-bottom: 15px;">• <strong>Investors</strong> — Discover raw talent and follow real traction.</li>
-                    </ul>
-                    <p class="tagline">One check-in. One idea. One moment of belief. That's how it starts.</p>
-                    <a href="index.html#join-form" class="cta-button">Join The Movement</a>
-                </div>
+                <p style="font-size: 1.1rem; font-style: italic; margin-top: 2rem;">
+                    Don't change who you are. You just need a system that gets how you work.
+                </p>
             </div>
-        </main>
-
-        <!-- Footer -->
-        <footer style="background-color: white; color: #333; padding: 25px 0; margin: 0 -20px -20px -20px; text-align: center; border-top: 1px solid #eee;">
-            <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-                <!-- Social Media Icons -->
-                <div style="margin-bottom: 15px;">
-                    <a href="#" style="color: #003554; margin: 0 15px; font-size: 24px; text-decoration: none;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                    </a>
-                    <a href="#" style="color: #003554; margin: 0 15px; font-size: 24px; text-decoration: none;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7.5 16L12 12l8-8-16 7.5Z"/><path d="M19.5 4.5L15 9"/></svg>
-                    </a>
-                    <a href="#" style="color: #003554; margin: 0 15px; font-size: 24px; text-decoration: none;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                    </a>
-                    <a href="#" style="color: #003554; margin: 0 15px; font-size: 24px; text-decoration: none;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-                    </a>
+        </section>
+        
+        <div class="about-content">
+            <!-- What You Unlock Section -->
+            <section class="section">
+                <h2>🎁 What You Unlock</h2>
+                <p style="text-align: center; font-size: 1.2rem; margin-bottom: 3rem;">
+                    The more time and energy you put in, the more you unlock:
+                </p>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">✨</div>
+                        <h4>AI Tools</h4>
+                        <p>Shape your idea with precision and insight using cutting-edge AI assistance</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🤝</div>
+                        <h4>Mentorship</h4>
+                        <p>Learn from people who've built before and are eager to share their journey</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">📊</div>
+                        <h4>Pitch Readiness</h4>
+                        <p>Programs to make your story investor-grade and presentation perfect</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🔍</div>
+                        <h4>Investor Visibility</h4>
+                        <p>Get discovered by investors who follow your progress over time</p>
+                    </div>
                 </div>
                 
-                <!-- Copyright -->
-                <p style="font-size: 14px; color: #777;">&copy; <script>document.write(new Date().getFullYear());</script> SociallyFounded. All rights reserved.</p>
+                <p style="text-align: center; margin-top: 3rem; font-size: 1.2rem; font-weight: 500;">
+                    Your effort doesn't disappear into the void. It <strong>builds toward something real.</strong>
+                </p>
+            </section>
+            
+            <!-- For Different Audiences -->
+            <section class="section">
+                <h2>👥 Who SociallyFounded Serves</h2>
+                
+                <h3>🏪 For Partner Venues</h3>
+                <p>Turn your space into a founder hotspot. When members engage at your place, they create real community and loyalty — not just transactions.</p>
+                <ul style="list-style: none; margin: 20px 0;">
+                    <li>📈 Increased dwell time and repeat visits</li>
+                    <li>💬 Word-of-mouth momentum as members invite peers</li>
+                    <li>🌱 An identity as a creative, innovation-driven venue</li>
+                    <li>🎯 An opportunity to differentiate from competitors</li>
+                </ul>
+                <p style="font-style: italic;">You're not just brewing coffee. You're brewing companies.</p>
+                
+                <h3 style="margin-top: 3rem;">💰 For Investors</h3>
+                <p>Watch the idea before the pitch. Back the founder before the hype. SociallyFounded is your pipeline into the rawest, realest phase of startup building.</p>
+                <ul style="list-style: none; margin: 20px 0;">
+                    <li>👀 Track founders as they build</li>
+                    <li>📈 Watch consistency, growth, and traction signals</li>
+                    <li>🧠 Leverage AI to surface high-potential creators</li>
+                    <li>💡 Invest with insight — not just instinct</li>
+                </ul>
+                <p style="font-style: italic;">This is pre-seed at the speed of presence. Real people. Real progress. Real early.</p>
+            </section>
+        </div>
+        
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>🙌 Join the Movement</h2>
+            <p>One check-in. One idea. One moment of belief. That's how it starts.</p>
+            <div class="cta-buttons">
+                <a href="/auth.html" class="btn-cta">
+                    Get Your Digital Passport <i class="fas fa-passport"></i>
+                </a>
+                <a href="/index.html#features" class="btn-secondary-cta">
+                    Learn More
+                </a>
             </div>
-        </footer>
+        </section>
     </div>
-
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/about.html">About</a>
+                <a href="/privacy.html">Privacy</a>
+                <a href="/terms.html">Terms</a>
+                <a href="/contact.html">Contact</a>
+            </div>
+            <p>&copy; 2025 SociallyFounded | Building the future of entrepreneurship</p>
+        </div>
+    </footer>
+    
     <script>
-        // Navigation script
-        document.addEventListener('DOMContentLoaded', function() {
-            const openMobileNav = document.getElementById('open-mobile-nav');
-            const closeMobileNav = document.getElementById('close-mobile-nav');
-            const mobileNav = document.getElementById('mobile-nav');
-            const mobileJoinLink = document.getElementById('mobile-join-link');
-            const desktopLinks = document.getElementById('desktop-links');
-            
-            // Update navigation based on screen size
-            function updateNavigation() {
-                if (window.innerWidth >= 768) {
-                    desktopLinks.style.display = 'flex';
-                    openMobileNav.style.display = 'none';
-                    if (mobileNav) mobileNav.style.display = 'none';
-                } else {
-                    desktopLinks.style.display = 'none';
-                    openMobileNav.style.display = 'block';
-                }
-            }
-            
-            // Initial navigation setup
-            updateNavigation();
-            
-            // Update navigation on window resize
-            window.addEventListener('resize', updateNavigation);
-            
-            // Open mobile navigation
-            if (openMobileNav) {
-                openMobileNav.addEventListener('click', function() {
-                    mobileNav.style.display = 'block';
-                    document.body.style.overflow = 'hidden'; // Prevent scrolling
-                });
-            }
-            
-            // Close mobile navigation
-            if (closeMobileNav) {
-                closeMobileNav.addEventListener('click', function() {
-                    mobileNav.style.display = 'none';
-                    document.body.style.overflow = ''; // Restore scrolling
-                });
-            }
-            
-            // Close mobile nav when clicking outside
-            if (mobileNav) {
-                mobileNav.addEventListener('click', function(e) {
-                    if (e.target === mobileNav) {
-                        mobileNav.style.display = 'none';
-                        document.body.style.overflow = ''; // Restore scrolling
-                    }
-                });
-            }
-            
-            // Close mobile nav when clicking join link
-            if (mobileJoinLink) {
-                mobileJoinLink.addEventListener('click', function() {
-                    mobileNav.style.display = 'none';
-                    document.body.style.overflow = ''; // Restore scrolling
-                });
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
         });
     </script>
-    
-    <!-- Additional Scripts -->
-    <script src="mobile-script-fixes.js"></script>
 </body>
 </html>
