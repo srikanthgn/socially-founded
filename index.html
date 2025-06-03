@@ -3,1014 +3,832 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Where entrepreneurial journeys converge and amplify</title>
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="mobile-fixes.css">
-    
-    <!-- Firebase SDK -->
-<!-- Firebase v8 SDK (NOT v9 compat!) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-    
-    <!-- Firebase Config -->
-    <script src="firebase-config.js"></script>
-    <script src="firebase-auth-providers.js"></script>
-    <script src="user-management.js"></script>
-    <script src="email-auth-system.js"></script>
-    <script src="phone-auth-system.js"></script>
+    <title>SociallyFounded - Where Entrepreneurs Build Together</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Favicon -->
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#003554">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Your existing auth styles here */
-    /* Reset and Base Styles */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        color: #333;
-        line-height: 1.6;
-        background: #f8f9fa;
-    }
-    
-    /* Navigation */
-    nav {
-        background: white;
-        padding: 1rem 0;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-    }
-    
-    nav .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    nav a {
-        text-decoration: none;
-        color: #003554;
-        font-weight: 500;
-        transition: color 0.3s;
-    }
-    
-    nav a:hover {
-        color: #0056b3;
-    }
-    
-    #desktop-links {
-        display: flex;
-        gap: 2rem;
-    }
-    
-    /* Hero Section */
-    .hero {
-        padding: 4rem 0;
-        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-        text-align: center;
-    }
-    
-    .hero h1 {
-        font-size: 2.5rem;
-        color: #003554;
-        margin-bottom: 1rem;
-    }
-    
-    .hero .subtitle {
-        font-size: 1.2rem;
-        color: #666;
-        margin-bottom: 3rem;
-    }
-    
-    /* Container */
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-    
-    /* Sections */
-    section {
-        padding: 4rem 0;
-    }
-    
-    .features {
-        background: white;
-    }
-    
-    .features h2, .network h2, .global-map h2 {
-        text-align: center;
-        font-size: 2rem;
-        color: #003554;
-        margin-bottom: 3rem;
-    }
-    
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-    
-    .feature {
-        text-align: center;
-        padding: 2rem;
-        background: #f8f9fa;
-        border-radius: 10px;
-        transition: transform 0.3s;
-    }
-    
-    .feature:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-    
-    .feature-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-    
-    .network {
-        background: #f8f9fa;
-    }
-    
-    .network canvas {
-        width: 100%;
-        height: 400px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    
-    footer {
-        background: #003554;
-        color: white;
-        padding: 2rem 0;
-        text-align: center;
-    }
-    
-    /* Mobile */
-    @media (max-width: 768px) {
-        #desktop-links {
-            display: none;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        #open-mobile-nav {
-            display: block !important;
+        :root {
+            --sf-navy: #003554;
+            --sf-navy-dark: #001f3f;
+            --sf-gold: #D4AF37;
+            --sf-burgundy: #800020;
+            --sf-platinum: #E5E4E2;
+            --sf-white: #ffffff;
+            --sf-gray-light: #f8f9fa;
+            --sf-gray: #6c757d;
+            --sf-success: #28a745;
         }
         
-        .hero h1 {
-            font-size: 1.8rem;
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
         
-        .features-grid {
-            grid-template-columns: 1fr;
+        /* Navigation */
+        nav {
+            background: var(--sf-white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
         }
-    }
-
-        .auth-container {
-            max-width: 400px;
+        
+        nav.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .auth-icons-grid {
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--sf-navy);
+        }
+        
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--sf-navy);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--sf-gold);
+        }
+        
+        .get-started-btn {
+            background: var(--sf-navy);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .get-started-btn:hover {
+            background: var(--sf-navy-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,53,84,0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--sf-navy);
+            line-height: 1.2;
             margin-bottom: 1.5rem;
         }
         
-        .auth-icon-btn {
-            aspect-ratio: 1;
+        .hero-content .highlight {
+            color: var(--sf-gold);
+        }
+        
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--sf-gray);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .btn-primary {
+            background: var(--sf-navy);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary:hover {
+            background: var(--sf-navy-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,53,84,0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--sf-navy);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--sf-navy);
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--sf-navy);
+            color: white;
+        }
+        
+        .trust-badges {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--sf-gray);
+        }
+        
+        .trust-badge i {
+            color: var(--sf-success);
+        }
+        
+        /* Passport Visual */
+        .hero-visual {
+            position: relative;
+        }
+        
+        .passport-stack {
+            position: relative;
+            transform: perspective(1000px) rotateY(-15deg);
+        }
+        
+        .passport-card {
+            width: 300px;
+            height: 400px;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            position: absolute;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .passport-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .passport-navy {
+            background: var(--sf-navy);
+            color: white;
+            z-index: 4;
+        }
+        
+        .passport-burgundy {
+            background: var(--sf-burgundy);
+            color: white;
+            z-index: 3;
+            top: 20px;
+            left: 20px;
+        }
+        
+        .passport-gold {
+            background: linear-gradient(45deg, #B8860B, #FFD700, #B8860B);
+            color: white;
+            z-index: 2;
+            top: 40px;
+            left: 40px;
+        }
+        
+        .passport-platinum {
+            background: linear-gradient(135deg, #E5E4E2, #FFFFFF, #C0C0C0);
+            color: #333;
+            z-index: 1;
+            top: 60px;
+            left: 60px;
+        }
+        
+        .passport-header {
+            text-align: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .passport-header h3 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .passport-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+        }
+        
+        .passport-logo {
+            margin: 20px 0 40px 0;
+        }
+        
+        .biometric-symbol {
+            opacity: 0.7;
+        }
+        
+        .biometric-symbol svg {
+            color: currentColor;
+        }
+        
+        /* Three Flywheels Section */
+        .flywheels {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--sf-navy);
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--sf-gray);
+        }
+        
+        .flywheels-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        
+        .flywheel-card {
+            background: var(--sf-gray-light);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .flywheel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--sf-navy);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .flywheel-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .flywheel-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .flywheel-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--sf-navy);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #f0f0f0;
-            border-radius: 1rem;
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 0.3s ease-out backwards;
-        }
-        
-        .auth-icon-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border-color: transparent;
-        }
-        
-        .auth-icon-btn i {
+            margin: 0 auto 20px;
             font-size: 2rem;
-            transition: transform 0.2s;
-        }
-        
-        .auth-icon-btn:hover i {
-            transform: scale(1.1);
-        }
-        
-        /* Icon colors */
-        .auth-icon-btn.google { color: #4285f4; }
-        .auth-icon-btn.google:hover { background: #4285f4; color: white; }
-        
-        .auth-icon-btn.facebook { color: #1877f2; }
-        .auth-icon-btn.facebook:hover { background: #1877f2; color: white; }
-        
-        .auth-icon-btn.linkedin { color: #0077b5; }
-        .auth-icon-btn.linkedin:hover { background: #0077b5; color: white; }
-        
-        .auth-icon-btn.whatsapp { color: #25d366; }
-        .auth-icon-btn.whatsapp:hover { background: #25d366; color: white; }
-        
-        .auth-icon-btn.phone { color: #6c757d; }
-        .auth-icon-btn.phone:hover { background: #6c757d; color: white; }
-        
-        .auth-icon-btn.email { color: #003554; }
-        .auth-icon-btn.email:hover { background: #003554; color: white; }
-        
-        /* Tooltip */
-        .auth-icon-btn::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            z-index: 10;
         }
         
-        .auth-icon-btn:hover::after {
+        .flywheel-card h3 {
+            font-size: 1.5rem;
+            color: var(--sf-navy);
+            margin-bottom: 15px;
+        }
+        
+        .flywheel-card p {
+            color: var(--sf-gray);
+            margin-bottom: 20px;
+        }
+        
+        .flywheel-features {
+            text-align: left;
+        }
+        
+        .flywheel-features li {
+            list-style: none;
+            padding: 5px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .flywheel-features i {
+            color: var(--sf-success);
+            font-size: 0.9rem;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+            background: var(--sf-gray-light);
+        }
+        
+        .steps-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--sf-navy);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .step h4 {
+            font-size: 1.1rem;
+            color: var(--sf-navy);
+            margin-bottom: 10px;
+        }
+        
+        .step p {
+            color: var(--sf-gray);
+            font-size: 0.95rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: var(--sf-navy);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .btn-cta {
+            background: white;
+            color: var(--sf-navy);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.3);
+        }
+        
+        /* Footer */
+        footer {
+            background: #001f3f;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
             opacity: 1;
         }
         
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
-        }
-        
-        .phone-auth-form {
-            display: none;
-        }
-        
-        .otp-input-container {
-            display: none;
-        }
-        
-        #auth-error {
-            display: none;
-            padding: 0.75rem;
-            background: #fee;
-            color: #c00;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-visual {
+                display: none;
+            }
+            
+            .flywheels-grid,
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .trust-badges {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav style="background-color: white; color: #003554; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
-            <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
-                    <img src="favicon.svg" alt="Socially Founded Logo" style="width: 40px; height: auto;">
-                    <span style="font-size: 22px; font-weight: 600; color: #003554;">SociallyFounded</span>
-                </a>
-                <span style="font-size: 10px; color: #555; margin-left: 55px; margin-top: -5px;">Fusion of Vibe, Entrepreneurship & Community</span>
-            </div>
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="favicon.svg" alt="SociallyFounded">
+                <span class="logo-text">SociallyFounded</span>
+            </a>
             
-            <!-- Desktop Navigation Links -->
-            <div id="desktop-links" style="display: flex; gap: 40px;">
-                <a href="about.html" style="color: #003554; text-decoration: none;">About</a>
-                <a href="how-it-works.html" style="color: #003554; text-decoration: none;">How It Works</a>
-                <a href="passport.html" style="color: #003554; text-decoration: none;">Digital Passport</a>
-                <a href="#" style="color: #003554; text-decoration: none;">Join</a>
-                <a href="#" style="color: #003554; text-decoration: none;">Contact</a>
+            <div class="nav-links">
+                <a href="#how-it-works">How It Works</a>
+                <a href="#features">Features</a>
+                <a href="/about.html">About</a>
+                <a href="/passport.html" class="get-started-btn">Get Your Passport</a>
             </div>
-            
-            <!-- Mobile Menu Button -->
-            <button id="open-mobile-nav" style="display: none; background: none; border: none; color: #003554; font-size: 24px; cursor: pointer;">☰</button>
         </div>
     </nav>
-
-    <!-- Hero Section with Authentication -->
+    
+    <!-- Hero Section -->
     <section class="hero">
-        <div class="container">
-            <h1>Where entrepreneurial journeys converge and amplify</h1>
-            <p class="subtitle">Get your Digital Passport and join thousands of founders worldwide</p>
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Where Entrepreneurs <span class="highlight">Build Together</span></h1>
+                <p>Get your Digital Passport, check in at venues worldwide, track your ideas, and join a global community of founders who support each other's journey.</p>
+                
+                <div class="hero-cta">
+                    <a href="#" class="btn-primary" onclick="showAuthModal()">
+                        Get Your Digital Passport <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#how-it-works" class="btn-secondary">
+                        See How It Works
+                    </a>
+                </div>
+                
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Free for Founders</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>500+ Venues</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>10K+ Founders</span>
+                    </div>
+                </div>
+            </div>
             
-            <!-- Authentication Container -->
-            <div class="auth-container">
-                <h2 style="text-align: center; margin-bottom: 1rem; color: #003554;">Get Your Digital Passport</h2>
-                <p class="auth-subtitle" style="text-align: center; color: #666; margin-bottom: 1.5rem;">Choose how you'd like to sign in</p>
-                
-                <!-- Error message -->
-                <div id="auth-error"></div>
-                
-                <!-- Icon Grid Authentication -->
-                <div class="auth-icons-grid" id="authIconsGrid">
-                    <button class="auth-icon-btn google" data-tooltip="Google" onclick="authProviders.signInWithProvider('google')">
-                        <i class="fab fa-google"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn facebook" data-tooltip="Facebook" onclick="authProviders.signInWithProvider('facebook')">
-                        <i class="fab fa-facebook-f"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn linkedin" data-tooltip="LinkedIn" onclick="authProviders.signInWithProvider('linkedin')">
-                        <i class="fab fa-linkedin-in"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn whatsapp" data-tooltip="WhatsApp" onclick="showPhoneAuth(true)">
-                        <i class="fab fa-whatsapp"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn phone" data-tooltip="SMS" onclick="showPhoneAuth(false)">
-                        <i class="fas fa-mobile-alt"></i>
-                    </button>
-                    
-                    <button class="auth-icon-btn email" data-tooltip="Email" onclick="showEmailAuth()">
-                        <i class="fas fa-envelope"></i>
-                    </button>
-                </div>
-                
-                <!-- Phone Authentication Form -->
-                <div class="phone-auth-form" id="phoneAuthForm">
-                    <!-- Your phone auth form content here -->
-                </div>
-                
-                <!-- OTP Verification -->
-                <div class="otp-input-container" id="otpContainer">
-                    <!-- Your OTP content here -->
-                </div>
-		<!-- Email Authentication Form -->
-		<div class="email-auth-form" id="emailAuthForm" style="display: none;">
-    		<!-- ... all the email form HTML ... -->
-			</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features">
-        <div class="container">
-            <h2>Transform Your Entrepreneurial Journey</h2>
-            <div class="features-grid">
-                <div class="feature">
-                    <div class="feature-icon">🤝</div>
-                    <h3>Community Connection</h3>
-                    <p>Connect with like-minded entrepreneurs and build meaningful relationships.</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">💡</div>
-                    <h3>Idea Enhancement</h3>
-                    <p>Transform concepts into refined opportunities through collective intelligence.</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Resource Access</h3>
-                    <p>Gain privileged access to tools, mentorship, and funding opportunities.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Network Visualization Section -->
-    <section class="network">
-        <div class="container">
-            <h2>Join Our Growing Network</h2>
-            <p class="subtitle">Connect with entrepreneurs worldwide</p>
-            <canvas id="networkCanvas"></canvas>
-        </div>
-    </section>
-
-    <!-- Global Map Section -->
-    <section class="global-map">
-        <div class="container">
-            <h2>Building a Global Network</h2>
-            <div id="map-container">
-                <div class="map-placeholder" style="background: #f5f5f5; padding: 100px; text-align: center; border-radius: 10px;">
-                    <p style="font-size: 24px;">🌍 Active in Lithuania, India, UAE, Ukraine, and growing...</p>
+            <div class="hero-visual">
+                <div class="passport-stack">
+                    <div class="passport-card passport-navy">
+                        <div class="passport-header">
+                            <h3>SOCIALLYFOUNDED</h3>
+                            <h2>PASSPORT</h2>
+                            <div class="passport-logo">
+                                <img src="favicon.svg" alt="SF" style="width: 60px; height: 60px; filter: brightness(0) invert(1);">
+                            </div>
+                            <div class="biometric-symbol">
+                                <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="5" y="5" width="30" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M1 10 Q5 10 5 10 M1 15 Q5 15 5 15 M1 20 Q5 20 5 20" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M35 10 Q39 10 39 10 M35 15 Q39 15 39 15 M35 20 Q39 20 39 20" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="20" cy="15" r="5" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="passport-card passport-burgundy">
+                        <div class="passport-header">
+                            <h3>SOCIALLYFOUNDED</h3>
+                            <h2>PASSPORT</h2>
+                            <div class="passport-logo">
+                                <img src="favicon.svg" alt="SF" style="width: 60px; height: 60px; filter: brightness(0) invert(1);">
+                            </div>
+                            <div class="biometric-symbol">
+                                <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="5" y="5" width="30" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M1 10 Q5 10 5 10 M1 15 Q5 15 5 15 M1 20 Q5 20 5 20" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M35 10 Q39 10 39 10 M35 15 Q39 15 39 15 M35 20 Q39 20 39 20" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="20" cy="15" r="5" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="passport-card passport-gold">
+                        <div class="passport-header">
+                            <h3>SOCIALLYFOUNDED</h3>
+                            <h2>PASSPORT</h2>
+                            <div class="passport-logo">
+                                <img src="favicon.svg" alt="SF" style="width: 60px; height: 60px; filter: brightness(0) invert(1);">
+                            </div>
+                            <div class="biometric-symbol">
+                                <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="5" y="5" width="30" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M1 10 Q5 10 5 10 M1 15 Q5 15 5 15 M1 20 Q5 20 5 20" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M35 10 Q39 10 39 10 M35 15 Q39 15 39 15 M35 20 Q39 20 39 20" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="20" cy="15" r="5" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="passport-card passport-platinum">
+                        <div class="passport-header">
+                            <h3>SOCIALLYFOUNDED</h3>
+                            <h2>PASSPORT</h2>
+                            <div class="passport-logo">
+                                <img src="favicon.svg" alt="SF" style="width: 60px; height: 60px;">
+                            </div>
+                            <div class="biometric-symbol">
+                                <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="5" y="5" width="30" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M1 10 Q5 10 5 10 M1 15 Q5 15 5 15 M1 20 Q5 20 5 20" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M35 10 Q39 10 39 10 M35 15 Q39 15 39 15 M35 20 Q39 20 39 20" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="20" cy="15" r="5" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
+    
+    <!-- Three Flywheels -->
+    <section class="flywheels" id="features">
+        <div class="section-header">
+            <h2>Three Ways to Grow</h2>
+            <p>Our ecosystem is designed to accelerate your entrepreneurial journey through three interconnected systems</p>
+        </div>
+        
+        <div class="flywheels-grid">
+            <div class="flywheel-card">
+                <div class="flywheel-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Engagement</h3>
+                <p>Build your network and stay motivated with gamified progress tracking</p>
+                <ul class="flywheel-features">
+                    <li><i class="fas fa-check"></i> Daily check-ins & streaks</li>
+                    <li><i class="fas fa-check"></i> Invite friends & grow together</li>
+                    <li><i class="fas fa-check"></i> Earn XP & unlock achievements</li>
+                    <li><i class="fas fa-check"></i> Passport progression system</li>
+                </ul>
+            </div>
+            
+            <div class="flywheel-card">
+                <div class="flywheel-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Ideas</h3>
+                <p>Transform your concepts into fundable ventures with community support</p>
+                <ul class="flywheel-features">
+                    <li><i class="fas fa-check"></i> Register ideas with SF ID</li>
+                    <li><i class="fas fa-check"></i> Track progress to pitch-ready</li>
+                    <li><i class="fas fa-check"></i> Get community feedback</li>
+                    <li><i class="fas fa-check"></i> Connect with investors</li>
+                </ul>
+            </div>
+            
+            <div class="flywheel-card">
+                <div class="flywheel-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3>Venues</h3>
+                <p>Work from entrepreneurial spaces worldwide with exclusive benefits</p>
+                <ul class="flywheel-features">
+                    <li><i class="fas fa-check"></i> 500+ partner venues</li>
+                    <li><i class="fas fa-check"></i> Check-in rewards</li>
+                    <li><i class="fas fa-check"></i> Member discounts</li>
+                    <li><i class="fas fa-check"></i> Real-world connections</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header">
+            <h2>Your Journey Starts Here</h2>
+            <p>Four simple steps to join the global entrepreneurial community</p>
+        </div>
+        
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h4>Get Your Passport</h4>
+                <p>Sign up with any method and receive your Digital Passport instantly</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <h4>Check In Daily</h4>
+                <p>Visit partner venues or check in remotely to build your streak</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <h4>Register Ideas</h4>
+                <p>Document your concepts with unique SF IDs and track progress</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <h4>Level Up Together</h4>
+                <p>Earn achievements, unlock benefits, and help others succeed</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Join 10,000+ Founders?</h2>
+            <p>Your entrepreneurial journey starts with a single click</p>
+            <a href="#" class="btn-cta" onclick="showAuthModal()">
+                Get Your Digital Passport Now <i class="fas fa-passport"></i>
+            </a>
+        </div>
+    </section>
+    
     <!-- Footer -->
-    <footer style="background: #003554; color: white; padding: 40px 0; margin-top: 80px;">
-        <div class="container" style="text-align: center;">
-            <p>&copy; 2025 SociallyFounded | A 4Square Capital Innovations Company</p>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/about.html">About</a>
+                <a href="/privacy.html">Privacy</a>
+                <a href="/terms.html">Terms</a>
+                <a href="/contact.html">Contact</a>
+            </div>
+            <p>&copy; 2025 SociallyFounded | Building the future of entrepreneurship</p>
         </div>
     </footer>
-
-    <!-- Mobile Navigation Menu -->
-    <div id="mobile-nav" style="display: none;">
-        <!-- Mobile nav content here -->
+    
+    <!-- Auth Modal Placeholder -->
+    <div id="authModal" style="display: none;">
+        <!-- Your authentication modal will go here -->
     </div>
-
-<!-- Scripts -->
-<script src="mobile-script-fixes.js"></script>
-<!-- Page Functions -->
-<script>
-    // Add recaptcha container div
-    if (!document.getElementById('recaptcha-container')) {
-        const recaptchaDiv = document.createElement('div');
-        recaptchaDiv.id = 'recaptcha-container';
-        document.body.appendChild(recaptchaDiv);
-    }
     
-    // Phone auth functions
-    let useWhatsApp = false;
-    
-    function showPhoneAuth(isWhatsApp = false) {
-        useWhatsApp = isWhatsApp;
-        const authGrid = document.getElementById('authIconsGrid');
-        const phoneForm = document.getElementById('phoneAuthForm');
-        if (authGrid) authGrid.style.display = 'none';
-        if (phoneForm) phoneForm.style.display = 'block';
-    }
-    
-    function hidePhoneAuth() {
-        const authGrid = document.getElementById('authIconsGrid');
-        const phoneForm = document.getElementById('phoneAuthForm');
-        if (phoneForm) phoneForm.style.display = 'none';
-        if (authGrid) authGrid.style.display = 'grid';
-    }
-
-
-// Email Authentication Functions
-function showEmailAuth() {
-    // Use the new modal from email-auth-system.js
-    if (typeof showEmailAuthModal === 'function') {
-        showEmailAuthModal();
-    } else {
-        console.error('Email auth modal function not loaded');
-    }
-}
-
-function hideEmailAuth() {
-    document.getElementById('emailAuthForm').style.display = 'none';
-    document.getElementById('authIconsGrid').style.display = 'grid';
-    // Reset forms
-    document.getElementById('emailSignInForm').style.display = 'block';
-    document.getElementById('emailSignUpForm').style.display = 'none';
-}
-
-function showEmailSignUp() {
-    document.getElementById('emailSignInForm').style.display = 'none';
-    document.getElementById('emailSignUpForm').style.display = 'block';
-    document.getElementById('nameInputSignUp').focus();
-}
-
-function showEmailSignIn() {
-    document.getElementById('emailSignUpForm').style.display = 'none';
-    document.getElementById('emailSignInForm').style.display = 'block';
-    document.getElementById('emailInput').focus();
-}
-
-async function signInWithEmail() {
-    const email = document.getElementById('emailInput').value;
-    const password = document.getElementById('passwordInput').value;
-    
-    if (!email || !password) {
-        showAuthError('Please enter both email and password');
-        return;
-    }
-    
-    try {
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-        console.log('Email sign in successful:', userCredential.user);
-        window.location.href = '/passport.html';
-    } catch (error) {
-        console.error('Email sign in error:', error);
-        if (error.code === 'auth/user-not-found') {
-            showAuthError('No account found with this email. Please sign up first.');
-        } else if (error.code === 'auth/wrong-password') {
-            showAuthError('Incorrect password. Please try again.');
-        } else if (error.code === 'auth/invalid-email') {
-            showAuthError('Please enter a valid email address.');
-        } else {
-            showAuthError(error.message);
-        }
-    }
-}
-
-async function signUpWithEmail() {
-    const name = document.getElementById('nameInputSignUp').value;
-    const email = document.getElementById('emailInputSignUp').value;
-    const password = document.getElementById('passwordInputSignUp').value;
-    
-    if (!name || !email || !password) {
-        showAuthError('Please fill in all fields');
-        return;
-    }
-    
-    if (password.length < 6) {
-        showAuthError('Password must be at least 6 characters');
-        return;
-    }
-    
-    try {
-        // Create the user
-        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-        
-        // Update their display name
-        await userCredential.user.updateProfile({
-            displayName: name
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
         });
         
-        console.log('Email sign up successful:', userCredential.user);
-        
-        // The user-management.js will handle creating the user profile in Firestore
-        window.location.href = '/passport.html';
-    } catch (error) {
-        console.error('Email sign up error:', error);
-        if (error.code === 'auth/email-already-in-use') {
-            showAuthError('An account already exists with this email. Please sign in.');
-        } else if (error.code === 'auth/invalid-email') {
-            showAuthError('Please enter a valid email address.');
-        } else if (error.code === 'auth/weak-password') {
-            showAuthError('Password is too weak. Please use at least 6 characters.');
-        } else {
-            showAuthError(error.message);
+        // Show auth modal function
+        function showAuthModal() {
+            // This will trigger your authentication modal
+            window.location.href = '/passport.html';
         }
-    }
-}
-    
-    window.showOTPInput = function(phoneNumber, useWhatsApp) {
-        console.log('OTP requested for:', phoneNumber);
-    };
-</script>
-    // Handle LinkedIn callback token
-document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const linkedinToken = urlParams.get('token');
-    
-    if (linkedinToken) {
-        console.log('LinkedIn token received, signing in...');
         
-        // Sign in with custom token
-        firebase.auth().signInWithCustomToken(linkedinToken)
-            .then((result) => {
-                console.log('LinkedIn sign-in successful:', result.user.email);
-                // Redirect to passport
-                window.location.href = '/passport.html';
-            })
-            .catch((error) => {
-                console.error('LinkedIn token sign-in error:', error);
-                alert('LinkedIn sign-in failed: ' + error.message);
-            });
-    }
-});
-
-<script>
-// Handle LinkedIn OAuth callback - Run immediately when page loads
-(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const customToken = urlParams.get('token');
-    const error = urlParams.get('error');
-    
-    console.log('URL params:', window.location.search);
-    console.log('Custom token present:', !!customToken);
-    console.log('Error present:', error);
-    
-    if (error) {
-        console.error('LinkedIn auth error:', error);
-        const errorDesc = urlParams.get('error_description');
-        if (typeof showAuthError === 'function') {
-            showAuthError(errorDesc || 'LinkedIn sign-in failed. Please try again.');
-        }
-        return;
-    }
-    
-    if (customToken) {
-        console.log('Token found, waiting for Firebase to initialize...');
-        
-        // Wait for Firebase to be ready
-        const signInWithToken = () => {
-            if (typeof firebase !== 'undefined' && firebase.auth) {
-                console.log('Firebase ready, signing in with custom token...');
-                firebase.auth().signInWithCustomToken(customToken)
-                    .then((userCredential) => {
-                        console.log('Sign in successful:', userCredential.user);
-                        // Clear the URL parameters
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        // Redirect to passport
-                        window.location.href = '/passport.html';
-                    })
-                    .catch((error) => {
-                        console.error('Error signing in with custom token:', error);
-                        console.error('Error code:', error.code);
-                        console.error('Error message:', error.message);
-                        if (typeof showAuthError === 'function') {
-                            showAuthError('LinkedIn sign-in failed. Please try again.');
-                        }
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
-            } else {
-                console.log('Firebase not ready yet, retrying in 100ms...');
-                setTimeout(signInWithToken, 100);
-            }
-        };
-        
-        // Start the sign-in process
-        signInWithToken();
-    }
-})();
-</script>
-
-<!-- Email Authentication Modal -->
-<div id="email-auth-modal" class="auth-modal" style="display: none;">
-    <div class="auth-modal-content">
-        <span class="auth-close" onclick="closeEmailAuthModal()">&times;</span>
-        
-        <div class="auth-header">
-            <img src="favicon.svg" alt="SociallyFounded" style="width: 50px; height: 50px; margin-bottom: 10px;">
-            <h2>Welcome to SociallyFounded</h2>
-        </div>
-        
-        <!-- Tab Navigation -->
-        <div class="auth-tabs">
-            <button class="auth-tab active" onclick="switchAuthTab('signin')">Sign In</button>
-            <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
-        </div>
-        
-        <!-- Sign In Form -->
-        <div id="signin-form" class="auth-form-container">
-            <form onsubmit="handleEmailSignIn(event)">
-                <div class="form-group">
-                    <label for="signin-email">Email Address</label>
-                    <input type="email" id="signin-email" required placeholder="founder@example.com">
-                </div>
-                
-                <div class="form-group">
-                    <label for="signin-password">Password</label>
-                    <input type="password" id="signin-password" required placeholder="Enter your password" minlength="6">
-                </div>
-                
-                <div class="form-group">
-                    <a href="#" onclick="showForgotPassword()" class="forgot-password-link">Forgot your password?</a>
-                </div>
-                
-                <button type="submit" class="auth-submit-btn">
-                    <span class="btn-text">Sign In</span>
-                    <span class="btn-loading" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i> Signing in...
-                    </span>
-                </button>
-                
-                <div class="auth-error" id="signin-error" style="display: none;"></div>
-            </form>
-        </div>
-        
-        <!-- Sign Up Form -->
-        <div id="signup-form" class="auth-form-container" style="display: none;">
-            <form onsubmit="handleEmailSignUp(event)">
-                <div class="form-group">
-                    <label for="signup-name">Full Name</label>
-                    <input type="text" id="signup-name" required placeholder="Jane Founder">
-                </div>
-                
-                <div class="form-group">
-                    <label for="signup-email">Email Address</label>
-                    <input type="email" id="signup-email" required placeholder="founder@example.com">
-                </div>
-                
-                <div class="form-group">
-                    <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" required placeholder="Create a password" minlength="6">
-                    <small class="form-hint">Minimum 6 characters</small>
-                </div>
-                
-                <div class="form-group">
-                    <label for="signup-confirm-password">Confirm Password</label>
-                    <input type="password" id="signup-confirm-password" required placeholder="Confirm your password">
-                </div>
-                
-                <button type="submit" class="auth-submit-btn">
-                    <span class="btn-text">Create Account</span>
-                    <span class="btn-loading" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i> Creating account...
-                    </span>
-                </button>
-                
-                <div class="auth-error" id="signup-error" style="display: none;"></div>
-                
-                <p class="auth-terms">
-                    By signing up, you agree to our <a href="#" target="_blank">Terms of Service</a> 
-                    and <a href="#" target="_blank">Privacy Policy</a>
-                </p>
-            </form>
-        </div>
-        
-        <!-- Forgot Password Form -->
-        <div id="forgot-password-form" class="auth-form-container" style="display: none;">
-            <form onsubmit="handlePasswordReset(event)">
-                <p class="auth-description">Enter your email address and we'll send you a link to reset your password.</p>
-                
-                <div class="form-group">
-                    <label for="reset-email">Email Address</label>
-                    <input type="email" id="reset-email" required placeholder="founder@example.com">
-                </div>
-                
-                <button type="submit" class="auth-submit-btn">
-                    <span class="btn-text">Send Reset Link</span>
-                    <span class="btn-loading" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i> Sending...
-                    </span>
-                </button>
-                
-                <div class="auth-success" id="reset-success" style="display: none;">
-                    <i class="fas fa-check-circle"></i> Password reset email sent! Check your inbox.
-                </div>
-                
-                <div class="auth-error" id="reset-error" style="display: none;"></div>
-                
-                <div class="form-group" style="margin-top: 20px;">
-                    <a href="#" onclick="switchAuthTab('signin')" class="back-to-signin">← Back to Sign In</a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<style>
-/* Email Authentication Modal Styles */
-.auth-modal {
-    display: none;
-    position: fixed;
-    z-index: 10000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    overflow: auto;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.auth-modal-content {
-    background-color: #ffffff;
-    margin: 5% auto;
-    padding: 0;
-    width: 90%;
-    max-width: 450px;
-    border-radius: 12px;
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.auth-close {
-    color: #666;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    padding: 15px 20px;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.auth-close:hover {
-    color: #003554;
-}
-
-.auth-header {
-    text-align: center;
-    padding: 30px 20px 20px;
-}
-
-.auth-header h2 {
-    color: #003554;
-    margin: 0;
-    font-size: 24px;
-}
-
-/* Tab Navigation */
-.auth-tabs {
-    display: flex;
-    border-bottom: 2px solid #e0e0e0;
-    margin: 0 30px;
-}
-
-.auth-tab {
-    flex: 1;
-    background: none;
-    border: none;
-    padding: 15px;
-    font-size: 16px;
-    cursor: pointer;
-    color: #666;
-    transition: all 0.3s;
-    position: relative;
-}
-
-.auth-tab.active {
-    color: #003554;
-    font-weight: 600;
-}
-
-.auth-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: #003554;
-}
-
-/* Form Styles */
-.auth-form-container {
-    padding: 30px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #333;
-    font-weight: 500;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: #003554;
-}
-
-.form-hint {
-    display: block;
-    margin-top: 5px;
-    color: #666;
-    font-size: 13px;
-}
-
-.forgot-password-link {
-    color: #003554;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.forgot-password-link:hover {
-    text-decoration: underline;
-}
-
-.back-to-signin {
-    color: #003554;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-/* Submit Button */
-.auth-submit-btn {
-    width: 100%;
-    padding: 14px;
-    background-color: #003554;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-}
-
-.auth-submit-btn:hover {
-    background-color: #002540;
-}
-
-.auth-submit-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.btn-loading {
-    display: none;
-}
-
-/* Messages */
-.auth-error {
-    margin-top: 15px;
-    padding: 12px;
-    background-color: #fee;
-    border: 1px solid #fcc;
-    color: #c33;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.auth-success {
-    margin-top: 15px;
-    padding: 12px;
-    background-color: #efe;
-    border: 1px solid #cfc;
-    color: #363;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.auth-description {
-    color: #666;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.auth-terms {
-    margin-top: 20px;
-    font-size: 13px;
-    color: #666;
-    text-align: center;
-}
-
-.auth-terms a {
-    color: #003554;
-    text-decoration: none;
-}
-
-.auth-terms a:hover {
-    text-decoration: underline;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 600px) {
-    .auth-modal-content {
-        margin: 10% auto;
-        width: 95%;
-    }
-    
-    .auth-form-container {
-        padding: 20px;
-    }
-}
-</style>
-
-	
+                }
+            });
+        });
+    </script>
 </body>
 </html>
