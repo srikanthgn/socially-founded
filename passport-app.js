@@ -285,4 +285,122 @@ window.showAuthModal = function() {
     window.location.href = '/';
 };
 
+// Additional code to add to passport-app.js
+// This ensures proper integration with the profile system
+
+// Update the existing loadPassportData function to include profile loading
+const originalLoadPassportData = window.loadPassportData;
+
+window.loadPassportData = async function(user) {
+    try {
+        // Call the profile integration version first
+        if (window.loadPassportData !== originalLoadPassportData) {
+            await originalLoadPassportData(user);
+        }
+        
+        // Ensure user profile exists and is complete
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+        
+        if (!userData || !userData.profile) {
+            console.log('Profile incomplete, creating/updating...');
+            
+            // Get provider data
+            let providerData = null;
+            if (user.providerData && user.providerData.length > 0) {
+                providerData = user.providerData[0];
+            }
+            
+            // Create or update profile with provider data
+            const profileUpdates = {
+                'profile.email': user.email,
+                'profile.displayName': user.displayName || providerData?.displayName || '',
+                'profile.photoURL': user.photoURL || providerData?.photoURL || '',
+                'profile.phoneNumber': user.phoneNumber || providerData?.phoneNumber || '',
+                'profile.updatedAt': firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // Extract LinkedIn data if available
+            if (providerData && providerData.providerId === 'linkedin.com') {
+                // LinkedIn data might be in different format
+                if (providerData.displayName) {
+                    profileUpdates['profile.displayName'] = providerData.displayName;
+                }
+                if (providerData.photoURL) {
+                    profileUpdates['profile.photoURL'] = providerData.photoURL;
+                }
+            }
+            
+            // Update Firestore
+            await firebase.firestore().collection('users').doc(user.uid).update(profileUpdates);
+            
+            // Reload the data
+            const updatedDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+            const updatedData = updatedDoc.data();
+            
+            // Update the display
+            updatePassportDisplay(updatedData);
+            createProfileSection(updatedData);
+        }
+        
+    } catch (error) {
+        console.error('Error in enhanced loadPassportData:', error);
+    }
+};
+
+// Ensure proper initialization
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePassportApp);
+} else {
+    initializePassportApp();
+}
+
+function initializePassportApp() {
+    // Make sure Font Awesome is loaded for icons
+    if (!document.querySelector('link[href*="font-awesome"]')) {
+        const faLink = document.createElement('link');
+        faLink.rel = 'stylesheet';
+        faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        document.head.appendChild(faLink);
+    }
+    
+    // Check authentication state
+    firebase.auth().onAuthStateChanged(async (user) => {
+        if (user) {
+            // User is signed in
+            console.log('User authenticated:', user.email);
+            
+            // Load passport data with profile
+            await loadPassportData(user);
+            
+            // Hide sign-in prompt if visible
+            const signInPrompt = document.getElementById('signInPrompt');
+            if (signInPrompt) {
+                signInPrompt.style.display = 'none';
+            }
+            
+            // Show passport content
+            const passportContent = document.querySelector('.passport-content');
+            if (passportContent) {
+                passportContent.style.display = 'block';
+            }
+        } else {
+            // User is not signed in
+            console.log('User not authenticated');
+            
+            // Show sign-in prompt
+            const signInPrompt = document.getElementById('signInPrompt');
+            if (signInPrompt) {
+                signInPrompt.style.display = 'block';
+            }
+            
+            // Hide passport content
+            const passportContent = document.querySelector('.passport-content');
+            if (passportContent) {
+                passportContent.style.display = 'none';
+            }
+        }
+    });
+}
+
 console.log('✅ Digital Passport app loaded');
