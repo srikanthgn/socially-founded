@@ -479,9 +479,12 @@
 
 // Email Authentication Functions
 function showEmailAuth() {
-    document.getElementById('authIconsGrid').style.display = 'none';
-    document.getElementById('emailAuthForm').style.display = 'block';
-    document.getElementById('emailInput').focus();
+    // Use the new modal from email-auth-system.js
+    if (typeof showEmailAuthModal === 'function') {
+        showEmailAuthModal();
+    } else {
+        console.error('Email auth modal function not loaded');
+    }
 }
 
 function hideEmailAuth() {
