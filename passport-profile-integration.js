@@ -1,239 +1,399 @@
-// passport-profile-integration.js
-// Add this to your passport page to integrate profile completion
+// passport-profile-integration.js - Fixed Version
+// This file integrates the profile system with the passport page
 
-// Update the loadPassportData function to handle profile data properly
-async function loadPassportData() {
-    const user = firebase.auth().currentUser;
-    if (!user) return;
-    
+// Profile data loading and display
+window.loadPassportData = async function(user) {
     try {
-        const userDoc = await db.collection('users').doc(user.uid).get();
+        // Load user profile data
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
         
-        if (!userDoc.exists) {
-            // Create initial profile if it doesn't exist
+        if (!userData) {
+            console.log('No user data found, creating profile...');
             await createUserProfile(user);
             return;
         }
+
+        // Update passport display with user data
+        updatePassportDisplay(userData);
         
-        const userData = userDoc.data();
-        const profile = userData.profile || {};
-        const passport = userData.passport || {};
-        
-        // Update passport display with profile data
-        updatePassportDisplay({
-            // Use profile data with fallbacks
-            name: profile.displayName || user.displayName || 'Entrepreneur',
-            email: profile.email || user.email || '',
-            photoURL: profile.photoURL || user.photoURL || '/images/default-avatar.png',
-            company: profile.company || '',
-            bio: profile.bio || '',
-            linkedinUrl: profile.linkedinUrl || '',
-            
-            // Passport data
-            passportId: passport.id || 'Generating...',
-            level: passport.level || 1,
-            experience: passport.experience || 0,
-            totalCheckIns: passport.totalCheckIns || 0,
-            currentStreak: passport.currentStreak || 0,
-            achievements: passport.achievements || []
-        });
-        
-        // Check if profile needs completion
-        if (!profile.profileComplete && user.providerData[0].providerId === 'phone') {
-            // Show profile completion for phone users
-            checkProfileCompletion();
-        }
+        // Create/update profile section
+        createProfileSection(userData);
         
     } catch (error) {
         console.error('Error loading passport data:', error);
     }
+};
+
+// Create profile section in passport
+function createProfileSection(userData) {
+    // Check if profile section already exists
+    let profileSection = document.querySelector('.profile-section');
+    
+    if (!profileSection) {
+        // Create profile section HTML
+        const passportContent = document.querySelector('.passport-content');
+        if (!passportContent) return;
+        
+        profileSection = document.createElement('div');
+        profileSection.className = 'profile-section';
+        profileSection.style.cssText = `
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        `;
+        
+        // Insert after passport card
+        const passportCard = document.querySelector('.passport-card');
+        if (passportCard && passportCard.parentNode) {
+            passportCard.parentNode.insertBefore(profileSection, passportCard.nextSibling);
+        }
+    }
+    
+    // Get linked auth methods
+    const authMethods = userData.authMethods || [];
+    const linkedAccounts = authMethods.map(method => {
+        const icons = {
+            'google.com': '<i class="fab fa-google"></i>',
+            'password': '<i class="fas fa-envelope"></i>',
+            'phone': '<i class="fas fa-phone"></i>',
+            'linkedin.com': '<i class="fab fa-linkedin"></i>',
+            'facebook.com': '<i class="fab fa-facebook"></i>'
+        };
+        return icons[method] || '';
+    }).join(' ');
+    
+    // Update profile section content
+    profileSection.innerHTML = `
+        <h3 style="color: white; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            Profile Information
+            <button onclick="showProfileEditModal()" style="
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                color: white;
+                cursor: pointer;
+                font-size: 14px;
+            ">
+                <i class="fas fa-edit"></i> Edit
+            </button>
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div>
+                <label style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Name</label>
+                <p style="color: white; margin: 5px 0;">${userData.profile?.displayName || 'Not set'}</p>
+            </div>
+            
+            <div>
+                <label style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Email</label>
+                <p style="color: white; margin: 5px 0;">${userData.profile?.email || 'Not set'}</p>
+            </div>
+            
+            <div>
+                <label style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Phone</label>
+                <p style="color: white; margin: 5px 0;">${userData.profile?.phoneNumber || 'Not set'}</p>
+            </div>
+            
+            <div>
+                <label style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Company</label>
+                <p style="color: white; margin: 5px 0;">${userData.profile?.company || 'Not set'}</p>
+            </div>
+            
+            <div>
+                <label style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Linked Accounts</label>
+                <p style="color: white; margin: 5px 0; font-size: 20px;">${linkedAccounts || 'None'}</p>
+            </div>
+            
+            <div>
+                <label style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Member Since</label>
+                <p style="color: white; margin: 5px 0;">${new Date(userData.profile?.joinDate || Date.now()).toLocaleDateString()}</p>
+            </div>
+        </div>
+    `;
 }
 
-// Enhanced updatePassportDisplay function
-function updatePassportDisplay(data) {
-    // Update avatar
-    const avatarElements = document.querySelectorAll('.passport-avatar, .user-avatar');
-    avatarElements.forEach(el => {
-        if (data.photoURL) {
-            el.innerHTML = `<img src="${data.photoURL}" alt="${data.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-        } else {
-            el.innerHTML = `<i class="fas fa-user-circle" style="font-size: 3rem; color: #ccc;"></i>`;
-        }
-    });
-    
+// Update passport display with user data
+function updatePassportDisplay(userData) {
     // Update name
-    const nameElements = document.querySelectorAll('.passport-name, .user-name');
-    nameElements.forEach(el => {
-        el.textContent = data.name;
-    });
+    const nameElement = document.querySelector('.passport-card h3');
+    if (nameElement && userData.profile?.displayName) {
+        nameElement.textContent = userData.profile.displayName;
+    }
     
-    // Update passport ID
-    const passportIdElement = document.querySelector('.passport-id');
-    if (passportIdElement) {
-        passportIdElement.textContent = data.passportId;
+    // Update avatar
+    const avatarElement = document.querySelector('.passport-card .user-avatar');
+    if (avatarElement && userData.profile?.photoURL) {
+        avatarElement.innerHTML = `<img src="${userData.profile.photoURL}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">`;
+    }
+    
+    // Update passport ID if needed
+    const passportIdElement = document.querySelector('.passport-card p');
+    if (passportIdElement && userData.passport?.passportId) {
+        passportIdElement.textContent = `Passport ID: ${userData.passport.passportId}`;
     }
     
     // Update stats
-    document.querySelector('.stat-level').textContent = data.level;
-    document.querySelector('.stat-xp').textContent = data.experience;
-    document.querySelector('.stat-checkins').textContent = data.totalCheckIns;
-    document.querySelector('.stat-streak').textContent = data.currentStreak;
-    
-    // Update profile section if exists
-    const profileSection = document.querySelector('.profile-section');
-    if (profileSection) {
-        profileSection.innerHTML = `
-            <div class="profile-header">
-                <h3>Profile Information</h3>
-                <button class="edit-profile-btn" onclick="showProfileEditModal()">
-                    <i class="fas fa-edit"></i> Edit
-                </button>
-            </div>
-            <div class="profile-details">
-                ${data.company ? `<p><strong>Company:</strong> ${data.company}</p>` : ''}
-                ${data.bio ? `<p><strong>Bio:</strong> ${data.bio}</p>` : ''}
-                ${data.linkedinUrl ? `<p><strong>LinkedIn:</strong> <a href="${data.linkedinUrl}" target="_blank">View Profile</a></p>` : ''}
-                ${!data.company && !data.bio && !data.linkedinUrl ? '<p class="text-muted">Complete your profile to stand out!</p>' : ''}
-            </div>
-        `;
+    if (userData.passport) {
+        const stats = {
+            level: userData.passport.level || 1,
+            experience: userData.passport.experience || 0,
+            totalCheckIns: userData.passport.totalCheckIns || 0,
+            currentStreak: userData.passport.currentStreak || 0
+        };
+        
+        // Update stat displays
+        document.querySelectorAll('.stat-value').forEach((el, index) => {
+            const values = [stats.level, `${stats.experience} XP`, stats.totalCheckIns, stats.currentStreak];
+            if (values[index] !== undefined) {
+                el.textContent = values[index];
+            }
+        });
     }
 }
 
-// Function to show profile edit modal
-function showProfileEditModal() {
-    // Reuse the profile completion modal but with edit mode
-    showProfileCompletionModal();
-    
-    // Pre-fill the form with existing data
-    firebase.auth().onAuthStateChanged(async (user) => {
-        if (user) {
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            const profile = userDoc.data()?.profile || {};
-            
-            // Pre-fill form fields
-            if (profile.displayName) document.getElementById('displayName').value = profile.displayName;
-            if (profile.email) document.getElementById('email').value = profile.email;
-            if (profile.company) document.getElementById('company').value = profile.company;
-            if (profile.bio) document.getElementById('bio').value = profile.bio;
-            if (profile.linkedinUrl) document.getElementById('linkedinUrl').value = profile.linkedinUrl;
-            
-            // Show existing photo
-            if (profile.photoURL) {
-                document.getElementById('photoPreview').innerHTML = 
-                    `<img src="${profile.photoURL}" alt="Profile photo">`;
-            }
-            
-            // Change button text
-            document.querySelector('.btn-primary').textContent = 'Update Profile';
-            
-            // Change skip button to cancel
-            document.querySelector('.btn-secondary').textContent = 'Cancel';
-            document.querySelector('.btn-secondary').onclick = () => {
-                document.getElementById('profileCompletionModal').remove();
-            };
-        }
-    });
-}
-
-// Add profile section to passport page if not exists
-function addProfileSection() {
-    const passportCard = document.querySelector('.passport-card');
-    if (passportCard && !document.querySelector('.profile-section')) {
-        const profileSection = document.createElement('div');
-        profileSection.className = 'profile-section';
-        profileSection.style.cssText = `
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: #f9f9f9;
-            border-radius: 0.5rem;
+// Show profile edit modal
+window.showProfileEditModal = async function() {
+    try {
+        const user = firebase.auth().currentUser;
+        if (!user) return;
+        
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+        
+        // Create modal
+        const modal = document.createElement('div');
+        modal.className = 'profile-edit-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
         `;
         
-        passportCard.appendChild(profileSection);
+        modal.innerHTML = `
+            <div style="
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                max-width: 500px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+            ">
+                <h2 style="margin-bottom: 20px; color: #003554;">Edit Profile</h2>
+                
+                <form id="profile-edit-form" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Full Name *</label>
+                        <input type="text" name="displayName" value="${userData.profile?.displayName || ''}" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Email *</label>
+                        <input type="email" value="${userData.profile?.email || ''}" disabled
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: #f5f5f5;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Phone Number</label>
+                        <input type="tel" name="phoneNumber" value="${userData.profile?.phoneNumber || ''}"
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Company</label>
+                        <input type="text" name="company" value="${userData.profile?.company || ''}"
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">LinkedIn Profile URL</label>
+                        <input type="url" name="linkedinUrl" value="${userData.profile?.linkedinUrl || ''}"
+                            placeholder="https://linkedin.com/in/yourprofile"
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Profile Photo</label>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                ${userData.profile?.photoURL ? 
+                                    `<img src="${userData.profile.photoURL}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">` : 
+                                    '<i class="fas fa-user" style="font-size: 30px; color: #999;"></i>'
+                                }
+                            </div>
+                            <input type="file" id="photo-upload" accept="image/*" style="display: none;">
+                            <button type="button" onclick="document.getElementById('photo-upload').click()" style="
+                                padding: 8px 16px;
+                                background: #003554;
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                cursor: pointer;
+                            ">Change Photo</button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button type="submit" style="
+                            flex: 1;
+                            padding: 12px;
+                            background: #003554;
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-weight: 500;
+                            cursor: pointer;
+                        ">Save Changes</button>
+                        
+                        <button type="button" onclick="this.closest('.profile-edit-modal').remove()" style="
+                            flex: 1;
+                            padding: 12px;
+                            background: #f0f0f0;
+                            color: #333;
+                            border: none;
+                            border-radius: 8px;
+                            font-weight: 500;
+                            cursor: pointer;
+                        ">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Handle photo upload
+        const photoUpload = document.getElementById('photo-upload');
+        photoUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    // Upload to Firebase Storage
+                    const storageRef = firebase.storage().ref();
+                    const photoRef = storageRef.child(`profile-photos/${user.uid}/${Date.now()}_${file.name}`);
+                    const snapshot = await photoRef.put(file);
+                    const photoURL = await snapshot.ref.getDownloadURL();
+                    
+                    // Update preview
+                    const preview = modal.querySelector('.fa-user').parentElement;
+                    preview.innerHTML = `<img src="${photoURL}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    
+                    // Store URL for form submission
+                    modal.photoURL = photoURL;
+                } catch (error) {
+                    console.error('Error uploading photo:', error);
+                    alert('Failed to upload photo. Please try again.');
+                }
+            }
+        });
+        
+        // Handle form submission
+        const form = document.getElementById('profile-edit-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const formData = new FormData(form);
+                const updates = {
+                    'profile.displayName': formData.get('displayName'),
+                    'profile.phoneNumber': formData.get('phoneNumber'),
+                    'profile.company': formData.get('company'),
+                    'profile.linkedinUrl': formData.get('linkedinUrl'),
+                    'profile.updatedAt': firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                // Add photo URL if changed
+                if (modal.photoURL) {
+                    updates['profile.photoURL'] = modal.photoURL;
+                }
+                
+                // Update Firestore
+                await firebase.firestore().collection('users').doc(user.uid).update(updates);
+                
+                // Update display name in Firebase Auth
+                if (formData.get('displayName') !== user.displayName) {
+                    await user.updateProfile({
+                        displayName: formData.get('displayName')
+                    });
+                }
+                
+                // Reload passport data
+                await loadPassportData(user);
+                
+                // Close modal
+                modal.remove();
+                
+                // Show success message
+                showSuccessMessage('Profile updated successfully!');
+                
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile. Please try again.');
+            }
+        });
+        
+    } catch (error) {
+        console.error('Error showing profile edit modal:', error);
     }
+};
+
+// Show success message
+function showSuccessMessage(message) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #4CAF50;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 10001;
+        animation: slideIn 0.3s ease-out;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
-// Add styles for profile section
-const profileStyles = document.createElement('style');
-profileStyles.innerHTML = `
-    .profile-section {
-        margin-top: 2rem;
-        padding: 1.5rem;
-        background: #f9f9f9;
-        border-radius: 0.5rem;
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
     }
-    
-    .profile-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-    
-    .profile-header h3 {
-        margin: 0;
-        color: #003554;
-    }
-    
-    .edit-profile-btn {
-        padding: 0.5rem 1rem;
-        background: #003554;
-        color: white;
-        border: none;
-        border-radius: 0.5rem;
-        font-size: 0.875rem;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    
-    .edit-profile-btn:hover {
-        background: #002544;
-    }
-    
-    .profile-details p {
-        margin: 0.5rem 0;
-        color: #333;
-    }
-    
-    .profile-details strong {
-        color: #003554;
-    }
-    
-    .profile-details a {
-        color: #0077b5;
-        text-decoration: none;
-    }
-    
-    .profile-details a:hover {
-        text-decoration: underline;
-    }
-    
-    .text-muted {
-        color: #999;
-        font-style: italic;
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
     }
 `;
-document.head.appendChild(profileStyles);
+document.head.appendChild(style);
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
-    // Add profile section to passport
-    addProfileSection();
-    
-    // Load profile completion script
-    const script = document.createElement('script');
-    script.src = 'profile-completion.js';
-    document.body.appendChild(script);
-    
-    // Check authentication and profile
-    firebase.auth().onAuthStateChanged((user) => {
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if Firebase Auth is ready
+    firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
-            loadPassportData();
-            
-            // Check if coming from auth with profile completion flag
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('completeProfile') === 'true') {
-                setTimeout(() => checkProfileCompletion(), 1000);
-            }
+            await loadPassportData(user);
         }
     });
 });
