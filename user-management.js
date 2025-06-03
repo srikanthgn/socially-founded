@@ -424,4 +424,175 @@ window.recordCheckIn = recordCheckIn;
 window.addAchievement = addAchievement;
 window.initializeUserSession = initializeUserSession;
 
+// Add this to user-management.js to properly capture LinkedIn and Google data
+
+// Enhanced createUserProfile function that captures provider data
+window.createUserProfile = async function(user) {
+    try {
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(user.uid);
+        
+        // Check if profile already exists
+        const doc = await userRef.get();
+        
+        // Get provider-specific data
+        let providerData = {
+            displayName: user.displayName || '',
+            photoURL: user.photoURL || '',
+            email: user.email || '',
+            phoneNumber: user.phoneNumber || ''
+        };
+        
+        // Extract data from provider information
+        if (user.providerData && user.providerData.length > 0) {
+            const provider = user.providerData[0];
+            
+            // Override with provider-specific data if available
+            if (provider.displayName) providerData.displayName = provider.displayName;
+            if (provider.photoURL) providerData.photoURL = provider.photoURL;
+            if (provider.email) providerData.email = provider.email;
+            if (provider.phoneNumber) providerData.phoneNumber = provider.phoneNumber;
+            
+            console.log('Provider data:', provider.providerId, providerData);
+        }
+        
+        // Get auth methods
+        const authMethods = user.providerData ? 
+            user.providerData.map(provider => provider.providerId) : 
+            ['password'];
+        
+        if (doc.exists) {
+            // Update existing profile with new provider data
+            const updates = {
+                'profile.displayName': providerData.displayName || doc.data().profile?.displayName || '',
+                'profile.photoURL': providerData.photoURL || doc.data().profile?.photoURL || '',
+                'profile.email': providerData.email || doc.data().profile?.email || user.email,
+                'profile.phoneNumber': providerData.phoneNumber || doc.data().profile?.phoneNumber || '',
+                'authMethods': firebase.firestore.FieldValue.arrayUnion(...authMethods),
+                'profile.updatedAt': firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            await userRef.update(updates);
+            console.log('Updated existing user profile with provider data');
+        } else {
+            // Create new profile with provider data
+            const userData = {
+                profile: {
+                    uid: user.uid,
+                    email: providerData.email || user.email,
+                    displayName: providerData.displayName || '',
+                    photoURL: providerData.photoURL || '',
+                    phoneNumber: providerData.phoneNumber || '',
+                    company: '',
+                    linkedinUrl: '',
+                    joinDate: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                },
+                passport: {
+                    passportId: generatePassportId(),
+                    level: 1,
+                    experience: 0,
+                    totalCheckIns: 0,
+                    currentStreak: 0,
+                    lastCheckIn: null,
+                    achievements: ['founding_member']
+                },
+                stats: {
+                    ideasRegistered: 0,
+                    venuesVisited: 0,
+                    connectionsMade: 0
+                },
+                authMethods: authMethods,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            await userRef.set(userData);
+            console.log('Created new user profile with provider data');
+            
+            // Initialize user session
+            await initializeUserSession(user);
+            
+            // Award welcome achievement
+            await addAchievement(user.uid, 'founding_member');
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Error in createUserProfile:', error);
+        return false;
+    }
+};
+
+// Helper function to extract LinkedIn profile URL from provider data
+function extractLinkedInUrl(user) {
+    if (!user.providerData) return '';
+    
+    const linkedinProvider = user.providerData.find(p => p.providerId === 'linkedin.com');
+    if (linkedinProvider && linkedinProvider.uid) {
+        // LinkedIn UID might contain profile information
+        return `https://linkedin.com/in/${linkedinProvider.uid}`;
+    }
+    
+    return '';
+}
+
+// Enhanced initializeUserSession to handle provider data
+window.initializeUserSession = async function(user) {
+    try {
+        if (!user) return;
+        
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+        
+        if (!userData) {
+            console.log('No user data found, creating profile...');
+            await createUserProfile(user);
+            return;
+        }
+        
+        // Update auth provider information if new provider added
+        if (user.providerData && user.providerData.length > 0) {
+            const currentAuthMethods = userData.authMethods || [];
+            const newAuthMethods = user.providerData.map(p => p.providerId);
+            
+            // Check if there are new auth methods
+            const hasNewMethods = newAuthMethods.some(method => !currentAuthMethods.includes(method));
+            
+            if (hasNewMethods) {
+                // Update auth methods and potentially profile data
+                const updates = {
+                    authMethods: firebase.firestore.FieldValue.arrayUnion(...newAuthMethods)
+                };
+                
+                // Update profile data if coming from a social provider
+                const socialProvider = user.providerData.find(p => 
+                    ['google.com', 'linkedin.com', 'facebook.com'].includes(p.providerId)
+                );
+                
+                if (socialProvider) {
+                    if (socialProvider.displayName && !userData.profile?.displayName) {
+                        updates['profile.displayName'] = socialProvider.displayName;
+                    }
+                    if (socialProvider.photoURL && !userData.profile?.photoURL) {
+                        updates['profile.photoURL'] = socialProvider.photoURL;
+                    }
+                }
+                
+                await firebase.firestore().collection('users').doc(user.uid).update(updates);
+                console.log('Updated auth methods and profile data');
+            }
+        }
+        
+        // Store user data in session
+        window.currentUser = {
+            ...user,
+            userData: userData
+        };
+        
+        console.log('User session initialized');
+    } catch (error) {
+        console.error('Error initializing user session:', error);
+    }
+};
+
 console.log('✅ User management system loaded');
