@@ -456,6 +456,74 @@
                 min-width: unset;
             }
         }
+
+/* Fix for Check In button */
+#quickCheckIn {
+    background: linear-gradient(135deg, #4CAF50, #45a049) !important;
+    color: white !important;
+    padding: 15px 30px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    border: none !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    margin-top: 20px !important;
+    text-align: center !important;
+}
+
+#quickCheckIn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+}
+
+/* Profile section styling */
+.profile-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.profile-section h3 {
+    color: white;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-edit-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.profile-field label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    display: block;
+}
+
+.profile-field p {
+    color: white;
+    margin: 5px 0;
+}
+
+
     </style>
 </head>
 <body>
@@ -643,5 +711,152 @@
             }
         });
     </script>
+<script>
+// Fix Check In button and create profile section
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix Check In button text and style
+    setTimeout(() => {
+        const checkInBtn = document.getElementById('quickCheckIn');
+        if (checkInBtn) {
+            checkInBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Check In at Venue';
+            checkInBtn.style.display = 'block';
+        }
+    }, 1000);
+    
+    // Create profile section after auth
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            setTimeout(() => {
+                ensureProfileSection();
+            }, 1500);
+        }
+    });
+});
+
+// Function to create profile section
+function ensureProfileSection() {
+    // Check if profile section already exists
+    if (document.querySelector('.profile-section')) {
+        return;
+    }
+    
+    // Find passport card
+    const passportCard = document.querySelector('.passport-card');
+    if (!passportCard) {
+        setTimeout(ensureProfileSection, 500);
+        return;
+    }
+    
+    // Get current user
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        return;
+    }
+    
+    // Create profile section
+    const profileSection = document.createElement('div');
+    profileSection.className = 'profile-section';
+    profileSection.innerHTML = `
+        <h3>
+            Profile Information
+            <button class="profile-edit-btn" onclick="showProfileEditModal()">
+                <i class="fas fa-edit"></i> Edit Profile
+            </button>
+        </h3>
+        
+        <div class="profile-grid">
+            <div class="profile-field">
+                <label>Name</label>
+                <p id="profile-name">${user.displayName || 'Not set'}</p>
+            </div>
+            
+            <div class="profile-field">
+                <label>Email</label>
+                <p id="profile-email">${user.email || 'Not set'}</p>
+            </div>
+            
+            <div class="profile-field">
+                <label>Phone</label>
+                <p id="profile-phone">Not set</p>
+            </div>
+            
+            <div class="profile-field">
+                <label>Company</label>
+                <p id="profile-company">Not set</p>
+            </div>
+            
+            <div class="profile-field">
+                <label>Linked Accounts</label>
+                <p id="profile-linked-accounts">
+                    <i class="fab fa-google" style="margin-right: 5px;"></i>
+                </p>
+            </div>
+            
+            <div class="profile-field">
+                <label>Member Since</label>
+                <p id="profile-member-since">${new Date().toLocaleDateString()}</p>
+            </div>
+        </div>
+    `;
+    
+    // Insert after passport card
+    passportCard.parentNode.insertBefore(profileSection, passportCard.nextSibling);
+    
+    // Load actual user data from Firestore
+    loadProfileData(user);
+}
+
+// Load profile data from Firestore
+async function loadProfileData(user) {
+    try {
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+        
+        if (userData && userData.profile) {
+            // Update profile fields
+            if (document.getElementById('profile-name')) {
+                document.getElementById('profile-name').textContent = userData.profile.displayName || user.displayName || 'Not set';
+            }
+            if (document.getElementById('profile-email')) {
+                document.getElementById('profile-email').textContent = userData.profile.email || user.email || 'Not set';
+            }
+            if (document.getElementById('profile-phone')) {
+                document.getElementById('profile-phone').textContent = userData.profile.phoneNumber || 'Not set';
+            }
+            if (document.getElementById('profile-company')) {
+                document.getElementById('profile-company').textContent = userData.profile.company || 'Not set';
+            }
+            
+            // Update member since date
+            if (userData.profile.joinDate && document.getElementById('profile-member-since')) {
+                const joinDate = userData.profile.joinDate.toDate ? userData.profile.joinDate.toDate() : new Date(userData.profile.joinDate);
+                document.getElementById('profile-member-since').textContent = joinDate.toLocaleDateString();
+            }
+            
+            // Update linked accounts icons
+            if (userData.authMethods && userData.authMethods.length > 0) {
+                const icons = {
+                    'google.com': '<i class="fab fa-google"></i>',
+                    'password': '<i class="fas fa-envelope"></i>',
+                    'phone': '<i class="fas fa-phone"></i>',
+                    'linkedin.com': '<i class="fab fa-linkedin"></i>',
+                    'facebook.com': '<i class="fab fa-facebook"></i>'
+                };
+                
+                const linkedAccountsHtml = userData.authMethods
+                    .map(method => icons[method] || '')
+                    .filter(icon => icon)
+                    .join(' ');
+                    
+                if (document.getElementById('profile-linked-accounts')) {
+                    document.getElementById('profile-linked-accounts').innerHTML = linkedAccountsHtml || 'None';
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading profile data:', error);
+    }
+}
+</script>
 </body>
 </html>
