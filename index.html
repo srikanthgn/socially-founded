@@ -368,7 +368,7 @@
                         <i class="fas fa-mobile-alt"></i>
                     </button>
                     
-                    <button class="auth-icon-btn email" data-tooltip="Email" onclick="window.location.href='/passport.html'">
+                    <button class="auth-icon-btn email" data-tooltip="Email" onclick="showEmailAuth()">
                         <i class="fas fa-envelope"></i>
                     </button>
                 </div>
@@ -382,6 +382,10 @@
                 <div class="otp-input-container" id="otpContainer">
                     <!-- Your OTP content here -->
                 </div>
+		<!-- Email Authentication Form -->
+		<div class="email-auth-form" id="emailAuthForm" style="display: none;">
+    		<!-- ... all the email form HTML ... -->
+			</div>
             </div>
         </div>
     </section>
@@ -471,6 +475,103 @@
         if (phoneForm) phoneForm.style.display = 'none';
         if (authGrid) authGrid.style.display = 'grid';
     }
+
+
+// Email Authentication Functions
+function showEmailAuth() {
+    document.getElementById('authIconsGrid').style.display = 'none';
+    document.getElementById('emailAuthForm').style.display = 'block';
+    document.getElementById('emailInput').focus();
+}
+
+function hideEmailAuth() {
+    document.getElementById('emailAuthForm').style.display = 'none';
+    document.getElementById('authIconsGrid').style.display = 'grid';
+    // Reset forms
+    document.getElementById('emailSignInForm').style.display = 'block';
+    document.getElementById('emailSignUpForm').style.display = 'none';
+}
+
+function showEmailSignUp() {
+    document.getElementById('emailSignInForm').style.display = 'none';
+    document.getElementById('emailSignUpForm').style.display = 'block';
+    document.getElementById('nameInputSignUp').focus();
+}
+
+function showEmailSignIn() {
+    document.getElementById('emailSignUpForm').style.display = 'none';
+    document.getElementById('emailSignInForm').style.display = 'block';
+    document.getElementById('emailInput').focus();
+}
+
+async function signInWithEmail() {
+    const email = document.getElementById('emailInput').value;
+    const password = document.getElementById('passwordInput').value;
+    
+    if (!email || !password) {
+        showAuthError('Please enter both email and password');
+        return;
+    }
+    
+    try {
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        console.log('Email sign in successful:', userCredential.user);
+        window.location.href = '/passport.html';
+    } catch (error) {
+        console.error('Email sign in error:', error);
+        if (error.code === 'auth/user-not-found') {
+            showAuthError('No account found with this email. Please sign up first.');
+        } else if (error.code === 'auth/wrong-password') {
+            showAuthError('Incorrect password. Please try again.');
+        } else if (error.code === 'auth/invalid-email') {
+            showAuthError('Please enter a valid email address.');
+        } else {
+            showAuthError(error.message);
+        }
+    }
+}
+
+async function signUpWithEmail() {
+    const name = document.getElementById('nameInputSignUp').value;
+    const email = document.getElementById('emailInputSignUp').value;
+    const password = document.getElementById('passwordInputSignUp').value;
+    
+    if (!name || !email || !password) {
+        showAuthError('Please fill in all fields');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showAuthError('Password must be at least 6 characters');
+        return;
+    }
+    
+    try {
+        // Create the user
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        
+        // Update their display name
+        await userCredential.user.updateProfile({
+            displayName: name
+        });
+        
+        console.log('Email sign up successful:', userCredential.user);
+        
+        // The user-management.js will handle creating the user profile in Firestore
+        window.location.href = '/passport.html';
+    } catch (error) {
+        console.error('Email sign up error:', error);
+        if (error.code === 'auth/email-already-in-use') {
+            showAuthError('An account already exists with this email. Please sign in.');
+        } else if (error.code === 'auth/invalid-email') {
+            showAuthError('Please enter a valid email address.');
+        } else if (error.code === 'auth/weak-password') {
+            showAuthError('Password is too weak. Please use at least 6 characters.');
+        } else {
+            showAuthError(error.message);
+        }
+    }
+}
     
     window.showOTPInput = function(phoneNumber, useWhatsApp) {
         console.log('OTP requested for:', phoneNumber);
