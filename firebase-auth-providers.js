@@ -83,28 +83,20 @@ async function signInWithProvider(providerName) {
 }
 
 // LinkedIn OAuth using existing Cloud Functions
+// LinkedIn OAuth using existing Cloud Functions
 async function signInWithLinkedIn() {
     try {
-        // Get the return URL to pass to the function
-        const returnUrl = window.location.origin;
+        // Get the return URL - remove www if present
+        let returnUrl = window.location.origin;
+        returnUrl = returnUrl.replace('www.', ''); // Remove www
         
-        // Call your startLinkedInAuth function to get the OAuth URL
-        const response = await fetch(`https://us-central1-sociallyfounded-df98f.cloudfunctions.net/startLinkedInAuth?returnUrl=${encodeURIComponent(returnUrl)}`, {
-            method: 'GET'
-        });
+        // Build the auth URL
+        const authUrl = `https://us-central1-sociallyfounded-df98f.cloudfunctions.net/startLinkedInAuth?returnUrl=${encodeURIComponent(returnUrl)}`;
         
-        if (!response.ok) {
-            throw new Error('Failed to start LinkedIn authentication');
-        }
+        console.log('Redirecting to LinkedIn auth:', authUrl);
         
-        const data = await response.json();
-        
-        // Redirect to LinkedIn OAuth URL
-        if (data.authUrl) {
-            window.location.href = data.authUrl;
-        } else {
-            throw new Error('No authentication URL received');
-        }
+        // Direct redirect - no fetch needed
+        window.location.href = authUrl;
         
     } catch (error) {
         console.error('Error signing in with LinkedIn:', error);
