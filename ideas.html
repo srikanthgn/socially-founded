@@ -571,42 +571,38 @@
         });
         
         // Load ideas
-        async function loadIdeas() {
-            try {
-                const ideasRef = firebase.firestore().collection('ideas');
-                const publicIdeas = await ideasRef
-                    .where('isPublic', '==', true)
-                    .orderBy('createdAt', 'desc')
-                    .limit(20)
-                    .get();
-                
-                const myIdeas = await ideasRef
-                    .where('userId', '==', currentUser.uid)
-                    .orderBy('createdAt', 'desc')
-                    .get();
-                
-                const allIdeas = [];
-                const ideaIds = new Set();
-                
-                // Add user's own ideas first
-                myIdeas.forEach(doc => {
-                    allIdeas.push({ id: doc.id, ...doc.data() });
-                    ideaIds.add(doc.id);
-                });
-                
-                // Add public ideas (avoid duplicates)
-                publicIdeas.forEach(doc => {
-                    if (!ideaIds.has(doc.id)) {
-                        allIdeas.push({ id: doc.id, ...doc.data() });
-                    }
-                });
-                
-                displayIdeas(allIdeas);
-                
-            } catch (error) {
-                console.error('Error loading ideas:', error);
+      // Load ideas - SIMPLIFIED VERSION
+async function loadIdeas() {
+    try {
+        // Just get all ideas without complex queries
+        const ideasRef = firebase.firestore().collection('ideas');
+        const snapshot = await ideasRef.get();
+        
+        const allIdeas = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            // Only show public ideas or user's own ideas
+            if (data.isPublic || data.userId === currentUser.uid) {
+                allIdeas.push({ id: doc.id, ...data });
             }
-        }
+        });
+        
+        // Sort by timestamp manually
+        allIdeas.sort((a, b) => {
+            const aTime = a.createdAt?.seconds || 0;
+            const bTime = b.createdAt?.seconds || 0;
+            return bTime - aTime;
+        });
+        
+        console.log('Ideas loaded:', allIdeas.length);
+        displayIdeas(allIdeas);
+        
+    } catch (error) {
+        console.error('Error loading ideas:', error);
+        // Show empty state if error
+        displayIdeas([]);
+    }
+}
         
         // Display ideas
         function displayIdeas(ideas) {
