@@ -1,1 +1,744 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ideas Marketplace - SociallyFounded</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #003554;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .nav-links a.active {
+            color: #003554;
+        }
+        
+        .btn-signout {
+            background: #003554;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .btn-new-idea {
+            background: #003554;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-new-idea:hover {
+            background: #002844;
+        }
+        
+        /* Ideas Grid */
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* Idea Card */
+        .idea-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .idea-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+        
+        .idea-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .idea-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .idea-id {
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: #666;
+            background: #f0f0f0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .idea-description {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .idea-progress {
+            margin-bottom: 1rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.3s ease;
+        }
+        
+        .idea-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .idea-stage {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .idea-visibility {
+            color: #666;
+            font-size: 0.875rem;
+        }
+        
+        /* New Idea Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        
+        .form-toggle {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #4CAF50;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .btn-submit {
+            background: #003554;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn-submit:hover {
+            background: #002844;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-text {
+            margin-bottom: 2rem;
+        }
+        
+        /* Success notification */
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .ideas-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="nav-brand">
+            <i class="fab fa-facebook-f"></i>
+            SociallyFounded
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/venues.html">Venues</a>
+            <a href="/ideas.html" class="active">Ideas</a>
+            <a href="/passport.html">My Passport</a>
+            <button onclick="signOut()" class="btn-signout">Sign Out</button>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>Ideas Marketplace</h1>
+                <p style="color: #666; margin-top: 0.5rem;">Publish your ideas with SF-backed IP protection</p>
+            </div>
+            <button onclick="openNewIdeaModal()" class="btn-new-idea">
+                <i class="fas fa-lightbulb"></i>
+                New Idea
+            </button>
+        </div>
+        
+        <!-- Ideas Grid -->
+        <div id="ideas-container">
+            <div class="ideas-grid" id="ideas-grid">
+                <!-- Ideas will be loaded here -->
+            </div>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <div class="empty-icon">💡</div>
+                <div class="empty-title">No ideas yet</div>
+                <div class="empty-text">Be the first to publish an idea and earn 100 XP!</div>
+                <button onclick="openNewIdeaModal()" class="btn-new-idea" style="margin: 0 auto;">
+                    <i class="fas fa-lightbulb"></i>
+                    Publish Your First Idea
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Idea Modal -->
+    <div class="modal" id="new-idea-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Publish New Idea</h2>
+                <button onclick="closeNewIdeaModal()" class="btn-close">&times;</button>
+            </div>
+            
+            <form id="new-idea-form" onsubmit="publishIdea(event)">
+                <div class="form-group">
+                    <label class="form-label">Idea Title *</label>
+                    <input type="text" class="form-input" id="idea-title" maxlength="100" required>
+                    <div class="char-count"><span id="title-count">0</span>/100</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-textarea" id="idea-description" minlength="100" maxlength="1000" required 
+                              placeholder="Describe your idea in detail (minimum 100 characters)"></textarea>
+                    <div class="char-count"><span id="desc-count">0</span>/1000</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="idea-category">
+                        <option value="tech">Technology</option>
+                        <option value="social">Social Impact</option>
+                        <option value="consumer">Consumer</option>
+                        <option value="b2b">B2B</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="education">Education</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Stage</label>
+                    <select class="form-select" id="idea-stage">
+                        <option value="concept">Concept</option>
+                        <option value="validation">Validation</option>
+                        <option value="building">Building</option>
+                        <option value="scaling">Scaling</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Make Public?</label>
+                    <div class="form-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="idea-public" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span>Allow others to discover and provide feedback</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit">
+                    Publish Idea & Get SF Idea ID
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Success Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Idea published successfully!</span>
+    </div>
+    
+    <!-- Firebase & Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="user-management.js"></script>
+    <script src="idea-system.js"></script>
+    
+    <script>
+        let currentUser = null;
+        let userIdeas = [];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Character counters
+            document.getElementById('idea-title').addEventListener('input', function() {
+                document.getElementById('title-count').textContent = this.value.length;
+            });
+            
+            document.getElementById('idea-description').addEventListener('input', function() {
+                document.getElementById('desc-count').textContent = this.value.length;
+            });
+            
+            // Check auth
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    loadIdeas();
+                } else {
+                    window.location.href = '/';
+                }
+            });
+        });
+        
+        // Load ideas
+        async function loadIdeas() {
+            try {
+                const ideasRef = firebase.firestore().collection('ideas');
+                const publicIdeas = await ideasRef
+                    .where('isPublic', '==', true)
+                    .orderBy('createdAt', 'desc')
+                    .limit(20)
+                    .get();
+                
+                const myIdeas = await ideasRef
+                    .where('userId', '==', currentUser.uid)
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                const allIdeas = [];
+                const ideaIds = new Set();
+                
+                // Add user's own ideas first
+                myIdeas.forEach(doc => {
+                    allIdeas.push({ id: doc.id, ...doc.data() });
+                    ideaIds.add(doc.id);
+                });
+                
+                // Add public ideas (avoid duplicates)
+                publicIdeas.forEach(doc => {
+                    if (!ideaIds.has(doc.id)) {
+                        allIdeas.push({ id: doc.id, ...doc.data() });
+                    }
+                });
+                
+                displayIdeas(allIdeas);
+                
+            } catch (error) {
+                console.error('Error loading ideas:', error);
+            }
+        }
+        
+        // Display ideas
+        function displayIdeas(ideas) {
+            const grid = document.getElementById('ideas-grid');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (ideas.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            emptyState.style.display = 'none';
+            
+            grid.innerHTML = ideas.map(idea => `
+                <div class="idea-card" onclick="viewIdea('${idea.id}')">
+                    <div class="idea-header">
+                        <div>
+                            <h3 class="idea-title">${escapeHtml(idea.title)}</h3>
+                            <div class="idea-id">${idea.sfIdeaId}</div>
+                        </div>
+                    </div>
+                    <p class="idea-description">${escapeHtml(idea.description)}</p>
+                    <div class="idea-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span>${idea.progress || 0}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${idea.progress || 0}%"></div>
+                        </div>
+                    </div>
+                    <div class="idea-footer">
+                        <span class="idea-stage">${formatStage(idea.stage)}</span>
+                        <span class="idea-visibility">
+                            <i class="fas fa-${idea.isPublic ? 'globe' : 'lock'}"></i>
+                            ${idea.isPublic ? 'Public' : 'Private'}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Open new idea modal
+        function openNewIdeaModal() {
+            document.getElementById('new-idea-modal').classList.add('active');
+            document.getElementById('new-idea-form').reset();
+            document.getElementById('title-count').textContent = '0';
+            document.getElementById('desc-count').textContent = '0';
+        }
+        
+        // Close modal
+        function closeNewIdeaModal() {
+            document.getElementById('new-idea-modal').classList.remove('active');
+        }
+        
+        // Publish idea
+        async function publishIdea(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('idea-title').value;
+            const description = document.getElementById('idea-description').value;
+            const category = document.getElementById('idea-category').value;
+            const stage = document.getElementById('idea-stage').value;
+            const isPublic = document.getElementById('idea-public').checked;
+            
+            try {
+                // Create idea using idea-system.js
+                const ideaId = await createIdea({
+                    title,
+                    description,
+                    category,
+                    stage,
+                    isPublic
+                });
+                
+                // Close modal
+                closeNewIdeaModal();
+                
+                // Show success notification
+                showNotification('Idea published successfully! +100 XP earned!');
+                
+                // Reload ideas
+                loadIdeas();
+                
+            } catch (error) {
+                console.error('Error publishing idea:', error);
+                alert('Error publishing idea. Please try again.');
+            }
+        }
+        
+        // View idea details
+        function viewIdea(ideaId) {
+            // For now, just show alert. Later, navigate to idea detail page
+            alert('Idea detail page coming soon!');
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            document.getElementById('notification-text').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Sign out
+        function signOut() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = '/';
+            });
+        }
+        
+        // Helper functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function formatStage(stage) {
+            const stages = {
+                concept: 'Concept',
+                validation: 'Validation',
+                building: 'Building',
+                scaling: 'Scaling'
+            };
+            return stages[stage] || stage;
+        }
+    </script>
+</body>
+</html>
