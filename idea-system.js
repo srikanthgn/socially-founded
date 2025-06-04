@@ -1,7 +1,24 @@
 // idea-system.js
 // Ideas management system with SF Idea ID generation
 // Sprint 2 - June 4, 2025
+// Add this at the very beginning of idea-system.js, after the comments:
 
+// Make getUserData available if not already defined
+if (typeof getUserData === 'undefined') {
+    window.getUserData = async function(userId) {
+        try {
+            const userDoc = await firebase.firestore()
+                .collection('users')
+                .doc(userId)
+                .get();
+            
+            return userDoc.exists ? userDoc.data() : {};
+        } catch (error) {
+            console.error('Error getting user data:', error);
+            return {};
+        }
+    };
+}
 // Generate unique SF Idea ID
 function generateIdeaId() {
     const date = new Date();
