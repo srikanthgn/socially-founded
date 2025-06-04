@@ -754,18 +754,20 @@
             }
         }
         
-        // Share passport function
         
-// Share passport function - SIMPLE AND WORKING
+        // Share passport function - Choose platform
 async function sharePassport() {
-    const shareText = `🚀 I just joined SociallyFounded as Founding Member ${userData?.passport?.id || 'SF-000000'}!
-
-Check in. Engage. Build. Belong.
-
-Join me at: https://sociallyfounded.com`;
+    const shareText = `🚀 I just joined SociallyFounded as Founding Member ${userData?.passport?.id || 'SF-000000'}!\n\nCheck in. Engage. Build. Belong.`;
+    const shareUrl = 'https://sociallyfounded.com';
     
-    // Just open Twitter - it works immediately
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+    // Simple choice
+    if (confirm('Share on LinkedIn? (OK = LinkedIn, Cancel = Twitter)')) {
+        // LinkedIn
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`, '_blank');
+    } else {
+        // Twitter
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${shareUrl}`, '_blank');
+    }
 }
 
         // Edit profile
