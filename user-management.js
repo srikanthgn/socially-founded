@@ -164,6 +164,15 @@ async function awardExperience(userId, points, reason) {
     }
 }
 
+// Look for where newLevel > currentLevel
+if (newLevel > currentLevel) {
+    // Add this line:
+    window.dispatchEvent(new CustomEvent('levelUp', {
+        detail: { oldLevel: currentLevel, newLevel: newLevel, level: newLevel }
+    }));
+}
+
+
 // Calculate level from XP
 function calculateLevel(xp) {
     if (xp < 100) return 1;
