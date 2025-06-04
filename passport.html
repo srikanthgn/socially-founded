@@ -755,22 +755,19 @@
         }
         
         // Share passport function
-        async function sharePassport() {
-            if (!userData) return;
-            
-            // Trigger share with real user data
-            SocialSharing.triggerShare('signup', {
-                passportId: userData.passport?.id || 'SF-000000',
-                name: userData.profile?.name || 'Entrepreneur',
-                stats: {
-                    level: userData.passport?.level || 1,
-                    xp: userData.passport?.experience || 0,
-                    streak: userData.passport?.streak || 0,
-                    checkIns: userData.passport?.totalCheckIns || 0
-                }
-            });
-        }
         
+// Share passport function - SIMPLE AND WORKING
+async function sharePassport() {
+    const shareText = `🚀 I just joined SociallyFounded as Founding Member ${userData?.passport?.id || 'SF-000000'}!
+
+Check in. Engage. Build. Belong.
+
+Join me at: https://sociallyfounded.com`;
+    
+    // Just open Twitter - it works immediately
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+}
+
         // Edit profile
         function editProfile() {
             // In a real app, this would open a modal
