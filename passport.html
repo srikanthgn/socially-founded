@@ -135,6 +135,7 @@
             border: 4px solid white;
             margin-bottom: 1rem;
             object-fit: cover;
+            background: white;
         }
         
         .user-name {
@@ -231,6 +232,11 @@
             background: #45a049;
         }
         
+        .btn-checkin:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
         /* Right Column */
         .right-column {
             background: white;
@@ -277,6 +283,17 @@
         .profile-value {
             font-weight: 600;
             color: #333;
+        }
+        
+        .btn-edit-profile {
+            background: #003554;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            margin-top: 1rem;
         }
         
         /* Achievements Section */
@@ -347,6 +364,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.2rem;
         }
         
         .activity-content {
@@ -370,6 +388,28 @@
             color: #666;
         }
         
+        /* Invite Button */
+        .btn-invite {
+            background: #FFD700;
+            color: #333;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-invite:hover {
+            background: #FFC700;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .content-grid {
@@ -382,6 +422,10 @@
             
             .nav-links {
                 display: none;
+            }
+            
+            .profile-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -447,13 +491,26 @@
                         Check In at Venue
                     </button>
                 </div>
+                
+                <!-- Invite Friends Button -->
+                <button onclick="inviteFriends()" class="btn-invite">
+                    <i class="fas fa-user-plus"></i>
+                    Invite Friends
+                </button>
             </div>
             
             <!-- Right Column - Profile & Achievements -->
             <div class="right-column">
                 <!-- Profile Section -->
                 <div class="profile-section" id="profile-section">
-                    <!-- Profile content will be loaded here -->
+                    <h2 class="section-title">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </h2>
+                    <div class="profile-grid" id="profile-grid">
+                        <!-- Profile items will be loaded here -->
+                    </div>
+                    <button onclick="editProfile()" class="btn-edit-profile">Edit Profile</button>
                 </div>
                 
                 <!-- Achievements Section -->
@@ -487,32 +544,224 @@
     <!-- User Management -->
     <script src="user-management.js"></script>
     
-    <!-- Profile Completion -->
-    <script src="profile-completion.js"></script>
-    
-    <!-- Passport App Logic -->
-    <script src="passport-app.js"></script>
-    
-    <!-- Profile Integration -->
-    <script src="passport-profile-integration.js"></script>
-    
     <!-- Social Sharing Scripts -->
     <script src="social-sharing-engine.js"></script>
     <script src="share-triggers.js"></script>
     
+    <!-- Integrated Passport Logic -->
     <script>
+        // Global variables
+        let currentUser = null;
+        let userData = null;
+        
+        // Test venues for check-in
+        const testVenues = [
+            { id: 'venue_001', name: 'Startup Café', location: 'Downtown' },
+            { id: 'venue_002', name: 'The Founders Hub', location: 'Tech District' },
+            { id: 'venue_003', name: 'Code & Coffee', location: 'Innovation Park' }
+        ];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check auth state
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    currentUser = user;
+                    console.log('User logged in:', user.email);
+                    await loadUserData();
+                    await loadAchievements();
+                    loadRecentActivity();
+                } else {
+                    // Redirect to home if not logged in
+                    window.location.href = '/';
+                }
+            });
+        });
+        
+        // Load user data
+        async function loadUserData() {
+            try {
+                const userDoc = await firebase.firestore()
+                    .collection('users')
+                    .doc(currentUser.uid)
+                    .get();
+                
+                if (userDoc.exists) {
+                    userData = userDoc.data();
+                    updatePassportDisplay();
+                    updateProfileDisplay();
+                } else {
+                    // Create user profile if doesn't exist
+                    await createUserProfile(currentUser);
+                    await loadUserData();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Update passport display
+        function updatePassportDisplay() {
+            // Update avatar
+            const avatarEl = document.getElementById('user-avatar');
+            if (userData.profile?.photoURL) {
+                avatarEl.src = userData.profile.photoURL;
+            }
+            
+            // Update name
+            document.getElementById('user-name').textContent = 
+                userData.profile?.name || currentUser.displayName || 'Entrepreneur';
+            
+            // Update passport ID
+            document.getElementById('passport-id').textContent = 
+                userData.passport?.id || 'SF-000000';
+            
+            // Update stats
+            document.getElementById('stat-level').textContent = 
+                userData.passport?.level || 1;
+            document.getElementById('stat-xp').textContent = 
+                (userData.passport?.experience || 0) + ' XP';
+            document.getElementById('stat-checkins').textContent = 
+                userData.passport?.totalCheckIns || 0;
+            document.getElementById('stat-streak').textContent = 
+                userData.passport?.streak || 0;
+        }
+        
+        // Update profile display
+        function updateProfileDisplay() {
+            const profileGrid = document.getElementById('profile-grid');
+            
+            profileGrid.innerHTML = `
+                <div class="profile-item">
+                    <div class="profile-label">EMAIL</div>
+                    <div class="profile-value">${userData.profile?.email || currentUser.email}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">PHONE</div>
+                    <div class="profile-value">${userData.profile?.phone || 'Not set'}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">COMPANY</div>
+                    <div class="profile-value">${userData.profile?.company || 'Not set'}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">MEMBER SINCE</div>
+                    <div class="profile-value">${formatDate(userData.profile?.joinDate)}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">LINKED ACCOUNTS</div>
+                    <div class="profile-value">${getLinkedAccounts()}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">PASSPORT TIER</div>
+                    <div class="profile-value">${(userData.passport?.tier || 'Navy').toUpperCase()}</div>
+                </div>
+            `;
+        }
+        
+        // Load achievements
+        async function loadAchievements() {
+            const achievementsGrid = document.getElementById('achievements-grid');
+            const userAchievements = userData.passport?.achievements || [];
+            
+            let achievementsHTML = '';
+            
+            // Define all achievements
+            const allAchievements = [
+                { id: 'founding_member', name: 'Founding Member', icon: '🚀' },
+                { id: 'first_checkin', name: 'First Steps', icon: '👣' },
+                { id: 'week_warrior', name: 'Week Warrior', icon: '🔥' },
+                { id: 'monthly_master', name: 'Monthly Master', icon: '💎' },
+                { id: 'rising_founder', name: 'Rising Star', icon: '📈' },
+                { id: 'veteran_builder', name: 'Veteran', icon: '⭐' },
+                { id: 'social_butterfly', name: 'Social Butterfly', icon: '🦋' },
+                { id: 'venue_explorer', name: 'Explorer', icon: '🗺️' }
+            ];
+            
+            allAchievements.forEach(achievement => {
+                const isUnlocked = userAchievements.includes(achievement.id);
+                achievementsHTML += `
+                    <div class="achievement-badge ${isUnlocked ? 'unlocked' : ''}" 
+                         title="${achievement.name}">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-name">${achievement.name}</div>
+                    </div>
+                `;
+            });
+            
+            achievementsGrid.innerHTML = achievementsHTML;
+        }
+        
+        // Load recent activity
+        function loadRecentActivity() {
+            const activityList = document.getElementById('activity-list');
+            
+            // Sample activities (in real app, load from Firestore)
+            const activities = [
+                { icon: '🚀', title: 'Welcome to SociallyFounded!', time: 'Just now' },
+                { icon: '📍', title: 'Ready to make your first check-in', time: 'Get started' },
+                { icon: '🏆', title: 'Unlock achievements as you progress', time: 'Explore' }
+            ];
+            
+            let activityHTML = '';
+            activities.forEach(activity => {
+                activityHTML += `
+                    <div class="activity-item">
+                        <div class="activity-icon">${activity.icon}</div>
+                        <div class="activity-content">
+                            <div class="activity-title">${activity.title}</div>
+                            <div class="activity-time">${activity.time}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            activityList.innerHTML = activityHTML;
+        }
+        
+        // Handle check-in
+        async function handleQuickCheckIn() {
+            const btn = document.getElementById('checkin-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking in...';
+            
+            try {
+                // Select random test venue
+                const venue = testVenues[Math.floor(Math.random() * testVenues.length)];
+                
+                // Record check-in
+                const result = await recordCheckIn(currentUser.uid, venue.id);
+                
+                if (result.success) {
+                    // Reload user data to show updated stats
+                    await loadUserData();
+                    await loadAchievements();
+                    
+                    // Show success message
+                    btn.innerHTML = '<i class="fas fa-check"></i> Checked in!';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Check In at Venue';
+                        btn.disabled = false;
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('Check-in error:', error);
+                btn.innerHTML = '<i class="fas fa-times"></i> Error';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Check In at Venue';
+                    btn.disabled = false;
+                }, 2000);
+            }
+        }
+        
         // Share passport function
         async function sharePassport() {
-            const user = firebase.auth().currentUser;
-            if (!user) return;
-            
-            const userData = await getUserData(user.uid);
-            const passportTier = userData.passport?.tier || 'navy';
+            if (!userData) return;
             
             // Trigger share with real user data
             SocialSharing.triggerShare('signup', {
-                passportId: userData.passport?.id,
-                name: userData.profile?.name,
+                passportId: userData.passport?.id || 'SF-000000',
+                name: userData.profile?.name || 'Entrepreneur',
                 stats: {
                     level: userData.passport?.level || 1,
                     xp: userData.passport?.experience || 0,
@@ -522,7 +771,31 @@
             });
         }
         
-        // Sign out function
+        // Edit profile
+        function editProfile() {
+            // In a real app, this would open a modal
+            alert('Profile editing coming soon!');
+        }
+        
+        // Invite friends
+        function inviteFriends() {
+            // Simple share functionality
+            const shareText = `Join me on SociallyFounded! I'm building my entrepreneurial journey with Digital Passport ${userData.passport?.id}. Sign up at sociallyfounded.com`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join SociallyFounded',
+                    text: shareText,
+                    url: 'https://sociallyfounded.com'
+                });
+            } else {
+                // Fallback - copy to clipboard
+                navigator.clipboard.writeText(shareText);
+                alert('Invite link copied to clipboard!');
+            }
+        }
+        
+        // Sign out
         function signOut() {
             firebase.auth().signOut().then(() => {
                 window.location.href = '/';
@@ -531,15 +804,26 @@
             });
         }
         
-        // Auth state observer
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                console.log('User logged in:', user.email);
-            } else {
-                // Redirect to home if not logged in
-                window.location.href = '/';
-            }
-        });
+        // Helper functions
+        function formatDate(timestamp) {
+            if (!timestamp) return 'Unknown';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString();
+        }
+        
+        function getLinkedAccounts() {
+            // In real app, check actual linked providers
+            const providers = currentUser.providerData.map(p => {
+                switch(p.providerId) {
+                    case 'google.com': return 'Google';
+                    case 'password': return 'Email';
+                    case 'linkedin.com': return 'LinkedIn';
+                    case 'phone': return 'Phone';
+                    default: return p.providerId;
+                }
+            });
+            return providers.join(', ') || 'None';
+        }
     </script>
 </body>
 </html>
