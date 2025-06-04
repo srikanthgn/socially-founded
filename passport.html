@@ -1208,7 +1208,33 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 });
 </script>`
+<!-- Social sharing scripts -->
+<script src="social-sharing-engine.js"></script>
+<script src="share-triggers.js"></script>
 
+<script>
+// Share passport function
+async function sharePassport() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    
+    const userData = await getUserData(user.uid);
+    const passportTier = userData.passport?.tier || 'navy';
+    
+    // Trigger share with real user data
+    SocialSharing.triggerShare('signup', {
+        passportId: userData.passport?.id,
+        name: userData.profile?.name,
+        stats: {
+            level: userData.passport?.level || 1,
+            xp: userData.passport?.experience || 0,
+            streak: userData.passport?.streak || 0,
+            checkIns: userData.passport?.totalCheckIns || 0
+        }
+    });
+}
+</script>
+    
     
 </body>
 </html>
