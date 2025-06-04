@@ -696,6 +696,13 @@
                             <div class="stat-label">Day Streak</div>
                         </div>
                     </div>
+
+                    // Add to the passport card section (after the stats grid):
+`<div class="share-passport-btn">
+    <button onclick="sharePassport()" class="btn-share-passport">
+        <i class="fas fa-share-alt"></i> Share My Passport
+    </button>
+</div>`
                     
                     <button id="quickCheckIn" onclick="handleQuickCheckIn()">
                         <i class="fas fa-map-marker-alt"></i> Check In at Venue
@@ -1160,5 +1167,48 @@
         `;
         document.head.appendChild(style);
     </script>
+<script src="social-sharing-engine.js"></script>
+<script>
+// Share passport function
+async function sharePassport() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    
+    const userData = await getUserData(user.uid);
+    const passportTier = userData.passport?.tier || 'navy';
+    
+    // Trigger appropriate share based on tier
+    if (passportTier === 'navy') {
+        // First time signup share
+        SocialSharing.triggerShare('signup', {
+            passportId: userData.passport?.id
+        });
+    } else {
+        // Passport upgrade share
+        SocialSharing.triggerShare(`passportUpgrade.${passportTier}`, {
+            passportTier: passportTier
+        });
+    }
+}
+
+// Auto-trigger signup share for new users
+window.addEventListener('DOMContentLoaded', async () => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        const userData = await getUserData(user.uid);
+        // If user joined in last 5 minutes, show signup share
+        const joinDate = userData.profile?.joinDate?.toDate();
+        if (joinDate && (Date.now() - joinDate.getTime()) < 5 * 60 * 1000) {
+            setTimeout(() => {
+                SocialSharing.triggerShare('signup', {
+                    passportId: userData.passport?.id
+                });
+            }, 3000);
+        }
+    }
+});
+</script>`
+
+    
 </body>
 </html>
