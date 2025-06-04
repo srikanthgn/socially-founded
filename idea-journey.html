@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Idea Journey - Napkin to Funded Venture | SociallyFounded</title>
+    <meta name="description" content="Transform your napkin idea into a fundable venture in 28 days with AI-powered incubation">
+    
+    <!-- Existing CSS links from your site -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile-fixes.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Page-specific styles */
+        .journey-hero {
+            background: linear-gradient(135deg, #003554 0%, #1B2951 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .journey-hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .journey-tagline {
+            font-size: 24px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .journey-stages {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stage {
+            display: flex;
+            align-items: center;
+            margin-bottom: 80px;
+            gap: 60px;
+        }
+        
+        .stage:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .stage-content {
+            flex: 1;
+        }
+        
+        .stage-visual {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .stage-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: #003554;
+            color: white;
+            border-radius: 50%;
+            line-height: 60px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .stage h2 {
+            font-size: 36px;
+            color: #003554;
+            margin-bottom: 10px;
+        }
+        
+        .stage-subtitle {
+            font-size: 20px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .stage-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .stage-features li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .stage-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .journey-cta {
+            background: #f5f5f5;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #003554;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.3);
+        }
+        
+        .comparison-table {
+            max-width: 1000px;
+            margin: 60px auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th {
+            background: #003554;
+            color: white;
+            padding: 20px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .journey-visual {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 40px 0;
+        }
+        
+        .arrow {
+            display: inline-block;
+            margin: 0 20px;
+            color: #003554;
+            font-size: 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .stage {
+                flex-direction: column !important;
+                gap: 30px;
+            }
+            
+            .journey-hero h1 {
+                font-size: 32px;
+            }
+            
+            .journey-tagline {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (reuse existing nav) -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <img src="SF Logo.svg" alt="SociallyFounded" class="logo">
+            </div>
+            <div class="nav-right desktop-nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="idea-journey.html" class="active">Idea Journey</a>
+                <a href="passport.html">Digital Passport</a>
+                <a href="ideas.html">Ideas</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="journey-hero">
+        <h1>The SociallyFounded Idea Journey</h1>
+        <p class="journey-tagline">Turn your napkin idea into a fundable venture in 28 days</p>
+    </section>
+
+    <!-- Journey Visualization -->
+    <section class="journey-stages">
+        <div class="journey-visual">
+            <h2 style="text-align: center; margin-bottom: 30px;">Your Transformation Path</h2>
+            <div style="text-align: center; font-size: 24px;">
+                <span style="color: #003554; font-weight: 700;">NAPKIN</span>
+                <span class="arrow">→</span>
+                <span style="color: #003554; font-weight: 700;">CERTIFICATE</span>
+                <span class="arrow">→</span>
+                <span style="color: #003554; font-weight: 700;">EXPERIENCE</span>
+                <span class="arrow">→</span>
+                <span style="color: #4CAF50; font-weight: 700;">LAUNCH</span>
+            </div>
+        </div>
+
+        <!-- Stage 1: Napkin -->
+        <div class="stage">
+            <div class="stage-content">
+                <div class="stage-number">1</div>
+                <h2>Idea Napkin</h2>
+                <p class="stage-subtitle">"Scribble it before you lose it"</p>
+                <p>Every billion-dollar company started with a simple idea. At SociallyFounded, we believe your napkin scribble deserves protection from day one. In just 30 seconds, transform your raw idea into a protected concept with our revolutionary SF Idea ID.</p>
+                <ul class="stage-features">
+                    <li>Voice-to-text capture for ideas on the go</li>
+                    <li>Photo upload of actual napkin sketches</li>
+                    <li>Instant SF-IDEA-XXXXX protection</li>
+                    <li>Timestamp verification for IP claims</li>
+                    <li>100 XP reward for your first idea</li>
+                </ul>
+            </div>
+            <div class="stage-visual">
+                <!-- Placeholder for napkin illustration -->
+                <div style="width: 300px; height: 300px; background: #f5f5f5; border-radius: 12px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 72px;">📝</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage 2: Certificate -->
+        <div class="stage">
+            <div class="stage-content">
+                <div class="stage-number">2</div>
+                <h2>Idea Certificate</h2>
+                <p class="stage-subtitle">"Make it official"</p>
+                <p>Your idea deserves more than a text file. Our AI-powered certificate system creates a beautiful, professional document that validates your innovation. Perfect for sharing on LinkedIn, adding to your portfolio, or showing potential co-founders.</p>
+                <ul class="stage-features">
+                    <li>AI-generated executive summary</li>
+                    <li>Professional PDF design</li>
+                    <li>QR code linking to your protected idea</li>
+                    <li>Social media ready formatting</li>
+                    <li>Legal timestamp documentation</li>
+                </ul>
+            </div>
+            <div class="stage-visual">
+                <div style="width: 300px; height: 300px; background: #f5f5f5; border-radius: 12px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 72px;">🎓</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage 3: Experience -->
+        <div class="stage">
+            <div class="stage-content">
+                <div class="stage-number">3</div>
+                <h2>Idea Experience</h2>
+                <p class="stage-subtitle">"Your AI co-founder journey"</p>
+                <p>This is where the magic happens. Over 28 days, work with your AI co-founder to transform your napkin idea into an investment-ready venture. Daily challenges, personalized guidance, and a structured path from concept to launch.</p>
+                <ul class="stage-features">
+                    <li>4-week structured incubation program</li>
+                    <li>Daily 15-minute AI sessions</li>
+                    <li>Market validation exercises</li>
+                    <li>MVP development guidance</li>
+                    <li>Pitch deck creation</li>
+                    <li>Investor readiness scoring</li>
+                </ul>
+            </div>
+            <div class="stage-visual">
+                <div style="width: 300px; height: 300px; background: #f5f5f5; border-radius: 12px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 72px;">🚀</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section style="background: #f5f5f5; padding: 80px 20px;">
+        <h2 style="text-align: center; font-size: 36px; margin-bottom: 40px;">Traditional vs. SociallyFounded</h2>
+        <div class="comparison-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Traditional Accelerators</th>
+                        <th>SociallyFounded Experience</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Access</strong></td>
+                        <td>Apply and hope for <2% acceptance</td>
+                        <td>Start immediately, no application</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost</strong></td>
+                        <td>7% equity forever</td>
+                        <td>$49/month, cancel anytime</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Location</strong></td>
+                        <td>Relocate to Silicon Valley</td>
+                        <td>Build from anywhere</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Duration</strong></td>
+                        <td>Fixed 3-month program</td>
+                        <td>28-day sprints, repeat as needed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Support</strong></td>
+                        <td>Generic mentor meetings</td>
+                        <td>24/7 AI co-founder + community</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IP Protection</strong></td>
+                        <td>Figure it out yourself</td>
+                        <td>Instant SF Idea ID protection</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- The Experience Journey -->
+    <section style="padding: 80px 20px; max-width: 1000px; margin: 0 auto;">
+        <h2 style="text-align: center; font-size: 36px; margin-bottom: 40px;">The 28-Day Experience Journey</h2>
+        
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+            <h3 style="color: #003554; margin-bottom: 20px;">Week 1: Discovery & Validation</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0;">📊 Day 1-2: Problem deep dive and market sizing</li>
+                <li style="padding: 10px 0;">👥 Day 3-4: Customer avatar and pain point mapping</li>
+                <li style="padding: 10px 0;">🔍 Day 5-6: Competition analysis and differentiation</li>
+                <li style="padding: 10px 0;">✅ Day 7: Week 1 milestone and badge unlock</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-top: 30px;">
+            <h3 style="color: #003554; margin-bottom: 20px;">Week 2: Solution Architecture</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0;">🏗️ Day 8-9: MVP feature prioritization</li>
+                <li style="padding: 10px 0;">🛠️ Day 10-11: Technical roadmap creation</li>
+                <li style="padding: 10px 0;">💰 Day 12-13: Resource planning and budgeting</li>
+                <li style="padding: 10px 0;">🏆 Day 14: Builder badge achievement</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-top: 30px;">
+            <h3 style="color: #003554; margin-bottom: 20px;">Week 3: Market Testing</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0;">🌐 Day 15-16: Landing page creation</li>
+                <li style="padding: 10px 0;">🎤 Day 17-18: Customer interviews</li>
+                <li style="padding: 10px 0;">📈 Day 19-20: Pricing strategy</li>
+                <li style="padding: 10px 0;">🎯 Day 21: Validator badge earned</li>
+            </ul>
+        </div>
+
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-top: 30px;">
+            <h3 style="color: #003554; margin-bottom: 20px;">Week 4: Launch Preparation</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0;">📊 Day 22-23: Pitch deck creation</li>
+                <li style="padding: 10px 0;">🚀 Day 24-25: Go-to-market strategy</li>
+                <li style="padding: 10px 0;">💎 Day 26-27: Investor preparation</li>
+                <li style="padding: 10px 0;">🎓 Day 28: Graduation and Founder badge</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="journey-cta">
+        <h2 style="font-size: 36px; margin-bottom: 20px;">Ready to Start Your Journey?</h2>
+        <p style="font-size: 20px; margin-bottom: 40px;">Join thousands of founders who are turning napkin ideas into funded ventures.</p>
+        <a href="passport.html" class="cta-button">Start Your Idea Journey</a>
+        <p style="margin-top: 20px; color: #666;">Free to start • No equity required • Cancel anytime</p>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #003554; color: white; padding: 40px 20px; text-align: center;">
+        <p>&copy; 2025 SociallyFounded. All rights reserved.</p>
+        <p style="margin-top: 10px; opacity: 0.8;">Napkin. Certificate. Experience. Launch.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="mobile-script-fixes.js"></script>
+</body>
+</html>
