@@ -564,19 +564,39 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             // Check auth state
-            firebase.auth().onAuthStateChanged(async (user) => {
-                if (user) {
-                    currentUser = user;
-                    console.log('User logged in:', user.email);
-                    await loadUserData();
-                    await loadAchievements();
-                    loadRecentActivity();
-                } else {
-                    // Redirect to home if not logged in
+            // Give Firebase time to restore auth session on mobile
+    let authChecked = false;
+    
+    firebase.auth().onAuthStateChanged((user) => {
+        authChecked = true;
+        if (user) {
+            currentUser = user;
+            console.log('User logged in:', user.email);
+            loadUserData();
+        } else {
+            console.log('No user found, waiting...');
+            // Wait a bit longer on mobile for auth to restore
+            setTimeout(() => {
+                if (!firebase.auth().currentUser) {
+                    console.log('Still no user, redirecting to home');
                     window.location.href = '/';
                 }
-            });
-        });
+            }, 2000); // Wait 2 seconds before redirecting
+        }
+    });
+    
+    // Fallback - if auth state never fires, check manually
+    setTimeout(() => {
+        if (!authChecked) {
+            console.log('Auth state never fired, checking manually');
+            if (firebase.auth().currentUser) {
+                currentUser = firebase.auth().currentUser;
+                loadUserData();
+            } else {
+                window.location.href = '/';
+            }
+        }
+    }, 3000);
         
         // Load user data
         async function loadUserData() {
