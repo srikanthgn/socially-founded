@@ -594,5 +594,34 @@ window.initializeUserSession = async function(user) {
         console.error('Error initializing user session:', error);
     }
 };
+// 1. UPDATE user-management.js - Add these functions:
+
+// Emit level up event for social sharing
+function emitLevelUpEvent(oldLevel, newLevel) {
+    window.dispatchEvent(new CustomEvent('levelUp', {
+        detail: { oldLevel, newLevel, level: newLevel }
+    }));
+}
+
+// Emit achievement event for social sharing
+function emitAchievementEvent(achievement) {
+    window.dispatchEvent(new CustomEvent('achievementUnlocked', {
+        detail: achievement
+    }));
+}
+
+// Update the awardExperience function to emit level up events:
+// Find the section where level increases and add:
+if (newLevel > currentLevel) {
+    emitLevelUpEvent(currentLevel, newLevel);
+}
+
+// Update the addAchievement function to emit achievement events:
+// After successfully adding achievement, add:
+emitAchievementEvent({
+    key: achievementKey,
+    name: achievementDef.name,
+    icon: achievementDef.icon
+});
 
 console.log('✅ User management system loaded');
