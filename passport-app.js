@@ -1,6 +1,30 @@
 // passport-app.js
 // Digital Passport functionality for SociallyFounded
+// Add this CSS to the passport styles:
+`.share-passport-btn {
+    text-align: center;
+    margin-top: 20px;
+}
 
+.btn-share-passport {
+    background: linear-gradient(45deg, #0077B5, #1DA1F2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-share-passport:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 119, 181, 0.3);
+}`
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Digital Passport app initializing...');
