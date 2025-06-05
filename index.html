@@ -893,5 +893,250 @@
 <script src="mobile-nav-fix.js"></script>
     <script src="mobile-nav-fix.js"></script>
 <link rel="stylesheet" href="mobile-auth-fix.css">
+    <!-- Mobile Passport Enhancement Script -->
+<!-- Add this single block right before the closing </body> tag in your index.html -->
+
+<style>
+/* Mobile Passport Showcase - Only applies on mobile */
+@media (max-width: 768px) {
+    /* Show the passport section on mobile */
+    .hero-visual {
+        display: block !important;
+        margin-top: 40px;
+        padding: 0 20px;
+    }
+    
+    /* Passport Carousel Container */
+    .passport-stack {
+        position: relative;
+        transform: none;
+        height: 400px;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    /* Reset passport positions for mobile carousel */
+    .passport-card {
+        position: absolute;
+        width: 280px;
+        height: 360px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: all 0.5s ease;
+        cursor: grab;
+    }
+    
+    /* Passport carousel states */
+    .passport-card.mobile-active {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        z-index: 10;
+    }
+    
+    .passport-card.mobile-prev {
+        opacity: 0.3;
+        transform: translate(-120%, -50%) scale(0.8) rotateY(45deg);
+        z-index: 5;
+    }
+    
+    .passport-card.mobile-next {
+        opacity: 0.3;
+        transform: translate(20%, -50%) scale(0.8) rotateY(-45deg);
+        z-index: 5;
+    }
+    
+    /* Carousel indicators */
+    .passport-indicators {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
+    
+    .passport-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(0, 53, 84, 0.3);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .passport-indicator.active {
+        width: 24px;
+        border-radius: 4px;
+        background: #003554;
+    }
+    
+    /* Swipe hint */
+    .swipe-hint {
+        text-align: center;
+        margin-top: 15px;
+        color: #6c757d;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        animation: swipeHint 2s ease-in-out infinite;
+    }
+    
+    @keyframes swipeHint {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(-10px); }
+    }
+    
+    /* Floating animation for active passport */
+    @keyframes mobileFloat {
+        0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+        50% { transform: translate(-50%, -50%) translateY(-10px); }
+    }
+    
+    .passport-card.mobile-active {
+        animation: mobileFloat 3s ease-in-out infinite;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .passport-card {
+        width: 260px;
+        height: 340px;
+    }
+}
+</style>
+
+<script>
+// Mobile Passport Carousel
+(function() {
+    // Only run on mobile
+    function checkMobile() {
+        return window.innerWidth <= 768;
+    }
+    
+    function initMobilePassports() {
+        if (!checkMobile()) return;
+        
+        const heroVisual = document.querySelector('.hero-visual');
+        const passportStack = document.querySelector('.passport-stack');
+        const passportCards = document.querySelectorAll('.passport-card');
+        
+        if (!heroVisual || !passportStack || passportCards.length === 0) return;
+        
+        // Create indicators if they don't exist
+        if (!document.querySelector('.passport-indicators')) {
+            const indicators = document.createElement('div');
+            indicators.className = 'passport-indicators';
+            
+            passportCards.forEach((card, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = 'passport-indicator';
+                if (index === 0) indicator.classList.add('active');
+                indicator.onclick = () => showPassport(index);
+                indicators.appendChild(indicator);
+            });
+            
+            heroVisual.appendChild(indicators);
+            
+            // Add swipe hint
+            const swipeHint = document.createElement('div');
+            swipeHint.className = 'swipe-hint';
+            swipeHint.innerHTML = '<i class="fas fa-arrow-left"></i> Swipe to explore <i class="fas fa-arrow-right"></i>';
+            heroVisual.appendChild(swipeHint);
+        }
+        
+        let currentIndex = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        // Show first passport
+        showPassport(0);
+        
+        // Touch events
+        passportStack.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        passportStack.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+        
+        function handleSwipe() {
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    // Swipe left
+                    currentIndex = (currentIndex + 1) % passportCards.length;
+                } else {
+                    // Swipe right
+                    currentIndex = (currentIndex - 1 + passportCards.length) % passportCards.length;
+                }
+                showPassport(currentIndex);
+            }
+        }
+        
+        function showPassport(index) {
+            passportCards.forEach((card, i) => {
+                card.classList.remove('mobile-active', 'mobile-prev', 'mobile-next');
+                
+                if (i === index) {
+                    card.classList.add('mobile-active');
+                } else if (i === (index - 1 + passportCards.length) % passportCards.length) {
+                    card.classList.add('mobile-prev');
+                } else if (i === (index + 1) % passportCards.length) {
+                    card.classList.add('mobile-next');
+                }
+            });
+            
+            // Update indicators
+            document.querySelectorAll('.passport-indicator').forEach((ind, i) => {
+                ind.classList.toggle('active', i === index);
+            });
+            
+            currentIndex = index;
+        }
+        
+        // Auto-rotate
+        setInterval(() => {
+            if (checkMobile() && !document.hidden) {
+                currentIndex = (currentIndex + 1) % passportCards.length;
+                showPassport(currentIndex);
+            }
+        }, 4000);
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobilePassports);
+    } else {
+        initMobilePassports();
+    }
+    
+    // Handle resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            if (checkMobile()) {
+                initMobilePassports();
+            } else {
+                // Clean up mobile elements when going back to desktop
+                const indicators = document.querySelector('.passport-indicators');
+                const hint = document.querySelector('.swipe-hint');
+                if (indicators) indicators.remove();
+                if (hint) hint.remove();
+                
+                // Remove mobile classes
+                document.querySelectorAll('.passport-card').forEach(card => {
+                    card.classList.remove('mobile-active', 'mobile-prev', 'mobile-next');
+                });
+            }
+        }, 250);
+    });
+})();
+</script>
 </body>
 </html>
