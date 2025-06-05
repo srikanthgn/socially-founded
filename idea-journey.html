@@ -3,487 +3,1129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Idea Journey - Napkin to Funded Venture | SociallyFounded</title>
-    <meta name="description" content="Transform your napkin idea into a fundable venture in 28 days with AI-powered incubation">
+    <title>The Idea Journey - Transform Your Vision | SociallyFounded</title>
+    <meta name="description" content="Transform your napkin idea into a fundable venture with AI-powered incubation">
     
-    <!-- Existing CSS links from your site -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="mobile-fixes.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Navigation styles to match other pages */
-        .journey-stages {
-    padding: 40px 20px; /* Reduced from 80px */
-}
-
-.stage {
-    margin-bottom: 40px; /* Reduced from 80px */
-    gap: 30px; /* Reduced from 60px */
-}
-
-.journey-visual {
-    margin: 20px 0; /* Reduced from 40px */
-}
-nav {
-    background: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1rem 2rem;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: #003554;
-    font-weight: 600;
-}
-
-.logo img {
-    width: 40px;
-    height: 40px;
-}
-
-.logo-text {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #003554;
-}
-
-.nav-links {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #666;
-    font-weight: 500;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-    color: #003554;
-}
-
-.get-started-btn {
-    background: #003554;
-    color: white !important;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    font-weight: 500;
-}
-
-/* Fix hero section position */
-.journey-hero {
-    margin-top: 80px; /* Account for fixed nav */
-}
-        /* Page-specific styles */
-        .journey-hero {
-            background: linear-gradient(135deg, #003554 0%, #1B2951 100%);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        .journey-hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            font-weight: 700;
+        :root {
+            --sf-navy: #003554;
+            --sf-navy-dark: #001f3f;
+            --sf-gold: #D4AF37;
+            --sf-burgundy: #800020;
+            --sf-platinum: #E5E4E2;
+            --sf-white: #ffffff;
+            --sf-gray-light: #f8f9fa;
+            --sf-gray: #6c757d;
+            --sf-success: #28a745;
         }
         
-        .journey-tagline {
-            font-size: 24px;
-            font-weight: 300;
-            opacity: 0.9;
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
         
-        .journey-stages {
-            padding: 80px 20px;
+        /* Navigation (matching homepage) */
+        nav {
+            background: var(--sf-white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        nav.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-container {
             max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--sf-navy);
+        }
+        
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--sf-navy);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--sf-gold);
+        }
+        
+        .get-started-btn {
+            background: var(--sf-navy);
+            color: white !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .get-started-btn:hover {
+            background: var(--sf-navy-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,53,84,0.3);
+        }
+        
+        /* Hero Section */
+        .journey-hero {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .journey-hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -250px;
+            right: -250px;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .journey-hero::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 53, 84, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -150px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.1); }
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
             margin: 0 auto;
         }
         
-        .stage {
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--sf-navy);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-content .highlight {
+            color: var(--sf-gold);
+            position: relative;
+        }
+        
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--sf-gray);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .journey-stats {
             display: flex;
-            align-items: center;
-            margin-bottom: 80px;
-            gap: 60px;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
         }
         
-        .stage:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-        
-        .stage-content {
-            flex: 1;
-        }
-        
-        .stage-visual {
-            flex: 1;
+        .stat {
             text-align: center;
         }
         
-        .stage-number {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            background: #003554;
-            color: white;
-            border-radius: 50%;
-            line-height: 60px;
-            font-size: 24px;
+        .stat-number {
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 20px;
+            color: var(--sf-navy);
         }
         
-        .stage h2 {
-            font-size: 36px;
-            color: #003554;
+        .stat-label {
+            color: var(--sf-gray);
+            font-size: 0.95rem;
+        }
+        
+        /* Journey Path Visual */
+        .journey-path {
+            padding: 80px 0;
+            background: white;
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--sf-navy);
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--sf-gray);
+        }
+        
+        .path-visual {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        .path-line {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--sf-navy) 0%, var(--sf-gold) 50%, var(--sf-success) 100%);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+        
+        .path-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .path-step {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            flex: 1;
+            margin: 0 15px;
+        }
+        
+        .path-step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--sf-gray-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .path-step:nth-child(1) .step-icon {
+            background: var(--sf-navy);
+            color: white;
+        }
+        
+        .path-step:nth-child(2) .step-icon {
+            background: var(--sf-burgundy);
+            color: white;
+        }
+        
+        .path-step:nth-child(3) .step-icon {
+            background: linear-gradient(45deg, #B8860B, #FFD700);
+            color: white;
+        }
+        
+        .path-step:nth-child(4) .step-icon {
+            background: var(--sf-success);
+            color: white;
+        }
+        
+        .path-step h3 {
+            font-size: 1.3rem;
+            color: var(--sf-navy);
             margin-bottom: 10px;
         }
         
-        .stage-subtitle {
-            font-size: 20px;
-            color: #666;
+        .path-step p {
+            color: var(--sf-gray);
+            font-size: 0.95rem;
+        }
+        
+        /* Journey Details */
+        .journey-details {
+            padding: 80px 0;
+            background: var(--sf-gray-light);
+        }
+        
+        .details-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .detail-card {
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .detail-card:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        
+        .detail-card:nth-child(even) {
+            grid-template-columns: 1fr 1fr;
+            direction: rtl;
+        }
+        
+        .detail-card:nth-child(even) > * {
+            direction: ltr;
+        }
+        
+        .detail-content h3 {
+            font-size: 2rem;
+            color: var(--sf-navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .detail-number {
+            display: inline-flex;
+            width: 50px;
+            height: 50px;
+            background: var(--sf-navy);
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .detail-content .subtitle {
+            font-size: 1.2rem;
+            color: var(--sf-gold);
             font-style: italic;
             margin-bottom: 20px;
         }
         
-        .stage-features {
-            list-style: none;
-            padding: 0;
+        .detail-content p {
+            color: var(--sf-gray);
+            margin-bottom: 20px;
+            line-height: 1.8;
         }
         
-        .stage-features li {
-            padding: 10px 0;
-            padding-left: 30px;
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list i {
+            color: var(--sf-success);
+        }
+        
+        .detail-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
         
-        .stage-features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #4CAF50;
-            font-weight: bold;
-        }
-        
-        .journey-cta {
-            background: #f5f5f5;
-            padding: 80px 20px;
-            text-align: center;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: #003554;
+        .visual-card {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--sf-navy) 0%, var(--sf-navy-dark) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,53,84,0.3);
             color: white;
-            padding: 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transform: rotate(-5deg);
+            transition: all 0.3s;
+        }
+        
+        .detail-card:hover .visual-card {
+            transform: rotate(0deg) scale(1.05);
+        }
+        
+        .visual-card i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .visual-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .visual-card p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        /* 28-Day Timeline */
+        .timeline-section {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .timeline-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .week {
+            background: var(--sf-gray-light);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .week::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--sf-navy);
+        }
+        
+        .week:nth-child(2)::before {
+            background: var(--sf-burgundy);
+        }
+        
+        .week:nth-child(3)::before {
+            background: var(--sf-gold);
+        }
+        
+        .week:nth-child(4)::before {
+            background: var(--sf-success);
+        }
+        
+        .week h3 {
+            font-size: 1.5rem;
+            color: var(--sf-navy);
+            margin-bottom: 20px;
+        }
+        
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .day {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .day:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        }
+        
+        .day-number {
+            font-weight: 700;
+            color: var(--sf-navy);
+            margin-bottom: 5px;
+        }
+        
+        .day-task {
+            font-size: 0.9rem;
+            color: var(--sf-gray);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: var(--sf-navy);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -400px;
+            right: -400px;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .btn-cta {
+            background: white;
+            color: var(--sf-navy);
+            padding: 1rem 2.5rem;
             border-radius: 50px;
             text-decoration: none;
-            font-size: 20px;
             font-weight: 600;
-            transition: transform 0.3s;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .cta-button:hover {
+        .btn-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.3);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.3);
         }
         
-        .comparison-table {
+        .cta-features {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .cta-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.9;
+        }
+        
+        .cta-feature i {
+            color: var(--sf-gold);
+            font-size: 1.2rem;
+        }
+        
+        /* Comparison Table */
+        .comparison-section {
+            padding: 80px 0;
+            background: var(--sf-gray-light);
+        }
+        
+        .comparison-grid {
             max-width: 1000px;
-            margin: 60px auto;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .comparison-card {
             background: white;
-            border-radius: 12px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
         
-        .comparison-table table {
-            width: 100%;
-            border-collapse: collapse;
+        .comparison-card.featured {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
         }
         
-        .comparison-table th {
-            background: #003554;
+        .comparison-card.featured::before {
+            content: 'RECOMMENDED';
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: var(--sf-gold);
             color: white;
-            padding: 20px;
-            text-align: left;
+            padding: 5px 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transform: rotate(45deg);
         }
         
-        .comparison-table td {
-            padding: 20px;
+        .comparison-card h3 {
+            font-size: 1.8rem;
+            color: var(--sf-navy);
+            margin-bottom: 20px;
+        }
+        
+        .comparison-list {
+            list-style: none;
+        }
+        
+        .comparison-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             border-bottom: 1px solid #eee;
         }
         
-        .journey-visual {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin: 40px 0;
+        .comparison-list li:last-child {
+            border-bottom: none;
         }
         
-        .arrow {
-            display: inline-block;
-            margin: 0 20px;
-            color: #003554;
-            font-size: 24px;
+        .comparison-list i.fa-check {
+            color: var(--sf-success);
         }
         
+        .comparison-list i.fa-times {
+            color: #dc3545;
+        }
+        
+        /* Footer */
+        footer {
+            background: #001f3f;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .stage {
-                flex-direction: column !important;
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .journey-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .path-steps {
+                flex-direction: column;
                 gap: 30px;
             }
             
-            .journey-hero h1 {
-                font-size: 32px;
+            .path-line {
+                display: none;
             }
             
-            .journey-tagline {
-                font-size: 18px;
+            .path-step {
+                margin: 0;
+            }
+            
+            .detail-card {
+                grid-template-columns: 1fr;
+                padding: 40px 30px;
+            }
+            
+            .detail-card:nth-child(even) {
+                direction: ltr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-card.featured {
+                transform: scale(1);
+            }
+            
+            .cta-features {
+                flex-direction: column;
+                gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation (reuse existing nav) -->
-    <!-- Replace the navigation section in idea-journey.html with this -->
-<nav>
-    <div class="nav-container">
-        <a href="/index.html" class="logo">
-            <img src="favicon.svg" alt="SociallyFounded">
-            <span class="logo-text">SociallyFounded</span>
-        </a>
-        
-        <div class="nav-links">
-            <a href="/index.html">Home</a>
-            <a href="/about.html">About</a>
-            <a href="/ideas.html">Ideas</a>
-            <a href="/idea-journey.html" class="active">Idea Journey</a>
-            <a href="/passport.html">My Passport</a>
-            <a href="/auth.html" class="get-started-btn">Get Your Passport</a>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="/index.html" class="logo">
+                <img src="favicon.svg" alt="SociallyFounded">
+                <span class="logo-text">SociallyFounded</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="/index.html">Home</a>
+                <a href="/about.html">About</a>
+                <a href="/ideas.html">Ideas</a>
+                <a href="/idea-journey.html" class="active">Idea Journey</a>
+                <a href="/passport.html">My Passport</a>
+                <a href="/auth.html" class="get-started-btn">Get Your Passport</a>
+            </div>
         </div>
-    </div>
-</nav>
-
+    </nav>
+    
     <!-- Hero Section -->
     <section class="journey-hero">
-        <h1>The SociallyFounded Idea Journey</h1>
-        <p class="journey-tagline">Turn your napkin idea into a fundable venture in 28 days</p>
-    </section>
-
-    <!-- Journey Visualization -->
-    <section class="journey-stages">
-        <div class="journey-visual">
-            <h2 style="text-align: center; margin-bottom: 30px;">Your Transformation Path</h2>
-            <div style="text-align: center; font-size: 24px;">
-                <span style="color: #003554; font-weight: 700;">NAPKIN</span>
-                <span class="arrow">→</span>
-                <span style="color: #003554; font-weight: 700;">CERTIFICATE</span>
-                <span class="arrow">→</span>
-                <span style="color: #003554; font-weight: 700;">EXPERIENCE</span>
-                <span class="arrow">→</span>
-                <span style="color: #4CAF50; font-weight: 700;">LAUNCH</span>
-            </div>
-        </div>
-
-        <!-- Stage 1: Napkin -->
-        <div class="stage">
-            <div class="stage-content">
-                <div class="stage-number">1</div>
-                <h2>Idea Napkin</h2>
-                <p class="stage-subtitle">"Scribble it before you lose it"</p>
-                <p>Every billion-dollar company started with a simple idea. At SociallyFounded, we believe your napkin scribble deserves protection from day one. In just 30 seconds, transform your raw idea into a protected concept with our revolutionary SF Idea ID.</p>
-                <ul class="stage-features">
-                    <li>Voice-to-text capture for ideas on the go</li>
-                    <li>Photo upload of actual napkin sketches</li>
-                    <li>Instant SF-IDEA-XXXXX protection</li>
-                    <li>Timestamp verification for IP claims</li>
-                    <li>100 XP reward for your first idea</li>
-                </ul>
-            </div>
-            <div class="stage-visual">
-                <!-- Placeholder for napkin illustration -->
-                <div style="width: 300px; height: 300px; background: #f5f5f5; border-radius: 12px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 72px;">📝</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stage 2: Certificate -->
-        <div class="stage">
-            <div class="stage-content">
-                <div class="stage-number">2</div>
-                <h2>Idea Certificate</h2>
-                <p class="stage-subtitle">"Make it official"</p>
-                <p>Your idea deserves more than a text file. Our AI-powered certificate system creates a beautiful, professional document that validates your innovation. Perfect for sharing on LinkedIn, adding to your portfolio, or showing potential co-founders.</p>
-                <ul class="stage-features">
-                    <li>AI-generated executive summary</li>
-                    <li>Professional PDF design</li>
-                    <li>QR code linking to your protected idea</li>
-                    <li>Social media ready formatting</li>
-                    <li>Legal timestamp documentation</li>
-                </ul>
-            </div>
-            <div class="stage-visual">
-                <div style="width: 300px; height: 300px; background: #f5f5f5; border-radius: 12px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 72px;">🎓</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stage 3: Experience -->
-        <div class="stage">
-            <div class="stage-content">
-                <div class="stage-number">3</div>
-                <h2>Idea Experience</h2>
-                <p class="stage-subtitle">"Your AI co-founder journey"</p>
-                <p>This is where the magic happens. Over 28 days, work with your AI co-founder to transform your napkin idea into an investment-ready venture. Daily challenges, personalized guidance, and a structured path from concept to launch.</p>
-                <ul class="stage-features">
-                    <li>4-week structured incubation program</li>
-                    <li>Daily 15-minute AI sessions</li>
-                    <li>Market validation exercises</li>
-                    <li>MVP development guidance</li>
-                    <li>Pitch deck creation</li>
-                    <li>Investor readiness scoring</li>
-                </ul>
-            </div>
-            <div class="stage-visual">
-                <div style="width: 300px; height: 300px; background: #f5f5f5; border-radius: 12px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 72px;">🚀</span>
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Transform Your <span class="highlight">Napkin Idea</span> Into a Funded Venture</h1>
+                <p>Join thousands of founders who've turned simple concepts into investment-ready businesses in just 28 days with our AI-powered incubation system.</p>
+                
+                <div class="journey-stats">
+                    <div class="stat">
+                        <div class="stat-number">28</div>
+                        <div class="stat-label">Days to Launch</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">$49</div>
+                        <div class="stat-label">Monthly Investment</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">87%</div>
+                        <div class="stat-label">Completion Rate</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">AI Co-founder</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Comparison Table -->
-    <section style="background: #f5f5f5; padding: 80px 20px;">
-        <h2 style="text-align: center; font-size: 36px; margin-bottom: 40px;">Traditional vs. SociallyFounded</h2>
-        <div class="comparison-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Aspect</th>
-                        <th>Traditional Accelerators</th>
-                        <th>SociallyFounded Experience</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Access</strong></td>
-                        <td>Apply and hope for <2% acceptance</td>
-                        <td>Start immediately, no application</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Cost</strong></td>
-                        <td>7% equity forever</td>
-                        <td>$49/month, cancel anytime</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Location</strong></td>
-                        <td>Relocate to Silicon Valley</td>
-                        <td>Build from anywhere</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Duration</strong></td>
-                        <td>Fixed 3-month program</td>
-                        <td>28-day sprints, repeat as needed</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Support</strong></td>
-                        <td>Generic mentor meetings</td>
-                        <td>24/7 AI co-founder + community</td>
-                    </tr>
-                    <tr>
-                        <td><strong>IP Protection</strong></td>
-                        <td>Figure it out yourself</td>
-                        <td>Instant SF Idea ID protection</td>
-                    </tr>
-                </tbody>
-            </table>
+    
+    <!-- Journey Path Visual -->
+    <section class="journey-path">
+        <div class="section-header">
+            <h2>Your Transformation Journey</h2>
+            <p>Four powerful stages that take you from idea to investment-ready</p>
         </div>
-    </section>
-
-    <!-- The Experience Journey -->
-    <section style="padding: 80px 20px; max-width: 1000px; margin: 0 auto;">
-        <h2 style="text-align: center; font-size: 36px; margin-bottom: 40px;">The 28-Day Experience Journey</h2>
         
-        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
-            <h3 style="color: #003554; margin-bottom: 20px;">Week 1: Discovery & Validation</h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 10px 0;">📊 Day 1-2: Problem deep dive and market sizing</li>
-                <li style="padding: 10px 0;">👥 Day 3-4: Customer avatar and pain point mapping</li>
-                <li style="padding: 10px 0;">🔍 Day 5-6: Competition analysis and differentiation</li>
-                <li style="padding: 10px 0;">✅ Day 7: Week 1 milestone and badge unlock</li>
-            </ul>
-        </div>
-
-        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-top: 30px;">
-            <h3 style="color: #003554; margin-bottom: 20px;">Week 2: Solution Architecture</h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 10px 0;">🏗️ Day 8-9: MVP feature prioritization</li>
-                <li style="padding: 10px 0;">🛠️ Day 10-11: Technical roadmap creation</li>
-                <li style="padding: 10px 0;">💰 Day 12-13: Resource planning and budgeting</li>
-                <li style="padding: 10px 0;">🏆 Day 14: Builder badge achievement</li>
-            </ul>
-        </div>
-
-        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-top: 30px;">
-            <h3 style="color: #003554; margin-bottom: 20px;">Week 3: Market Testing</h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 10px 0;">🌐 Day 15-16: Landing page creation</li>
-                <li style="padding: 10px 0;">🎤 Day 17-18: Customer interviews</li>
-                <li style="padding: 10px 0;">📈 Day 19-20: Pricing strategy</li>
-                <li style="padding: 10px 0;">🎯 Day 21: Validator badge earned</li>
-            </ul>
-        </div>
-
-        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-top: 30px;">
-            <h3 style="color: #003554; margin-bottom: 20px;">Week 4: Launch Preparation</h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 10px 0;">📊 Day 22-23: Pitch deck creation</li>
-                <li style="padding: 10px 0;">🚀 Day 24-25: Go-to-market strategy</li>
-                <li style="padding: 10px 0;">💎 Day 26-27: Investor preparation</li>
-                <li style="padding: 10px 0;">🎓 Day 28: Graduation and Founder badge</li>
-            </ul>
+        <div class="path-visual">
+            <div class="path-line"></div>
+            <div class="path-steps">
+                <div class="path-step">
+                    <div class="step-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Napkin</h3>
+                    <p>Capture your raw idea in seconds</p>
+                </div>
+                
+                <div class="path-step">
+                    <div class="step-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>Certificate</h3>
+                    <p>Get official SF Idea ID protection</p>
+                </div>
+                
+                <div class="path-step">
+                    <div class="step-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Experience</h3>
+                    <p>28-day AI incubation journey</p>
+                </div>
+                
+                <div class="path-step">
+                    <div class="step-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Launch</h3>
+                    <p>Pitch-ready with investor access</p>
+                </div>
+            </div>
         </div>
     </section>
-
+    
+    <!-- Journey Details -->
+    <section class="journey-details">
+        <div class="details-grid">
+            <!-- Stage 1: Napkin -->
+            <div class="detail-card">
+                <div class="detail-content">
+                    <h3><span class="detail-number">1</span> Idea Napkin</h3>
+                    <p class="subtitle">"Scribble it before you lose it"</p>
+                    <p>Every billion-dollar company started with a simple idea. At SociallyFounded, we believe your napkin scribble deserves protection from day one. In just 30 seconds, transform your raw idea into a protected concept.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Voice-to-text capture on the go</li>
+                        <li><i class="fas fa-check"></i> Photo upload of napkin sketches</li>
+                        <li><i class="fas fa-check"></i> Instant SF-IDEA-XXXXX protection</li>
+                        <li><i class="fas fa-check"></i> Blockchain timestamp verification</li>
+                        <li><i class="fas fa-check"></i> 100 XP reward instantly</li>
+                    </ul>
+                </div>
+                <div class="detail-visual">
+                    <div class="visual-card">
+                        <i class="fas fa-pen-fancy"></i>
+                        <h4>Quick Capture</h4>
+                        <p>Ideas in 30 seconds</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stage 2: Certificate -->
+            <div class="detail-card">
+                <div class="detail-content">
+                    <h3><span class="detail-number">2</span> Idea Certificate</h3>
+                    <p class="subtitle">"Make it official"</p>
+                    <p>Your idea deserves more than a text file. Our AI creates a beautiful certificate that validates your innovation—perfect for LinkedIn, portfolios, or showing potential co-founders.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> AI-generated executive summary</li>
+                        <li><i class="fas fa-check"></i> Professional PDF certificate</li>
+                        <li><i class="fas fa-check"></i> QR code with verification</li>
+                        <li><i class="fas fa-check"></i> Social media optimized</li>
+                        <li><i class="fas fa-check"></i> Legal timestamp included</li>
+                    </ul>
+                </div>
+                <div class="detail-visual">
+                    <div class="visual-card" style="background: linear-gradient(135deg, var(--sf-burgundy) 0%, #600018 100%);">
+                        <i class="fas fa-award"></i>
+                        <h4>Official Certificate</h4>
+                        <p>Your idea, certified</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stage 3: Experience -->
+            <div class="detail-card">
+                <div class="detail-content">
+                    <h3><span class="detail-number">3</span> Idea Experience</h3>
+                    <p class="subtitle">"Your AI co-founder journey"</p>
+                    <p>This is where magic happens. Over 28 days, work with your AI co-founder to transform your napkin idea into an investment-ready venture with daily guidance and structured milestones.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> 4-week structured program</li>
+                        <li><i class="fas fa-check"></i> Daily 15-minute AI sessions</li>
+                        <li><i class="fas fa-check"></i> Market validation framework</li>
+                        <li><i class="fas fa-check"></i> MVP development guide</li>
+                        <li><i class="fas fa-check"></i> Pitch deck automation</li>
+                        <li><i class="fas fa-check"></i> Investor readiness score</li>
+                    </ul>
+                </div>
+                <div class="detail-visual">
+                    <div class="visual-card" style="background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);">
+                        <i class="fas fa-brain"></i>
+                        <h4>AI Incubation</h4>
+                        <p>Guided every step</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 28-Day Timeline -->
+    <section class="timeline-section">
+        <div class="section-header">
+            <h2>The 28-Day Roadmap</h2>
+            <p>A proven framework that takes you from concept to launch-ready</p>
+        </div>
+        
+        <div class="timeline-container">
+            <!-- Week 1 -->
+            <div class="week">
+                <h3>Week 1: Discovery & Validation</h3>
+                <div class="days-grid">
+                    <div class="day">
+                        <div class="day-number">Day 1-2</div>
+                        <div class="day-task">Problem deep dive & market sizing</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 3-4</div>
+                        <div class="day-task">Customer avatar & pain mapping</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 5-6</div>
+                        <div class="day-task">Competition analysis</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 7</div>
+                        <div class="day-task">Week 1 milestone badge</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Week 2 -->
+            <div class="week">
+                <h3>Week 2: Solution Architecture</h3>
+                <div class="days-grid">
+                    <div class="day">
+                        <div class="day-number">Day 8-9</div>
+                        <div class="day-task">MVP feature prioritization</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 10-11</div>
+                        <div class="day-task">Technical roadmap</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 12-13</div>
+                        <div class="day-task">Resource planning</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 14</div>
+                        <div class="day-task">Builder badge earned</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Week 3 -->
+            <div class="week">
+                <h3>Week 3: Market Testing</h3>
+                <div class="days-grid">
+                    <div class="day">
+                        <div class="day-number">Day 15-16</div>
+                        <div class="day-task">Landing page creation</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 17-18</div>
+                        <div class="day-task">Customer interviews</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 19-20</div>
+                        <div class="day-task">Pricing strategy</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 21</div>
+                        <div class="day-task">Validator badge</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Week 4 -->
+            <div class="week">
+                <h3>Week 4: Launch Preparation</h3>
+                <div class="days-grid">
+                    <div class="day">
+                        <div class="day-number">Day 22-23</div>
+                        <div class="day-task">Pitch deck creation</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 24-25</div>
+                        <div class="day-task">Go-to-market strategy</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 26-27</div>
+                        <div class="day-task">Investor preparation</div>
+                    </div>
+                    <div class="day">
+                        <div class="day-number">Day 28</div>
+                        <div class="day-task">Graduation & Launch!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <div class="section-header">
+            <h2>Why Choose SociallyFounded?</h2>
+            <p>Compare our approach to traditional accelerators</p>
+        </div>
+        
+        <div class="comparison-grid">
+            <div class="comparison-card">
+                <h3>Traditional Accelerators</h3>
+                <ul class="comparison-list">
+                    <li><i class="fas fa-times"></i> Apply and hope for <2% acceptance</li>
+                    <li><i class="fas fa-times"></i> Give away 7% equity forever</li>
+                    <li><i class="fas fa-times"></i> Relocate to Silicon Valley</li>
+                    <li><i class="fas fa-times"></i> Fixed 3-month program</li>
+                    <li><i class="fas fa-times"></i> Generic mentor meetings</li>
+                    <li><i class="fas fa-times"></i> Figure out IP yourself</li>
+                    <li><i class="fas fa-times"></i> $50K+ in costs</li>
+                </ul>
+            </div>
+            
+            <div class="comparison-card featured">
+                <h3>SociallyFounded Experience</h3>
+                <ul class="comparison-list">
+                    <li><i class="fas fa-check"></i> Start immediately, no application</li>
+                    <li><i class="fas fa-check"></i> Keep 100% of your equity</li>
+                    <li><i class="fas fa-check"></i> Build from anywhere in the world</li>
+                    <li><i class="fas fa-check"></i> 28-day sprints, repeat as needed</li>
+                    <li><i class="fas fa-check"></i> 24/7 AI co-founder + community</li>
+                    <li><i class="fas fa-check"></i> Instant SF Idea ID protection</li>
+                    <li><i class="fas fa-check"></i> Just $49/month, cancel anytime</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
     <!-- CTA Section -->
-    <section class="journey-cta">
-        <h2 style="font-size: 36px; margin-bottom: 20px;">Ready to Start Your Journey?</h2>
-        <p style="font-size: 20px; margin-bottom: 40px;">Join thousands of founders who are turning napkin ideas into funded ventures.</p>
-        <a href="passport.html" class="cta-button">Start Your Idea Journey</a>
-        <p style="margin-top: 20px; color: #666;">Free to start • No equity required • Cancel anytime</p>
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Idea?</h2>
+            <p>Join thousands of founders who've launched their ventures with us</p>
+            <a href="/passport.html" class="btn-cta">
+                Start Your 28-Day Journey <i class="fas fa-rocket"></i>
+            </a>
+            
+            <div class="cta-features">
+                <div class="cta-feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>30-Day Money Back</span>
+                </div>
+                <div class="cta-feature">
+                    <i class="fas fa-users"></i>
+                    <span>10K+ Founders</span>
+                </div>
+                <div class="cta-feature">
+                    <i class="fas fa-star"></i>
+                    <span>4.9/5 Rating</span>
+                </div>
+            </div>
+        </div>
     </section>
-
+    
     <!-- Footer -->
-    <footer style="background: #003554; color: white; padding: 40px 20px; text-align: center;">
-        <p>&copy; 2025 SociallyFounded. All rights reserved.</p>
-        <p style="margin-top: 10px; opacity: 0.8;">Napkin. Certificate. Experience. Launch.</p>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/about.html">About</a>
+                <a href="/privacy.html">Privacy</a>
+                <a href="/terms.html">Terms</a>
+                <a href="/contact.html">Contact</a>
+            </div>
+            <p>&copy; 2025 SociallyFounded | Napkin. Certificate. Experience. Launch.</p>
+        </div>
     </footer>
-
-    <!-- Scripts -->
-    <script src="mobile-script-fixes.js"></script>
+    
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+    
     <link rel="stylesheet" href="mobile-auth-fix.css">
-<script src="mobile-nav-fix.js"></script>
+    <script src="mobile-nav-fix.js"></script>
 </body>
 </html>
