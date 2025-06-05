@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -220,7 +221,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.5);
-            z-index: 1000;
+            z-index: 9999 !important;  
             align-items: center;
             justify-content: center;
         }
@@ -449,7 +450,7 @@
             </div>
             <button onclick="openNewIdeaModal()" class="btn-new-idea">
                 <i class="fas fa-lightbulb"></i>
-                New Idea
+                Idea Napkin
             </button>
         </div>
         
@@ -476,7 +477,7 @@
     <div class="modal" id="new-idea-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Publish New Idea</h2>
+                <h2 class="modal-title">Create Idea Napkin</h2>
                 <button onclick="closeNewIdeaModal()" class="btn-close">&times;</button>
             </div>
             
@@ -581,39 +582,45 @@ firebase.auth().onAuthStateChanged((user) => {
 
         
         // Load ideas
-      // Load ideas - SIMPLIFIED VERSION
+      // Load ideas - Fixed version
 async function loadIdeas() {
     try {
-        // Just get all ideas without complex queries
+        console.log('Starting to load ideas...');
+        
+        // Get ALL ideas first (no complex queries)
         const ideasRef = firebase.firestore().collection('ideas');
         const snapshot = await ideasRef.get();
         
         const allIdeas = [];
         snapshot.forEach(doc => {
             const data = doc.data();
-            // Only show public ideas or user's own ideas
-            if (data.isPublic || data.userId === currentUser.uid) {
-                allIdeas.push({ id: doc.id, ...data });
-            }
+            allIdeas.push({ 
+                id: doc.id, 
+                ...data,
+                // Convert timestamp to Date for sorting
+                createdAtDate: data.createdAt?.toDate() || new Date(0)
+            });
         });
         
-        // Sort by timestamp manually
-        allIdeas.sort((a, b) => {
-            const aTime = a.createdAt?.seconds || 0;
-            const bTime = b.createdAt?.seconds || 0;
-            return bTime - aTime;
-        });
+        console.log('Total ideas in database:', allIdeas.length);
         
-        console.log('Ideas loaded:', allIdeas.length);
-        displayIdeas(allIdeas);
+        // Filter for public ideas or user's own ideas
+        const visibleIdeas = allIdeas.filter(idea => 
+            idea.isPublic || idea.userId === currentUser.uid
+        );
+        
+        // Sort by date (newest first)
+        visibleIdeas.sort((a, b) => b.createdAtDate - a.createdAtDate);
+        
+        console.log('Visible ideas:', visibleIdeas.length);
+        displayIdeas(visibleIdeas);
         
     } catch (error) {
         console.error('Error loading ideas:', error);
-        // Show empty state if error
         displayIdeas([]);
     }
 }
-        
+
         // Display ideas
         function displayIdeas(ideas) {
             const grid = document.getElementById('ideas-grid');
@@ -658,18 +665,25 @@ async function loadIdeas() {
         }
         
         // Open new idea modal
-        function openNewIdeaModal() {
-            document.getElementById('new-idea-modal').classList.add('active');
-            document.getElementById('new-idea-form').reset();
-            document.getElementById('title-count').textContent = '0';
-            document.getElementById('desc-count').textContent = '0';
-        }
-        
-        // Close modal
-        function closeNewIdeaModal() {
-            document.getElementById('new-idea-modal').classList.remove('active');
-        }
-        
+// Open new idea modal - with debug
+function openNewIdeaModal() {
+    console.log('Opening new idea modal...');
+    
+    const modal = document.getElementById('new-idea-modal');
+    if (!modal) {
+        console.error('Modal element not found!');
+        return;
+    }
+    
+    modal.classList.add('active');
+    document.getElementById('new-idea-form').reset();
+    document.getElementById('title-count').textContent = '0';
+    document.getElementById('desc-count').textContent = '0';
+    
+    console.log('Modal should be visible now');
+}        
+
+
         // Publish idea
         async function publishIdea(event) {
             event.preventDefault();
