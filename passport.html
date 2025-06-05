@@ -563,28 +563,27 @@
         ];
         
         // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check auth state
-            // Give Firebase time to restore auth session on mobile
-    let authChecked = false;
-    
+       
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Simple auth check - wait for Firebase to be ready
     firebase.auth().onAuthStateChanged((user) => {
-        authChecked = true;
         if (user) {
             currentUser = user;
             console.log('User logged in:', user.email);
             loadUserData();
+            loadAchievements();
+            loadRecentActivity();
         } else {
-            console.log('No user found, waiting...');
-            // Wait a bit longer on mobile for auth to restore
+            // Give Firebase time on mobile
             setTimeout(() => {
                 if (!firebase.auth().currentUser) {
-                    console.log('Still no user, redirecting to home');
                     window.location.href = '/';
                 }
-            }, 2000); // Wait 2 seconds before redirecting
+            }, 3000);
         }
     });
+});
     
     // Fallback - if auth state never fires, check manually
     setTimeout(() => {
