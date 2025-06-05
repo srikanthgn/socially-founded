@@ -116,6 +116,30 @@
         }
         
         /* Idea Card */
+
+.idea-card {
+    /* existing styles... */
+    position: relative;
+    transform: rotate(-1deg);
+    background: #fffef5;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.idea-card:nth-child(even) {
+    transform: rotate(1deg);
+}
+
+.idea-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: white;
+    z-index: -1;
+    transform: rotate(0.5deg);
+}
         .idea-card {
             background: white;
             border-radius: 12px;
