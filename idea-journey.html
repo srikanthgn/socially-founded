@@ -12,6 +12,74 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* Navigation styles to match other pages */
+nav {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #003554;
+    font-weight: 600;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #003554;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #003554;
+}
+
+.get-started-btn {
+    background: #003554;
+    color: white !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+}
+
+/* Fix hero section position */
+.journey-hero {
+    margin-top: 80px; /* Account for fixed nav */
+}
         /* Page-specific styles */
         .journey-hero {
             background: linear-gradient(135deg, #003554 0%, #1B2951 100%);
@@ -403,5 +471,7 @@
 
     <!-- Scripts -->
     <script src="mobile-script-fixes.js"></script>
+    <link rel="stylesheet" href="mobile-auth-fix.css">
+<script src="mobile-nav-fix.js"></script>
 </body>
 </html>
