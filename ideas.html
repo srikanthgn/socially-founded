@@ -561,15 +561,23 @@
             });
             
             // Check auth
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    currentUser = user;
-                    loadIdeas();
-                } else {
-                    window.location.href = '/';
-                }
-            });
-        });
+// Better mobile auth check
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        currentUser = user;
+        console.log('User authenticated:', user.email);
+        loadIdeas();
+    } else {
+        // Wait a bit for auth to restore on mobile
+        setTimeout(() => {
+            if (!firebase.auth().currentUser) {
+                window.location.href = '/';
+            }
+        }, 2000);
+    }
+});            
+
+
         
         // Load ideas
       // Load ideas - SIMPLIFIED VERSION
