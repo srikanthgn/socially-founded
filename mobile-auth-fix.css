@@ -1,0 +1,71 @@
+/* Mobile Authentication Fix */
+@media (max-width: 768px) {
+    /* Fix navigation on all pages */
+    nav {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo {
+        font-size: 1.2rem !important;
+    }
+    
+    .logo img {
+        width: 30px !important;
+        height: 30px !important;
+    }
+    
+    /* Ensure auth state persists */
+    body {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+    }
+    
+    /* Fix ideas grid */
+    .ideas-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .idea-card {
+        margin-bottom: 1rem;
+    }
+    
+    /* Fix passport grid */
+    .content-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .passport-card {
+        margin-bottom: 2rem;
+    }
+    
+    /* Fix profile grid */
+    .profile-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Prevent iOS zoom on form inputs */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Ensure mobile menu button is visible */
+.mobile-menu-btn {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block !important;
+    }
+    
+    .nav-links {
+        display: none !important;
+    }
+}
