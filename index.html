@@ -894,15 +894,29 @@
     <script src="mobile-nav-fix.js"></script>
 <link rel="stylesheet" href="mobile-auth-fix.css">
     <!-- Mobile Passport Enhancement Script -->
+<!-- Mobile Passport Enhancement Script -->
 <!-- Add this single block right before the closing </body> tag in your index.html -->
 
 <style>
 /* Mobile Passport Showcase - Only applies on mobile */
 @media (max-width: 768px) {
-    /* Show the passport section on mobile */
+    /* Reorder hero content on mobile */
+    .hero-container {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Move text content below passports */
+    .hero-content {
+        order: 2;
+        margin-top: 40px;
+    }
+    
+    /* Show passport section and move it to top */
     .hero-visual {
         display: block !important;
-        margin-top: 40px;
+        order: 1;
+        margin-top: 0;
         padding: 0 20px;
     }
     
