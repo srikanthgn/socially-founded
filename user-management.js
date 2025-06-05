@@ -455,3 +455,30 @@ window.debugUnlockAchievement = async (achievementKey) => {
         console.log('No user logged in');
     }
 };
+
+async function loadUserData() {
+    console.log('Starting to load user data...');
+    try {
+        const userDoc = await firebase.firestore()
+            .collection('users')
+            .doc(currentUser.uid)
+            .get();
+        
+        console.log('User doc fetched:', userDoc.exists);
+        
+        if (userDoc.exists) {
+            userData = userDoc.data();
+            console.log('User data loaded:', userData);
+            updatePassportDisplay();
+            updateProfileDisplay();
+        } else {
+            console.log('Creating new user profile...');
+            await createUserProfile(currentUser);
+            await loadUserData();
+        }
+    } catch (error) {
+        console.error('Error loading user data:', error);
+        // Show loading error to user
+        document.getElementById('user-name').textContent = 'Error loading profile';
+    }
+}
