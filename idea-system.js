@@ -266,6 +266,14 @@ async function getPublicIdeas(limit = 20) {
         return [];
     }
 }
+// In the public ideas section, add the filter:
+publicIdeasSnapshot.forEach(doc => {
+    const idea = doc.data();
+    // Skip your own ideas in public section
+    if (idea.userId !== user.uid) {
+        publicIdeasHTML += generateIdeaCardHTML(idea, doc.id);
+    }
+});
 
 // Share idea on social media
 async function shareIdea(ideaId, platform) {
@@ -568,80 +576,98 @@ function generateVersionTimeline(idea) {
 function generateIdeaCardHTML(idea, ideaId) {
     const isOwner = firebase.auth().currentUser && idea.userId === firebase.auth().currentUser.uid;
     
+    // Create a truncated description for the summary
+    const truncatedDesc = idea.description.length > 100 
+        ? idea.description.substring(0, 100) + '...' 
+        : idea.description;
+    
     return `
-        <div class="idea-card ${idea.isPublic ? '' : 'private'}" data-idea-id="${ideaId}">
+        <div class="idea-card" data-idea-id="${ideaId}" onclick="toggleIdeaCard(this)">
             <div class="idea-header">
                 <h3 class="idea-title">${idea.title}</h3>
                 <div class="idea-meta">
-                    <span class="idea-id">${idea.sfIdeaId}</span>
                     <span class="idea-version">v${idea.version || 1}</span>
-                    ${idea.isPublic ? '<span class="visibility-badge"><i class="fas fa-globe"></i> Public</span>' : '<span class="visibility-badge"><i class="fas fa-lock"></i> Private</span>'}
+                    ${idea.isPublic ? '<span class="visibility-badge"><i class="fas fa-globe"></i></span>' : '<span class="visibility-badge"><i class="fas fa-lock"></i></span>'}
+                    <i class="fas fa-chevron-down expand-icon"></i>
                 </div>
             </div>
             
-            <p class="idea-description">${idea.description}</p>
-            
-            <div class="idea-details">
-                <div class="detail-item">
-                    <i class="fas fa-folder"></i>
-                    <span>${getCategoryLabel(idea.category)}</span>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-layer-group"></i>
-                    <span>${idea.stage}</span>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-calendar"></i>
-                    <span>${new Date(idea.createdAt.toDate()).toLocaleDateString()}</span>
+            <div class="idea-summary">
+                <p style="margin: 0; flex: 1;">${truncatedDesc}</p>
+                <div class="idea-meta-compact">
+                    <span><i class="fas fa-eye"></i> ${idea.views || 0}</span>
+                    <span><i class="fas fa-heart"></i> ${idea.interests ? idea.interests.length : 0}</span>
+                    ${idea.progress ? `<span><i class="fas fa-chart-line"></i> ${idea.progress}%</span>` : ''}
                 </div>
             </div>
             
-            <div class="idea-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${idea.progress || 0}%"></div>
+            <div class="idea-content">
+                <div class="divider" style="margin: 15px 0;"></div>
+                
+                <p class="idea-description">${idea.description}</p>
+                
+                <div class="idea-details">
+                    <div class="detail-item">
+                        <i class="fas fa-folder"></i>
+                        <span>${getCategoryLabel(idea.category)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-layer-group"></i>
+                        <span>${idea.stage}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>${idea.createdAt ? new Date(idea.createdAt.toDate()).toLocaleDateString() : 'Recently'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-fingerprint"></i>
+                        <span>${idea.sfIdeaId}</span>
+                    </div>
                 </div>
-                <span class="progress-text">${idea.progress || 0}% Complete</span>
-            </div>
-            
-            <div class="idea-stats">
-                <div class="stat-item">
-                    <i class="fas fa-eye"></i>
-                    <span>${idea.views || 0} views</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-heart"></i>
-                    <span>${idea.interests ? idea.interests.length : 0} interests</span>
-                </div>
-                ${idea.certificateLocked ? '<div class="stat-item"><i class="fas fa-certificate"></i><span>Certified</span></div>' : ''}
-            </div>
-            
-            <div class="idea-actions">
-                ${isOwner ? `
-                    <button class="btn btn-sm btn-primary" onclick="updateIdea('${ideaId}')">
-                        <i class="fas fa-edit"></i> Update
-                    </button>
-                    ${idea.version > 1 ? `
-                        <button class="btn btn-sm btn-secondary" onclick="showVersionHistory('${ideaId}')">
-                            <i class="fas fa-history"></i> History
+                
+                ${idea.progress ? `
+                    <div class="idea-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${idea.progress}%"></div>
+                        </div>
+                        <span class="progress-text">${idea.progress}% Complete</span>
+                    </div>
+                ` : ''}
+                
+                <div class="idea-actions" onclick="event.stopPropagation()">
+                    ${isOwner ? `
+                        <button class="btn btn-sm btn-primary" onclick="updateIdea('${ideaId}')">
+                            <i class="fas fa-edit"></i> Update
                         </button>
-                    ` : ''}
-                    ${!idea.certificateLocked ? `
-                        <button class="btn btn-sm btn-success" onclick="initCertificateGeneration('${ideaId}', ${JSON.stringify(idea).replace(/"/g, '&quot;')})">
-                            <i class="fas fa-certificate"></i> Certificate
+                        ${idea.version > 1 ? `
+                            <button class="btn btn-sm btn-secondary" onclick="showVersionHistory('${ideaId}')">
+                                <i class="fas fa-history"></i> History
+                            </button>
+                        ` : ''}
+                        ${!idea.certificateLocked ? `
+                            <button class="btn btn-sm btn-success" onclick="initCertificateGeneration('${ideaId}', ${JSON.stringify(idea).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-certificate"></i> Certificate
+                            </button>
+                        ` : ''}
+                    ` : `
+                        <button class="btn btn-sm btn-secondary" onclick="expressInterest('${ideaId}')">
+                            <i class="fas fa-heart"></i> Interest
                         </button>
-                    ` : ''}
-                ` : `
-                    <button class="btn btn-sm btn-secondary" onclick="expressInterest('${ideaId}')">
-                        <i class="fas fa-heart"></i> Interest
+                    `}
+                    <button class="btn btn-sm btn-secondary" onclick="shareIdea('${ideaId}', '${idea.title}')">
+                        <i class="fas fa-share"></i> Share
                     </button>
-                `}
-                <button class="btn btn-sm btn-secondary" onclick="shareIdea('${ideaId}', '${idea.title}')">
-                    <i class="fas fa-share"></i> Share
-                </button>
+                </div>
             </div>
         </div>
     `;
 }
+
+// Add this toggle function
+function toggleIdeaCard(card) {
+    card.classList.toggle('expanded');
+}
+
 
 // Helper function for category labels
 function getCategoryLabel(category) {
@@ -696,6 +722,10 @@ function showToast(message, type = 'info') {
 // Export it
 window.logActivity = logActivity;
 
+// Export it
+window.toggleIdeaCard = toggleIdeaCard;
+
+
 // Export the function
 window.generateIdeaCardHTML = generateIdeaCardHTML;
 
@@ -709,4 +739,3 @@ window.getPublicIdeas = getPublicIdeas;
 window.shareIdea = shareIdea;
 window.getCategoryLabel = getCategoryLabel;
 window.showToast = showToast;
-
