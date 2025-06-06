@@ -1,595 +1,784 @@
-// venue-system.js - Core Venue System Functions
-// Add this file to your SociallyFounded project
-
-// ===== GLOBAL VARIABLES =====
-let currentUserLocation = null;
-let nearbyVenues = [];
-let userCheckIns = [];
-let currentCheckIn = null;
-
-// ===== LOCATION SERVICES =====
-
-// Request user location permission and get current position
-async function requestLocationPermission() {
-    if (!navigator.geolocation) {
-        showToast('Geolocation is not supported by this browser', 'error');
-        return null;
-    }
-
-    try {
-        const position = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(
-                resolve,
-                reject,
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 300000 // 5 minutes
-                }
-            );
-        });
-
-        currentUserLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            accuracy: position.coords.accuracy
-        };
-
-        console.log('Location obtained:', currentUserLocation);
-        return currentUserLocation;
-    } catch (error) {
-        console.error('Error getting location:', error);
-        showToast('Unable to get your location. You can still add venues manually.', 'warning');
-        return null;
-    }
-}
-
-// Calculate distance between two coordinates (Haversine formula)
-function calculateDistance(lat1, lng1, lat2, lng2) {
-    const R = 6371e3; // Earth's radius in meters
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δφ = (lat2 - lat1) * Math.PI / 180;
-    const Δλ = (lng2 - lng1) * Math.PI / 180;
-
-    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-              Math.cos(φ1) * Math.cos(φ2) *
-              Math.sin(Δλ/2) * Math.sin(Δλ/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-    return R * c; // Distance in meters
-}
-
-// ===== VENUE CRUD OPERATIONS =====
-
-// Add a new venue
-async function addVenue(venueData) {
-    const user = firebase.auth().currentUser;
-    if (!user) {
-        showToast('Please sign in to add venues', 'error');
-        return null;
-    }
-
-    try {
-        // Check if user is Level 2+ (simplified for now - just check if user exists)
-        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
-        if (!userDoc.exists) {
-            showToast('Please complete your profile first', 'error');
-            return null;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venues - SociallyFounded</title>
+    <link rel="icon" type="image/x-icon" href="favicon.svg">
+    
+    <!-- PWA meta tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#003554">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SociallyFounded">
+    <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile-fixes.css">
+    
+    <!-- Venue-specific styles -->
+    <style>
+        .venues-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
-
-        // Check for duplicate venues within 50m
-        const nearbyExisting = await findNearbyVenues(
-            venueData.location.lat, 
-            venueData.location.lng, 
-            0.05 // 50m radius
-        );
-
-        if (nearbyExisting.length > 0) {
-            showToast('A venue already exists at this location', 'warning');
-            return null;
+        
+        .venues-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #003554 0%, #005580 100%);
+            color: white;
+            border-radius: 20px;
         }
-
-        // Prepare venue document
-        const venueDoc = {
-            name: venueData.name,
-            type: venueData.type,
-            description: venueData.description || '',
-            address: venueData.address,
-            location: new firebase.firestore.GeoPoint(venueData.location.lat, venueData.location.lng),
-            city: venueData.city || '',
-            country: venueData.country || '',
-            amenities: venueData.amenities || [],
-            photos: venueData.photos || [],
-            operatingHours: venueData.operatingHours || getDefaultOperatingHours(),
-            addedBy: user.uid,
-            status: 'pending',
-            verificationCount: 0,
-            totalCheckIns: 0,
-            uniqueVisitors: [],
-            averageRating: 0,
-            ratingCount: 0,
-            averageDwellTime: 0,
-            subscriptionTier: 'free',
-            subscriptionExpiry: null,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            verifiedAt: null
-        };
-
-        // Add to Firestore
-        const docRef = await firebase.firestore().collection('venues').add(venueDoc);
         
-        // Award XP to user for adding venue
-        await awardExperience(user.uid, 50, 'venue_added');
+        .venues-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
         
-        // Log activity
-        await logActivity(user.uid, 'venue_added', {
-            venueId: docRef.id,
-            venueName: venueData.name
+        .venues-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .venue-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-input {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            width: 300px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #003554;
+        }
+        
+        .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .view-toggle {
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 25px;
+            padding: 5px;
+        }
+        
+        .view-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-btn.active {
+            background: #003554;
+            color: white;
+        }
+        
+        .add-venue-btn {
+            background: #D4AF37;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .add-venue-btn:hover {
+            background: #B8860B;
+            transform: translateY(-2px);
+        }
+        
+        .venues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .venue-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .venue-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .venue-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 3rem;
+            position: relative;
+        }
+        
+        .venue-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #D4AF37;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .venue-badge.verified { background: #28a745; }
+        .venue-badge.featured { background: #007bff; }
+        .venue-badge.premium { background: #6f42c1; }
+        
+        .venue-info {
+            padding: 20px;
+        }
+        
+        .venue-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #003554;
+            margin-bottom: 8px;
+        }
+        
+        .venue-type {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .venue-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stars {
+            color: #D4AF37;
+        }
+        
+        .rating-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .venue-amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .amenity-tag {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .venue-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .venue-stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-weight: bold;
+            color: #003554;
+            font-size: 1.1rem;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .venues-map {
+            height: 500px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            color: #666;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid #003554;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .venues-container {
+                padding: 15px;
+            }
+            
+            .venue-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-filters {
+                justify-content: space-between;
+            }
+            
+            .search-input {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .venues-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .venues-header h1 {
+                font-size: 2rem;
+            }
+            
+            .venues-header p {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Add Venue Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-header h2 {
+            color: #003554;
+            margin: 0;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #003554;
+        }
+        
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        
+        .amenity-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .submit-btn {
+            background: #003554;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #001f3f;
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="favicon.svg" alt="SociallyFounded" width="40" height="40">
+                    <span>SociallyFounded</span>
+                </a>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="nav-links desktop-nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="venues.html" class="active">Venues</a>
+                <a href="ideas.html">Ideas</a>
+                <a href="passport.html">Digital Passport</a>
+            </div>
+            
+            <!-- Mobile Navigation Button -->
+            <button id="open-mobile-nav" class="mobile-nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-nav" class="mobile-nav">
+            <div class="mobile-nav-header">
+                <span>Menu</span>
+                <button id="close-mobile-nav">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mobile-nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="venues.html" class="active">Venues</a>
+                <a href="ideas.html">Ideas</a>
+                <a href="passport.html">Digital Passport</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="venues-container">
+        <!-- Header -->
+        <div class="venues-header">
+            <h1><i class="fas fa-map-marker-alt"></i> Discover Venues</h1>
+            <p>Find the perfect workspace near you. From bustling cafés to quiet libraries, discover where founders build their dreams.</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="venue-controls">
+            <div class="search-filters">
+                <input type="text" class="search-input" placeholder="Search venues by name or location..." id="venueSearch">
+                
+                <select class="filter-select" id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="cafe">Café</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="coworking">Coworking</option>
+                    <option value="library">Library</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="park">Park</option>
+                </select>
+                
+                <select class="filter-select" id="distanceFilter">
+                    <option value="">Any Distance</option>
+                    <option value="0.5">Within 500m</option>
+                    <option value="1">Within 1km</option>
+                    <option value="2">Within 2km</option>
+                    <option value="5">Within 5km</option>
+                    <option value="10">Within 10km</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div class="view-toggle">
+                    <button class="view-btn active" id="gridView">
+                        <i class="fas fa-th"></i> Grid
+                    </button>
+                    <button class="view-btn" id="mapView">
+                        <i class="fas fa-map"></i> Map
+                    </button>
+                </div>
+                
+                <button class="add-venue-btn" onclick="showAddVenueModal()">
+                    <i class="fas fa-plus"></i> Add Venue
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-spinner">
+            <div class="spinner"></div>
+            <span>Finding amazing venues near you...</span>
+        </div>
+
+        <!-- Venues Grid -->
+        <div id="venuesGrid" class="venues-grid" style="display: none;">
+            <!-- Venues will be dynamically loaded here -->
+        </div>
+
+        <!-- Map View -->
+        <div id="venuesMap" class="venues-map" style="display: none;">
+            <div>
+                <i class="fas fa-map"></i>
+                <p>Interactive map coming soon! For now, enjoy our grid view of all venues.</p>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>No venues found</h3>
+            <p>Try adjusting your search filters or be the first to add a venue in this area!</p>
+            <button class="add-venue-btn" onclick="showAddVenueModal()">
+                <i class="fas fa-plus"></i> Add First Venue
+            </button>
+        </div>
+    </main>
+
+    <!-- Add Venue Modal -->
+    <div id="addVenueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-map-marker-alt"></i> Add New Venue</h2>
+                <button class="close-modal" onclick="closeAddVenueModal()">&times;</button>
+            </div>
+            
+            <form id="addVenueForm">
+                <div class="form-group">
+                    <label for="venueName">Venue Name *</label>
+                    <input type="text" id="venueName" required placeholder="e.g., Startup Café">
+                </div>
+                
+                <div class="form-group">
+                    <label for="venueType">Venue Type *</label>
+                    <select id="venueType" required>
+                        <option value="">Select type</option>
+                        <option value="cafe">Café</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="coworking">Coworking Space</option>
+                        <option value="library">Library</option>
+                        <option value="hotel">Hotel</option>
+                        <option value="park">Park</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="venueAddress">Address *</label>
+                    <input type="text" id="venueAddress" required placeholder="Street address will be auto-filled">
+                </div>
+                
+                <div class="form-group">
+                    <label>Amenities</label>
+                    <div class="amenities-grid">
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="wifi" value="wifi">
+                            <label for="wifi">WiFi</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="power" value="power">
+                            <label for="power">Power Outlets</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="quiet" value="quiet">
+                            <label for="quiet">Quiet Space</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="meetings" value="meetings">
+                            <label for="meetings">Meeting Rooms</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="parking" value="parking">
+                            <label for="parking">Parking</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="food" value="food">
+                            <label for="food">Food & Drinks</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="venueDescription">Description (Optional)</label>
+                    <textarea id="venueDescription" rows="3" placeholder="Tell us what makes this venue special for founders..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-plus"></i> Add Venue (Earn 50 XP!)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="user-management.js"></script>
+    <script src="venue-system.js"></script>
+    <script src="mobile-script-fixes.js"></script>
+    <script src="pwa-registration.js" defer></script>
+    
+    <script>
+        // Initialize venues page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Venues page loaded');
+            
+            // Initialize venue system
+            if (typeof initializeVenueSystem === 'function') {
+                initializeVenueSystem();
+            } else {
+                console.error('venue-system.js not loaded properly');
+            }
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Load venues
+            loadVenues();
         });
-
-        showToast('Venue added successfully! You earned 50 XP.', 'success');
-        return docRef.id;
-
-    } catch (error) {
-        console.error('Error adding venue:', error);
-        showToast('Error adding venue. Please try again.', 'error');
-        return null;
-    }
-}
-
-// Get default operating hours
-function getDefaultOperatingHours() {
-    return {
-        monday: { open: "07:00", close: "22:00", closed: false },
-        tuesday: { open: "07:00", close: "22:00", closed: false },
-        wednesday: { open: "07:00", close: "22:00", closed: false },
-        thursday: { open: "07:00", close: "22:00", closed: false },
-        friday: { open: "07:00", close: "22:00", closed: false },
-        saturday: { open: "08:00", close: "23:00", closed: false },
-        sunday: { open: "08:00", close: "21:00", closed: false }
-    };
-}
-
-// Find venues near a location
-async function findNearbyVenues(lat, lng, radiusKm = 10) {
-    try {
-        // Calculate approximate bounds for the query
-        const bounds = calculateBounds(lat, lng, radiusKm);
         
-        const venuesRef = firebase.firestore().collection('venues');
-        const query = venuesRef
-            .where('location', '>=', new firebase.firestore.GeoPoint(bounds.south, bounds.west))
-            .where('location', '<=', new firebase.firestore.GeoPoint(bounds.north, bounds.east))
-            .orderBy('location')
-            .limit(100);
-
-        const snapshot = await query.get();
-        const venues = [];
-
-        snapshot.forEach(doc => {
-            const venueData = doc.data();
-            const distance = calculateDistance(
-                lat, lng,
-                venueData.location.latitude,
-                venueData.location.longitude
-            );
-
-            // Filter by actual distance (since bounds are approximate)
-            if (distance <= radiusKm * 1000) {
-                venues.push({
-                    id: doc.id,
-                    ...venueData,
-                    distance: Math.round(distance)
+        function setupEventListeners() {
+            // Search and filter listeners
+            document.getElementById('venueSearch').addEventListener('input', filterVenues);
+            document.getElementById('typeFilter').addEventListener('change', filterVenues);
+            document.getElementById('distanceFilter').addEventListener('change', filterVenues);
+            
+            // View toggle listeners
+            document.getElementById('gridView').addEventListener('click', () => switchView('grid'));
+            document.getElementById('mapView').addEventListener('click', () => switchView('map'));
+            
+            // Add venue form listener
+            document.getElementById('addVenueForm').addEventListener('submit', handleAddVenue);
+        }
+        
+        function switchView(view) {
+            const gridView = document.getElementById('gridView');
+            const mapView = document.getElementById('mapView');
+            const venuesGrid = document.getElementById('venuesGrid');
+            const venuesMap = document.getElementById('venuesMap');
+            
+            if (view === 'grid') {
+                gridView.classList.add('active');
+                mapView.classList.remove('active');
+                venuesGrid.style.display = 'grid';
+                venuesMap.style.display = 'none';
+            } else {
+                mapView.classList.add('active');
+                gridView.classList.remove('active');
+                venuesGrid.style.display = 'none';
+                venuesMap.style.display = 'flex';
+            }
+        }
+        
+        function showAddVenueModal() {
+            const modal = document.getElementById('addVenueModal');
+            modal.classList.add('show');
+            
+            // Get current location for address
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    console.log('Current location:', position.coords);
+                    // TODO: Reverse geocode to get address
                 });
             }
-        });
-
-        // Sort by distance
-        venues.sort((a, b) => a.distance - b.distance);
-        return venues;
-
-    } catch (error) {
-        console.error('Error finding nearby venues:', error);
-        return [];
-    }
-}
-
-// Calculate bounds for geo query
-function calculateBounds(lat, lng, radiusKm) {
-    const latDelta = radiusKm / 111.32; // Approximate km per degree of latitude
-    const lngDelta = radiusKm / (111.32 * Math.cos(lat * Math.PI / 180));
-
-    return {
-        north: lat + latDelta,
-        south: lat - latDelta,
-        east: lng + lngDelta,
-        west: lng - lngDelta
-    };
-}
-
-// Get a single venue by ID
-async function getVenue(venueId) {
-    try {
-        const doc = await firebase.firestore().collection('venues').doc(venueId).get();
-        if (doc.exists) {
-            return { id: doc.id, ...doc.data() };
         }
-        return null;
-    } catch (error) {
-        console.error('Error getting venue:', error);
-        return null;
-    }
-}
-
-// ===== CHECK-IN SYSTEM =====
-
-// Check in to a venue
-async function checkInToVenue(venueId, userLocation = null) {
-    const user = firebase.auth().currentUser;
-    if (!user) {
-        showToast('Please sign in to check in', 'error');
-        return null;
-    }
-
-    try {
-        // Check if user is already checked in somewhere
-        if (currentCheckIn && currentCheckIn.isActive) {
-            showToast('Please check out of your current venue first', 'warning');
-            return null;
-        }
-
-        // Get venue details
-        const venue = await getVenue(venueId);
-        if (!venue) {
-            showToast('Venue not found', 'error');
-            return null;
-        }
-
-        // Validate location if provided
-        let distanceFromVenue = 0;
-        if (userLocation) {
-            distanceFromVenue = calculateDistance(
-                userLocation.lat, userLocation.lng,
-                venue.location.latitude, venue.location.longitude
-            );
-
-            // Allow manual override if distance is > 150m but < 1km
-            if (distanceFromVenue > 150 && distanceFromVenue < 1000) {
-                const confirmed = confirm(`You're ${Math.round(distanceFromVenue)}m from ${venue.name}. Check in anyway?`);
-                if (!confirmed) return null;
-            } else if (distanceFromVenue >= 1000) {
-                showToast('You must be closer to the venue to check in', 'error');
-                return null;
-            }
-        }
-
-        // Check for recent check-in to same venue (prevent spam)
-        const recentCheckIns = await firebase.firestore()
-            .collection('checkIns')
-            .where('userId', '==', user.uid)
-            .where('venueId', '==', venueId)
-            .where('checkInTime', '>', new Date(Date.now() - 30 * 60 * 1000)) // Last 30 minutes
-            .get();
-
-        if (!recentCheckIns.empty) {
-            showToast('You already checked in recently', 'warning');
-            return null;
-        }
-
-        // Calculate current streak
-        const currentStreak = await calculateUserStreak(user.uid);
-
-        // Create check-in document
-        const checkInDoc = {
-            userId: user.uid,
-            venueId: venueId,
-            checkInTime: firebase.firestore.FieldValue.serverTimestamp(),
-            checkOutTime: null,
-            dwellTime: null,
-            userLocation: userLocation ? new firebase.firestore.GeoPoint(userLocation.lat, userLocation.lng) : null,
-            distanceFromVenue: Math.round(distanceFromVenue),
-            method: userLocation ? 'auto' : 'manual',
-            xpAwarded: 10,
-            streakDay: currentStreak + 1,
-            isActive: true,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-
-        // Add check-in to Firestore
-        const checkInRef = await firebase.firestore().collection('checkIns').add(checkInDoc);
         
-        // Update venue analytics
-        await updateVenueAnalytics(venueId, user.uid, 'checkin');
-        
-        // Award XP
-        await awardExperience(user.uid, 10, 'venue_checkin');
-        
-        // Update user streak
-        await updateUserStreak(user.uid, currentStreak + 1);
-        
-        // Log activity
-        await logActivity(user.uid, 'venue_checkin', {
-            venueId: venueId,
-            venueName: venue.name,
-            checkInId: checkInRef.id
-        });
-
-        // Set current check-in
-        currentCheckIn = {
-            id: checkInRef.id,
-            ...checkInDoc,
-            venueName: venue.name,
-            isActive: true
-        };
-
-        showToast(`Checked in to ${venue.name}! +10 XP`, 'success');
-        return checkInRef.id;
-
-    } catch (error) {
-        console.error('Error checking in:', error);
-        showToast('Error checking in. Please try again.', 'error');
-        return null;
-    }
-}
-
-// Check out of current venue
-async function checkOutOfVenue(checkInId = null) {
-    const user = firebase.auth().currentUser;
-    if (!user) return null;
-
-    try {
-        // Find active check-in
-        const activeCheckInId = checkInId || (currentCheckIn ? currentCheckIn.id : null);
-        if (!activeCheckInId) {
-            showToast('No active check-in found', 'warning');
-            return null;
+        function closeAddVenueModal() {
+            const modal = document.getElementById('addVenueModal');
+            modal.classList.remove('show');
+            document.getElementById('addVenueForm').reset();
         }
-
-        // Get check-in document
-        const checkInDoc = await firebase.firestore().collection('checkIns').doc(activeCheckInId).get();
-        if (!checkInDoc.exists) {
-            showToast('Check-in not found', 'error');
-            return null;
-        }
-
-        const checkInData = checkInDoc.data();
-        const checkInTime = checkInData.checkInTime.toDate();
-        const checkOutTime = new Date();
-        const dwellTime = Math.round((checkOutTime - checkInTime) / (1000 * 60)); // Minutes
-
-        // Update check-in document
-        await firebase.firestore().collection('checkIns').doc(activeCheckInId).update({
-            checkOutTime: firebase.firestore.FieldValue.serverTimestamp(),
-            dwellTime: dwellTime,
-            isActive: false
-        });
-
-        // Update venue analytics
-        await updateVenueAnalytics(checkInData.venueId, user.uid, 'checkout', dwellTime);
-
-        // Clear current check-in
-        currentCheckIn = null;
-
-        // Show rating prompt after a short delay
-        setTimeout(() => {
-            showRatingPrompt(checkInData.venueId, activeCheckInId, dwellTime);
-        }, 2000);
-
-        showToast(`Checked out! You stayed for ${dwellTime} minutes.`, 'success');
-        return activeCheckInId;
-
-    } catch (error) {
-        console.error('Error checking out:', error);
-        showToast('Error checking out. Please try again.', 'error');
-        return null;
-    }
-}
-
-// Update venue analytics
-async function updateVenueAnalytics(venueId, userId, action, dwellTime = null) {
-    try {
-        const venueRef = firebase.firestore().collection('venues').doc(venueId);
         
-        if (action === 'checkin') {
-            await venueRef.update({
-                totalCheckIns: firebase.firestore.FieldValue.increment(1),
-                uniqueVisitors: firebase.firestore.FieldValue.arrayUnion(userId),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        } else if (action === 'checkout' && dwellTime) {
-            // Get current average to calculate new average
-            const venueDoc = await venueRef.get();
-            const venueData = venueDoc.data();
-            const currentAvg = venueData.averageDwellTime || 0;
-            const totalCheckIns = venueData.totalCheckIns || 0;
+        function handleAddVenue(event) {
+            event.preventDefault();
             
-            // Calculate new average dwell time
-            const newAvg = totalCheckIns > 0 ? 
-                ((currentAvg * (totalCheckIns - 1)) + dwellTime) / totalCheckIns : 
-                dwellTime;
-
-            await venueRef.update({
-                averageDwellTime: Math.round(newAvg),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        }
-
-        // Check if venue should be verified (3+ unique visitors)
-        const venueDoc = await venueRef.get();
-        const venueData = venueDoc.data();
-        if (venueData.status === 'pending' && venueData.uniqueVisitors.length >= 3) {
-            await venueRef.update({
-                status: 'verified',
-                verifiedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-            // Award bonus XP to venue creator
-            await awardExperience(venueData.addedBy, 100, 'venue_verified');
-        }
-
-    } catch (error) {
-        console.error('Error updating venue analytics:', error);
-    }
-}
-
-// ===== HELPER FUNCTIONS =====
-
-// Calculate user's current check-in streak
-async function calculateUserStreak(userId) {
-    try {
-        // Get user's check-ins from last 30 days, ordered by date
-        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-        const checkInsSnapshot = await firebase.firestore()
-            .collection('checkIns')
-            .where('userId', '==', userId)
-            .where('checkInTime', '>', thirtyDaysAgo)
-            .orderBy('checkInTime', 'desc')
-            .get();
-
-        if (checkInsSnapshot.empty) return 0;
-
-        // Group check-ins by date
-        const checkInsByDate = {};
-        checkInsSnapshot.forEach(doc => {
-            const checkInTime = doc.data().checkInTime.toDate();
-            const dateString = checkInTime.toDateString();
-            checkInsByDate[dateString] = true;
-        });
-
-        // Calculate consecutive days
-        let streak = 0;
-        let currentDate = new Date();
-        
-        while (streak < 100) { // Max streak to check
-            const dateString = currentDate.toDateString();
-            if (checkInsByDate[dateString]) {
-                streak++;
-                currentDate.setDate(currentDate.getDate() - 1);
+            if (typeof addVenue === 'function') {
+                // Call the function from venue-system.js
+                addVenue();
             } else {
-                break;
+                console.error('addVenue function not available');
             }
         }
-
-        return streak;
-    } catch (error) {
-        console.error('Error calculating streak:', error);
-        return 0;
-    }
-}
-
-// Update user streak in profile
-async function updateUserStreak(userId, newStreak) {
-    try {
-        await firebase.firestore().collection('users').doc(userId).update({
-            'passport.streak': newStreak
-        });
         
-        // Check for streak achievements
-        if (newStreak === 7) {
-            await addAchievement(userId, 'streak_week');
-        } else if (newStreak === 30) {
-            await addAchievement(userId, 'streak_month');
-        } else if (newStreak === 100) {
-            await addAchievement(userId, 'streak_century');
+        function filterVenues() {
+            if (typeof filterVenues === 'function') {
+                // Call the function from venue-system.js
+                filterVenues();
+            }
         }
-    } catch (error) {
-        console.error('Error updating streak:', error);
-    }
-}
-
-// Show rating prompt modal
-function showRatingPrompt(venueId, checkInId, dwellTime) {
-    // This will be implemented in the UI components
-    // For now, just log that rating should be requested
-    console.log(`Rating prompt for venue ${venueId}, check-in ${checkInId}, dwell time ${dwellTime} minutes`);
-    
-    // Create a simple rating interface
-    const shouldRate = confirm('Would you like to rate your experience at this venue?');
-    if (shouldRate) {
-        // Open rating modal (to be implemented)
-        console.log('Opening rating modal...');
-    }
-}
-
-// Show toast notification
-function showToast(message, type = 'info') {
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `
-        <div class="toast-content">
-            <i class="fas fa-${getToastIcon(type)}"></i>
-            <span>${message}</span>
-        </div>
-    `;
-    
-    // Add styles if not already present
-    if (!document.getElementById('toast-styles')) {
-        const styles = document.createElement('style');
-        styles.id = 'toast-styles';
-        styles.textContent = `
-            .toast {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                padding: 16px;
-                z-index: 1000;
-                transform: translateX(400px);
-                transition: transform 0.3s ease;
-                min-width: 300px;
-                max-width: 400px;
+        
+        function loadVenues() {
+            if (typeof loadVenues === 'function') {
+                // Call the function from venue-system.js
+                loadVenues();
+            } else {
+                // Fallback - hide loading and show empty state
+                setTimeout(() => {
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('emptyState').style.display = 'block';
+                }, 2000);
             }
-            .toast.show {
-                transform: translateX(0);
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('addVenueModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeAddVenueModal();
             }
-            .toast-content {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-            .toast-success { border-left: 4px solid #10B981; }
-            .toast-error { border-left: 4px solid #EF4444; }
-            .toast-warning { border-left: 4px solid #F59E0B; }
-            .toast-info { border-left: 4px solid #3B82F6; }
-        `;
-        document.head.appendChild(styles);
-    }
-    
-    // Add to page
-    document.body.appendChild(toast);
-    
-    // Animate in
-    setTimeout(() => toast.classList.add('show'), 100);
-    
-    // Remove after 4 seconds
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 4000);
-}
-
-function getToastIcon(type) {
-    switch (type) {
-        case 'success': return 'check-circle';
-        case 'error': return 'exclamation-circle';
-        case 'warning': return 'exclamation-triangle';
-        default: return 'info-circle';
-    }
-}
-
-// Export functions for use in other files
-window.venueSystem = {
-    requestLocationPermission,
-    addVenue,
-    findNearbyVenues,
-    getVenue,
-    checkInToVenue,
-    checkOutOfVenue,
-    calculateDistance,
-    showToast
-};
+        });
+    </script>
+</body>
+</html>
