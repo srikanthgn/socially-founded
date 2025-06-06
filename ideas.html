@@ -651,6 +651,104 @@
 .toast-error {
     background: #f44336;
 }
+/* Compact Card Design */
+.idea-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.idea-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.idea-card.expanded {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* Compact Header */
+.idea-card .idea-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.idea-card .idea-title {
+    font-size: 20px;
+    margin: 0;
+    color: #003554;
+    flex: 1;
+}
+
+.idea-card .expand-icon {
+    color: #666;
+    transition: transform 0.3s;
+    margin-left: 10px;
+}
+
+.idea-card.expanded .expand-icon {
+    transform: rotate(180deg);
+}
+
+/* Collapsible Content */
+.idea-card .idea-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.idea-card.expanded .idea-content {
+    max-height: 500px;
+}
+
+/* Always Visible Summary */
+.idea-card .idea-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.idea-card .idea-meta-compact {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.idea-card .idea-meta-compact span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Grid Layout for Multiple Ideas */
+.ideas-grid {
+    display: grid;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Make sections more distinct */
+.section {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+}
+
+.section h2 {
+    margin-top: 0;
+    color: #003554;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
 
     </style>
 </head>
