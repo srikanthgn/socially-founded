@@ -438,6 +438,105 @@
                 align-items: stretch;
             }
         }
+
+/* Add this CSS to the existing <style> section */
+
+/* Certificate Button */
+.btn-certificate {
+    background: #D4AF37;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.btn-certificate:hover {
+    background: #B8981F;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+/* Certificate Modal */
+.certificate-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.certificate-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.certificate-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #666;
+    z-index: 10;
+}
+
+.certificate-preview {
+    margin-bottom: 20px;
+}
+
+.certificate-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.certificate-rewards {
+    text-align: center;
+    padding: 15px;
+    background: #fef3c7;
+    border-radius: 10px;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.certificate-rewards i {
+    color: #f59e0b;
+}
+
+
     </style>
 </head>
 <body>
@@ -656,50 +755,55 @@
         }
         
         // Display ideas
-        function displayIdeas(ideas) {
-            const grid = document.getElementById('ideas-grid');
-            const emptyState = document.getElementById('empty-state');
-            
-            console.log('Displaying', ideas.length, 'ideas');
-            
-            if (ideas.length === 0) {
-                grid.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            grid.style.display = 'grid';
-            emptyState.style.display = 'none';
-            
-            grid.innerHTML = ideas.map(idea => `
-                <div class="idea-card" onclick="viewIdea('${idea.id}')">
-                    <div class="idea-header">
-                        <div>
-                            <h3 class="idea-title">${escapeHtml(idea.title)}</h3>
-                            <div class="idea-id">${idea.sfIdeaId}</div>
-                        </div>
-                    </div>
-                    <p class="idea-description">${escapeHtml(idea.description)}</p>
-                    <div class="idea-progress">
-                        <div class="progress-label">
-                            <span>Progress</span>
-                            <span>${idea.progress || 0}%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${idea.progress || 0}%"></div>
-                        </div>
-                    </div>
-                    <div class="idea-footer">
-                        <span class="idea-stage">${formatStage(idea.stage)}</span>
-                        <span class="idea-visibility">
-                            <i class="fas fa-${idea.isPublic ? 'globe' : 'lock'}"></i>
-                            ${idea.isPublic ? 'Public' : 'Private'}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
-        }
         
+// Display ideas - WITH CERTIFICATE BUTTON
+function displayIdeas(ideas) {
+    const grid = document.getElementById('ideas-grid');
+    const emptyState = document.getElementById('empty-state');
+    
+    console.log('Displaying', ideas.length, 'ideas');
+    
+    if (ideas.length === 0) {
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+    }
+    
+    grid.style.display = 'grid';
+    emptyState.style.display = 'none';
+    
+    grid.innerHTML = ideas.map(idea => `
+        <div class="idea-card" onclick="viewIdea('${idea.id}')">
+            <div class="idea-header">
+                <div>
+                    <h3 class="idea-title">${escapeHtml(idea.title)}</h3>
+                    <div class="idea-id">${idea.sfIdeaId}</div>
+                </div>
+                <button class="btn-certificate" onclick="event.stopPropagation(); generateCertificate('${idea.id}', ${JSON.stringify(idea).replace(/"/g, '&quot;')})" title="Generate Certificate">
+                    <i class="fas fa-certificate"></i>
+                </button>
+            </div>
+            <p class="idea-description">${escapeHtml(idea.description)}</p>
+            <div class="idea-progress">
+                <div class="progress-label">
+                    <span>Progress</span>
+                    <span>${idea.progress || 0}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${idea.progress || 0}%"></div>
+                </div>
+            </div>
+            <div class="idea-footer">
+                <span class="idea-stage">${formatStage(idea.stage)}</span>
+                <span class="idea-visibility">
+                    <i class="fas fa-${idea.isPublic ? 'globe' : 'lock'}"></i>
+                    ${idea.isPublic ? 'Public' : 'Private'}
+                </span>
+            </div>
+        </div>
+    `).join('');
+}
+
         // Open new idea modal
         function openNewIdeaModal() {
             console.log('Opening modal...');
@@ -814,5 +918,8 @@
     <!-- Mobile fixes -->
     <link rel="stylesheet" href="mobile-auth-fix.css">
     <script src="mobile-nav-fix.js"></script>
+<!-- Certificate Generator -->
+<link rel="stylesheet" href="certificate-styles.css">
+<script src="certificate-generator.js"></script>
 </body>
 </html>
