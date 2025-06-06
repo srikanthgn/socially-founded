@@ -1,11 +1,678 @@
-<!-- REPLACE THE ENTIRE SCRIPT SECTION IN YOUR venues.html WITH THIS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venues - SociallyFounded</title>
+    <link rel="icon" type="image/x-icon" href="favicon.svg">
     
+    <!-- PWA meta tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#003554">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SociallyFounded">
+    <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile-fixes.css">
+    
+    <!-- Venue-specific styles -->
+    <style>
+        .venues-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .venues-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #003554 0%, #005580 100%);
+            color: white;
+            border-radius: 20px;
+        }
+        
+        .venues-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .venues-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .venue-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-input {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            width: 300px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #003554;
+        }
+        
+        .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .view-toggle {
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 25px;
+            padding: 5px;
+        }
+        
+        .view-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-btn.active {
+            background: #003554;
+            color: white;
+        }
+        
+        .add-venue-btn {
+            background: #D4AF37;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .add-venue-btn:hover {
+            background: #B8860B;
+            transform: translateY(-2px);
+        }
+        
+        .venues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .venue-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .venue-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .venue-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 3rem;
+            position: relative;
+        }
+        
+        .venue-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #D4AF37;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .venue-badge.verified { background: #28a745; }
+        .venue-badge.featured { background: #007bff; }
+        .venue-badge.premium { background: #6f42c1; }
+        
+        .venue-info {
+            padding: 20px;
+        }
+        
+        .venue-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #003554;
+            margin-bottom: 8px;
+        }
+        
+        .venue-type {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .venue-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stars {
+            color: #D4AF37;
+        }
+        
+        .rating-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .venue-amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .amenity-tag {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .venue-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .venue-stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-weight: bold;
+            color: #003554;
+            font-size: 1.1rem;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .venues-map {
+            height: 500px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            color: #666;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid #003554;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .venues-container {
+                padding: 15px;
+            }
+            
+            .venue-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-filters {
+                justify-content: space-between;
+            }
+            
+            .search-input {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .venues-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .venues-header h1 {
+                font-size: 2rem;
+            }
+            
+            .venues-header p {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Add Venue Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-header h2 {
+            color: #003554;
+            margin: 0;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #003554;
+        }
+        
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        
+        .amenity-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .submit-btn {
+            background: #003554;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #001f3f;
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="favicon.svg" alt="SociallyFounded" width="40" height="40">
+                    <span>SociallyFounded</span>
+                </a>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="nav-links desktop-nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="venues.html" class="active">Venues</a>
+                <a href="ideas.html">Ideas</a>
+                <a href="passport.html">Digital Passport</a>
+            </div>
+            
+            <!-- Mobile Navigation Button -->
+            <button id="open-mobile-nav" class="mobile-nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-nav" class="mobile-nav">
+            <div class="mobile-nav-header">
+                <span>Menu</span>
+                <button id="close-mobile-nav">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mobile-nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="venues.html" class="active">Venues</a>
+                <a href="ideas.html">Ideas</a>
+                <a href="passport.html">Digital Passport</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="venues-container">
+        <!-- Header -->
+        <div class="venues-header">
+            <h1><i class="fas fa-map-marker-alt"></i> Discover Venues</h1>
+            <p>Find the perfect workspace near you. From bustling cafés to quiet libraries, discover where founders build their dreams.</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="venue-controls">
+            <div class="search-filters">
+                <input type="text" class="search-input" placeholder="Search venues by name or location..." id="venueSearch">
+                
+                <select class="filter-select" id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="cafe">Café</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="coworking">Coworking</option>
+                    <option value="library">Library</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="park">Park</option>
+                </select>
+                
+                <select class="filter-select" id="distanceFilter">
+                    <option value="">Any Distance</option>
+                    <option value="0.5">Within 500m</option>
+                    <option value="1">Within 1km</option>
+                    <option value="2">Within 2km</option>
+                    <option value="5">Within 5km</option>
+                    <option value="10">Within 10km</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div class="view-toggle">
+                    <button class="view-btn active" id="gridView">
+                        <i class="fas fa-th"></i> Grid
+                    </button>
+                    <button class="view-btn" id="mapView">
+                        <i class="fas fa-map"></i> Map
+                    </button>
+                </div>
+                
+                <button class="add-venue-btn" onclick="showAddVenueModal()">
+                    <i class="fas fa-plus"></i> Add Venue
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-spinner">
+            <div class="spinner"></div>
+            <span>Finding amazing venues near you...</span>
+        </div>
+
+        <!-- Venues Grid -->
+        <div id="venuesGrid" class="venues-grid" style="display: none;">
+            <!-- Venues will be dynamically loaded here -->
+        </div>
+
+        <!-- Map View -->
+        <div id="venuesMap" class="venues-map" style="display: none;">
+            <div>
+                <i class="fas fa-map"></i>
+                <p>Interactive map coming soon! For now, enjoy our grid view of all venues.</p>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>No venues found</h3>
+            <p>Try adjusting your search filters or be the first to add a venue in this area!</p>
+            <button class="add-venue-btn" onclick="showAddVenueModal()">
+                <i class="fas fa-plus"></i> Add First Venue
+            </button>
+        </div>
+    </main>
+
+    <!-- Add Venue Modal -->
+    <div id="addVenueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-map-marker-alt"></i> Add New Venue</h2>
+                <button class="close-modal" onclick="closeAddVenueModal()">&times;</button>
+            </div>
+            
+            <form id="addVenueForm">
+                <div class="form-group">
+                    <label for="venueName">Venue Name *</label>
+                    <input type="text" id="venueName" required placeholder="e.g., Startup Café">
+                </div>
+                
+                <div class="form-group">
+                    <label for="venueType">Venue Type *</label>
+                    <select id="venueType" required>
+                        <option value="">Select type</option>
+                        <option value="cafe">Café</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="coworking">Coworking Space</option>
+                        <option value="library">Library</option>
+                        <option value="hotel">Hotel</option>
+                        <option value="park">Park</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="venueAddress">Address *</label>
+                    <input type="text" id="venueAddress" required placeholder="Street address will be auto-filled">
+                </div>
+                
+                <div class="form-group">
+                    <label>Amenities</label>
+                    <div class="amenities-grid">
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="wifi" value="wifi">
+                            <label for="wifi">WiFi</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="power" value="power">
+                            <label for="power">Power Outlets</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="quiet" value="quiet">
+                            <label for="quiet">Quiet Space</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="meetings" value="meetings">
+                            <label for="meetings">Meeting Rooms</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="parking" value="parking">
+                            <label for="parking">Parking</label>
+                        </div>
+                        <div class="amenity-checkbox">
+                            <input type="checkbox" id="food" value="food">
+                            <label for="food">Food & Drinks</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="venueDescription">Description (Optional)</label>
+                    <textarea id="venueDescription" rows="3" placeholder="Tell us what makes this venue special for founders..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-plus"></i> Add Venue (Earn 50 XP!)
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="firebase-config.js"></script>
     <script src="user-management.js"></script>
     <script src="venue-system.js"></script>
     <script src="mobile-script-fixes.js"></script>
     <script src="pwa-registration.js" defer></script>
+    <!-- REPLACE THE ENTIRE SCRIPT SECTION IN YOUR venues.html WITH THIS -->
+    
+   
     
     <script>
         // Initialize venues page - FIXED VERSION
@@ -109,3 +776,5 @@
         window.handleAddVenue = handleAddVenue;
         window.switchView = switchView;
     </script>
+</body>
+</html>
