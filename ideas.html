@@ -818,6 +818,23 @@
                 }
             });
         });
+
+// Loading state functions
+function showLoading() {
+    const loadingState = document.getElementById('loading-state');
+    if (loadingState) {
+        loadingState.style.display = 'flex';
+    }
+}
+
+function hideLoading() {
+    const loadingState = document.getElementById('loading-state');
+    if (loadingState) {
+        loadingState.style.display = 'none';
+    }
+}
+
+
         
         // Load ideas - Simplified version
        
@@ -1053,20 +1070,7 @@ function showToast(message, type = 'info') {
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
-// Loading state functions
-function showLoading() {
-    const loadingState = document.getElementById('loading-state');
-    if (loadingState) {
-        loadingState.style.display = 'flex';
-    }
-}
 
-function hideLoading() {
-    const loadingState = document.getElementById('loading-state');
-    if (loadingState) {
-        loadingState.style.display = 'none';
-    }
-}
         
     </script>
     
