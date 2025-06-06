@@ -705,42 +705,62 @@
         });
         
         // Load ideas - Simplified version
-        async function loadIdeas() {
-            try {
-                console.log('Loading ideas...');
-                document.getElementById('loading-state').style.display = 'block';
-                document.getElementById('ideas-grid').style.display = 'none';
-                document.getElementById('empty-state').style.display = 'none';
-                
-                // Get ALL ideas without ordering (we'll sort manually)
-                const ideasRef = firebase.firestore().collection('ideas');
-                const snapshot = await ideasRef.get();
-                
-                const allIdeas = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    allIdeas.push({ 
-                        id: doc.id, 
-                        ...data
-                    });
-                });
-                
-                console.log('Total ideas in database:', allIdeas.length);
-                
-                // Filter for public ideas or user's own ideas
-                const visibleIdeas = allIdeas.filter(idea => 
-                    idea.isPublic || idea.userId === currentUser.uid
-                );
-                
-                console.log('Visible ideas:', visibleIdeas.length);
-                
-                // Sort by createdAt manually (newest first)
-                visibleIdeas.sort((a, b) => {
-                    const aTime = a.createdAt?.seconds || 0;
-                    const bTime = b.createdAt?.seconds || 0;
-                    return bTime - aTime;
-                });
-                
+       
+                async function loadIdeas() {
+    try {
+        showLoading();
+        const user = firebase.auth().currentUser;
+        
+        if (!user) {
+            document.getElementById('myIdeasList').innerHTML = '<p>Please sign in to see your ideas.</p>';
+            document.getElementById('publicIdeasList').innerHTML = '<p>Please sign in to browse ideas.</p>';
+            hideLoading();
+            return;
+        }
+        
+        // Load user's ideas
+        const myIdeasSnapshot = await firebase.firestore()
+            .collection('ideas')
+            .where('userId', '==', user.uid)
+            .orderBy('createdAt', 'desc')
+            .get();
+        
+        let myIdeasHTML = '';
+        if (myIdeasSnapshot.empty) {
+            myIdeasHTML = '<p class="empty-state">You haven\'t created any ideas yet. Click "Create New Idea" to get started!</p>';
+        } else {
+            myIdeasSnapshot.forEach(doc => {
+                const idea = doc.data();
+                myIdeasHTML += generateIdeaCardHTML(idea, doc.id);
+            });
+        }
+        document.getElementById('myIdeasList').innerHTML = myIdeasHTML;
+        
+        // Load public ideas
+        const publicIdeasSnapshot = await firebase.firestore()
+            .collection('ideas')
+            .where('isPublic', '==', true)
+            .orderBy('createdAt', 'desc')
+            .limit(20)
+            .get();
+        
+        let publicIdeasHTML = '';
+        if (publicIdeasSnapshot.empty) {
+            publicIdeasHTML = '<p class="empty-state">No public ideas yet. Be the first to share!</p>';
+        } else {
+            publicIdeasSnapshot.forEach(doc => {
+                const idea = doc.data();
+                publicIdeasHTML += generateIdeaCardHTML(idea, doc.id);
+            });
+        }
+        document.getElementById('publicIdeasList').innerHTML = publicIdeasHTML;
+        
+        hideLoading();
+    } catch (error) {
+        console.error('Error loading ideas:', error);
+        hideLoading();
+    }
+}
                 // Hide loading state
                 document.getElementById('loading-state').style.display = 'none';
                 
