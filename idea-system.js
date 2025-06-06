@@ -564,7 +564,101 @@ function generateVersionTimeline(idea) {
     return html;
 }
 
+// Generate Idea Card HTML for display
+function generateIdeaCardHTML(idea, ideaId) {
+    const isOwner = firebase.auth().currentUser && idea.userId === firebase.auth().currentUser.uid;
+    
+    return `
+        <div class="idea-card ${idea.isPublic ? '' : 'private'}" data-idea-id="${ideaId}">
+            <div class="idea-header">
+                <h3 class="idea-title">${idea.title}</h3>
+                <div class="idea-meta">
+                    <span class="idea-id">${idea.sfIdeaId}</span>
+                    <span class="idea-version">v${idea.version || 1}</span>
+                    ${idea.isPublic ? '<span class="visibility-badge"><i class="fas fa-globe"></i> Public</span>' : '<span class="visibility-badge"><i class="fas fa-lock"></i> Private</span>'}
+                </div>
+            </div>
+            
+            <p class="idea-description">${idea.description}</p>
+            
+            <div class="idea-details">
+                <div class="detail-item">
+                    <i class="fas fa-folder"></i>
+                    <span>${getCategoryLabel(idea.category)}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-layer-group"></i>
+                    <span>${idea.stage}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>${new Date(idea.createdAt.toDate()).toLocaleDateString()}</span>
+                </div>
+            </div>
+            
+            <div class="idea-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${idea.progress || 0}%"></div>
+                </div>
+                <span class="progress-text">${idea.progress || 0}% Complete</span>
+            </div>
+            
+            <div class="idea-stats">
+                <div class="stat-item">
+                    <i class="fas fa-eye"></i>
+                    <span>${idea.views || 0} views</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-heart"></i>
+                    <span>${idea.interests ? idea.interests.length : 0} interests</span>
+                </div>
+                ${idea.certificateLocked ? '<div class="stat-item"><i class="fas fa-certificate"></i><span>Certified</span></div>' : ''}
+            </div>
+            
+            <div class="idea-actions">
+                ${isOwner ? `
+                    <button class="btn btn-sm btn-primary" onclick="updateIdea('${ideaId}')">
+                        <i class="fas fa-edit"></i> Update
+                    </button>
+                    ${idea.version > 1 ? `
+                        <button class="btn btn-sm btn-secondary" onclick="showVersionHistory('${ideaId}')">
+                            <i class="fas fa-history"></i> History
+                        </button>
+                    ` : ''}
+                    ${!idea.certificateLocked ? `
+                        <button class="btn btn-sm btn-success" onclick="initCertificateGeneration('${ideaId}', ${JSON.stringify(idea).replace(/"/g, '&quot;')})">
+                            <i class="fas fa-certificate"></i> Certificate
+                        </button>
+                    ` : ''}
+                ` : `
+                    <button class="btn btn-sm btn-secondary" onclick="expressInterest('${ideaId}')">
+                        <i class="fas fa-heart"></i> Interest
+                    </button>
+                `}
+                <button class="btn btn-sm btn-secondary" onclick="shareIdea('${ideaId}', '${idea.title}')">
+                    <i class="fas fa-share"></i> Share
+                </button>
+            </div>
+        </div>
+    `;
+}
 
+// Helper function for category labels
+function getCategoryLabel(category) {
+    const labels = {
+        tech: 'Technology',
+        social: 'Social Impact',
+        consumer: 'Consumer Products',
+        b2b: 'B2B Solutions',
+        health: 'Health & Wellness',
+        education: 'Education',
+        other: 'Other'
+    };
+    return labels[category] || 'Other';
+}
+
+// Export the function
+window.generateIdeaCardHTML = generateIdeaCardHTML;
 
 // Export functions
 window.createIdea = createIdea;
