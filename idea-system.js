@@ -313,6 +313,259 @@ async function shareIdea(ideaId, platform) {
     }
 }
 
+// ADD THESE NEW FUNCTIONS TO idea-system.js (don't replace the whole file)
+
+// Update Idea Function
+async function updateIdea(ideaId) {
+    try {
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            showAuthModal();
+            return;
+        }
+
+        const ideaDoc = await firebase.firestore().collection('ideas').doc(ideaId).get();
+        const currentIdea = ideaDoc.data();
+        
+        if (currentIdea.userId !== user.uid) {
+            alert('You can only update your own ideas!');
+            return;
+        }
+
+        showUpdateIdeaModal(ideaId, currentIdea);
+        
+    } catch (error) {
+        console.error('Error loading idea for update:', error);
+        alert('Error loading idea. Please try again.');
+    }
+}
+
+// Show Update Idea Modal
+function showUpdateIdeaModal(ideaId, currentIdea) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Idea - Version ${currentIdea.version || 1}</h2>
+                <button class="close-modal" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+            </div>
+            
+            <form id="updateIdeaForm" class="idea-form">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" value="${currentIdea.title}" required maxlength="100">
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" required minlength="50" maxlength="2000">${currentIdea.description}</textarea>
+                    <div class="char-count">${currentIdea.description.length}/2000</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="tech" ${currentIdea.category === 'tech' ? 'selected' : ''}>Technology</option>
+                        <option value="social" ${currentIdea.category === 'social' ? 'selected' : ''}>Social Impact</option>
+                        <option value="consumer" ${currentIdea.category === 'consumer' ? 'selected' : ''}>Consumer Products</option>
+                        <option value="b2b" ${currentIdea.category === 'b2b' ? 'selected' : ''}>B2B Solutions</option>
+                        <option value="health" ${currentIdea.category === 'health' ? 'selected' : ''}>Health & Wellness</option>
+                        <option value="education" ${currentIdea.category === 'education' ? 'selected' : ''}>Education</option>
+                        <option value="other" ${currentIdea.category === 'other' ? 'selected' : ''}>Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Stage</label>
+                    <select name="stage" required>
+                        <option value="concept" ${currentIdea.stage === 'concept' ? 'selected' : ''}>Concept</option>
+                        <option value="validation" ${currentIdea.stage === 'validation' ? 'selected' : ''}>Validation</option>
+                        <option value="building" ${currentIdea.stage === 'building' ? 'selected' : ''}>Building</option>
+                        <option value="scaling" ${currentIdea.stage === 'scaling' ? 'selected' : ''}>Scaling</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Progress</label>
+                    <input type="range" name="progress" min="0" max="100" value="${currentIdea.progress || 0}" 
+                           oninput="this.nextElementSibling.textContent = this.value + '%'">
+                    <span class="progress-value">${currentIdea.progress || 0}%</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Version Notes (What changed?)</label>
+                    <textarea name="versionNotes" placeholder="Describe what you updated in this version..." required></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Version ${(currentIdea.version || 1) + 1}
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    document.getElementById('updateIdeaForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveIdeaUpdate(ideaId, currentIdea, new FormData(e.target));
+    });
+    
+    const textarea = modal.querySelector('textarea[name="description"]');
+    textarea.addEventListener('input', function() {
+        this.nextElementSibling.textContent = `${this.value.length}/2000`;
+    });
+}
+
+// Save Idea Update
+async function saveIdeaUpdate(ideaId, currentIdea, formData) {
+    try {
+        const updateBtn = document.querySelector('#updateIdeaForm button[type="submit"]');
+        updateBtn.disabled = true;
+        updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        
+        const currentVersion = currentIdea.version || 1;
+        const newVersion = currentVersion + 1;
+        
+        const versionEntry = {
+            version: currentVersion,
+            title: currentIdea.title,
+            description: currentIdea.description,
+            category: currentIdea.category,
+            stage: currentIdea.stage,
+            progress: currentIdea.progress || 0,
+            updatedAt: currentIdea.updatedAt || currentIdea.createdAt,
+            versionNotes: currentIdea.versionNotes || 'Initial version'
+        };
+        
+        const updateData = {
+            title: formData.get('title'),
+            description: formData.get('description'),
+            category: formData.get('category'),
+            stage: formData.get('stage'),
+            progress: parseInt(formData.get('progress')),
+            version: newVersion,
+            versionNotes: formData.get('versionNotes'),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            [`versionHistory.v${currentVersion}`]: versionEntry
+        };
+        
+        const oldProgress = currentIdea.progress || 0;
+        const newProgress = updateData.progress;
+        const oldMilestone = Math.floor(oldProgress / 25);
+        const newMilestone = Math.floor(newProgress / 25);
+        
+        await firebase.firestore().collection('ideas').doc(ideaId).update(updateData);
+        
+        if (newMilestone > oldMilestone) {
+            const milestonesAchieved = newMilestone - oldMilestone;
+            const xpReward = milestonesAchieved * 25;
+            await window.awardExperience(xpReward, `Idea progress milestone${milestonesAchieved > 1 ? 's' : ''}`);
+            
+            showToast(`Version ${newVersion} saved! +${xpReward} XP for progress!`, 'success');
+        } else {
+            showToast(`Version ${newVersion} saved successfully!`, 'success');
+        }
+        
+        await logActivity('idea_updated', {
+            ideaId: ideaId,
+            ideaTitle: updateData.title,
+            newVersion: newVersion,
+            progress: newProgress
+        });
+        
+        document.querySelector('.modal-overlay').remove();
+        await loadIdeas();
+        
+    } catch (error) {
+        console.error('Error updating idea:', error);
+        alert('Error updating idea. Please try again.');
+        const updateBtn = document.querySelector('#updateIdeaForm button[type="submit"]');
+        updateBtn.disabled = false;
+        updateBtn.innerHTML = '<i class="fas fa-save"></i> Save Update';
+    }
+}
+
+// Show Version History
+async function showVersionHistory(ideaId) {
+    try {
+        const ideaDoc = await firebase.firestore().collection('ideas').doc(ideaId).get();
+        const idea = ideaDoc.data();
+        
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content version-history-modal">
+                <div class="modal-header">
+                    <h2>Version History - ${idea.title}</h2>
+                    <button class="close-modal" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+                </div>
+                
+                <div class="version-timeline">
+                    ${generateVersionTimeline(idea)}
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+    } catch (error) {
+        console.error('Error loading version history:', error);
+        alert('Error loading version history.');
+    }
+}
+
+// Generate Version Timeline HTML
+function generateVersionTimeline(idea) {
+    let html = '';
+    
+    html += `
+        <div class="version-item current">
+            <div class="version-number">v${idea.version || 1}</div>
+            <div class="version-content">
+                <h4>${idea.title}</h4>
+                <p class="version-date">Current Version - ${idea.updatedAt ? new Date(idea.updatedAt.toDate()).toLocaleDateString() : 'Now'}</p>
+                <p class="version-notes">${idea.versionNotes || 'Latest version'}</p>
+                <div class="version-meta">
+                    <span><i class="fas fa-chart-line"></i> ${idea.progress || 0}% Complete</span>
+                    <span><i class="fas fa-layer-group"></i> ${idea.stage}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    if (idea.versionHistory) {
+        const versions = Object.entries(idea.versionHistory)
+            .sort((a, b) => b[1].version - a[1].version);
+            
+        versions.forEach(([key, version]) => {
+            html += `
+                <div class="version-item">
+                    <div class="version-number">v${version.version}</div>
+                    <div class="version-content">
+                        <h4>${version.title}</h4>
+                        <p class="version-date">${version.updatedAt ? new Date(version.updatedAt.toDate()).toLocaleDateString() : ''}</p>
+                        <p class="version-notes">${version.versionNotes || 'No notes'}</p>
+                        <div class="version-meta">
+                            <span><i class="fas fa-chart-line"></i> ${version.progress}% Complete</span>
+                            <span><i class="fas fa-layer-group"></i> ${version.stage}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    
+    return html;
+}
+
+
+
 // Export functions
 window.createIdea = createIdea;
 window.updateIdeaProgress = updateIdeaProgress;
