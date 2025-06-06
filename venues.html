@@ -7,17 +7,21 @@
     <link rel="icon" type="image/x-icon" href="favicon.svg">
     
     <!-- PWA meta tags -->
-<!-- PWA meta tags -->
- 
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#003554">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="SociallyFounded">
     <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
     
     <!-- Main Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -666,34 +670,42 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Scripts - FIXED ORDER -->
+    <!-- Firebase must be loaded first, then our config, then our scripts -->
     <script src="firebase-config.js"></script>
     <script src="user-management.js"></script>
     <script src="venue-system.js"></script>
     <script src="mobile-script-fixes.js"></script>
     <script src="pwa-registration.js" defer></script>
-    <!-- REPLACE THE ENTIRE SCRIPT SECTION IN YOUR venues.html WITH THIS -->
-    
-   
     
     <script>
         // Initialize venues page - FIXED VERSION
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Venues page loaded');
+            console.log('Venues page loaded, Firebase available:', typeof firebase !== 'undefined');
             
-            // Wait for venue-system.js to load
-            function checkVenueSystem() {
-                if (typeof initializeVenueSystem === 'function') {
-                    console.log('venue-system.js loaded successfully');
+            // Wait for all scripts to load
+            function checkAllSystemsReady() {
+                const firebaseReady = typeof firebase !== 'undefined';
+                const venueSystemReady = typeof initializeVenueSystem === 'function';
+                const userManagementReady = typeof awardExperience === 'function';
+                
+                console.log('Systems check:', {
+                    firebase: firebaseReady,
+                    venueSystem: venueSystemReady,
+                    userManagement: userManagementReady
+                });
+                
+                if (firebaseReady && venueSystemReady) {
+                    console.log('All systems ready, initializing venue system');
                     initializeVenueSystem();
                     setupEventListeners();
                 } else {
-                    console.log('Waiting for venue-system.js...');
-                    setTimeout(checkVenueSystem, 100);
+                    console.log('Waiting for systems to load...');
+                    setTimeout(checkAllSystemsReady, 100);
                 }
             }
             
-            checkVenueSystem();
+            checkAllSystemsReady();
         });
         
         function setupEventListeners() {
@@ -726,6 +738,8 @@
                     }
                 });
             }
+            
+            console.log('Event listeners set up successfully');
         }
         
         function switchView(view) {
@@ -748,17 +762,29 @@
         }
         
         function showAddVenueModal() {
-            const modal = document.getElementById('addVenueModal');
-            if (modal) {
-                modal.classList.add('show');
-                
-                // Get current location for address
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        console.log('Current location:', position.coords);
-                        // TODO: Reverse geocode to get address
-                    });
+            // Check if user is authenticated
+            if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
+                const modal = document.getElementById('addVenueModal');
+                if (modal) {
+                    modal.classList.add('show');
+                    
+                    // Get current location for address
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            console.log('Current location:', position.coords);
+                            // TODO: Reverse geocode to get address
+                        });
+                    }
                 }
+            } else {
+                // Show auth prompt
+                if (typeof showToast === 'function') {
+                    showToast('Please sign in to add venues', 'info');
+                } else {
+                    alert('Please sign in to add venues');
+                }
+                // Redirect to passport page for authentication
+                window.location.href = 'passport.html';
             }
         }
         
@@ -769,7 +795,9 @@
                 addVenue();
             } else {
                 console.error('addVenue function not available');
-                showToast('Error: Venue system not loaded', 'error');
+                if (typeof showToast === 'function') {
+                    showToast('Error: Venue system not loaded', 'error');
+                }
             }
         }
         
