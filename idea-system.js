@@ -688,3 +688,6 @@ window.expressInterest = expressInterest;
 window.getUserIdeas = getUserIdeas;
 window.getPublicIdeas = getPublicIdeas;
 window.shareIdea = shareIdea;
+window.getCategoryLabel = getCategoryLabel;
+window.showToast = showToast;
+
