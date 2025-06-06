@@ -4,807 +4,1071 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venues - SociallyFounded</title>
-    <link rel="icon" type="image/x-icon" href="favicon.svg">
-    
-    <!-- PWA meta tags -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#003554">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="SociallyFounded">
-    <link rel="apple-touch-icon" href="/pwa/icons/icon-152x152.png">
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-    
-    <!-- Main Styles -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="mobile-fixes.css">
-    
-    <!-- Venue-specific styles -->
     <style>
-        .venues-container {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        
+
+        /* Header */
         .venues-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #003554 0%, #005580 100%);
+            background: linear-gradient(135deg, #003554 0%, #0056a3 100%);
             color: white;
-            border-radius: 20px;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
         }
-        
+
         .venues-header h1 {
             font-size: 2.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
-        
+
         .venues-header p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
         }
-        
-        .venue-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 20px;
+
+        /* Search and Filters */
+        .search-controls {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        
-        .search-filters {
+
+        .search-row {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             align-items: center;
+            margin-bottom: 20px;
         }
-        
+
         .search-input {
+            flex: 1;
+            min-width: 250px;
             padding: 12px 20px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            border-radius: 8px;
             font-size: 16px;
-            width: 300px;
+            outline: none;
             transition: border-color 0.3s;
         }
-        
+
         .search-input:focus {
-            outline: none;
             border-color: #003554;
         }
-        
+
         .filter-select {
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            min-width: 120px;
             background: white;
-            cursor: pointer;
         }
-        
-        .view-toggle {
+
+        .filter-chips {
             display: flex;
-            background: #f5f5f5;
-            border-radius: 25px;
-            padding: 5px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        
-        .view-btn {
-            padding: 10px 20px;
-            border: none;
-            background: transparent;
+
+        .filter-chip {
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
         }
-        
-        .view-btn.active {
+
+        .filter-chip.active {
             background: #003554;
             color: white;
+            border-color: #003554;
         }
-        
+
+        .filter-chip:hover {
+            border-color: #003554;
+        }
+
         .add-venue-btn {
-            background: #D4AF37;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .add-venue-btn:hover {
-            background: #B8860B;
-            transform: translateY(-2px);
-        }
-        
-        .venues-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-        
-        .venue-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .venue-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-        }
-        
-        .venue-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 3rem;
-            position: relative;
-        }
-        
-        .venue-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #D4AF37;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .venue-badge.verified { background: #28a745; }
-        .venue-badge.featured { background: #007bff; }
-        .venue-badge.premium { background: #6f42c1; }
-        
-        .venue-info {
-            padding: 20px;
-        }
-        
-        .venue-name {
-            font-size: 1.3rem;
-            font-weight: bold;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
             color: #003554;
-            margin-bottom: 8px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: auto;
         }
-        
-        .venue-type {
-            color: #666;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+
+        .add-venue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
-        
-        .venue-rating {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .stars {
-            color: #D4AF37;
-        }
-        
-        .rating-text {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .venue-amenities {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-        
-        .amenity-tag {
-            background: #f0f0f0;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            color: #666;
-        }
-        
-        .venue-stats {
+
+        /* Results Header */
+        .results-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
+            margin-bottom: 20px;
+            padding: 0 5px;
         }
-        
-        .venue-stat {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-weight: bold;
-            color: #003554;
-            font-size: 1.1rem;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
+
+        .results-count {
             color: #666;
+            font-size: 14px;
         }
-        
-        .venues-map {
-            height: 500px;
-            background: #f0f0f0;
+
+        .sort-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sort-select {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* Compact Venue List */
+        .venues-list {
+            background: white;
             border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .venue-item {
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .venue-item:last-child {
+            border-bottom: none;
+        }
+
+        .venue-item:hover {
+            background: #f8f9fa;
+        }
+
+        .venue-item.expanded {
+            background: #f8f9fa;
+        }
+
+        /* Compact venue row */
+        .venue-summary {
+            padding: 18px 25px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 1.2rem;
-            margin-bottom: 40px;
+            gap: 20px;
+            min-height: 70px;
         }
-        
-        .loading-spinner {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px;
-            color: #666;
-        }
-        
-        .spinner {
+
+        .venue-icon {
             width: 40px;
             height: 40px;
-            border: 4px solid #f0f0f0;
-            border-top: 4px solid #003554;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .venue-icon.cafe { background: #8B4513; }
+        .venue-icon.restaurant { background: #FF6347; }
+        .venue-icon.coworking { background: #4682B4; }
+        .venue-icon.library { background: #2E8B57; }
+        .venue-icon.hotel { background: #9932CC; }
+        .venue-icon.park { background: #228B22; }
+
+        .venue-main-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .venue-name-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .venue-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #003554;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 250px;
+        }
+
+        .venue-type {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.verified { background: #e8f5e8; color: #2e7d32; }
+        .status-badge.pending { background: #fff3e0; color: #f57c00; }
+        .status-badge.featured { background: #fff8e1; color: #f9a825; }
+
+        .venue-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 14px;
+        }
+
+        .amenities-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .amenity-icon {
+            width: 24px;
+            height: 24px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #666;
+            position: relative;
+        }
+
+        .amenity-icon.available {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .distance-info {
+            color: #999;
+            font-size: 13px;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .expand-arrow {
+            margin-left: 10px;
+            transition: transform 0.3s;
+            color: #999;
+        }
+
+        .venue-item.expanded .expand-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Expanded venue details */
+        .venue-details {
+            display: none;
+            padding: 0 25px 25px 25px;
+            border-top: 1px solid #f0f0f0;
+            background: white;
+        }
+
+        .venue-item.expanded .venue-details {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .venue-description {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .venue-address {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .opening-hours {
+            margin-bottom: 20px;
+        }
+
+        .opening-hours h4 {
+            color: #003554;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .hours-list {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .amenities-detailed {
+            margin-bottom: 20px;
+        }
+
+        .amenities-detailed h4 {
+            color: #003554;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+        }
+
+        .amenity-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .amenity-item.available {
+            color: #2e7d32;
+        }
+
+        .amenity-item.available .fa-circle {
+            color: #4caf50;
+        }
+
+        .venue-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #003554;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #001f3f;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #003554;
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #003554;
+            border: 1px solid #003554;
+        }
+
+        .btn-outline:hover {
+            background: #003554;
+            color: white;
+        }
+
+        /* Recent activity in sidebar */
+        .recent-activity {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .recent-activity h4 {
+            color: #003554;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .activity-avatar {
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 15px;
+            background: #003554;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
+
+        /* Empty state */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: #666;
         }
-        
+
         .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 20px;
+            font-size: 3rem;
             color: #ccc;
+            margin-bottom: 20px;
         }
-        
-        .empty-state h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+
+        /* Loading state */
+        .loading-state {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
         }
-        
-        .empty-state p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #003554;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        
-        /* Mobile responsiveness */
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .venues-container {
-                padding: 15px;
+            .venue-summary {
+                padding: 15px 20px;
+                gap: 15px;
             }
-            
-            .venue-controls {
-                flex-direction: column;
-                align-items: stretch;
+
+            .venue-name {
+                max-width: 180px;
             }
-            
-            .search-filters {
-                justify-content: space-between;
+
+            .amenities-icons {
+                display: none;
             }
-            
-            .search-input {
-                width: 100%;
-                margin-bottom: 15px;
-            }
-            
-            .venues-grid {
+
+            .details-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-            
-            .venues-header h1 {
-                font-size: 2rem;
-            }
-            
-            .venues-header p {
-                font-size: 1rem;
+
+            .venue-actions {
+                flex-direction: column;
             }
         }
-        
-        /* Add Venue Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 1;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            transform: scale(0.9);
-            transition: transform 0.3s;
-        }
-        
-        .modal.show .modal-content {
-            transform: scale(1);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .modal-header h2 {
-            color: #003554;
-            margin: 0;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #666;
-            cursor: pointer;
-            padding: 5px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #003554;
-        }
-        
-        .amenities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-        }
-        
-        .amenity-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .submit-btn {
-            background: #003554;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
-        }
-        
-        .submit-btn:hover {
-            background: #001f3f;
-        }
-        
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .search-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-chips {
+                justify-content: center;
+            }
+
+            .venue-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html">
-                    <img src="favicon.svg" alt="SociallyFounded" width="40" height="40">
-                    <span>SociallyFounded</span>
-                </a>
-            </div>
-            
-            <!-- Desktop Navigation -->
-            <div class="nav-links desktop-nav">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="how-it-works.html">How It Works</a>
-                <a href="venues.html" class="active">Venues</a>
-                <a href="ideas.html">Ideas</a>
-                <a href="passport.html">Digital Passport</a>
-            </div>
-            
-            <!-- Mobile Navigation Button -->
-            <button id="open-mobile-nav" class="mobile-nav-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-        
-        <!-- Mobile Navigation Menu -->
-        <div id="mobile-nav" class="mobile-nav">
-            <div class="mobile-nav-header">
-                <span>Menu</span>
-                <button id="close-mobile-nav">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="mobile-nav-links">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="how-it-works.html">How It Works</a>
-                <a href="venues.html" class="active">Venues</a>
-                <a href="ideas.html">Ideas</a>
-                <a href="passport.html">Digital Passport</a>
-            </div>
-        </div>
-    </nav>
-
-    <main class="venues-container">
+    <div class="container">
         <!-- Header -->
         <div class="venues-header">
             <h1><i class="fas fa-map-marker-alt"></i> Discover Venues</h1>
-            <p>Find the perfect workspace near you. From bustling cafés to quiet libraries, discover where founders build their dreams.</p>
+            <p>Find your perfect workspace. From bustling cafés to quiet libraries, discover where founders build their dreams.</p>
         </div>
 
-        <!-- Controls -->
-        <div class="venue-controls">
-            <div class="search-filters">
-                <input type="text" class="search-input" placeholder="Search venues by name or location..." id="venueSearch">
-                
-                <select class="filter-select" id="typeFilter">
-                    <option value="">All Types</option>
-                    <option value="cafe">Café</option>
-                    <option value="restaurant">Restaurant</option>
-                    <option value="coworking">Coworking</option>
-                    <option value="library">Library</option>
-                    <option value="hotel">Hotel</option>
-                    <option value="park">Park</option>
-                </select>
+        <!-- Search Controls -->
+        <div class="search-controls">
+            <div class="search-row">
+                <input type="text" class="search-input" placeholder="Search venues by name, location, or amenities..." id="venueSearch">
                 
                 <select class="filter-select" id="distanceFilter">
                     <option value="">Any Distance</option>
-                    <option value="0.5">Within 500m</option>
-                    <option value="1">Within 1km</option>
-                    <option value="2">Within 2km</option>
-                    <option value="5">Within 5km</option>
-                    <option value="10">Within 10km</option>
+                    <option value="500">500m</option>
+                    <option value="1000">1km</option>
+                    <option value="2000">2km</option>
+                    <option value="5000">5km</option>
                 </select>
-            </div>
-            
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <div class="view-toggle">
-                    <button class="view-btn active" id="gridView">
-                        <i class="fas fa-th"></i> Grid
-                    </button>
-                    <button class="view-btn" id="mapView">
-                        <i class="fas fa-map"></i> Map
-                    </button>
-                </div>
-                
+
+                <select class="filter-select" id="ratingFilter">
+                    <option value="">Any Rating</option>
+                    <option value="4">4+ Stars</option>
+                    <option value="3">3+ Stars</option>
+                    <option value="2">2+ Stars</option>
+                </select>
+
                 <button class="add-venue-btn" onclick="showAddVenueModal()">
                     <i class="fas fa-plus"></i> Add Venue
                 </button>
             </div>
+
+            <div class="filter-chips">
+                <div class="filter-chip active" data-type="">All Types</div>
+                <div class="filter-chip" data-type="cafe"><i class="fas fa-coffee"></i> Cafés</div>
+                <div class="filter-chip" data-type="restaurant"><i class="fas fa-utensils"></i> Restaurants</div>
+                <div class="filter-chip" data-type="coworking"><i class="fas fa-users"></i> Coworking</div>
+                <div class="filter-chip" data-type="library"><i class="fas fa-book"></i> Libraries</div>
+                <div class="filter-chip" data-type="hotel"><i class="fas fa-bed"></i> Hotels</div>
+                <div class="filter-chip" data-type="park"><i class="fas fa-tree"></i> Parks</div>
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        <div class="results-header">
+            <div class="results-count" id="resultsCount">Found 247 venues</div>
+            <div class="sort-controls">
+                <label for="sortSelect" style="font-size: 14px; color: #666;">Sort by:</label>
+                <select class="sort-select" id="sortSelect">
+                    <option value="distance">Distance</option>
+                    <option value="rating">Rating</option>
+                    <option value="name">Name</option>
+                    <option value="recent">Recently Added</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Venues List -->
+        <div class="venues-list" id="venuesList">
+            <!-- Venues will be loaded here -->
         </div>
 
         <!-- Loading State -->
-        <div id="loadingState" class="loading-spinner">
+        <div class="loading-state" id="loadingState" style="display: none;">
             <div class="spinner"></div>
-            <span>Finding amazing venues near you...</span>
-        </div>
-
-        <!-- Venues Grid -->
-        <div id="venuesGrid" class="venues-grid" style="display: none;">
-            <!-- Venues will be dynamically loaded here -->
-        </div>
-
-        <!-- Map View -->
-        <div id="venuesMap" class="venues-map" style="display: none;">
-            <div>
-                <i class="fas fa-map"></i>
-                <p>Interactive map coming soon! For now, enjoy our grid view of all venues.</p>
-            </div>
         </div>
 
         <!-- Empty State -->
-        <div id="emptyState" class="empty-state" style="display: none;">
-            <i class="fas fa-map-marker-alt"></i>
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-search"></i>
             <h3>No venues found</h3>
-            <p>Try adjusting your search filters or be the first to add a venue in this area!</p>
-            <button class="add-venue-btn" onclick="showAddVenueModal()">
-                <i class="fas fa-plus"></i> Add First Venue
+            <p>No venues match your search criteria. Try adjusting your filters or add a new venue!</p>
+            <button class="btn btn-primary" onclick="showAddVenueModal()">
+                <i class="fas fa-plus"></i> Add Venue
             </button>
-        </div>
-    </main>
-
-    <!-- Add Venue Modal -->
-    <div id="addVenueModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-map-marker-alt"></i> Add New Venue</h2>
-                <button class="close-modal" onclick="closeAddVenueModal()">&times;</button>
-            </div>
-            
-            <form id="addVenueForm">
-                <div class="form-group">
-                    <label for="venueName">Venue Name *</label>
-                    <input type="text" id="venueName" required placeholder="e.g., Startup Café">
-                </div>
-                
-                <div class="form-group">
-                    <label for="venueType">Venue Type *</label>
-                    <select id="venueType" required>
-                        <option value="">Select type</option>
-                        <option value="cafe">Café</option>
-                        <option value="restaurant">Restaurant</option>
-                        <option value="coworking">Coworking Space</option>
-                        <option value="library">Library</option>
-                        <option value="hotel">Hotel</option>
-                        <option value="park">Park</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="venueAddress">Address *</label>
-                    <input type="text" id="venueAddress" required placeholder="Street address will be auto-filled">
-                </div>
-                
-                <div class="form-group">
-                    <label>Amenities</label>
-                    <div class="amenities-grid">
-                        <div class="amenity-checkbox">
-                            <input type="checkbox" id="wifi" value="wifi">
-                            <label for="wifi">WiFi</label>
-                        </div>
-                        <div class="amenity-checkbox">
-                            <input type="checkbox" id="power" value="power">
-                            <label for="power">Power Outlets</label>
-                        </div>
-                        <div class="amenity-checkbox">
-                            <input type="checkbox" id="quiet" value="quiet">
-                            <label for="quiet">Quiet Space</label>
-                        </div>
-                        <div class="amenity-checkbox">
-                            <input type="checkbox" id="meetings" value="meetings">
-                            <label for="meetings">Meeting Rooms</label>
-                        </div>
-                        <div class="amenity-checkbox">
-                            <input type="checkbox" id="parking" value="parking">
-                            <label for="parking">Parking</label>
-                        </div>
-                        <div class="amenity-checkbox">
-                            <input type="checkbox" id="food" value="food">
-                            <label for="food">Food & Drinks</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="venueDescription">Description (Optional)</label>
-                    <textarea id="venueDescription" rows="3" placeholder="Tell us what makes this venue special for founders..."></textarea>
-                </div>
-                
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-plus"></i> Add Venue (Earn 50 XP!)
-                </button>
-            </form>
         </div>
     </div>
 
-    <!-- Scripts - FIXED ORDER -->
-    <!-- Firebase must be loaded first, then our config, then our scripts -->
-    <script src="firebase-config.js"></script>
-    <script src="user-management.js"></script>
-    <script src="venue-system.js"></script>
-    <script src="mobile-script-fixes.js"></script>
-    <script src="pwa-registration.js" defer></script>
-    
     <script>
-        // Initialize venues page - FIXED VERSION
+        // Sample venue data
+        const sampleVenues = [
+            {
+                id: 1,
+                name: "Startup Café Downtown",
+                type: "cafe",
+                status: "verified",
+                rating: 4.5,
+                reviewCount: 123,
+                distance: "0.2 km",
+                address: "123 Innovation Street, Tech District, Dubai",
+                description: "A vibrant café designed for entrepreneurs and innovators. Features high-speed WiFi, plenty of power outlets, and a collaborative atmosphere perfect for meetings and focused work.",
+                openingHours: "Mon-Fri: 7:00 AM - 10:00 PM\nSat-Sun: 8:00 AM - 9:00 PM",
+                amenities: {
+                    wifi: true,
+                    power: true,
+                    quiet: false,
+                    meetings: true,
+                    parking: true,
+                    food: true
+                },
+                recentActivity: [
+                    { user: "JS", action: "checked in", time: "2 min ago" },
+                    { user: "MK", action: "rated 5 stars", time: "15 min ago" }
+                ]
+            },
+            {
+                id: 2,
+                name: "The Founders Hub",
+                type: "coworking",
+                status: "featured",
+                rating: 4.8,
+                reviewCount: 89,
+                distance: "0.5 km",
+                address: "456 Entrepreneur Avenue, Business Quarter, Dubai",
+                description: "Premium coworking space with dedicated areas for startups. Includes private meeting rooms, event spaces, and networking opportunities.",
+                openingHours: "Mon-Fri: 6:00 AM - 11:00 PM\nSat-Sun: 9:00 AM - 8:00 PM",
+                amenities: {
+                    wifi: true,
+                    power: true,
+                    quiet: true,
+                    meetings: true,
+                    parking: true,
+                    food: false
+                }
+            },
+            {
+                id: 3,
+                name: "Code & Coffee",
+                type: "cafe",
+                status: "verified",
+                rating: 4.3,
+                reviewCount: 67,
+                distance: "0.8 km",
+                address: "789 Developer Lane, Creative District, Dubai",
+                description: "Perfect spot for developers and designers. Quiet environment with excellent coffee and coding-friendly atmosphere.",
+                openingHours: "Mon-Fri: 8:00 AM - 9:00 PM\nSat-Sun: 9:00 AM - 7:00 PM",
+                amenities: {
+                    wifi: true,
+                    power: true,
+                    quiet: true,
+                    meetings: false,
+                    parking: false,
+                    food: true
+                }
+            },
+            {
+                id: 4,
+                name: "La Petit Belgian Cafe",
+                type: "restaurant",
+                status: "pending",
+                rating: 0,
+                reviewCount: 0,
+                distance: "1.2 km",
+                address: "321 Gourmet Street, Food District, Dubai",
+                description: "Authentic Belgian cuisine in a cozy setting. Recently added to our network and awaiting verification.",
+                openingHours: "Mon-Sun: 11:00 AM - 11:00 PM",
+                amenities: {
+                    wifi: true,
+                    power: false,
+                    quiet: false,
+                    meetings: false,
+                    parking: true,
+                    food: true
+                }
+            },
+            {
+                id: 5,
+                name: "Central Library Business Center",
+                type: "library",
+                status: "verified",
+                rating: 4.1,
+                reviewCount: 45,
+                distance: "1.5 km",
+                address: "100 Knowledge Boulevard, Academic Quarter, Dubai",
+                description: "Quiet study spaces with business resources. Perfect for research and focused work sessions.",
+                openingHours: "Mon-Fri: 8:00 AM - 8:00 PM\nSat-Sun: 10:00 AM - 6:00 PM",
+                amenities: {
+                    wifi: true,
+                    power: true,
+                    quiet: true,
+                    meetings: true,
+                    parking: true,
+                    food: false
+                }
+            }
+        ];
+
+        let filteredVenues = [...sampleVenues];
+        let currentFilters = {
+            search: '',
+            type: '',
+            distance: '',
+            rating: ''
+        };
+
+        // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Venues page loaded, Firebase available:', typeof firebase !== 'undefined');
-            
-            // Wait for all scripts to load
-            function checkAllSystemsReady() {
-                const firebaseReady = typeof firebase !== 'undefined';
-                const venueSystemReady = typeof initializeVenueSystem === 'function';
-                const userManagementReady = typeof awardExperience === 'function';
-                
-                console.log('Systems check:', {
-                    firebase: firebaseReady,
-                    venueSystem: venueSystemReady,
-                    userManagement: userManagementReady
-                });
-                
-                if (firebaseReady && venueSystemReady) {
-                    console.log('All systems ready, initializing venue system');
-                    initializeVenueSystem();
-                    setupEventListeners();
-                } else {
-                    console.log('Waiting for systems to load...');
-                    setTimeout(checkAllSystemsReady, 100);
-                }
-            }
-            
-            checkAllSystemsReady();
+            loadVenues();
+            initializeEventListeners();
         });
-        
-        function setupEventListeners() {
-            // Search and filter listeners
-            const venueSearch = document.getElementById('venueSearch');
-            const typeFilter = document.getElementById('typeFilter');
-            const distanceFilter = document.getElementById('distanceFilter');
-            
-            if (venueSearch) venueSearch.addEventListener('input', filterVenues);
-            if (typeFilter) typeFilter.addEventListener('change', filterVenues);
-            if (distanceFilter) distanceFilter.addEventListener('change', filterVenues);
-            
-            // View toggle listeners
-            const gridView = document.getElementById('gridView');
-            const mapView = document.getElementById('mapView');
-            
-            if (gridView) gridView.addEventListener('click', () => switchView('grid'));
-            if (mapView) mapView.addEventListener('click', () => switchView('map'));
-            
-            // Add venue form listener
-            const addVenueForm = document.getElementById('addVenueForm');
-            if (addVenueForm) addVenueForm.addEventListener('submit', handleAddVenue);
-            
-            // Modal close listener
-            const addVenueModal = document.getElementById('addVenueModal');
-            if (addVenueModal) {
-                addVenueModal.addEventListener('click', function(event) {
-                    if (event.target === this) {
-                        closeAddVenueModal();
-                    }
+
+        function initializeEventListeners() {
+            // Search input
+            document.getElementById('venueSearch').addEventListener('input', function() {
+                currentFilters.search = this.value.toLowerCase();
+                filterVenues();
+            });
+
+            // Filter chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilters.type = this.dataset.type;
+                    filterVenues();
                 });
-            }
-            
-            console.log('Event listeners set up successfully');
+            });
+
+            // Filter selects
+            document.getElementById('distanceFilter').addEventListener('change', function() {
+                currentFilters.distance = this.value;
+                filterVenues();
+            });
+
+            document.getElementById('ratingFilter').addEventListener('change', function() {
+                currentFilters.rating = this.value;
+                filterVenues();
+            });
+
+            // Sort select
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                sortVenues(this.value);
+            });
         }
-        
-        function switchView(view) {
-            const gridViewBtn = document.getElementById('gridView');
-            const mapViewBtn = document.getElementById('mapView');
-            const venuesGrid = document.getElementById('venuesGrid');
-            const venuesMap = document.getElementById('venuesMap');
+
+        function loadVenues() {
+            showLoading();
             
-            if (view === 'grid') {
-                if (gridViewBtn) gridViewBtn.classList.add('active');
-                if (mapViewBtn) mapViewBtn.classList.remove('active');
-                if (venuesGrid) venuesGrid.style.display = 'grid';
-                if (venuesMap) venuesMap.style.display = 'none';
-            } else {
-                if (mapViewBtn) mapViewBtn.classList.add('active');
-                if (gridViewBtn) gridViewBtn.classList.remove('active');
-                if (venuesGrid) venuesGrid.style.display = 'none';
-                if (venuesMap) venuesMap.style.display = 'flex';
-            }
+            // Simulate loading
+            setTimeout(() => {
+                hideLoading();
+                renderVenues();
+            }, 800);
         }
-        
-        function showAddVenueModal() {
-            // Check if user is authenticated
-            if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
-                const modal = document.getElementById('addVenueModal');
-                if (modal) {
-                    modal.classList.add('show');
-                    
-                    // Get current location for address
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                            console.log('Current location:', position.coords);
-                            // TODO: Reverse geocode to get address
-                        });
+
+        function showLoading() {
+            document.getElementById('loadingState').style.display = 'flex';
+            document.getElementById('venuesList').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('venuesList').style.display = 'block';
+        }
+
+        function filterVenues() {
+            filteredVenues = sampleVenues.filter(venue => {
+                // Search filter
+                if (currentFilters.search && !venue.name.toLowerCase().includes(currentFilters.search) && 
+                    !venue.address.toLowerCase().includes(currentFilters.search)) {
+                    return false;
+                }
+
+                // Type filter
+                if (currentFilters.type && venue.type !== currentFilters.type) {
+                    return false;
+                }
+
+                // Rating filter
+                if (currentFilters.rating && venue.rating < parseFloat(currentFilters.rating)) {
+                    return false;
+                }
+
+                // Distance filter (simplified)
+                if (currentFilters.distance) {
+                    const venueDistance = parseFloat(venue.distance);
+                    const filterDistance = parseFloat(currentFilters.distance) / 1000; // Convert to km
+                    if (venueDistance > filterDistance) {
+                        return false;
                     }
                 }
-            } else {
-                // Show auth prompt
-                if (typeof showToast === 'function') {
-                    showToast('Please sign in to add venues', 'info');
-                } else {
-                    alert('Please sign in to add venues');
-                }
-                // Redirect to passport page for authentication
-                window.location.href = 'passport.html';
-            }
+
+                return true;
+            });
+
+            renderVenues();
         }
-        
-        function handleAddVenue(event) {
-            event.preventDefault();
-            
-            if (typeof addVenue === 'function') {
-                addVenue();
-            } else {
-                console.error('addVenue function not available');
-                if (typeof showToast === 'function') {
-                    showToast('Error: Venue system not loaded', 'error');
-                }
+
+        function sortVenues(sortBy) {
+            switch (sortBy) {
+                case 'rating':
+                    filteredVenues.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'name':
+                    filteredVenues.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'distance':
+                    filteredVenues.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+                    break;
+                case 'recent':
+                    filteredVenues.sort((a, b) => b.id - a.id);
+                    break;
             }
+            renderVenues();
         }
-        
-        // Make functions globally available
-        window.showAddVenueModal = showAddVenueModal;
-        window.handleAddVenue = handleAddVenue;
-        window.switchView = switchView;
+
+        function renderVenues() {
+            const venuesList = document.getElementById('venuesList');
+            const emptyState = document.getElementById('emptyState');
+            const resultsCount = document.getElementById('resultsCount');
+
+            if (filteredVenues.length === 0) {
+                venuesList.style.display = 'none';
+                emptyState.style.display = 'block';
+                resultsCount.textContent = 'No venues found';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            venuesList.style.display = 'block';
+            resultsCount.textContent = `Found ${filteredVenues.length} venue${filteredVenues.length !== 1 ? 's' : ''}`;
+
+            venuesList.innerHTML = filteredVenues.map(venue => createVenueItem(venue)).join('');
+        }
+
+        function createVenueItem(venue) {
+            const getVenueIcon = (type) => {
+                const icons = {
+                    cafe: 'fa-coffee',
+                    restaurant: 'fa-utensils',
+                    coworking: 'fa-users',
+                    library: 'fa-book',
+                    hotel: 'fa-bed',
+                    park: 'fa-tree'
+                };
+                return icons[type] || 'fa-map-marker-alt';
+            };
+
+            const getStars = (rating) => {
+                if (rating === 0) return '<span style="color: #ccc;">No rating yet</span>';
+                return '★'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
+            };
+
+            const getAmenityIcon = (amenity, available) => {
+                const icons = {
+                    wifi: 'fa-wifi',
+                    power: 'fa-plug',
+                    quiet: 'fa-volume-mute',
+                    meetings: 'fa-users',
+                    parking: 'fa-car',
+                    food: 'fa-utensils'
+                };
+                return `<div class="amenity-icon ${available ? 'available' : ''}" title="${amenity}">
+                    <i class="fas ${icons[amenity]}"></i>
+                </div>`;
+            };
+
+            return `
+                <div class="venue-item" onclick="toggleVenueDetails(${venue.id})">
+                    <div class="venue-summary">
+                        <div class="venue-icon ${venue.type}">
+                            <i class="fas ${getVenueIcon(venue.type)}"></i>
+                        </div>
+                        
+                        <div class="venue-main-info">
+                            <div class="venue-name-row">
+                                <span class="venue-name">${venue.name}</span>
+                                <span class="venue-type">${venue.type}</span>
+                                <span class="status-badge ${venue.status}">${venue.status}</span>
+                            </div>
+                            
+                            <div class="venue-meta">
+                                <div class="rating-display">
+                                    <span class="stars">${getStars(venue.rating)}</span>
+                                    <span>${venue.rating > 0 ? venue.rating : ''} ${venue.reviewCount > 0 ? `(${venue.reviewCount})` : ''}</span>
+                                </div>
+                                
+                                <div class="amenities-icons">
+                                    ${getAmenityIcon('wifi', venue.amenities.wifi)}
+                                    ${getAmenityIcon('power', venue.amenities.power)}
+                                    ${getAmenityIcon('quiet', venue.amenities.quiet)}
+                                    ${getAmenityIcon('meetings', venue.amenities.meetings)}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="distance-info">${venue.distance}</div>
+                        <i class="fas fa-chevron-down expand-arrow"></i>
+                    </div>
+                    
+                    <div class="venue-details">
+                        <div class="details-grid">
+                            <div>
+                                <div class="venue-description">${venue.description}</div>
+                                
+                                <div class="venue-address">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${venue.address}</span>
+                                </div>
+                                
+                                <div class="opening-hours">
+                                    <h4><i class="fas fa-clock"></i> Opening Hours</h4>
+                                    <div class="hours-list">${venue.openingHours.replace(/\n/g, '<br>')}</div>
+                                </div>
+                                
+                                <div class="amenities-detailed">
+                                    <h4><i class="fas fa-list"></i> Amenities</h4>
+                                    <div class="amenities-grid">
+                                        <div class="amenity-item ${venue.amenities.wifi ? 'available' : ''}">
+                                            <i class="fas fa-circle"></i> WiFi
+                                        </div>
+                                        <div class="amenity-item ${venue.amenities.power ? 'available' : ''}">
+                                            <i class="fas fa-circle"></i> Power Outlets
+                                        </div>
+                                        <div class="amenity-item ${venue.amenities.quiet ? 'available' : ''}">
+                                            <i class="fas fa-circle"></i> Quiet Space
+                                        </div>
+                                        <div class="amenity-item ${venue.amenities.meetings ? 'available' : ''}">
+                                            <i class="fas fa-circle"></i> Meeting Rooms
+                                        </div>
+                                        <div class="amenity-item ${venue.amenities.parking ? 'available' : ''}">
+                                            <i class="fas fa-circle"></i> Parking
+                                        </div>
+                                        <div class="amenity-item ${venue.amenities.food ? 'available' : ''}">
+                                            <i class="fas fa-circle"></i> Food & Drinks
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="venue-actions">
+                                    <button class="btn btn-primary" onclick="checkInToVenue(${venue.id}); event.stopPropagation();">
+                                        <i class="fas fa-map-pin"></i> Check In
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="viewDirections(${venue.id}); event.stopPropagation();">
+                                        <i class="fas fa-directions"></i> Directions
+                                    </button>
+                                    <button class="btn btn-outline" onclick="shareVenue(${venue.id}); event.stopPropagation();">
+                                        <i class="fas fa-share"></i> Share
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                ${venue.recentActivity ? `
+                                    <div class="recent-activity">
+                                        <h4><i class="fas fa-clock"></i> Recent Activity</h4>
+                                        ${venue.recentActivity.map(activity => `
+                                            <div class="activity-item">
+                                                <div class="activity-avatar">${activity.user}</div>
+                                                <span>${activity.action} • ${activity.time}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleVenueDetails(venueId) {
+            const venueItem = event.currentTarget;
+            venueItem.classList.toggle('expanded');
+        }
+
+        function checkInToVenue(venueId) {
+            const venue = sampleVenues.find(v => v.id === venueId);
+            alert(`Checking in to ${venue.name}...`);
+        }
+
+        function viewDirections(venueId) {
+            const venue = sampleVenues.find(v => v.id === venueId);
+            alert(`Getting directions to ${venue.name}...`);
+        }
+
+        function shareVenue(venueId) {
+            const venue = sampleVenues.find(v => v.id === venueId);
+            alert(`Sharing ${venue.name}...`);
+        }
+
+        function showAddVenueModal() {
+            alert('Add venue modal would open here');
+        }
     </script>
 </body>
 </html>
