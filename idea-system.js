@@ -657,6 +657,26 @@ function getCategoryLabel(category) {
     return labels[category] || 'Other';
 }
 
+// Log activity helper
+async function logActivity(type, data) {
+    try {
+        const user = firebase.auth().currentUser;
+        if (!user) return;
+        
+        await firebase.firestore().collection('activities').add({
+            userId: user.uid,
+            type: type,
+            data: data,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    } catch (error) {
+        console.error('Error logging activity:', error);
+    }
+}
+
+// Export it
+window.logActivity = logActivity;
+
 // Export the function
 window.generateIdeaCardHTML = generateIdeaCardHTML;
 
