@@ -876,18 +876,7 @@
         hideLoading();
     }
 }
-                // Hide loading state
-                document.getElementById('loading-state').style.display = 'none';
                 
-                // Display ideas
-                displayIdeas(visibleIdeas);
-                
-            } catch (error) {
-                console.error('Error loading ideas:', error);
-                document.getElementById('loading-state').style.display = 'none';
-                displayIdeas([]);
-            }
-        }
         
         // Display ideas
         
