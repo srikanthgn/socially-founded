@@ -5,16 +5,48 @@ console.log('venue-system.js loading...');
 // Global venue data
 let allVenues = [];
 let filteredVenues = [];
+let firebaseReady = false;
+
+// Wait for Firebase to be ready
+function waitForFirebase() {
+    return new Promise((resolve) => {
+        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+            firebaseReady = true;
+            resolve();
+        } else {
+            // Listen for the firebaseReady event
+            window.addEventListener('firebaseReady', () => {
+                firebaseReady = true;
+                resolve();
+            });
+            
+            // Also poll in case event was missed
+            const checkFirebase = () => {
+                if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+                    firebaseReady = true;
+                    resolve();
+                } else {
+                    setTimeout(checkFirebase, 100);
+                }
+            };
+            checkFirebase();
+        }
+    });
+}
 
 // Initialize the venue system
-function initializeVenueSystem() {
-    console.log('Venue system initialized');
+async function initializeVenueSystem() {
+    console.log('Venue system initializing...');
+    
+    // Wait for Firebase to be ready
+    await waitForFirebase();
+    console.log('Firebase ready, continuing venue system initialization');
     
     // Check authentication
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             console.log('User authenticated, loading venues');
-            loadVenuesFromFirestore(); // Changed function name to avoid recursion
+            loadVenuesFromFirestore();
         } else {
             console.log('User not authenticated');
             showAuthPrompt();
@@ -22,8 +54,13 @@ function initializeVenueSystem() {
     });
 }
 
-// Load venues from Firestore (renamed to avoid recursion)
+// Load venues from Firestore
 function loadVenuesFromFirestore() {
+    if (!firebaseReady) {
+        console.log('Firebase not ready, cannot load venues');
+        return;
+    }
+
     const loadingState = document.getElementById('loadingState');
     const venuesGrid = document.getElementById('venuesGrid');
     const emptyState = document.getElementById('emptyState');
@@ -147,7 +184,12 @@ function generateStars(rating) {
 }
 
 // Handle adding a new venue
-function addVenue() {
+async function addVenue() {
+    if (!firebaseReady) {
+        showToast('Firebase not ready, please try again', 'error');
+        return;
+    }
+
     const form = document.getElementById('addVenueForm');
     if (!form) return;
     
@@ -219,7 +261,7 @@ function submitVenue(venueData) {
             
             // Close modal and refresh venues
             closeAddVenueModal();
-            loadVenuesFromFirestore(); // Use the correct function name
+            loadVenuesFromFirestore();
         })
         .catch(function(error) {
             console.error('Error adding venue:', error);
@@ -345,7 +387,7 @@ function closeAddVenueModal() {
 
 // Make functions globally available
 window.initializeVenueSystem = initializeVenueSystem;
-window.loadVenues = loadVenuesFromFirestore; // Fix the function reference
+window.loadVenues = loadVenuesFromFirestore;
 window.addVenue = addVenue;
 window.filterVenues = filterVenues;
 window.openVenueDetail = openVenueDetail;
