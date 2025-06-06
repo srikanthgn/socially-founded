@@ -1,0 +1,441 @@
+/* certificate-styles.css - Complete file - Just copy and paste this entire file */
+
+/* Certificate Container */
+.certificate-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    position: relative;
+    aspect-ratio: 1.414 / 1;
+}
+
+.certificate {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    overflow: hidden;
+}
+
+.certificate::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    border: 3px solid #003554;
+    border-radius: 0;
+}
+
+.certificate::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    border: 1px solid #D4AF37;
+}
+
+/* Watermark */
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 120px;
+    color: rgba(0, 53, 84, 0.03);
+    font-weight: bold;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+/* Hologram Seal */
+.hologram-seal {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    width: 100px;
+    height: 100px;
+    z-index: 10;
+}
+
+.hologram-content {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #D4AF37 0%, #FFD700 25%, #D4AF37 50%, #FFD700 75%, #D4AF37 100%);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    animation: hologram 3s ease-in-out infinite;
+}
+
+@keyframes hologram {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(5deg) scale(1.05); }
+}
+
+.hologram-content i {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.hologram-content span {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+}
+
+/* Certificate Header */
+.cert-header {
+    text-align: center;
+    z-index: 2;
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.cert-logo {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+}
+
+.cert-title {
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.cert-main-title {
+    font-size: 36px;
+    color: #003554;
+    font-weight: normal;
+    margin-bottom: 10px;
+    font-family: 'Georgia', serif;
+}
+
+.cert-subtitle {
+    font-size: 16px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Divider */
+.divider {
+    width: 100px;
+    height: 1px;
+    background: #D4AF37;
+    margin: 30px auto;
+    position: relative;
+    z-index: 2;
+}
+
+/* Founder Section */
+.founder-section {
+    z-index: 2;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.founder-info {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.info-item {
+    flex: 1;
+}
+
+.info-label {
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Certificate Body */
+.cert-body {
+    flex: 1;
+    z-index: 2;
+    position: relative;
+}
+
+.cert-text {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.idea-title {
+    font-size: 32px;
+    color: #003554;
+    margin: 20px 0;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+}
+
+.ai-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.ai-label {
+    font-weight: 600;
+    color: #003554;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.ai-text {
+    color: #333;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+/* Idea Details Grid */
+.idea-details-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.detail-box {
+    text-align: center;
+}
+
+.detail-label {
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Full Description */
+.full-description {
+    margin: 30px 0;
+}
+
+.desc-label {
+    font-weight: 600;
+    color: #003554;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.idea-description {
+    color: #555;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.protection-text {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    color: #2e7d32;
+}
+
+.protection-text i {
+    margin-right: 10px;
+}
+
+/* Certificate Footer */
+.cert-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 40px;
+    z-index: 2;
+    position: relative;
+}
+
+.cert-timestamp {
+    text-align: left;
+}
+
+.timestamp-label {
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.timestamp-value {
+    font-size: 14px;
+    color: #333;
+}
+
+.cert-signature {
+    text-align: center;
+}
+
+.signature-line {
+    width: 200px;
+    height: 1px;
+    background: #333;
+    margin-bottom: 5px;
+}
+
+.signature-name {
+    font-size: 14px;
+    color: #666;
+}
+
+.cert-seal {
+    width: 100px;
+    height: 100px;
+    background: #003554;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 53, 84, 0.3);
+}
+
+.seal-inner {
+    text-align: center;
+}
+
+.seal-inner i {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.seal-inner span {
+    font-size: 10px;
+    font-weight: bold;
+    display: block;
+    line-height: 1.2;
+}
+
+/* QR Code */
+.qr-code {
+    position: absolute;
+    bottom: 60px;
+    right: 60px;
+    width: 80px;
+    height: 80px;
+    z-index: 3;
+}
+
+.qr-placeholder {
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        #003554,
+        #003554 2px,
+        white 2px,
+        white 4px
+    );
+    border: 2px solid #003554;
+}
+
+.qr-label {
+    font-size: 10px;
+    text-align: center;
+    margin-top: 5px;
+    color: #666;
+}
+
+/* Pattern Overlay */
+.pattern-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 53, 84, 0.05) 0%, transparent 50%);
+    z-index: 1;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .certificate {
+        padding: 30px;
+    }
+    
+    .cert-main-title {
+        font-size: 28px;
+    }
+    
+    .idea-title {
+        font-size: 24px;
+    }
+    
+    .idea-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cert-footer {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .qr-code {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        margin: 20px auto 0;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .certificate-container {
+        box-shadow: none;
+        width: 210mm;
+        height: 297mm;
+    }
+}
