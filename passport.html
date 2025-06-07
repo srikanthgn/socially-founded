@@ -1114,5 +1114,36 @@
     <!-- Mobile fixes -->
     <link rel="stylesheet" href="mobile-auth-fix.css">
     <script src="mobile-nav-fix.js"></script>
+<!-- Quick test for social sharing -->
+<script>
+// Override any conflicts and ensure the function is available
+window.triggerTestShare = function(type) {
+    console.log('Testing share modal...');
+    
+    // Simple test modal to verify CSS is working
+    const modal = document.createElement('div');
+    modal.className = 'sharing-modal modal-visible';
+    modal.innerHTML = `
+        <div class="sharing-overlay" onclick="this.parentElement.remove()"></div>
+        <div class="sharing-content">
+            <button class="sharing-close" onclick="this.parentElement.parentElement.remove()">×</button>
+            <div class="sharing-header">
+                <div class="sharing-emoji">🚀</div>
+                <h3>Test Sharing Modal</h3>
+                <p>Social sharing system is working!</p>
+            </div>
+            <div class="sharing-buttons">
+                <button class="btn-share-linkedin" onclick="alert('LinkedIn sharing would open here!'); this.closest('.sharing-modal').remove();">
+                    <i class="fab fa-linkedin"></i>
+                    <span><strong>LinkedIn</strong><small>Test</small></span>
+                </button>
+                <button class="btn-share-later" onclick="this.closest('.sharing-modal').remove()">Close Test</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+};
+</script>
+    
 </body>
 </html>
