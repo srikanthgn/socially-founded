@@ -428,3 +428,105 @@ function initializePassportApp() {
 }
 
 console.log('✅ Digital Passport app loaded');
+
+// Social Sharing System for Sprint 2
+console.log('Loading social sharing system...');
+
+function triggerTestShare(type = 'levelUp') {
+    const testData = {
+        levelUp: {
+            title: '🚀 Level 5 Founder!',
+            message: 'Just reached Level 5 on SociallyFounded! Building my entrepreneurial journey one check-in at a time. #SociallyFounded #EntrepreneurLife',
+            url: 'https://sociallyfounded.com',
+            emoji: '🚀'
+        },
+        achievement: {
+            title: '🏆 Achievement Unlocked!',
+            message: 'Just unlocked "Check-in Champion" achievement on SociallyFounded! #SociallyFounded #Achievement',
+            url: 'https://sociallyfounded.com',
+            emoji: '🏆'
+        }
+    };
+
+    if (testData[type]) {
+        showSharingPrompt(type, testData[type]);
+    }
+}
+
+function showSharingPrompt(trigger, data) {
+    if (document.querySelector('.sharing-modal')) return;
+
+    const modal = document.createElement('div');
+    modal.className = 'sharing-modal';
+    modal.innerHTML = `
+        <div class="sharing-overlay" onclick="closeSharingModal()"></div>
+        <div class="sharing-content">
+            <button class="sharing-close" onclick="closeSharingModal()">×</button>
+            
+            <div class="sharing-header">
+                <div class="sharing-emoji">${data.emoji}</div>
+                <h3>${data.title}</h3>
+                <p>Share your milestone with the world!</p>
+            </div>
+            
+            <div class="sharing-buttons">
+                <button class="btn-share-linkedin" onclick="shareToLinkedIn('${encodeURIComponent(data.message)}', '${data.url}')">
+                    <i class="fab fa-linkedin"></i>
+                    <span><strong>LinkedIn</strong><small>Professional network</small></span>
+                    <div class="xp-badge">+5 XP</div>
+                </button>
+                
+                <button class="btn-share-twitter" onclick="shareToTwitter('${encodeURIComponent(data.message)}', '${data.url}')">
+                    <i class="fab fa-twitter"></i>
+                    <span><strong>Twitter</strong><small>Social network</small></span>
+                    <div class="xp-badge">+5 XP</div>
+                </button>
+                
+                <button class="btn-share-copy" onclick="copyShareText('${encodeURIComponent(data.message)}', '${data.url}')">
+                    <i class="fas fa-copy"></i>
+                    <span><strong>Copy Link</strong><small>Share anywhere</small></span>
+                </button>
+                
+                <button class="btn-share-later" onclick="closeSharingModal()">Maybe Later</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    setTimeout(() => modal.classList.add('modal-visible'), 10);
+}
+
+function shareToLinkedIn(encodedMessage, url) {
+    const message = decodeURIComponent(encodedMessage);
+    const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(message)}`;
+    window.open(shareUrl, 'linkedinShare', 'width=600,height=500');
+    closeSharingModal();
+    if (window.showToast) window.showToast('✅ Shared to LinkedIn! +5 XP earned', 'success');
+}
+
+function shareToTwitter(encodedMessage, url) {
+    const message = decodeURIComponent(encodedMessage);
+    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(url)}`;
+    window.open(shareUrl, 'twitterShare', 'width=600,height=400');
+    closeSharingModal();
+    if (window.showToast) window.showToast('✅ Shared to Twitter! +5 XP earned', 'success');
+}
+
+function copyShareText(encodedMessage, url) {
+    const message = decodeURIComponent(encodedMessage);
+    const fullText = `${message}\n\n${url}`;
+    navigator.clipboard.writeText(fullText).then(() => {
+        if (window.showToast) window.showToast('✅ Share text copied to clipboard!', 'success');
+    });
+    closeSharingModal();
+}
+
+function closeSharingModal() {
+    const modal = document.querySelector('.sharing-modal');
+    if (modal) modal.remove();
+}
+
+window.triggerTestShare = triggerTestShare;
+window.closeSharingModal = closeSharingModal;
+
+console.log('✅ Social sharing system loaded');
