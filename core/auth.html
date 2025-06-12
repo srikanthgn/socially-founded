@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SociallyFounded - Join the Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #003554;
+            --light-gray: #F5F5F5;
+            --accent-gray: #E0E0E0;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 53, 84, 0.2);
+            max-width: 400px;
+            width: 100%;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--navy), #004a6b);
+        }
+
+        .sf-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--navy);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .welcome-text {
+            color: var(--navy);
+            margin-bottom: 30px;
+        }
+
+        .welcome-text h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .welcome-text p {
+            color: #666;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .auth-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .auth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 20px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 12px;
+            background: var(--white);
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .auth-btn:hover {
+            border-color: var(--navy);
+            background: var(--light-gray);
+            transform: translateY(-2px);
+        }
+
+        .auth-btn i {
+            font-size: 18px;
+        }
+
+        .auth-btn.linkedin {
+            border-color: #0077B5;
+            color: #0077B5;
+        }
+
+        .auth-btn.linkedin:hover {
+            background: #0077B5;
+            color: var(--white);
+        }
+
+        .auth-btn.google {
+            border-color: #DB4437;
+            color: #DB4437;
+        }
+
+        .auth-btn.google:hover {
+            background: #DB4437;
+            color: var(--white);
+        }
+
+        .auth-btn.facebook {
+            border-color: #1877F2;
+            color: #1877F2;
+        }
+
+        .auth-btn.facebook:hover {
+            background: #1877F2;
+            color: var(--white);
+        }
+
+        .divider {
+            position: relative;
+            margin: 20px 0;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--accent-gray);
+        }
+
+        .divider span {
+            background: var(--white);
+            padding: 0 15px;
+        }
+
+        .phone-auth {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .phone-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .country-code {
+            flex: 0 0 80px;
+            padding: 12px 8px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            background: var(--light-gray);
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .phone-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .phone-input:focus {
+            outline: none;
+            border-color: var(--navy);
+        }
+
+        .verify-btn {
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .verify-btn:hover {
+            background: #004a6b;
+            transform: translateY(-2px);
+        }
+
+        .verify-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            background: var(--success);
+            color: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .passport-preview {
+            background: linear-gradient(135deg, var(--navy), #004a6b);
+            color: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .passport-preview h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .passport-id {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
+
+        .passport-tier {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .loading {
+            display: none;
+            margin: 10px 0;
+        }
+
+        .spinner {
+            border: 2px solid var(--accent-gray);
+            border-top: 2px solid var(--navy);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-gray);
+            transition: background 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--navy);
+        }
+
+        .terms {
+            font-size: 11px;
+            color: #999;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
+        .terms a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            .welcome-text h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="step-indicator">
+            <div class="step active"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+        </div>
+
+        <div class="sf-logo">SF</div>
+        
+        <div class="welcome-text">
+            <h1>Join SociallyFounded</h1>
+            <p>Where entrepreneurs connect, create, and thrive together</p>
+        </div>
+
+        <div id="authStep" class="auth-step">
+            <!-- Social Login Options -->
+            <div class="auth-methods">
+                <button class="auth-btn linkedin" onclick="socialLogin('linkedin')">
+                    <i class="fab fa-linkedin-in"></i>
+                    Continue with LinkedIn
+                </button>
+                
+                <button class="auth-btn google" onclick="socialLogin('google')">
+                    <i class="fab fa-google"></i>
+                    Continue with Google
+                </button>
+                
+                <button class="auth-btn facebook" onclick="socialLogin('facebook')">
+                    <i class="fab fa-facebook-f"></i>
+                    Continue with Facebook
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <!-- Phone/WhatsApp Login -->
+            <div class="phone-auth">
+                <div class="phone-input-group">
+                    <select class="country-code" id="countryCode">
+                        <option value="+971">🇦🇪 +971</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+91">🇮🇳 +91</option>
+                        <option value="+370">🇱🇹 +370</option>
+                    </select>
+                    <input type="tel" class="phone-input" id="phoneNumber" placeholder="501234567" maxlength="15">
+                </div>
+                <button class="verify-btn" onclick="phoneLogin()" id="phoneBtn">
+                    <i class="fab fa-whatsapp"></i> Send WhatsApp Code
+                </button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Creating your SF Passport...</p>
+            </div>
+        </div>
+
+        <!-- Success State -->
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            Welcome to SociallyFounded! Your passport is ready.
+        </div>
+
+        <!-- Passport Preview -->
+        <div class="passport-preview" id="passportPreview">
+            <h3>🎉 Your SF Passport</h3>
+            <div class="passport-id" id="passportId">SF-123456</div>
+            <div class="passport-tier">Navy Tier • Level 1</div>
+            <p style="margin-top: 15px; font-size: 14px;">
+                Ready to discover venues and connect with entrepreneurs!
+            </p>
+        </div>
+
+        <div class="terms">
+            By joining, you agree to our <a href="#" onclick="showTerms()">Terms of Service</a> 
+            and <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+        </div>
+    </div>
+
+    <script>
+        // SF Authentication System
+        class SFAuth {
+            constructor() {
+                this.currentStep = 1;
+                this.maxSteps = 3;
+                this.userData = {};
+                this.initializeCountryCode();
+            }
+
+            initializeCountryCode() {
+                // Set UAE as default (Dubai focus)
+                document.getElementById('countryCode').value = '+971';
+            }
+
+            updateStepIndicator() {
+                const steps = document.querySelectorAll('.step');
+                steps.forEach((step, index) => {
+                    step.classList.toggle('active', index < this.currentStep);
+                });
+            }
+
+            generatePassportId() {
+                // Generate SF-XXXXXX format passport
+                const timestamp = Date.now().toString().slice(-6);
+                return `SF-${timestamp}`;
+            }
+
+            showLoading() {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('phoneBtn').disabled = true;
+            }
+
+            hideLoading() {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('phoneBtn').disabled = false;
+            }
+
+            async createUserPassport(authMethod, userData) {
+                this.showLoading();
+                
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                const passportId = this.generatePassportId();
+                
+                const userRecord = {
+                    passportId: passportId,
+                    authMethod: authMethod,
+                    createdAt: new Date().toISOString(),
+                    identities: {
+                        primary: userData
+                    },
+                    personas: {
+                        member: { active: true, circleIds: [] },
+                        founder: { active: false },
+                        mentor: { active: false },
+                        host: { active: false },
+                        investor: { active: false }
+                    },
+                    passport: {
+                        level: 1,
+                        experience: 0,
+                        tier: "Navy",
+                        totalCheckIns: 0,
+                        currentStreak: 0,
+                        achievements: []
+                    },
+                    loyaltyProgram: {
+                        totalPoints: 0,
+                        venuePoints: {},
+                        tier: "bronze"
+                    }
+                };
+
+                // Store in memory (would be Firebase in production)
+                this.userData = userRecord;
+                localStorage.setItem('sf_user', JSON.stringify(userRecord));
+                
+                this.hideLoading();
+                this.showSuccess(passportId);
+            }
+
+            showSuccess(passportId) {
+                this.currentStep = 3;
+                this.updateStepIndicator();
+                
+                document.getElementById('authStep').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('passportPreview').style.display = 'block';
+                document.getElementById('passportId').textContent = passportId;
+
+                // Auto-redirect to main platform after 3 seconds
+                setTimeout(() => {
+                    this.redirectToMemberDashboard();
+                }, 3000);
+            }
+
+            redirectToMemberDashboard() {
+                // Would redirect to member dashboard
+                console.log('Redirecting to member dashboard...');
+                alert('🎉 Authentication complete! Redirecting to your member dashboard...');
+            }
+
+            async socialLogin(provider) {
+                this.currentStep = 2;
+                this.updateStepIndicator();
+
+                const mockUserData = {
+                    [provider]: {
+                        email: `user@${provider}.com`,
+                        name: 'Demo User',
+                        verified: true,
+                        provider: provider
+                    }
+                };
+
+                console.log(`Authenticating with ${provider}...`);
+                await this.createUserPassport('social', mockUserData[provider]);
+            }
+
+            async phoneLogin() {
+                const countryCode = document.getElementById('countryCode').value;
+                const phoneNumber = document.getElementById('phoneNumber').value.trim();
+
+                if (!phoneNumber) {
+                    alert('Please enter your phone number');
+                    return;
+                }
+
+                if (phoneNumber.length < 7) {
+                    alert('Please enter a valid phone number');
+                    return;
+                }
+
+                this.currentStep = 2;
+                this.updateStepIndicator();
+
+                const fullPhone = countryCode + phoneNumber;
+                
+                const phoneData = {
+                    phone: fullPhone,
+                    verified: true,
+                    provider: 'phone'
+                };
+
+                console.log(`Sending verification to ${fullPhone}...`);
+                await this.createUserPassport('phone', phoneData);
+            }
+
+            checkExistingSession() {
+                const existingUser = localStorage.getItem('sf_user');
+                if (existingUser) {
+                    const userData = JSON.parse(existingUser);
+                    console.log('Existing session found:', userData.passportId);
+                    // Could auto-login here
+                }
+            }
+        }
+
+        // Initialize authentication system
+        const sfAuth = new SFAuth();
+
+        // Global functions for onclick handlers
+        function socialLogin(provider) {
+            sfAuth.socialLogin(provider);
+        }
+
+        function phoneLogin() {
+            sfAuth.phoneLogin();
+        }
+
+        function showTerms() {
+            alert('Terms of Service would open here');
+        }
+
+        function showPrivacy() {
+            alert('Privacy Policy would open here');
+        }
+
+        // Check for existing session on load
+        document.addEventListener('DOMContentLoaded', () => {
+            sfAuth.checkExistingSession();
+            
+            // Enable Enter key for phone input
+            document.getElementById('phoneNumber').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    phoneLogin();
+                }
+            });
+        });
+
+        // Demo: Auto-fill UAE number for testing
+        setTimeout(() => {
+            if (window.location.hash === '#demo') {
+                document.getElementById('phoneNumber').value = '501234567';
+            }
+        }, 500);
+    </script>
+</body>
+</html>
