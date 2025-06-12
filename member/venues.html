@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SociallyFounded - Discover Venues</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #003554;
+            --light-gray: #F5F5F5;
+            --accent-gray: #E0E0E0;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            color: var(--white);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sf-logo-small {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-info h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .passport-info {
+            font-size: 12px;
+            opacity: 0.9;
+            font-family: 'Courier New', monospace;
+        }
+
+        .location-status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .location-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .check-in-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .check-in-card.active {
+            border-color: var(--success);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+
+        .check-in-status {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .status-icon.checked-out {
+            background: var(--accent-gray);
+            color: #666;
+        }
+
+        .status-icon.checked-in {
+            background: var(--success);
+            color: var(--white);
+            animation: pulse 2s infinite;
+        }
+
+        .check-in-venue {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .check-in-time {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .time-tracker {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .time-tracker.active {
+            display: block;
+        }
+
+        .session-time {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .points-earned {
+            text-align: center;
+            font-size: 14px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-btn.check-in {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .action-btn.check-in:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.check-out {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .action-btn.check-out:hover {
+            background: #D97706;
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .venues-section {
+            margin-top: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .add-venue-btn {
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-venue-btn:hover {
+            background: #004a6b;
+            transform: translateY(-1px);
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 25px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--navy);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            background: var(--white);
+            border: 2px solid var(--accent-gray);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .filter-tab.active {
+            background: var(--navy);
+            color: var(--white);
+            border-color: var(--navy);
+        }
+
+        .venue-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .venue-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .venue-card.nearby {
+            border-left: 4px solid var(--success);
+        }
+
+        .venue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .venue-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 3px;
+        }
+
+        .venue-type {
+            font-size: 12px;
+            color: #666;
+            background: var(--light-gray);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .venue-distance {
+            font-size: 12px;
+            color: var(--success);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .venue-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .stars {
+            color: #FFC107;
+            font-size: 14px;
+        }
+
+        .rating-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .venue-facilities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .facility {
+            background: var(--light-gray);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .venue-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid var(--accent-gray);
+            font-size: 12px;
+            color: #666;
+        }
+
+        .sf-host-badge {
+            background: linear-gradient(135deg, var(--navy), #004a6b);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--navy);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--white);
+        }
+
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .facility-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border: 1px solid var(--accent-gray);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .facility-checkbox:hover {
+            background: var(--light-gray);
+        }
+
+        .facility-checkbox input[type="checkbox"] {
+            accent-color: var(--navy);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #004a6b;
+        }
+
+        .gps-permission {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .gps-icon {
+            font-size: 48px;
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .permission-btn {
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 12px 15px;
+            }
+            
+            .modal-content {
+                margin: 20px auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="sf-logo-small">SF</div>
+            <div class="user-info">
+                <h2 id="userName">Welcome back!</h2>
+                <div class="passport-info" id="passportDisplay">SF-XXXXXX • Navy Tier</div>
+            </div>
+        </div>
+        <div class="location-status" id="locationStatus">
+            <div class="location-dot"></div>
+            <span>GPS Ready</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- GPS Permission Request -->
+        <div class="gps-permission" id="gpsPermission" style="display: none;">
+            <div class="gps-icon">📍</div>
+            <h3>Enable Location Access</h3>
+            <p>SF needs your location to find nearby venues and enable check-ins</p>
+            <button class="permission-btn" onclick="requestLocation()">
+                <i class="fas fa-map-marker-alt"></i> Enable GPS
+            </button>
+        </div>
+
+        <!-- Check-in Status Card -->
+        <div class="check-in-card" id="checkInCard">
+            <div class="check-in-status">
+                <div class="status-icon checked-out" id="statusIcon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="check-in-venue" id="currentVenue">Not checked in</div>
+                <div class="check-in-time" id="checkInTime">Find a venue nearby to start earning points!</div>
+                
+                <div class="time-tracker" id="timeTracker">
+                    <div class="session-time" id="sessionTime">00:00:00</div>
+                    <div class="points-earned" id="pointsEarned">+0 points earned</div>
+                </div>
+            </div>
+            
+            <button class="action-btn check-in" id="actionBtn" onclick="handleCheckInOut()" disabled>
+                <i class="fas fa-search"></i> Find nearby venues first
+            </button>
+        </div>
+
+        <!-- Venues Section -->
+        <div class="venues-section">
+            <div class="section-header">
+                <h3 class="section-title">Discover Venues</h3>
+                <button class="add-venue-btn" onclick="openAddVenueModal()">
+                    <i class="fas fa-plus"></i> Add Venue
+                </button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search venues by name or location..." id="searchInput">
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <div class="filter-tab active" data-filter="all">All</div>
+                <div class="filter-tab" data-filter="nearby">Nearby</div>
+                <div class="filter-tab" data-filter="cafe">Cafes</div>
+                <div class="filter-tab" data-filter="coworking">Coworking</div>
+                <div class="filter-tab" data-filter="library">Libraries</div>
+                <div class="filter-tab" data-filter="sf-partner">SF Partners</div>
+            </div>
+
+            <!-- Venues List -->
+            <div class="venues-list" id="venuesList">
+                <!-- Venues will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Venue Modal -->
+    <div class="modal" id="addVenueModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Venue</h3>
+                <button class="close-btn" onclick="closeAddVenueModal()">&times;</button>
+            </div>
+            
+            <form id="addVenueForm">
+                <div class="form-group">
+                    <label class="form-label">Venue Name</label>
+                    <input type="text" class="form-input" id="venueName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select class="form-select" id="venueType" required>
+                        <option value="">Select type...</option>
+                        <option value="cafe">Cafe</option>
+                        <option value="coworking">Coworking Space</option>
+                        <option value="library">Library</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="hotel_lobby">Hotel Lobby</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-input" id="venueAddress" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <input type="text" class="form-input" id="venueDescription" placeholder="What makes this venue special?">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Available Facilities</label>
+                    <div class="facilities-grid">
+                        <label class="facility-checkbox">
+                            <input type="checkbox" value="wifi">
+                            <span>WiFi</span>
+                        </label>
+                        <label class="facility-checkbox">
+                            <input type="checkbox" value="parking">
+                            <span>Parking</span>
+                        </label>
+                        <label class="facility-checkbox">
+                            <input type="checkbox" value="food">
+                            <span>Food & Drinks</span>
+                        </label>
+                        <label class="facility-checkbox">
+                            <input type="checkbox" value="quiet">
+                            <span>Quiet Zones</span>
+                        </label>
+                        <label class="facility-checkbox">
+                            <input type="checkbox" value="meeting_rooms">
+                            <span>Meeting Rooms</span>
+                        </label>
+                        <label class="facility-checkbox">
+                            <input type="checkbox" value="power_outlets">
+                            <span>Power Outlets</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">Add Venue</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // SF Venues System
+        class SFVenues {
+            constructor() {
+                this.userLocation = null;
+                this.currentCheckIn = null;
+                this.sessionStartTime = null;
+                this.sessionTimer = null;
+                this.venues = [];
+                this.filteredVenues = [];
+                this.currentFilter = 'all';
+                
+                this.initializeUser();
+                this.initializeSampleVenues();
+                this.initializeEventListeners();
+                this.checkLocationPermission();
+            }
+
+            initializeUser() {
+                // Load user data from localStorage (from auth system)
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                if (userData) {
+                    document.getElementById('userName').textContent = `Welcome back!`;
+                    document.getElementById('passportDisplay').textContent = 
+                        `${userData.passportId} • ${userData.passport.tier} Tier`;
+                }
+            }
+
+            initializeSampleVenues() {
+                // Sample venues for Dubai
+                this.venues = [
+                    {
+                        id: 'venue-001',
+                        name: 'Brew & Bytes Cafe',
+                        type: 'cafe',
+                        address: 'Dubai Marina Walk, Dubai',
+                        description: 'Perfect spot for entrepreneurs with great coffee and WiFi',
+                        rating: 4.8,
+                        reviewCount: 127,
+                        facilities: ['wifi', 'food', 'power_outlets', 'quiet'],
+                        sfPartner: true,
+                        coordinates: { lat: 25.0657, lng: 55.1406 },
+                        memberCount: 23,
+                        avgSessionTime: '2h 15m'
+                    },
+                    {
+                        id: 'venue-002', 
+                        name: 'WorkHub Downtown',
+                        type: 'coworking',
+                        address: 'Downtown Dubai, UAE',
+                        description: 'Premium coworking space with meeting rooms',
+                        rating: 4.9,
+                        reviewCount: 89,
+                        facilities: ['wifi', 'meeting_rooms', 'parking', 'food'],
+                        sfPartner: true,
+                        coordinates: { lat: 25.1972, lng: 55.2744 },
+                        memberCount: 45,
+                        avgSessionTime: '4h 30m'
+                    },
+                    {
+                        id: 'venue-003',
+                        name: 'Public Library JLT',
+                        type: 'library',
+                        address: 'Jumeirah Lake Towers, Dubai',
+                        description: 'Quiet study environment with excellent facilities',
+                        rating: 4.6,
+                        reviewCount: 56,
+                        facilities: ['wifi', 'quiet', 'power_outlets'],
+                        sfPartner: false,
+                        coordinates: { lat: 25.0657, lng: 55.1406 },
+                        memberCount: 12,
+                        avgSessionTime: '3h 45m'
+                    },
+                    {
+                        id: 'venue-004',
+                        name: 'Startup Cafe JBR',
+                        type: 'cafe',
+                        address: 'The Beach, JBR, Dubai',
+                        description: 'Beachside cafe popular with tech entrepreneurs',
+                        rating: 4.7,
+                        reviewCount: 234,
+                        facilities: ['wifi', 'food', 'parking'],
+                        sfPartner: false,
+                        coordinates: { lat: 25.0657, lng: 55.1406 },
+                        memberCount: 67,
+                        avgSessionTime: '1h 50m'
+                    }
+                ];
+                
+                this.filteredVenues = this.venues;
+                this.renderVenues();
+            }
+
+            async checkLocationPermission() {
+                if (!navigator.geolocation) {
+                    document.getElementById('locationStatus').innerHTML = 
+                        '<i class="fas fa-exclamation-triangle"></i> GPS not supported';
+                    return;
+                }
+
+                try {
+                    const position = await this.getCurrentPosition();
+                    this.userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    this.updateLocationStatus('GPS Ready');
+                    this.calculateDistances();
+                    this.checkNearbyVenues();
+                } catch (error) {
+                    this.showGPSPermissionRequest();
+                }
+            }
+
+            getCurrentPosition() {
+                return new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 300000
+                    });
+                });
+            }
+
+            showGPSPermissionRequest() {
+                document.getElementById('gpsPermission').style.display = 'block';
+                document.getElementById('locationStatus').innerHTML = 
+                    '<i class="fas fa-exclamation-triangle"></i> Enable GPS';
+            }
+
+            async requestLocation() {
+                try {
+                    const position = await this.getCurrentPosition();
+                    this.userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    document.getElementById('gpsPermission').style.display = 'none';
+                    this.updateLocationStatus('GPS Ready');
+                    this.calculateDistances();
+                    this.checkNearbyVenues();
+                } catch (error) {
+                    alert('Please enable location access in your browser settings to use check-in features.');
+                }
+            }
+
+            updateLocationStatus(status) {
+                document.getElementById('locationStatus').innerHTML = 
+                    `<div class="location-dot"></div><span>${status}</span>`;
+            }
+
+            calculateDistances() {
+                if (!this.userLocation) return;
+
+                this.venues.forEach(venue => {
+                    venue.distance = this.calculateDistance(
+                        this.userLocation.lat, this.userLocation.lng,
+                        venue.coordinates.lat, venue.coordinates.lng
+                    );
+                });
+
+                // Sort by distance
+                this.venues.sort((a, b) => a.distance - b.distance);
+                this.applyFilter();
+            }
+
+            calculateDistance(lat1, lng1, lat2, lng2) {
+                // Haversine formula for distance calculation
+                const R = 6371; // Earth's radius in km
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLng = (lng2 - lng1) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                         Math.sin(dLng/2) * Math.sin(dLng/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return R * c;
+            }
+
+            checkNearbyVenues() {
+                const nearbyVenues = this.venues.filter(venue => venue.distance && venue.distance <= 0.1); // Within 100m
+                
+                if (nearbyVenues.length > 0 && !this.currentCheckIn) {
+                    const actionBtn = document.getElementById('actionBtn');
+                    actionBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Check in to ' + nearbyVenues[0].name;
+                    actionBtn.disabled = false;
+                    actionBtn.dataset.venueId = nearbyVenues[0].id;
+                }
+            }
+
+            handleCheckInOut() {
+                if (!this.currentCheckIn) {
+                    this.checkInToVenue();
+                } else {
+                    this.checkOutFromVenue();
+                }
+            }
+
+            checkInToVenue() {
+                const actionBtn = document.getElementById('actionBtn');
+                const venueId = actionBtn.dataset.venueId;
+                const venue = this.venues.find(v => v.id === venueId);
+                
+                if (!venue) return;
+
+                this.currentCheckIn = {
+                    venueId: venueId,
+                    venueName: venue.name,
+                    checkInTime: new Date()
+                };
+
+                this.sessionStartTime = Date.now();
+                this.startSessionTimer();
+
+                // Update UI
+                document.getElementById('statusIcon').className = 'status-icon checked-in';
+                document.getElementById('statusIcon').innerHTML = '<i class="fas fa-clock"></i>';
+                document.getElementById('currentVenue').textContent = venue.name;
+                document.getElementById('checkInTime').textContent = 
+                    `Checked in at ${this.currentCheckIn.checkInTime.toLocaleTimeString()}`;
+                document.getElementById('timeTracker').classList.add('active');
+                document.getElementById('checkInCard').classList.add('active');
+
+                actionBtn.className = 'action-btn check-out';
+                actionBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Check out';
+                actionBtn.disabled = false;
+
+                // Save to localStorage
+                localStorage.setItem('sf_checkin', JSON.stringify(this.currentCheckIn));
+            }
+
+            checkOutFromVenue() {
+                if (!this.currentCheckIn) return;
+
+                const sessionDuration = Date.now() - this.sessionStartTime;
+                const hours = Math.floor(sessionDuration / (1000 * 60 * 60));
+                const minutes = Math.floor((sessionDuration % (1000 * 60 * 60)) / (1000 * 60));
+                
+                // Calculate points earned
+                const pointsEarned = this.calculatePointsEarned(sessionDuration);
+
+                this.stopSessionTimer();
+
+                // Update user data
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                if (userData) {
+                    userData.passport.totalCheckIns += 1;
+                    userData.passport.experience += pointsEarned;
+                    userData.loyaltyProgram.totalPoints += pointsEarned;
+                    
+                    if (!userData.loyaltyProgram.venuePoints[this.currentCheckIn.venueId]) {
+                        userData.loyaltyProgram.venuePoints[this.currentCheckIn.venueId] = 0;
+                    }
+                    userData.loyaltyProgram.venuePoints[this.currentCheckIn.venueId] += pointsEarned;
+                    
+                    localStorage.setItem('sf_user', JSON.stringify(userData));
+                }
+
+                // Show success message
+                alert(`🎉 Check-out successful!\n\nSession: ${hours}h ${minutes}m\nPoints earned: +${pointsEarned}\n\nThanks for working at ${this.currentCheckIn.venueName}!`);
+
+                // Reset UI
+                this.resetCheckInState();
+                
+                // Clear stored check-in
+                localStorage.removeItem('sf_checkin');
+            }
+
+            calculatePointsEarned(duration) {
+                const minutes = Math.floor(duration / (1000 * 60));
+                let points = 10; // Base check-in points
+
+                if (minutes >= 30) points += 5;
+                if (minutes >= 60) points += 15;
+                if (minutes >= 120) points += 35;
+                if (minutes >= 240) points += 50;
+
+                return points;
+            }
+
+            startSessionTimer() {
+                this.sessionTimer = setInterval(() => {
+                    const elapsed = Date.now() - this.sessionStartTime;
+                    const hours = Math.floor(elapsed / (1000 * 60 * 60));
+                    const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+
+                    document.getElementById('sessionTime').textContent = 
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    const pointsEarned = this.calculatePointsEarned(elapsed);
+                    document.getElementById('pointsEarned').textContent = `+${pointsEarned} points earned`;
+                }, 1000);
+            }
+
+            stopSessionTimer() {
+                if (this.sessionTimer) {
+                    clearInterval(this.sessionTimer);
+                    this.sessionTimer = null;
+                }
+            }
+
+            resetCheckInState() {
+                this.currentCheckIn = null;
+                this.sessionStartTime = null;
+
+                document.getElementById('statusIcon').className = 'status-icon checked-out';
+                document.getElementById('statusIcon').innerHTML = '<i class="fas fa-map-marker-alt"></i>';
+                document.getElementById('currentVenue').textContent = 'Not checked in';
+                document.getElementById('checkInTime').textContent = 'Find a venue nearby to start earning points!';
+                document.getElementById('timeTracker').classList.remove('active');
+                document.getElementById('checkInCard').classList.remove('active');
+
+                const actionBtn = document.getElementById('actionBtn');
+                actionBtn.className = 'action-btn check-in';
+                actionBtn.innerHTML = '<i class="fas fa-search"></i> Find nearby venues first';
+                actionBtn.disabled = true;
+                delete actionBtn.dataset.venueId;
+
+                this.checkNearbyVenues();
+            }
+
+            initializeEventListeners() {
+                // Search functionality
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    this.searchVenues(e.target.value);
+                });
+
+                // Filter tabs
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelector('.filter-tab.active').classList.remove('active');
+                        tab.classList.add('active');
+                        this.currentFilter = tab.dataset.filter;
+                        this.applyFilter();
+                    });
+                });
+
+                // Add venue form
+                document.getElementById('addVenueForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addNewVenue();
+                });
+            }
+
+            searchVenues(query) {
+                if (!query.trim()) {
+                    this.applyFilter();
+                    return;
+                }
+
+                const filtered = this.venues.filter(venue => 
+                    venue.name.toLowerCase().includes(query.toLowerCase()) ||
+                    venue.address.toLowerCase().includes(query.toLowerCase()) ||
+                    venue.description.toLowerCase().includes(query.toLowerCase())
+                );
+
+                this.filteredVenues = filtered;
+                this.renderVenues();
+            }
+
+            applyFilter() {
+                let filtered = this.venues;
+
+                switch (this.currentFilter) {
+                    case 'nearby':
+                        filtered = this.venues.filter(venue => venue.distance && venue.distance <= 2);
+                        break;
+                    case 'cafe':
+                        filtered = this.venues.filter(venue => venue.type === 'cafe');
+                        break;
+                    case 'coworking':
+                        filtered = this.venues.filter(venue => venue.type === 'coworking');
+                        break;
+                    case 'library':
+                        filtered = this.venues.filter(venue => venue.type === 'library');
+                        break;
+                    case 'sf-partner':
+                        filtered = this.venues.filter(venue => venue.sfPartner);
+                        break;
+                    default:
+                        filtered = this.venues;
+                }
+
+                this.filteredVenues = filtered;
+                this.renderVenues();
+            }
+
+            renderVenues() {
+                const venuesList = document.getElementById('venuesList');
+                venuesList.innerHTML = '';
+
+                this.filteredVenues.forEach(venue => {
+                    const venueCard = this.createVenueCard(venue);
+                    venuesList.appendChild(venueCard);
+                });
+            }
+
+            createVenueCard(venue) {
+                const card = document.createElement('div');
+                card.className = 'venue-card';
+                if (venue.distance && venue.distance <= 0.5) {
+                    card.classList.add('nearby');
+                }
+
+                const distanceText = venue.distance ? 
+                    (venue.distance < 1 ? `${Math.round(venue.distance * 1000)}m` : `${venue.distance.toFixed(1)}km`) 
+                    : '';
+
+                const facilitiesHTML = venue.facilities.map(facility => {
+                    const icons = {
+                        wifi: 'fas fa-wifi',
+                        parking: 'fas fa-parking',
+                        food: 'fas fa-utensils',
+                        quiet: 'fas fa-volume-mute',
+                        meeting_rooms: 'fas fa-users',
+                        power_outlets: 'fas fa-plug'
+                    };
+                    return `<span class="facility"><i class="${icons[facility]}"></i> ${facility.replace('_', ' ')}</span>`;
+                }).join('');
+
+                card.innerHTML = `
+                    ${venue.sfPartner ? '<div class="sf-host-badge">SF Partner</div>' : ''}
+                    <div class="venue-header">
+                        <div>
+                            <div class="venue-name">${venue.name}</div>
+                            <div class="venue-type">${venue.type}</div>
+                        </div>
+                        ${distanceText ? `<div class="venue-distance"><i class="fas fa-map-marker-alt"></i> ${distanceText}</div>` : ''}
+                    </div>
+                    <div class="venue-rating">
+                        <div class="stars">${'★'.repeat(Math.floor(venue.rating))}${'☆'.repeat(5-Math.floor(venue.rating))}</div>
+                        <span class="rating-text">${venue.rating} (${venue.reviewCount} reviews)</span>
+                    </div>
+                    <div class="venue-facilities">${facilitiesHTML}</div>
+                    <div class="venue-stats">
+                        <span><i class="fas fa-users"></i> ${venue.memberCount} members</span>
+                        <span><i class="fas fa-clock"></i> ${venue.avgSessionTime} avg</span>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => {
+                    this.showVenueDetails(venue);
+                });
+
+                return card;
+            }
+
+            showVenueDetails(venue) {
+                alert(`🏢 ${venue.name}\n\n📍 ${venue.address}\n💬 ${venue.description}\n⭐ ${venue.rating}/5 rating\n👥 ${venue.memberCount} SF members\n⏱️ ${venue.avgSessionTime} average session`);
+            }
+
+            openAddVenueModal() {
+                document.getElementById('addVenueModal').style.display = 'block';
+            }
+
+            closeAddVenueModal() {
+                document.getElementById('addVenueModal').style.display = 'none';
+                document.getElementById('addVenueForm').reset();
+            }
+
+            addNewVenue() {
+                const formData = new FormData(document.getElementById('addVenueForm'));
+                const facilities = Array.from(document.querySelectorAll('#addVenueModal input[type="checkbox"]:checked'))
+                    .map(cb => cb.value);
+
+                const newVenue = {
+                    id: 'venue-' + Date.now(),
+                    name: document.getElementById('venueName').value,
+                    type: document.getElementById('venueType').value,
+                    address: document.getElementById('venueAddress').value,
+                    description: document.getElementById('venueDescription').value || 'Added by community',
+                    rating: 0,
+                    reviewCount: 0,
+                    facilities: facilities,
+                    sfPartner: false,
+                    coordinates: this.userLocation || { lat: 25.2048, lng: 55.2708 }, // Default to Dubai
+                    memberCount: 1,
+                    avgSessionTime: '0h 0m'
+                };
+
+                this.venues.unshift(newVenue);
+                this.calculateDistances();
+                this.applyFilter();
+                this.closeAddVenueModal();
+
+                alert(`🎉 "${newVenue.name}" has been added to SF!\n\nThanks for growing our community!`);
+            }
+        }
+
+        // Global functions
+        function requestLocation() {
+            sfVenues.requestLocation();
+        }
+
+        function handleCheckInOut() {
+            sfVenues.handleCheckInOut();
+        }
+
+        function openAddVenueModal() {
+            sfVenues.openAddVenueModal();
+        }
+
+        function closeAddVenueModal() {
+            sfVenues.closeAddVenueModal();
+        }
+
+        // Initialize the venues system
+        const sfVenues = new SFVenues();
+
+        // Check for existing check-in on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const existingCheckIn = localStorage.getItem('sf_checkin');
+            if (existingCheckIn) {
+                const checkInData = JSON.parse(existingCheckIn);
+                // Restore check-in state
+                sfVenues.currentCheckIn = checkInData;
+                sfVenues.sessionStartTime = new Date(checkInData.checkInTime).getTime();
+                
+                const venue = sfVenues.venues.find(v => v.id === checkInData.venueId);
+                if (venue) {
+                    document.getElementById('statusIcon').className = 'status-icon checked-in';
+                    document.getElementById('statusIcon').innerHTML = '<i class="fas fa-clock"></i>';
+                    document.getElementById('currentVenue').textContent = venue.name;
+                    document.getElementById('checkInTime').textContent = 
+                        `Checked in at ${new Date(checkInData.checkInTime).toLocaleTimeString()}`;
+                    document.getElementById('timeTracker').classList.add('active');
+                    document.getElementById('checkInCard').classList.add('active');
+
+                    const actionBtn = document.getElementById('actionBtn');
+                    actionBtn.className = 'action-btn check-out';
+                    actionBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Check out';
+                    actionBtn.disabled = false;
+
+                    sfVenues.startSessionTimer();
+                }
+            }
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('addVenueModal');
+            if (e.target === modal) {
+                closeAddVenueModal();
+            }
+        });
+    </script>
+</body>
+</html>
