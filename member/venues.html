@@ -914,7 +914,8 @@
             }
 
             checkNearbyVenues() {
-                const nearbyVenues = this.venues.filter(venue => venue.distance && venue.distance <= 0.1); // Within 100m
+                // DEMO MODE: Always consider first venue as nearby for testing
+                const nearbyVenues = this.venues.slice(0, 1); // Use first venue for demo
                 
                 if (nearbyVenues.length > 0 && !this.currentCheckIn) {
                     const actionBtn = document.getElementById('actionBtn');
