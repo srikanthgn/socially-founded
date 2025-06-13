@@ -30,6 +30,118 @@
             font-family: 'Poppins', sans-serif;
             background: var(--light-gray);
             min-height: 100vh;
+            padding-top: 60px; /* Account for fixed navbar */
+        }
+
+        /* SF Navigation */
+        .sf-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sf-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .sf-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .sf-logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sf-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sf-nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sf-nav-link {
+            color: #666;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 15px;
+        }
+
+        .sf-nav-link:hover {
+            color: var(--navy);
+            background: var(--light-gray);
+        }
+
+        .sf-nav-link.active {
+            color: var(--white);
+            background: var(--navy);
+        }
+
+        .sf-user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sf-user-passport {
+            background: var(--light-gray);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--navy);
+            font-family: 'Courier New', monospace;
+        }
+
+        .sf-logout-btn {
+            background: transparent;
+            border: 1px solid var(--accent-gray);
+            color: #666;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sf-logout-btn:hover {
+            background: #ff4444;
+            color: white;
+            border-color: #ff4444;
         }
 
         .header {
@@ -37,6 +149,12 @@
             color: var(--white);
             padding: 20px;
             text-align: center;
+        }
+
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
         }
 
         .passport-card {
@@ -78,17 +196,22 @@
         .passport-avatar {
             width: 80px;
             height: 80px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            font-weight: 700;
+            border-radius: 50%;
             border: 3px solid rgba(255, 255, 255, 0.3);
         }
 
+        .passport-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
         .passport-info h2 {
+            font-family: 'Poppins', sans-serif;
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 5px;
@@ -105,6 +228,7 @@
             background: rgba(255, 255, 255, 0.2);
             padding: 8px 16px;
             border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
             font-size: 14px;
             font-weight: 600;
             display: inline-block;
@@ -132,6 +256,7 @@
         }
 
         .stat-label {
+            font-family: 'Poppins', sans-serif;
             font-size: 12px;
             opacity: 0.8;
             text-transform: uppercase;
@@ -153,6 +278,7 @@
         }
 
         .section-title {
+            font-family: 'Poppins', sans-serif;
             font-size: 18px;
             font-weight: 600;
             color: var(--navy);
@@ -174,12 +300,14 @@
         }
 
         .current-level {
+            font-family: 'Poppins', sans-serif;
             font-size: 20px;
             font-weight: 700;
             color: var(--navy);
         }
 
         .xp-info {
+            font-family: 'Poppins', sans-serif;
             font-size: 14px;
             color: #666;
         }
@@ -231,6 +359,7 @@
         }
 
         .benefit-title {
+            font-family: 'Poppins', sans-serif;
             font-weight: 600;
             color: var(--navy);
             font-size: 14px;
@@ -238,6 +367,7 @@
         }
 
         .benefit-desc {
+            font-family: 'Poppins', sans-serif;
             font-size: 12px;
             color: #666;
         }
@@ -273,12 +403,14 @@
         }
 
         .achievement-name {
+            font-family: 'Poppins', sans-serif;
             font-size: 12px;
             font-weight: 600;
             margin-bottom: 2px;
         }
 
         .achievement-desc {
+            font-family: 'Poppins', sans-serif;
             font-size: 10px;
             opacity: 0.8;
         }
@@ -296,6 +428,7 @@
         }
 
         .venue-name {
+            font-family: 'Poppins', sans-serif;
             font-weight: 600;
             color: var(--navy);
             margin-bottom: 8px;
@@ -315,6 +448,7 @@
         }
 
         .venue-visits {
+            font-family: 'Poppins', sans-serif;
             font-size: 12px;
             color: #666;
         }
@@ -333,6 +467,7 @@
             padding: 12px;
             text-align: center;
             border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
             font-weight: 500;
             font-size: 14px;
             cursor: pointer;
@@ -354,6 +489,10 @@
         }
 
         @media (max-width: 768px) {
+            .sf-nav-menu {
+                display: none;
+            }
+            
             .passport-card {
                 margin: -20px 15px 20px;
                 padding: 20px;
@@ -377,13 +516,42 @@
     </style>
 </head>
 <body>
+    <!-- SF Navigation -->
+    <nav class="sf-navbar">
+        <div class="sf-nav-container">
+            <a href="../index.html" class="sf-logo">
+                <div class="sf-logo-icon">
+                    <img src="../assets/sf-logo.png" alt="SociallyFounded Logo" />
+                </div>
+                SociallyFounded
+            </a>
+            
+            <ul class="sf-nav-menu">
+                <li><a href="../index.html" class="sf-nav-link">Home</a></li>
+                <li><a href="../member/venues.html" class="sf-nav-link">Venues</a></li>
+                <li><a href="../core/passport.html" class="sf-nav-link active">My Passport</a></li>
+                <li><a href="#" class="sf-nav-link" onclick="showComingSoon()">Ideas</a></li>
+                <li><a href="#" class="sf-nav-link" onclick="showComingSoon()">Network</a></li>
+            </ul>
+            
+            <div class="sf-user-section" id="sfUserSection">
+                <div class="sf-user-passport" id="sfUserPassport">Not logged in</div>
+                <button class="sf-logout-btn" onclick="sfLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
     <div class="header">
         <h1>My SF Passport</h1>
     </div>
 
     <div class="passport-card">
         <div class="passport-header">
-            <div class="passport-avatar" id="userAvatar">SF</div>
+            <div class="passport-avatar">
+                <img src="../assets/sf-logo.png" alt="SF Avatar" />
+            </div>
             <div class="passport-info">
                 <h2 id="userName">SF Member</h2>
                 <div class="passport-id" id="passportId">SF-XXXXXX</div>
@@ -533,6 +701,41 @@
     </div>
 
     <script>
+        // SF Navigation System
+        class SFNavigation {
+            constructor() {
+                this.updateNavigation();
+            }
+
+            updateNavigation() {
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                const userSection = document.getElementById('sfUserSection');
+                const userPassport = document.getElementById('sfUserPassport');
+                
+                if (userData && userData.passportId) {
+                    userSection.style.display = 'flex';
+                    userPassport.textContent = `${userData.passportId} • Level ${userData.passport.level}`;
+                    
+                    if (userData.loyaltyProgram && userData.loyaltyProgram.totalPoints > 0) {
+                        userPassport.textContent += ` • ${userData.loyaltyProgram.totalPoints} pts`;
+                    }
+                } else {
+                    userSection.style.display = 'none';
+                }
+            }
+
+            logout() {
+                localStorage.removeItem('sf_user');
+                localStorage.removeItem('sf_checkin');
+                alert('👋 Logged out successfully!\n\nThanks for using SociallyFounded!');
+                window.location.href = '../index.html';
+            }
+
+            refreshUserData() {
+                this.updateNavigation();
+            }
+        }
+
         class SFPassport {
             constructor() {
                 this.userData = {};
@@ -554,12 +757,10 @@
                 const userData = JSON.parse(localStorage.getItem('sf_user'));
                 if (userData) {
                     this.userData = userData;
-                    // Check for first check-in achievement
                     if (userData.passport.totalCheckIns > 0) {
                         this.achievements['first-checkin'].earned = true;
                     }
                 } else {
-                    // Default user data
                     this.userData = {
                         passportId: 'SF-DEMO01',
                         passport: {
@@ -578,18 +779,15 @@
             }
 
             updateDisplay() {
-                // Update passport header
                 document.getElementById('passportId').textContent = this.userData.passportId;
                 document.getElementById('tierBadge').textContent = 
                     `${this.userData.passport.tier} Tier • Level ${this.userData.passport.level}`;
 
-                // Update stats
                 document.getElementById('totalPoints').textContent = this.userData.loyaltyProgram.totalPoints;
                 document.getElementById('totalHours').textContent = this.calculateTotalHours();
                 document.getElementById('venuesVisited').textContent = Object.keys(this.userData.loyaltyProgram.venuePoints).length;
                 document.getElementById('currentStreak').textContent = this.userData.passport.currentStreak;
 
-                // Update level progress
                 const currentLevel = this.userData.passport.level;
                 const currentXP = this.userData.passport.experience;
                 const xpForNextLevel = currentLevel * 100;
@@ -599,18 +797,14 @@
                 document.getElementById('xpInfo').textContent = `${currentXP} / ${xpForNextLevel} XP`;
                 document.getElementById('progressFill').style.width = `${progressPercent}%`;
 
-                // Update achievements
                 this.updateAchievements();
-                
-                // Update venue stats
                 this.updateVenueStats();
             }
 
             calculateTotalHours() {
-                // Estimate based on check-ins and points
-                const avgSessionPoints = 50; // Average points per session
+                const avgSessionPoints = 50;
                 const estimatedSessions = Math.floor(this.userData.loyaltyProgram.totalPoints / avgSessionPoints);
-                const estimatedHours = estimatedSessions * 2; // Assume 2h average per session
+                const estimatedHours = estimatedSessions * 2;
                 return `${estimatedHours}h`;
             }
 
@@ -631,11 +825,10 @@
                 const venuePoints = this.userData.loyaltyProgram.venuePoints;
                 
                 if (Object.keys(venuePoints).length === 0) {
-                    venueStats.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No venue visits yet. Start checking in to see your stats!</p>';
+                    venueStats.innerHTML = '<p style="text-align: center; color: #666; padding: 40px; font-family: \'Poppins\', sans-serif;">No venue visits yet. Start checking in to see your stats!</p>';
                     return;
                 }
 
-                // Mock venue names for demo
                 const venueNames = {
                     'venue-001': 'Brew & Bytes Cafe',
                     'venue-002': 'WorkHub Downtown',
@@ -644,7 +837,7 @@
 
                 Object.entries(venuePoints).forEach(([venueId, points]) => {
                     const venueName = venueNames[venueId] || 'Unknown Venue';
-                    const visits = Math.floor(points / 30); // Estimate visits
+                    const visits = Math.floor(points / 30);
 
                     const venueDiv = document.createElement('div');
                     venueDiv.className = 'venue-stat';
@@ -662,11 +855,9 @@
             initializeTabs() {
                 document.querySelectorAll('.nav-tab').forEach(tab => {
                     tab.addEventListener('click', () => {
-                        // Remove active from all tabs and content
                         document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                         
-                        // Add active to clicked tab and corresponding content
                         tab.classList.add('active');
                         document.getElementById(tab.dataset.tab).classList.add('active');
                     });
@@ -674,14 +865,36 @@
             }
         }
 
-        // Initialize passport system
+        // Global functions
+        function sfLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.sfNav.logout();
+            }
+        }
+
+        function showComingSoon() {
+            alert('🚀 Coming Soon!\n\nThis feature is in development.\nStay tuned for updates!');
+        }
+
+        // Initialize systems
+        const sfNav = new SFNavigation();
         const sfPassport = new SFPassport();
 
         // Auto-refresh data every 30 seconds
         setInterval(() => {
             sfPassport.initializeUser();
             sfPassport.updateDisplay();
+            sfNav.refreshUserData();
         }, 30000);
+
+        // Update when user data changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'sf_user') {
+                sfPassport.initializeUser();
+                sfPassport.updateDisplay();
+                sfNav.updateNavigation();
+            }
+        });
     </script>
 </body>
 </html>
