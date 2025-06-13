@@ -30,10 +30,10 @@
             font-family: 'Poppins', sans-serif;
             background: var(--light-gray);
             min-height: 100vh;
-            padding-top: 60px; /* Account for fixed navbar */
+            padding-top: 60px;
         }
 
-        /* SF Navigation */
+        /* BULLETPROOF NAVIGATION - IDENTICAL TO AUTH.HTML */
         .sf-navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -111,7 +111,7 @@
         }
 
         .sf-user-section {
-            display: flex;
+            display: none;
             align-items: center;
             gap: 15px;
         }
@@ -144,6 +144,59 @@
             border-color: #ff4444;
         }
 
+        .sf-mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--navy);
+            padding: 5px;
+        }
+
+        /* MOBILE NAVIGATION - BULLETPROOF */
+        @media (max-width: 768px) {
+            .sf-nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                border-radius: 0 0 12px 12px;
+                gap: 10px;
+            }
+            
+            .sf-nav-menu.mobile-open {
+                display: flex !important;
+            }
+            
+            .sf-mobile-toggle {
+                display: block !important;
+            }
+            
+            .sf-user-section {
+                display: none !important;
+                position: absolute;
+                top: 100%;
+                right: 20px;
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .sf-user-section.mobile-open {
+                display: flex !important;
+            }
+        }
+
+        /* PASSPORT PAGE STYLES */
         .header {
             background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
             color: var(--white);
@@ -489,10 +542,6 @@
         }
 
         @media (max-width: 768px) {
-            .sf-nav-menu {
-                display: none;
-            }
-            
             .passport-card {
                 margin: -20px 15px 20px;
                 padding: 20px;
@@ -516,7 +565,7 @@
     </style>
 </head>
 <body>
-    <!-- SF Navigation -->
+    <!-- BULLETPROOF NAVIGATION - IDENTICAL TO AUTH.HTML -->
     <nav class="sf-navbar">
         <div class="sf-nav-container">
             <a href="../index.html" class="sf-logo">
@@ -526,7 +575,7 @@
                 SociallyFounded
             </a>
             
-            <ul class="sf-nav-menu">
+            <ul class="sf-nav-menu" id="sfNavMenu">
                 <li><a href="../index.html" class="sf-nav-link">Home</a></li>
                 <li><a href="../member/venues.html" class="sf-nav-link">Venues</a></li>
                 <li><a href="../core/passport.html" class="sf-nav-link active">My Passport</a></li>
@@ -536,12 +585,12 @@
             
             <div class="sf-user-section" id="sfUserSection">
                 <div class="sf-user-passport" id="sfUserPassport">Not logged in</div>
-                <button class="sf-logout-btn" onclick="sfLogout()">
+                <button class="sf-logout-btn" id="sfLogoutBtn">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </div>
             
-            <button class="sf-mobile-toggle" onclick="toggleMobileMenu()">
+            <button class="sf-mobile-toggle" id="sfMobileToggle">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
@@ -705,45 +754,142 @@
     </div>
 
     <script>
-        // SF Navigation System
+        // BULLETPROOF NAVIGATION SYSTEM - IDENTICAL TO AUTH.HTML
         class SFNavigation {
             constructor() {
-                this.updateNavigation();
+                this.mobileMenuOpen = false;
+                this.initializeNavigation();
+                this.updateUserStatus();
+                this.bindEvents();
             }
 
-            updateNavigation() {
+            initializeNavigation() {
+                console.log('🔧 Initializing SF Navigation...');
+                
+                this.hamburger = document.getElementById('sfMobileToggle');
+                this.menu = document.getElementById('sfNavMenu');
+                this.userSection = document.getElementById('sfUserSection');
+                this.logoutBtn = document.getElementById('sfLogoutBtn');
+                this.userPassport = document.getElementById('sfUserPassport');
+                
+                console.log('Navigation elements:', {
+                    hamburger: !!this.hamburger,
+                    menu: !!this.menu,
+                    userSection: !!this.userSection,
+                    logoutBtn: !!this.logoutBtn
+                });
+            }
+
+            bindEvents() {
+                if (this.hamburger) {
+                    this.hamburger.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.toggleMobileMenu();
+                    });
+                }
+
+                if (this.logoutBtn) {
+                    this.logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.handleLogout();
+                    });
+                }
+
+                document.addEventListener('click', (e) => {
+                    if (this.mobileMenuOpen && !e.target.closest('.sf-navbar')) {
+                        this.closeMobileMenu();
+                    }
+                });
+            }
+
+            toggleMobileMenu() {
+                console.log('🍔 Toggling mobile menu...');
+                this.mobileMenuOpen = !this.mobileMenuOpen;
+                
+                if (this.menu) {
+                    if (this.mobileMenuOpen) {
+                        this.menu.classList.add('mobile-open');
+                    } else {
+                        this.menu.classList.remove('mobile-open');
+                    }
+                }
+                
+                if (this.userSection && this.userSection.style.display !== 'none') {
+                    if (this.mobileMenuOpen) {
+                        this.userSection.classList.add('mobile-open');
+                    } else {
+                        this.userSection.classList.remove('mobile-open');
+                    }
+                }
+                
+                console.log('Mobile menu open:', this.mobileMenuOpen);
+            }
+
+            closeMobileMenu() {
+                this.mobileMenuOpen = false;
+                if (this.menu) {
+                    this.menu.classList.remove('mobile-open');
+                }
+                if (this.userSection) {
+                    this.userSection.classList.remove('mobile-open');
+                }
+            }
+
+            updateUserStatus() {
                 const userData = JSON.parse(localStorage.getItem('sf_user'));
-                const userSection = document.getElementById('sfUserSection');
-                const userPassport = document.getElementById('sfUserPassport');
                 
                 if (userData && userData.passportId) {
-                    userSection.style.display = 'flex';
-                    userPassport.textContent = `${userData.passportId} • Level ${userData.passport.level}`;
+                    if (this.userSection) {
+                        this.userSection.style.display = 'flex';
+                    }
                     
-                    if (userData.loyaltyProgram && userData.loyaltyProgram.totalPoints > 0) {
-                        userPassport.textContent += ` • ${userData.loyaltyProgram.totalPoints} pts`;
+                    if (this.userPassport) {
+                        let displayText = `${userData.passportId} • Level ${userData.passport.level}`;
+                        if (userData.loyaltyProgram && userData.loyaltyProgram.totalPoints > 0) {
+                            displayText += ` • ${userData.loyaltyProgram.totalPoints} pts`;
+                        }
+                        this.userPassport.textContent = displayText;
                     }
                 } else {
-                    userSection.style.display = 'none';
+                    if (this.userSection) {
+                        this.userSection.style.display = 'none';
+                    }
                 }
             }
 
-            logout() {
-                localStorage.removeItem('sf_user');
-                localStorage.removeItem('sf_checkin');
-                alert('👋 Logged out successfully!\n\nThanks for using SociallyFounded!');
+            handleLogout() {
+                console.log('🚪 Logout initiated...');
                 
-                // Fix: Smart redirect based on current location
-                const currentPath = window.location.pathname;
-                if (currentPath === '/' || currentPath.includes('index.html')) {
-                    window.location.href = 'index.html';
-                } else {
-                    window.location.href = '../index.html';
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('sf_user');
+                    localStorage.removeItem('sf_checkin');
+                    
+                    console.log('✅ User data cleared');
+                    
+                    alert('👋 Logged out successfully!\n\nThanks for using SociallyFounded!');
+                    
+                    console.log('🔄 Attempting redirect...');
+                    
+                    try {
+                        window.location.href = '../index.html';
+                    } catch (e) {
+                        console.error('Redirect failed:', e);
+                        try {
+                            window.location.replace('../index.html');
+                        } catch (e2) {
+                            window.location = '../index.html';
+                        }
+                    }
+                    
+                    setTimeout(() => {
+                        console.log('🔄 Fallback redirect...');
+                        window.location.href = '../index.html';
+                    }, 1000);
                 }
             }
 
-            refreshUserData() {
-                this.updateNavigation();
+            refreshUserStatus() {
+                this.updateUserStatus();
             }
         }
 
@@ -877,34 +1023,22 @@
         }
 
         // Global functions
-        function sfLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                window.sfNav.logout();
-            }
-        }
-
         function showComingSoon() {
             alert('🚀 Coming Soon!\n\nThis feature is in development.\nStay tuned for updates!');
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.querySelector('.sf-nav-menu');
-            const userSection = document.getElementById('sfUserSection');
-            menu.classList.toggle('show');
-            if (userSection.style.display === 'flex') {
-                userSection.classList.toggle('show');
-            }
         }
 
         // Initialize systems
         const sfNav = new SFNavigation();
         const sfPassport = new SFPassport();
 
+        // Make navigation globally accessible
+        window.sfNav = sfNav;
+
         // Auto-refresh data every 30 seconds
         setInterval(() => {
             sfPassport.initializeUser();
             sfPassport.updateDisplay();
-            sfNav.refreshUserData();
+            sfNav.refreshUserStatus();
         }, 30000);
 
         // Update when user data changes
@@ -912,9 +1046,12 @@
             if (e.key === 'sf_user') {
                 sfPassport.initializeUser();
                 sfPassport.updateDisplay();
-                sfNav.updateNavigation();
+                sfNav.updateUserStatus();
             }
         });
+
+        console.log('✅ SF Passport system initialized');
+        console.log('✅ SF Navigation system initialized');
     </script>
 </body>
 </html>
