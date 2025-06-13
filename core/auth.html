@@ -749,15 +749,29 @@
                     // Show success message
                     alert('👋 Logged out successfully!\n\nThanks for using SociallyFounded!');
                     
-                    // Smart redirect
-                    const currentPath = window.location.pathname;
-                    console.log('Current path:', currentPath);
+                    // FORCE redirect - try multiple methods
+                    console.log('🔄 Attempting redirect...');
                     
-                    if (currentPath === '/' || currentPath.endsWith('index.html')) {
-                        window.location.href = 'index.html';
-                    } else {
+                    try {
+                        // Method 1: Direct redirect
                         window.location.href = '../index.html';
+                    } catch (e) {
+                        console.error('Method 1 failed:', e);
+                        try {
+                            // Method 2: Replace location
+                            window.location.replace('../index.html');
+                        } catch (e2) {
+                            console.error('Method 2 failed:', e2);
+                            // Method 3: Assign location
+                            window.location = '../index.html';
+                        }
                     }
+                    
+                    // Fallback: Force reload after delay
+                    setTimeout(() => {
+                        console.log('🔄 Fallback redirect...');
+                        window.location.href = '../index.html';
+                    }, 1000);
                 }
             }
 
