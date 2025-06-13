@@ -93,6 +93,38 @@
             background: var(--light-gray);
         }
 
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--navy);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                border-radius: 0 0 12px 12px;
+            }
+            
+            .nav-menu.show {
+                display: flex;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+        }
+
         .nav-link.active {
             color: var(--white);
             background: var(--navy);
@@ -474,7 +506,7 @@
                 <li><a href="#features" class="nav-link">Features</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="member/venues.html" class="nav-link">Venues</a></li>
-                <li><a href="core/passport.html" class="nav-link">My Passport</a></li>
+                <li><a href="core/passport.html" class="nav-link" id="passportNavLink" style="display: none;">My Passport</a></li>
             </ul>
             
             <div class="user-info" id="userInfo">
@@ -484,6 +516,10 @@
             <a href="core/auth.html" class="join-btn" id="authBtn">
                 <i class="fas fa-user-plus"></i> Join SF
             </a>
+            
+            <button class="mobile-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
@@ -645,12 +681,24 @@
 
             checkUserStatus() {
                 const userData = JSON.parse(localStorage.getItem('sf_user'));
+                const passportLink = document.getElementById('passportNavLink');
+                
                 if (userData) {
                     // User is logged in
                     document.getElementById('userInfo').classList.add('show');
                     document.getElementById('userPassport').textContent = userData.passportId;
                     document.getElementById('authBtn').innerHTML = '<i class="fas fa-user"></i> My Account';
                     document.getElementById('authBtn').href = 'core/passport.html';
+                    
+                    // Show passport link
+                    if (passportLink) {
+                        passportLink.style.display = 'block';
+                    }
+                } else {
+                    // User not logged in - hide passport link
+                    if (passportLink) {
+                        passportLink.style.display = 'none';
+                    }
                 }
             }
 
@@ -711,6 +759,11 @@
         function startDemo() {
             const sf = new SFLanding();
             sf.startDemo();
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.querySelector('.nav-menu');
+            menu.classList.toggle('show');
         }
 
         // Initialize landing page
