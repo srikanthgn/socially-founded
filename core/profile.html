@@ -721,7 +721,7 @@
                         <span class="status-badge unverified" id="verificationStatus">Unverified</span>
                         <span style="font-size: 12px; color: #666;">Complete verification to unlock personas</span>
                     </div>
-                    <button class="complete-profile-btn" onclick="openProfileModal()">
+                    <button class="complete-profile-btn" id="completeProfileBtn">
                         <i class="fas fa-user-edit"></i> Complete Profile
                     </button>
                 </div>
@@ -801,7 +801,7 @@
                     <div class="persona-requirements">
                         🔒 Requires: Profile completion + social verification
                     </div>
-                    <button class="unlock-btn" onclick="requestPersonaUnlock('founder')" disabled>
+                    <button class="unlock-btn" disabled>
                         Unlock Founder
                     </button>
                 </div>
@@ -816,7 +816,7 @@
                     <div class="persona-requirements">
                         🔒 Requires: LinkedIn verification + professional experience
                     </div>
-                    <button class="unlock-btn" onclick="requestPersonaUnlock('mentor')" disabled>
+                    <button class="unlock-btn" disabled>
                         Unlock Mentor
                     </button>
                 </div>
@@ -831,7 +831,7 @@
                     <div class="persona-requirements">
                         🔒 Requires: Business verification + venue ownership
                     </div>
-                    <button class="unlock-btn" onclick="requestPersonaUnlock('host')" disabled>
+                    <button class="unlock-btn" disabled>
                         Unlock Host
                     </button>
                 </div>
@@ -846,7 +846,7 @@
                     <div class="persona-requirements">
                         🔒 Requires: Accredited investor verification + $5K annual fee
                     </div>
-                    <button class="unlock-btn" onclick="requestPersonaUnlock('investor')" disabled>
+                    <button class="unlock-btn" disabled>
                         Unlock Investor
                     </button>
                 </div>
@@ -890,12 +890,12 @@
                 <div class="form-group">
                     <label class="form-label">Social Verification (Required for persona unlock)</label>
                     
-                    <button type="button" class="social-verify-btn linkedin" onclick="socialVerify('linkedin')">
+                    <button type="button" class="social-verify-btn linkedin" data-provider="linkedin">
                         <i class="fab fa-linkedin-in"></i>
                         Verify with LinkedIn
                     </button>
                     
-                    <button type="button" class="social-verify-btn facebook" onclick="socialVerify('facebook')">
+                    <button type="button" class="social-verify-btn facebook" data-provider="facebook">
                         <i class="fab fa-facebook-f"></i>
                         Verify with Facebook
                     </button>
@@ -1162,6 +1162,12 @@
                 const verificationBadge = document.getElementById('verificationBadge');
                 const verificationStatus = document.getElementById('verificationStatus');
 
+                // Check if elements exist before updating
+                if (!verificationBadge || !verificationStatus) {
+                    console.warn('Verification status elements not found');
+                    return;
+                }
+
                 if (this.socialVerified) {
                     verificationBadge.className = 'verification-badge';
                     verificationBadge.innerHTML = '<i class="fas fa-check"></i>';
@@ -1231,10 +1237,41 @@
             }
 
             initializeEventListeners() {
+                // Profile form submission
                 document.getElementById('profileForm').addEventListener('submit', (e) => {
                     e.preventDefault();
                     this.saveProfile();
                 });
+
+                // Complete profile button
+                const completeProfileBtn = document.getElementById('completeProfileBtn');
+                if (completeProfileBtn) {
+                    completeProfileBtn.addEventListener('click', () => {
+                        this.openProfileModal();
+                    });
+                }
+
+                // Social verification buttons
+                document.querySelectorAll('.social-verify-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const provider = e.target.closest('button').dataset.provider;
+                        this.socialVerify(provider);
+                    });
+                });
+
+                // Persona unlock buttons - add event listeners after DOM is ready
+                setTimeout(() => {
+                    document.querySelectorAll('.unlock-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const personaCard = e.target.closest('.persona-card');
+                            const persona = personaCard?.dataset.persona;
+                            if (persona) {
+                                this.openPersonaUnlockModal(persona);
+                            }
+                        });
+                    });
+                }, 100);
             }
 
             saveProfile() {
@@ -1417,49 +1454,44 @@
             }
         }
 
-        // Global functions
-        function openProfileModal() {
-            sfProfile.openProfileModal();
-        }
-
-        function closeProfileModal() {
-            sfProfile.closeProfileModal();
-        }
-
-        function socialVerify(provider) {
-            sfProfile.socialVerify(provider);
-        }
-
-        function requestPersonaUnlock(persona) {
-            sfProfile.openPersonaUnlockModal(persona);
-        }
-
-        function closePersonaUnlockModal() {
-            sfProfile.closePersonaUnlockModal();
-        }
-
+        // Global functions for navigation compatibility
         function showPersonaLocked(feature) {
             alert(`🔒 ${feature} is locked\n\nComplete your profile and verify your identity to unlock this feature.\n\nGo to Profile → Complete Profile to get started!`);
         }
-
-        // Initialize systems
-        const sfNav = new SFNavigation();
-        const sfProfile = new SFProfile();
-
-        // Make globally accessible
-        window.sfNav = sfNav;
-        window.sfProfile = sfProfile;
 
         // Close modals when clicking outside
         window.addEventListener('click', (e) => {
             const profileModal = document.getElementById('profileModal');
             const unlockModal = document.getElementById('personaUnlockModal');
             
-            if (e.target === profileModal) {
-                closeProfileModal();
+            if (e.target === profileModal && window.sfProfile) {
+                window.sfProfile.closeProfileModal();
             }
-            if (e.target === unlockModal) {
-                closePersonaUnlockModal();
+            if (e.target === unlockModal && window.sfProfile) {
+                window.sfProfile.closePersonaUnlockModal();
+            }
+        });
+
+        // Initialize systems when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize systems
+            window.sfNav = new SFNavigation();
+            window.sfProfile = new SFProfile();
+
+            console.log('✅ SF Profile system initialized');
+            console.log('✅ SF Navigation system initialized');
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            const profileModal = document.getElementById('profileModal');
+            const unlockModal = document.getElementById('personaUnlockModal');
+            
+            if (e.target === profileModal && window.sfProfile) {
+                window.sfProfile.closeProfileModal();
+            }
+            if (e.target === unlockModal && window.sfProfile) {
+                window.sfProfile.closePersonaUnlockModal();
             }
         });
 
