@@ -1,1 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SociallyFounded - My Ideas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #003554;
+            --light-gray: #F5F5F5;
+            --accent-gray: #E0E0E0;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --gold: #D4AF37;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-gray);
+            min-height: 100vh;
+            padding-top: 60px;
+        }
+
+        /* BULLETPROOF NAVIGATION */
+        .sf-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sf-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .sf-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .sf-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--navy), #004a6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .sf-nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sf-nav-link {
+            color: #666;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 15px;
+        }
+
+        .sf-nav-link:hover {
+            color: var(--navy);
+            background: var(--light-gray);
+        }
+
+        .sf-nav-link.active {
+            color: var(--white);
+            background: var(--navy);
+        }
+
+        .sf-user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sf-user-passport {
+            background: var(--light-gray);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--navy);
+            font-family: 'Courier New', monospace;
+        }
+
+        .sf-logout-btn {
+            background: transparent;
+            border: 1px solid var(--accent-gray);
+            color: #666;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sf-logout-btn:hover {
+            background: #ff4444;
+            color: white;
+            border-color: #ff4444;
+        }
+
+        /* FOUNDER IDEAS STYLES */
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🚀💡🎯✨🔬';
+            position: absolute;
+            top: 20px;
+            right: -100px;
+            font-size: 120px;
+            opacity: 0.1;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(0px) rotate(0deg); }
+            100% { transform: translateX(-200px) rotate(360deg); }
+        }
+
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-content {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .quick-start {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .quick-start h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .quick-start p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        .new-idea-btn {
+            background: linear-gradient(135deg, var(--navy), #004a6b);
+            color: var(--white);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .new-idea-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 53, 84, 0.3);
+        }
+
+        .ideas-section {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .ideas-main {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .ideas-sidebar {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .idea-card {
+            border: 2px solid var(--accent-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .idea-card:hover {
+            border-color: var(--navy);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 53, 84, 0.1);
+        }
+
+        .idea-card.active {
+            border-color: var(--success);
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: var(--white);
+        }
+
+        .idea-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .idea-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .idea-score {
+            background: var(--gold);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .idea-card.active .idea-score {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .idea-description {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .idea-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .idea-status {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .status-concept {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .status-development {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .status-published {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .ai-assistant {
+            margin-bottom: 20px;
+        }
+
+        .ai-suggestion {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: var(--white);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .ai-suggestion h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-suggestion p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .progress-tracker {
+            margin-bottom: 20px;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--accent-gray);
+        }
+
+        .progress-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .progress-icon.completed {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .progress-icon.current {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .progress-icon.pending {
+            background: var(--accent-gray);
+            color: #666;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: var(--navy);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--navy);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #004a6b;
+        }
+
+        .ai-brainstorm-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-brainstorm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .ideas-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- BULLETPROOF NAVIGATION -->
+    <nav class="sf-navbar">
+        <div class="sf-nav-container">
+            <a href="../index.html" class="sf-logo">
+                <div class="sf-logo-icon">SF</div>
+                SociallyFounded
+            </a>
+            
+            <ul class="sf-nav-menu" id="sfNavMenu">
+                <li><a href="../index.html" class="sf-nav-link">Home</a></li>
+                <li><a href="../member/venues.html" class="sf-nav-link">Venues</a></li>
+                <li><a href="../core/passport.html" class="sf-nav-link">My Passport</a></li>
+                <li><a href="../core/profile.html" class="sf-nav-link">Profile</a></li>
+                <li><a href="../founder/ideas.html" class="sf-nav-link active">Ideas</a></li>
+            </ul>
+            
+            <div class="sf-user-section" id="sfUserSection">
+                <div class="sf-user-passport" id="sfUserPassport">Not logged in</div>
+                <button class="sf-logout-btn" id="sfLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>🚀 My Ideas</h1>
+        <p>Transform napkin scribbles into business strategies with AI assistance</p>
+    </div>
+
+    <div class="main-content">
+        <!-- Quick Start Section -->
+        <div class="quick-start">
+            <h2>Ready to Build Something Amazing?</h2>
+            <p>Every great business starts with a simple idea. Let's develop yours with AI-powered insights and protect your intellectual property.</p>
+            <button class="new-idea-btn" onclick="openNewIdeaModal()">
+                <i class="fas fa-edit"></i> Scribble Napkin
+            </button>
+        </div>
+
+        <!-- Ideas Section -->
+        <div class="ideas-section">
+            <!-- Main Ideas List -->
+            <div class="ideas-main">
+                <h3 class="section-title">
+                    <i class="fas fa-lightbulb"></i>
+                    My Ideas
+                </h3>
+                
+                <div id="ideasList">
+                    <!-- Sample Ideas -->
+                    <div class="idea-card active" onclick="selectIdea('idea-001')">
+                        <div class="idea-header">
+                            <div>
+                                <div class="idea-title">AI-Powered Fitness Coach</div>
+                                <div class="idea-description">
+                                    A mobile app that uses computer vision to analyze workout form and provides real-time feedback, personalized training plans, and nutrition advice.
+                                </div>
+                            </div>
+                            <div class="idea-score">87/100</div>
+                        </div>
+                        <div class="idea-meta">
+                            <span class="idea-status status-development">Development</span>
+                            <span>Updated 2 days ago</span>
+                        </div>
+                    </div>
+
+                    <div class="idea-card" onclick="selectIdea('idea-002')">
+                        <div class="idea-header">
+                            <div>
+                                <div class="idea-title">Sustainable Food Delivery</div>
+                                <div class="idea-description">
+                                    Zero-waste food delivery platform using reusable containers and electric vehicles, partnering with local organic restaurants.
+                                </div>
+                            </div>
+                            <div class="idea-score">73/100</div>
+                        </div>
+                        <div class="idea-meta">
+                            <span class="idea-status status-concept">Concept</span>
+                            <span>Updated 1 week ago</span>
+                        </div>
+                    </div>
+
+                    <div class="idea-card" onclick="selectIdea('idea-003')">
+                        <div class="idea-header">
+                            <div>
+                                <div class="idea-title">Remote Work Wellness</div>
+                                <div class="idea-description">
+                                    Platform connecting remote workers with local wellness services, offering virtual classes and home visit options for massage, yoga, and mental health.
+                                </div>
+                            </div>
+                            <div class="idea-score">92/100</div>
+                        </div>
+                        <div class="idea-meta">
+                            <span class="idea-status status-published">Published</span>
+                            <span>SF-IDEA-20250614-001</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="ideas-sidebar">
+                <!-- AI Assistant -->
+                <div class="ai-assistant">
+                    <h3 class="section-title">
+                        <i class="fas fa-robot"></i>
+                        AI Assistant
+                    </h3>
+                    
+                    <div class="ai-suggestion">
+                        <h4><i class="fas fa-magic"></i> Suggestion</h4>
+                        <p>Consider adding a subscription model to your AI Fitness Coach - market research shows 73% higher retention for fitness apps with personalized coaching.</p>
+                    </div>
+
+                    <div class="ai-suggestion">
+                        <h4><i class="fas fa-chart-line"></i> Market Insight</h4>
+                        <p>Fitness app market growing at 14.7% CAGR. Your AI form analysis feature could be a strong differentiator.</p>
+                    </div>
+                </div>
+
+                <!-- Progress Tracker -->
+                <div class="progress-tracker">
+                    <h3 class="section-title">
+                        <i class="fas fa-tasks"></i>
+                        Progress
+                    </h3>
+                    
+                    <div class="progress-item">
+                        <div class="progress-icon completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="progress-text">Napkin Scribble</div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-icon completed">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="progress-text">AI Enhancement</div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-icon current">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="progress-text">Team Building</div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-icon pending">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <div class="progress-text">IP Protection</div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-icon pending">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <div class="progress-text">Business Strategy</div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <h3 class="section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Quick Stats
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+                        <div style="text-align: center; padding: 10px; background: var(--light-gray); border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--navy);">3</div>
+                            <div style="font-size: 12px; color: #666;">Active Ideas</div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: var(--light-gray); border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--navy);">1</div>
+                            <div style="font-size: 12px; color: #666;">Published</div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: var(--light-gray); border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--navy);">84</div>
+                            <div style="font-size: 12px; color: #666;">Avg Score</div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: var(--light-gray); border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--navy);">12</div>
+                            <div style="font-size: 12px; color: #666;">AI Sessions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Idea Modal -->
+    <div class="modal" id="newIdeaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">New Napkin Scribble</h3>
+                <button class="close-btn" onclick="closeNewIdeaModal()">&times;</button>
+            </div>
+            
+            <form id="newIdeaForm">
+                <div class="form-group">
+                    <label class="form-label">What's on your napkin?</label>
+                    <input type="text" class="form-input" id="ideaTitle" required 
+                           placeholder="Your big idea in a few words...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Napkin Scribble</label>
+                    <textarea class="form-input" id="ideaDescription" rows="4" required
+                              placeholder="Describe your idea like you're explaining it to a friend over coffee..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-input" id="ideaCategory" required>
+                        <option value="">Select category...</option>
+                        <option value="technology">Technology</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="fintech">FinTech</option>
+                        <option value="ecommerce">E-commerce</option>
+                        <option value="sustainability">Sustainability</option>
+                        <option value="education">Education</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-edit"></i> Save My Napkin
+                </button>
+                
+                <button type="button" class="ai-brainstorm-btn" onclick="aiEnhance()">
+                    <i class="fas fa-magic"></i> Enhance with AI
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // SF Navigation System (simplified for 30-min sprint)
+        class SFNavigation {
+            constructor() {
+                this.updateUserStatus();
+            }
+
+            updateUserStatus() {
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                
+                if (userData && userData.passportId) {
+                    document.getElementById('sfUserSection').style.display = 'flex';
+                    document.getElementById('sfUserPassport').textContent = 
+                        `${userData.passportId} • Level ${userData.passport.level}`;
+                } else {
+                    // Redirect to auth if not logged in
+                    window.location.href = '../core/auth.html';
+                }
+            }
+        }
+
+        // SF Founder Ideas System
+        class SFFounderIdeas {
+            constructor() {
+                this.ideas = [];
+                this.selectedIdeaId = 'idea-001';
+                this.initializeIdeas();
+                this.checkFounderAccess();
+            }
+
+            checkFounderAccess() {
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                if (!userData || !userData.personas.founder.active) {
+                    alert('🔒 Founder persona required!\n\nPlease complete your profile and verify your identity to access the Ideas system.');
+                    window.location.href = '../core/profile.html';
+                    return;
+                }
+                console.log('✅ Founder access verified');
+            }
+
+            initializeIdeas() {
+                // Sample ideas for demo
+                this.ideas = [
+                    {
+                        id: 'idea-001',
+                        title: 'AI-Powered Fitness Coach',
+                        description: 'A mobile app that uses computer vision to analyze workout form and provides real-time feedback, personalized training plans, and nutrition advice.',
+                        category: 'technology',
+                        stage: 'development',
+                        score: 87,
+                        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+                        sfIdeaId: null
+                    },
+                    {
+                        id: 'idea-002', 
+                        title: 'Sustainable Food Delivery',
+                        description: 'Zero-waste food delivery platform using reusable containers and electric vehicles, partnering with local organic restaurants.',
+                        category: 'sustainability',
+                        stage: 'concept',
+                        score: 73,
+                        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                        sfIdeaId: null
+                    },
+                    {
+                        id: 'idea-003',
+                        title: 'Remote Work Wellness',
+                        description: 'Platform connecting remote workers with local wellness services, offering virtual classes and home visit options for massage, yoga, and mental health.',
+                        category: 'healthcare',
+                        stage: 'published',
+                        score: 92,
+                        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+                        sfIdeaId: 'SF-IDEA-20250614-001'
+                    }
+                ];
+            }
+
+            createNewIdea() {
+                const title = document.getElementById('ideaTitle').value;
+                const description = document.getElementById('ideaDescription').value;
+                const category = document.getElementById('ideaCategory').value;
+
+                if (!title || !description || !category) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+
+                const newIdea = {
+                    id: 'idea-' + Date.now(),
+                    title: title,
+                    description: description,
+                    category: category,
+                    stage: 'concept',
+                    score: Math.floor(Math.random() * 30) + 50, // Random score 50-80
+                    createdAt: new Date(),
+                    sfIdeaId: null
+                };
+
+                this.ideas.unshift(newIdea);
+                this.renderIdeas();
+                this.closeNewIdeaModal();
+
+                // Award XP for creating idea
+                this.awardXP(50, 'Idea Created');
+
+                alert(`🎉 "${title}" napkin saved!\n\n+50 XP earned\n\nYour scribble is now ready for AI enhancement!`);
+            }
+
+            aiEnhance() {
+                // Mock AI enhancement
+                alert('🤖 AI Enhancement Demo:\n\n"Your fitness app napkin shows strong potential! Let me help you develop this:\n\n💡 Market Insights:\n• $4.4B fitness app market, growing 14.7% annually\n• AI form analysis = strong differentiator\n• 73% higher retention with personalized coaching\n\n🎯 Enhancement Suggestions:\n• Add social workout buddy features\n• Wearable device integration\n• Corporate wellness partnerships\n• Gamification with achievement system\n\n💰 Funding Strategy:\n• Estimated need: $500K seed round\n• Focus on AI technology patents\n• Target B2B corporate wellness market\n\nReady to turn your napkin into a business plan?"');
+            }
+
+            awardXP(points, reason) {
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                if (userData) {
+                    userData.passport.experience += points;
+                    localStorage.setItem('sf_user', JSON.stringify(userData));
+                    console.log(`✅ Awarded ${points} XP for: ${reason}`);
+                }
+            }
+
+            renderIdeas() {
+                const ideasList = document.getElementById('ideasList');
+                ideasList.innerHTML = '';
+
+                this.ideas.forEach(idea => {
+                    const ideaCard = this.createIdeaCard(idea);
+                    ideasList.appendChild(ideaCard);
+                });
+            }
+
+            createIdeaCard(idea) {
+                const card = document.createElement('div');
+                card.className = `idea-card ${idea.id === this.selectedIdeaId ? 'active' : ''}`;
+                card.onclick = () => this.selectIdea(idea.id);
+
+                const statusClass = {
+                    concept: 'status-concept',
+                    development: 'status-development', 
+                    published: 'status-published'
+                }[idea.stage];
+
+                card.innerHTML = `
+                    <div class="idea-header">
+                        <div>
+                            <div class="idea-title">${idea.title}</div>
+                            <div class="idea-description">${idea.description}</div>
+                        </div>
+                        <div class="idea-score">${idea.score}/100</div>
+                    </div>
+                    <div class="idea-meta">
+                        <span class="idea-status ${statusClass}">${idea.stage.charAt(0).toUpperCase() + idea.stage.slice(1)}</span>
+                        <span>${idea.sfIdeaId || this.formatDate(idea.createdAt)}</span>
+                    </div>
+                `;
+
+                return card;
+            }
+
+            selectIdea(ideaId) {
+                this.selectedIdeaId = ideaId;
+                document.querySelectorAll('.idea-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                event.target.closest('.idea-card').classList.add('active');
+            }
+
+            formatDate(date) {
+                const now = new Date();
+                const diffTime = Math.abs(now - date);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) return 'Updated today';
+                if (diffDays === 2) return 'Updated yesterday'; 
+                if (diffDays <= 7) return `Updated ${diffDays} days ago`;
+                return `Updated ${Math.floor(diffDays / 7)} weeks ago`;
+            }
+
+            openNewIdeaModal() {
+                document.getElementById('newIdeaModal').style.display = 'block';
+            }
+
+            closeNewIdeaModal() {
+                document.getElementById('newIdeaModal').style.display = 'none';
+                document.getElementById('newIdeaForm').reset();
+            }
+        }
+
+        // Global functions
+        function openNewIdeaModal() {
+            sfFounderIdeas.openNewIdeaModal();
+        }
+
+        function closeNewIdeaModal() {
+            sfFounderIdeas.closeNewIdeaModal();
+        }
+
+        function selectIdea(ideaId) {
+            sfFounderIdeas.selectIdea(ideaId);
+        }
+
+        function aiEnhance() {
+            sfFounderIdeas.aiEnhance();
+        }
+
+        // Initialize systems
+        document.addEventListener('DOMContentLoaded', () => {
+            window.sfNav = new SFNavigation();
+            window.sfFounderIdeas = new SFFounderIdeas();
+
+            // Form submission
+            document.getElementById('newIdeaForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                sfFounderIdeas.createNewIdea();
+            });
+
+            console.log('✅ SF Founder Ideas system initialized');
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('newIdeaModal');
+            if (e.target === modal) {
+                closeNewIdeaModal();
+            }
+        });
+    </script>
+</body>
+</html>
