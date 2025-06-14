@@ -1,4 +1,40 @@
-<!DOCTYPE html>
+generateIdeaId() {
+                const chars = 'ABCDEFGHKLMNPQRSTUVWXYZ23456789'; // No confusing 0,O,I,1
+                let id = 'SF-';
+                
+                // Generate 4-4-2 format: SF-XXXX-XXXX-XX
+                for(let i = 0; i < 4; i++) {
+                    id += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                id += '-';
+                for(let i = 0; i < 4; i++) {
+                    id += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                id += '-';
+                for(let i = 0; i < 2; i++) {
+                    id += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                
+                return id;
+            }
+
+            publishIdea(ideaId) {
+                const idea = this.ideas.find(i => i.id === ideaId);
+                if (!idea) return;
+
+                // Generate SF Idea ID and mark as published
+                idea.sfIdeaId = this.generateIdeaId();
+                idea.stage = 'published';
+                idea.publishedAt = new Date();
+                
+                // Award XP for publishing
+                this.awardXP(100, 'Idea Published');
+                
+                // Show certificate
+                alert(`🎉 Idea Published Successfully!\n\nSF Idea ID: ${idea.sfIdeaId}\n\n📜 Your intellectual property is now protected with timestamp: ${idea.publishedAt.toLocaleString()}\n\n+100 XP earned\n\nYou can now share this ID as proof of your original concept!`);
+                
+                this.renderIdeas();
+            }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -858,7 +894,7 @@
                         stage: 'published',
                         score: 92,
                         createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-                        sfIdeaId: 'SF-IDEA-20250614-001'
+                        sfIdeaId: 'SF-7K9M-2X4P-8N'
                     }
                 ];
             }
@@ -929,6 +965,9 @@
                     published: 'status-published'
                 }[idea.stage];
 
+                const statusText = idea.stage.charAt(0).toUpperCase() + idea.stage.slice(1);
+                const rightText = idea.sfIdeaId || this.formatDate(idea.createdAt);
+
                 card.innerHTML = `
                     <div class="idea-header">
                         <div>
@@ -938,9 +977,15 @@
                         <div class="idea-score">${idea.score}/100</div>
                     </div>
                     <div class="idea-meta">
-                        <span class="idea-status ${statusClass}">${idea.stage.charAt(0).toUpperCase() + idea.stage.slice(1)}</span>
-                        <span>${idea.sfIdeaId || this.formatDate(idea.createdAt)}</span>
+                        <span class="idea-status ${statusClass}">${statusText}</span>
+                        <span>${rightText}</span>
                     </div>
+                    ${idea.stage !== 'published' ? `
+                        <button onclick="sfFounderIdeas.publishIdea('${idea.id}')" 
+                                style="margin-top: 10px; padding: 6px 12px; background: var(--success); color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">
+                            📜 Publish & Protect IP
+                        </button>
+                    ` : ''}
                 `;
 
                 return card;
