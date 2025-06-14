@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SociallyFounded - My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #003554;
+            --light-gray: #F5F5F5;
+            --accent-gray: #E0E0E0;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --gold: #D4AF37;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-gray);
+            min-height: 100vh;
+            padding-top: 60px;
+        }
+
+        /* BULLETPROOF NAVIGATION */
+        .sf-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sf-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .sf-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .sf-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--navy), #004a6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .sf-nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sf-nav-link {
+            color: #666;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .sf-nav-link:hover {
+            color: var(--navy);
+            background: var(--light-gray);
+        }
+
+        .sf-nav-link.active {
+            color: var(--white);
+            background: var(--navy);
+        }
+
+        .sf-nav-link.locked {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .sf-nav-link.locked::after {
+            content: '🔒';
+            font-size: 10px;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+        }
+
+        .sf-user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sf-user-passport {
+            background: var(--light-gray);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--navy);
+            font-family: 'Courier New', monospace;
+        }
+
+        .sf-logout-btn {
+            background: transparent;
+            border: 1px solid var(--accent-gray);
+            color: #666;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sf-logout-btn:hover {
+            background: #ff4444;
+            color: white;
+            border-color: #ff4444;
+        }
+
+        .sf-mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--navy);
+            padding: 5px;
+        }
+
+        /* MOBILE NAVIGATION */
+        @media (max-width: 768px) {
+            .sf-nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                border-radius: 0 0 12px 12px;
+                gap: 10px;
+            }
+            
+            .sf-nav-menu.mobile-open {
+                display: flex !important;
+            }
+            
+            .sf-mobile-toggle {
+                display: block !important;
+            }
+            
+            .sf-user-section {
+                display: none !important;
+                position: absolute;
+                top: 100%;
+                right: 20px;
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .sf-user-section.mobile-open {
+                display: flex !important;
+            }
+        }
+
+        /* PROFILE PAGE STYLES */
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .main-content {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .profile-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--navy), #004a6b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 36px;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .verification-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 16px;
+            border: 3px solid var(--white);
+        }
+
+        .verification-badge.unverified {
+            background: var(--accent-gray);
+            color: #666;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .user-passport {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .verification-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .status-badge.verified {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .status-badge.unverified {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .complete-profile-btn {
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .complete-profile-btn:hover {
+            background: #004a6b;
+            transform: translateY(-2px);
+        }
+
+        .personas-section {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .personas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .persona-card {
+            background: var(--white);
+            border: 2px solid var(--accent-gray);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .persona-card.active {
+            border-color: var(--success);
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: var(--white);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .persona-card.locked {
+            border-color: #ddd;
+            background: #f9f9f9;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .persona-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .persona-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .persona-description {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .persona-requirements {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .persona-card.active .persona-requirements {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .unlock-btn {
+            background: var(--gold);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .unlock-btn:hover {
+            background: #B8860B;
+            transform: translateY(-1px);
+        }
+
+        .unlock-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--navy);
+        }
+
+        .social-verify-btn {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid var(--accent-gray);
+            border-radius: 8px;
+            background: var(--white);
+            color: #333;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .social-verify-btn.linkedin {
+            border-color: #0077B5;
+            color: #0077B5;
+        }
+
+        .social-verify-btn.linkedin:hover {
+            background: #0077B5;
+            color: var(--white);
+        }
+
+        .social-verify-btn.facebook {
+            border-color: #1877F2;
+            color: #1877F2;
+        }
+
+        .social-verify-btn.facebook:hover {
+            background: #1877F2;
+            color: var(--white);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #004a6b;
+        }
+
+        .verification-progress {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--accent-gray);
+        }
+
+        .progress-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .progress-icon.completed {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .progress-icon.pending {
+            background: var(--accent-gray);
+            color: #666;
+        }
+
+        .progress-text {
+            flex: 1;
+        }
+
+        .progress-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--navy);
+        }
+
+        .progress-desc {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .personas-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 20px auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- BULLETPROOF NAVIGATION -->
+    <nav class="sf-navbar">
+        <div class="sf-nav-container">
+            <a href="../index.html" class="sf-logo">
+                <div class="sf-logo-icon">SF</div>
+                SociallyFounded
+            </a>
+            
+            <ul class="sf-nav-menu" id="sfNavMenu">
+                <li><a href="../index.html" class="sf-nav-link">Home</a></li>
+                <li><a href="../member/venues.html" class="sf-nav-link">Venues</a></li>
+                <li><a href="../core/passport.html" class="sf-nav-link">My Passport</a></li>
+                <li><a href="../core/profile.html" class="sf-nav-link active">Profile</a></li>
+                <li><a href="#" class="sf-nav-link locked" onclick="showPersonaLocked('Ideas')">Ideas</a></li>
+                <li><a href="#" class="sf-nav-link locked" onclick="showPersonaLocked('Mentor')">Mentor</a></li>
+                <li><a href="#" class="sf-nav-link locked" onclick="showPersonaLocked('Host')">Host</a></li>
+                <li><a href="#" class="sf-nav-link locked" onclick="showPersonaLocked('Invest')">Invest</a></li>
+            </ul>
+            
+            <div class="sf-user-section" id="sfUserSection">
+                <div class="sf-user-passport" id="sfUserPassport">Not logged in</div>
+                <button class="sf-logout-btn" id="sfLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            
+            <button class="sf-mobile-toggle" id="sfMobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>My Profile</h1>
+        <p>Complete your profile to unlock all SF personas and features</p>
+    </div>
+
+    <div class="main-content">
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar-section">
+                    <div class="user-avatar" id="userAvatar">
+                        SF
+                        <div class="verification-badge unverified" id="verificationBadge">
+                            <i class="fas fa-question"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="user-name" id="userName">SF Member</div>
+                    <div class="user-passport" id="userPassport">SF-XXXXXX • Navy Tier • Level 1</div>
+                    <div class="verification-status">
+                        <span class="status-badge unverified" id="verificationStatus">Unverified</span>
+                        <span style="font-size: 12px; color: #666;">Complete verification to unlock personas</span>
+                    </div>
+                    <button class="complete-profile-btn" onclick="openProfileModal()">
+                        <i class="fas fa-user-edit"></i> Complete Profile
+                    </button>
+                </div>
+            </div>
+
+            <!-- Verification Progress -->
+            <div class="verification-progress" id="verificationProgress">
+                <div class="progress-item">
+                    <div class="progress-icon completed">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="progress-text">
+                        <div class="progress-title">SF Account Created</div>
+                        <div class="progress-desc">Basic SF Passport issued</div>
+                    </div>
+                </div>
+                
+                <div class="progress-item">
+                    <div class="progress-icon pending" id="profileProgressIcon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="progress-text">
+                        <div class="progress-title">Profile Information</div>
+                        <div class="progress-desc">Add name, bio, and contact details</div>
+                    </div>
+                </div>
+                
+                <div class="progress-item">
+                    <div class="progress-icon pending" id="socialProgressIcon">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <div class="progress-text">
+                        <div class="progress-title">Social Verification</div>
+                        <div class="progress-desc">Connect LinkedIn or Facebook for credibility</div>
+                    </div>
+                </div>
+                
+                <div class="progress-item">
+                    <div class="progress-icon pending" id="personasProgressIcon">
+                        <i class="fas fa-unlock"></i>
+                    </div>
+                    <div class="progress-text">
+                        <div class="progress-title">Personas Unlocked</div>
+                        <div class="progress-desc">Access all SF features and functionality</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personas Section -->
+        <div class="personas-section">
+            <h3 class="section-title">
+                <i class="fas fa-users"></i>
+                SF Personas
+            </h3>
+            
+            <div class="personas-grid">
+                <!-- Member Persona (Always Active) -->
+                <div class="persona-card active" data-persona="member">
+                    <div class="persona-icon">👥</div>
+                    <div class="persona-name">Member</div>
+                    <div class="persona-description">
+                        Venue discovery, check-ins, and networking with entrepreneurs
+                    </div>
+                    <div class="persona-requirements">
+                        ✅ Active - Base level access
+                    </div>
+                </div>
+
+                <!-- Founder Persona -->
+                <div class="persona-card locked" data-persona="founder">
+                    <div class="persona-icon">🚀</div>
+                    <div class="persona-name">Founder</div>
+                    <div class="persona-description">
+                        AI-powered idea development, IP protection, and team building
+                    </div>
+                    <div class="persona-requirements">
+                        🔒 Requires: Profile completion + social verification
+                    </div>
+                    <button class="unlock-btn" onclick="requestPersonaUnlock('founder')" disabled>
+                        Unlock Founder
+                    </button>
+                </div>
+
+                <!-- Mentor Persona -->
+                <div class="persona-card locked" data-persona="mentor">
+                    <div class="persona-icon">🎓</div>
+                    <div class="persona-name">Mentor</div>
+                    <div class="persona-description">
+                        Guide entrepreneurs, track impact, and publish research
+                    </div>
+                    <div class="persona-requirements">
+                        🔒 Requires: LinkedIn verification + professional experience
+                    </div>
+                    <button class="unlock-btn" onclick="requestPersonaUnlock('mentor')" disabled>
+                        Unlock Mentor
+                    </button>
+                </div>
+
+                <!-- Host Persona -->
+                <div class="persona-card locked" data-persona="host">
+                    <div class="persona-icon">🏢</div>
+                    <div class="persona-name">Host</div>
+                    <div class="persona-description">
+                        Manage venues, analyze customers, and build revenue
+                    </div>
+                    <div class="persona-requirements">
+                        🔒 Requires: Business verification + venue ownership
+                    </div>
+                    <button class="unlock-btn" onclick="requestPersonaUnlock('host')" disabled>
+                        Unlock Host
+                    </button>
+                </div>
+
+                <!-- Investor Persona -->
+                <div class="persona-card locked" data-persona="investor">
+                    <div class="persona-icon">💰</div>
+                    <div class="persona-name">Investor</div>
+                    <div class="persona-description">
+                        Discover deals, automated due diligence, and portfolio management
+                    </div>
+                    <div class="persona-requirements">
+                        🔒 Requires: Accredited investor verification + $5K annual fee
+                    </div>
+                    <button class="unlock-btn" onclick="requestPersonaUnlock('investor')" disabled>
+                        Unlock Investor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Completion Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Complete Your Profile</h3>
+                <button class="close-btn" onclick="closeProfileModal()">&times;</button>
+            </div>
+            
+            <form id="profileForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="fullName" required 
+                           placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Professional Title</label>
+                    <input type="text" class="form-input" id="professionalTitle" 
+                           placeholder="e.g. Software Engineer, Entrepreneur, CEO">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-input" id="userBio" rows="3" 
+                              placeholder="Tell the SF community about yourself..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" id="userLocation" 
+                           placeholder="City, Country">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Social Verification (Required for persona unlock)</label>
+                    
+                    <button type="button" class="social-verify-btn linkedin" onclick="socialVerify('linkedin')">
+                        <i class="fab fa-linkedin-in"></i>
+                        Verify with LinkedIn
+                    </button>
+                    
+                    <button type="button" class="social-verify-btn facebook" onclick="socialVerify('facebook')">
+                        <i class="fab fa-facebook-f"></i>
+                        Verify with Facebook
+                    </button>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i> Save Profile
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Persona Unlock Modal -->
+    <div class="modal" id="personaUnlockModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="unlockModalTitle">Unlock Persona</h3>
+                <button class="close-btn" onclick="closePersonaUnlockModal()">&times;</button>
+            </div>
+            
+            <div id="unlockModalContent">
+                <!-- Content populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // BULLETPROOF NAVIGATION SYSTEM
+        class SFNavigation {
+            constructor() {
+                this.mobileMenuOpen = false;
+                this.initializeNavigation();
+                this.updateUserStatus();
+                this.bindEvents();
+            }
+
+            initializeNavigation() {
+                console.log('🔧 Initializing SF Navigation...');
+                
+                this.hamburger = document.getElementById('sfMobileToggle');
+                this.menu = document.getElementById('sfNavMenu');
+                this.userSection = document.getElementById('sfUserSection');
+                this.logoutBtn = document.getElementById('sfLogoutBtn');
+                this.userPassport = document.getElementById('sfUserPassport');
+                
+                console.log('Navigation elements:', {
+                    hamburger: !!this.hamburger,
+                    menu: !!this.menu,
+                    userSection: !!this.userSection,
+                    logoutBtn: !!this.logoutBtn
+                });
+            }
+
+            bindEvents() {
+                if (this.hamburger) {
+                    this.hamburger.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.toggleMobileMenu();
+                    });
+                }
+
+                if (this.logoutBtn) {
+                    this.logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.handleLogout();
+                    });
+                }
+
+                document.addEventListener('click', (e) => {
+                    if (this.mobileMenuOpen && !e.target.closest('.sf-navbar')) {
+                        this.closeMobileMenu();
+                    }
+                });
+            }
+
+            toggleMobileMenu() {
+                console.log('🍔 Toggling mobile menu...');
+                this.mobileMenuOpen = !this.mobileMenuOpen;
+                
+                if (this.menu) {
+                    if (this.mobileMenuOpen) {
+                        this.menu.classList.add('mobile-open');
+                    } else {
+                        this.menu.classList.remove('mobile-open');
+                    }
+                }
+                
+                if (this.userSection && this.userSection.style.display !== 'none') {
+                    if (this.mobileMenuOpen) {
+                        this.userSection.classList.add('mobile-open');
+                    } else {
+                        this.userSection.classList.remove('mobile-open');
+                    }
+                }
+                
+                console.log('Mobile menu open:', this.mobileMenuOpen);
+            }
+
+            closeMobileMenu() {
+                this.mobileMenuOpen = false;
+                if (this.menu) {
+                    this.menu.classList.remove('mobile-open');
+                }
+                if (this.userSection) {
+                    this.userSection.classList.remove('mobile-open');
+                }
+            }
+
+            updateUserStatus() {
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                
+                if (userData && userData.passportId) {
+                    if (this.userSection) {
+                        this.userSection.style.display = 'flex';
+                    }
+                    
+                    if (this.userPassport) {
+                        let displayText = `${userData.passportId} • Level ${userData.passport.level}`;
+                        if (userData.loyaltyProgram && userData.loyaltyProgram.totalPoints > 0) {
+                            displayText += ` • ${userData.loyaltyProgram.totalPoints} pts`;
+                        }
+                        this.userPassport.textContent = displayText;
+                    }
+                    
+                    // Update navigation based on active personas
+                    this.updateNavigationPersonas(userData);
+                } else {
+                    if (this.userSection) {
+                        this.userSection.style.display = 'none';
+                    }
+                }
+            }
+
+            updateNavigationPersonas(userData) {
+                const navLinks = {
+                    'Ideas': userData.personas.founder.active,
+                    'Mentor': userData.personas.mentor.active,
+                    'Host': userData.personas.host.active,
+                    'Invest': userData.personas.investor.active
+                };
+
+                Object.entries(navLinks).forEach(([linkText, isActive]) => {
+                    const link = Array.from(document.querySelectorAll('.sf-nav-link'))
+                        .find(l => l.textContent.trim() === linkText);
+                    
+                    if (link) {
+                        if (isActive) {
+                            link.classList.remove('locked');
+                            link.onclick = null;
+                            link.href = this.getPersonaUrl(linkText);
+                        } else {
+                            link.classList.add('locked');
+                            link.href = '#';
+                        }
+                    }
+                });
+            }
+
+            getPersonaUrl(linkText) {
+                const urls = {
+                    'Ideas': '../founder/ideas.html',
+                    'Mentor': '../mentor/dashboard.html',
+                    'Host': '../host/venues.html',
+                    'Invest': '../investor/deals.html'
+                };
+                return urls[linkText] || '#';
+            }
+
+            handleLogout() {
+                console.log('🚪 Logout initiated...');
+                
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('sf_user');
+                    localStorage.removeItem('sf_checkin');
+                    
+                    console.log('✅ User data cleared');
+                    
+                    alert('👋 Logged out successfully!\n\nThanks for using SociallyFounded!');
+                    
+                    console.log('🔄 Attempting redirect...');
+                    
+                    try {
+                        window.location.href = '../index.html';
+                    } catch (e) {
+                        console.error('Redirect failed:', e);
+                        try {
+                            window.location.replace('../index.html');
+                        } catch (e2) {
+                            window.location = '../index.html';
+                        }
+                    }
+                    
+                    setTimeout(() => {
+                        console.log('🔄 Fallback redirect...');
+                        window.location.href = '../index.html';
+                    }, 1000);
+                }
+            }
+
+            refreshUserStatus() {
+                this.updateUserStatus();
+            }
+        }
+
+        // SF Profile Management System
+        class SFProfile {
+            constructor() {
+                this.userData = {};
+                this.profileComplete = false;
+                this.socialVerified = false;
+                
+                this.initializeUser();
+                this.updateDisplay();
+                this.initializeEventListeners();
+            }
+
+            initializeUser() {
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                if (userData) {
+                    this.userData = userData;
+                    this.checkProfileCompletion();
+                    this.checkSocialVerification();
+                } else {
+                    // Redirect to auth if no user
+                    window.location.href = '../core/auth.html';
+                }
+            }
+
+            checkProfileCompletion() {
+                const profile = this.userData.profile || {};
+                this.profileComplete = !!(profile.fullName && profile.professionalTitle);
+            }
+
+            checkSocialVerification() {
+                const identities = this.userData.identities || {};
+                this.socialVerified = !!(identities.linkedin || identities.facebook);
+            }
+
+            updateDisplay() {
+                const profile = this.userData.profile || {};
+                
+                // Update user info
+                document.getElementById('userName').textContent = 
+                    profile.fullName || 'SF Member';
+                document.getElementById('userPassport').textContent = 
+                    `${this.userData.passportId} • ${this.userData.passport.tier} Tier • Level ${this.userData.passport.level}`;
+
+                // Update avatar
+                const avatar = document.getElementById('userAvatar');
+                if (profile.fullName) {
+                    const initials = profile.fullName.split(' ').map(n => n[0]).join('').toUpperCase();
+                    avatar.textContent = initials;
+                } else {
+                    avatar.textContent = 'SF';
+                }
+
+                // Update verification status
+                this.updateVerificationStatus();
+                this.updateProgressIndicators();
+                this.updatePersonaCards();
+            }
+
+            updateVerificationStatus() {
+                const verificationBadge = document.getElementById('verificationBadge');
+                const verificationStatus = document.getElementById('verificationStatus');
+
+                if (this.socialVerified) {
+                    verificationBadge.className = 'verification-badge';
+                    verificationBadge.innerHTML = '<i class="fas fa-check"></i>';
+                    verificationStatus.className = 'status-badge verified';
+                    verificationStatus.textContent = 'Verified';
+                } else {
+                    verificationBadge.className = 'verification-badge unverified';
+                    verificationBadge.innerHTML = '<i class="fas fa-question"></i>';
+                    verificationStatus.className = 'status-badge unverified';
+                    verificationStatus.textContent = 'Unverified';
+                }
+            }
+
+            updateProgressIndicators() {
+                // Profile completion
+                const profileIcon = document.getElementById('profileProgressIcon');
+                if (this.profileComplete) {
+                    profileIcon.className = 'progress-icon completed';
+                    profileIcon.innerHTML = '<i class="fas fa-check"></i>';
+                }
+
+                // Social verification
+                const socialIcon = document.getElementById('socialProgressIcon');
+                if (this.socialVerified) {
+                    socialIcon.className = 'progress-icon completed';
+                    socialIcon.innerHTML = '<i class="fas fa-check"></i>';
+                }
+
+                // Personas unlock
+                const personasIcon = document.getElementById('personasProgressIcon');
+                const anyPersonaActive = Object.values(this.userData.personas).some(p => p.active && p !== this.userData.personas.member);
+                if (anyPersonaActive) {
+                    personasIcon.className = 'progress-icon completed';
+                    personasIcon.innerHTML = '<i class="fas fa-check"></i>';
+                }
+            }
+
+            updatePersonaCards() {
+                const canUnlockPersonas = this.profileComplete && this.socialVerified;
+
+                // Update persona card states
+                document.querySelectorAll('.persona-card').forEach(card => {
+                    const persona = card.dataset.persona;
+                    const unlockBtn = card.querySelector('.unlock-btn');
+                    
+                    if (persona === 'member') return; // Member is always active
+
+                    const isActive = this.userData.personas[persona]?.active;
+                    
+                    if (isActive) {
+                        card.className = 'persona-card active';
+                        card.querySelector('.persona-requirements').textContent = '✅ Active - Full access';
+                        if (unlockBtn) unlockBtn.style.display = 'none';
+                    } else if (canUnlockPersonas) {
+                        card.className = 'persona-card';
+                        if (unlockBtn) {
+                            unlockBtn.disabled = false;
+                            unlockBtn.textContent = `Unlock ${persona.charAt(0).toUpperCase() + persona.slice(1)}`;
+                        }
+                    } else {
+                        card.className = 'persona-card locked';
+                        if (unlockBtn) {
+                            unlockBtn.disabled = true;
+                        }
+                    }
+                });
+            }
+
+            initializeEventListeners() {
+                document.getElementById('profileForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveProfile();
+                });
+            }
+
+            saveProfile() {
+                const formData = {
+                    fullName: document.getElementById('fullName').value,
+                    professionalTitle: document.getElementById('professionalTitle').value,
+                    bio: document.getElementById('userBio').value,
+                    location: document.getElementById('userLocation').value
+                };
+
+                // Update user data
+                this.userData.profile = { ...this.userData.profile, ...formData };
+                localStorage.setItem('sf_user', JSON.stringify(this.userData));
+
+                // Refresh display
+                this.checkProfileCompletion();
+                this.updateDisplay();
+                this.closeProfileModal();
+
+                // Update navigation
+                window.sfNav.refreshUserStatus();
+
+                alert('✅ Profile updated successfully!\n\n' + 
+                      (this.socialVerified ? 'You can now unlock additional personas!' : 
+                       'Connect a social account to unlock personas.'));
+            }
+
+            socialVerify(provider) {
+                // Mock social verification
+                if (!this.userData.identities) {
+                    this.userData.identities = {};
+                }
+
+                this.userData.identities[provider] = {
+                    verified: true,
+                    email: `user@${provider}.com`,
+                    name: document.getElementById('fullName').value || 'Demo User',
+                    provider: provider,
+                    verifiedAt: new Date().toISOString()
+                };
+
+                localStorage.setItem('sf_user', JSON.stringify(this.userData));
+
+                this.checkSocialVerification();
+                this.updateDisplay();
+
+                alert(`✅ ${provider.charAt(0).toUpperCase() + provider.slice(1)} verification successful!\n\nYou can now unlock additional personas.`);
+            }
+
+            unlockPersona(persona) {
+                const requirements = this.getPersonaRequirements(persona);
+                
+                if (!this.meetsRequirements(persona)) {
+                    alert(`❌ Cannot unlock ${persona}:\n\n${requirements.join('\n')}`);
+                    return;
+                }
+
+                // Unlock the persona
+                this.userData.personas[persona].active = true;
+                localStorage.setItem('sf_user', JSON.stringify(this.userData));
+
+                // Update display
+                this.updateDisplay();
+                this.updateNavigation();
+
+                alert(`🎉 ${persona.charAt(0).toUpperCase() + persona.slice(1)} persona unlocked!\n\nYou now have access to all ${persona} features.`);
+            }
+
+            getPersonaRequirements(persona) {
+                const requirements = {
+                    founder: ['Complete profile', 'Social verification'],
+                    mentor: ['Complete profile', 'LinkedIn verification', 'Professional experience'],
+                    host: ['Complete profile', 'Business verification', 'Venue ownership'],
+                    investor: ['Complete profile', 'Accredited investor verification', '$5K annual fee']
+                };
+                return requirements[persona] || [];
+            }
+
+            meetsRequirements(persona) {
+                if (!this.profileComplete || !this.socialVerified) return false;
+
+                // Additional checks for specific personas
+                switch (persona) {
+                    case 'founder':
+                        return true; // Base requirements met
+                    case 'mentor':
+                        return this.userData.identities?.linkedin; // Requires LinkedIn
+                    case 'host':
+                        return false; // Requires additional business verification
+                    case 'investor':
+                        return false; // Requires accredited investor verification
+                    default:
+                        return false;
+                }
+            }
+
+            updateNavigation() {
+                // Refresh navigation to show unlocked personas
+                window.sfNav.refreshUserStatus();
+            }
+
+            openProfileModal() {
+                // Pre-fill form with existing data
+                const profile = this.userData.profile || {};
+                document.getElementById('fullName').value = profile.fullName || '';
+                document.getElementById('professionalTitle').value = profile.professionalTitle || '';
+                document.getElementById('userBio').value = profile.bio || '';
+                document.getElementById('userLocation').value = profile.location || '';
+
+                document.getElementById('profileModal').style.display = 'block';
+            }
+
+            closeProfileModal() {
+                document.getElementById('profileModal').style.display = 'none';
+            }
+
+            openPersonaUnlockModal(persona) {
+                const modalTitle = document.getElementById('unlockModalTitle');
+                const modalContent = document.getElementById('unlockModalContent');
+
+                modalTitle.textContent = `Unlock ${persona.charAt(0).toUpperCase() + persona.slice(1)} Persona`;
+
+                const requirements = this.getPersonaRequirements(persona);
+                const meetsReqs = this.meetsRequirements(persona);
+
+                modalContent.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">
+                            ${this.getPersonaIcon(persona)}
+                        </div>
+                        <h3>${persona.charAt(0).toUpperCase() + persona.slice(1)} Persona</h3>
+                        <p style="margin-top: 10px; color: #666;">
+                            ${this.getPersonaDescription(persona)}
+                        </p>
+                    </div>
+                    
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px;">Requirements:</h4>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            ${requirements.map(req => `<li>${req}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    ${meetsReqs ? `
+                        <button class="submit-btn" onclick="sfProfile.unlockPersona('${persona}'); sfProfile.closePersonaUnlockModal();">
+                            <i class="fas fa-unlock"></i> Unlock ${persona.charAt(0).toUpperCase() + persona.slice(1)}
+                        </button>
+                    ` : `
+                        <p style="text-align: center; color: #666; font-style: italic;">
+                            Complete the requirements above to unlock this persona.
+                        </p>
+                    `}
+                `;
+
+                document.getElementById('personaUnlockModal').style.display = 'block';
+            }
+
+            closePersonaUnlockModal() {
+                document.getElementById('personaUnlockModal').style.display = 'none';
+            }
+
+            getPersonaIcon(persona) {
+                const icons = {
+                    founder: '🚀',
+                    mentor: '🎓', 
+                    host: '🏢',
+                    investor: '💰'
+                };
+                return icons[persona] || '❓';
+            }
+
+            getPersonaDescription(persona) {
+                const descriptions = {
+                    founder: 'Transform ideas into businesses with AI assistance, IP protection, and team building tools.',
+                    mentor: 'Guide entrepreneurs, track mentorship impact, and publish research based on insights.',
+                    host: 'Manage venues, analyze customer data, and build revenue through entrepreneur partnerships.',
+                    investor: 'Discover AI-scored deals, access automated due diligence, and manage your portfolio.'
+                };
+                return descriptions[persona] || 'Advanced SF features and functionality.';
+            }
+        }
+
+        // Global functions
+        function openProfileModal() {
+            sfProfile.openProfileModal();
+        }
+
+        function closeProfileModal() {
+            sfProfile.closeProfileModal();
+        }
+
+        function socialVerify(provider) {
+            sfProfile.socialVerify(provider);
+        }
+
+        function requestPersonaUnlock(persona) {
+            sfProfile.openPersonaUnlockModal(persona);
+        }
+
+        function closePersonaUnlockModal() {
+            sfProfile.closePersonaUnlockModal();
+        }
+
+        function showPersonaLocked(feature) {
+            alert(`🔒 ${feature} is locked\n\nComplete your profile and verify your identity to unlock this feature.\n\nGo to Profile → Complete Profile to get started!`);
+        }
+
+        // Initialize systems
+        const sfNav = new SFNavigation();
+        const sfProfile = new SFProfile();
+
+        // Make globally accessible
+        window.sfNav = sfNav;
+        window.sfProfile = sfProfile;
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            const profileModal = document.getElementById('profileModal');
+            const unlockModal = document.getElementById('personaUnlockModal');
+            
+            if (e.target === profileModal) {
+                closeProfileModal();
+            }
+            if (e.target === unlockModal) {
+                closePersonaUnlockModal();
+            }
+        });
+
+        console.log('✅ SF Profile system initialized');
+        console.log('✅ SF Navigation system initialized');
+    </script>
+</body>
+</html>
