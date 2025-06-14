@@ -1291,17 +1291,27 @@
                 return R * c;
             }
 
-            checkNearbyVenues() {
-                // DEMO MODE: Always consider first venue as nearby for testing
-                const nearbyVenues = this.venues.slice(0, 1);
-                
-                if (nearbyVenues.length > 0 && !this.currentCheckIn) {
-                    const actionBtn = document.getElementById('actionBtn');
-                    actionBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Check in to ' + nearbyVenues[0].name;
-                    actionBtn.disabled = false;
-                    actionBtn.dataset.venueId = nearbyVenues[0].id;
-                }
-            }
+            
+checkNearbyVenues() {
+    // Check all venues for nearby status (demo mode - all venues are "nearby")
+    const nearbyVenues = this.venues.filter(venue => {
+        // In demo mode, consider all venues as nearby
+        return true;
+        // In production, use: return venue.distance && venue.distance <= 0.1;
+    });
+    
+    if (nearbyVenues.length > 0 && !this.currentCheckIn) {
+        const actionBtn = document.getElementById('actionBtn');
+        // Show check-in options for any nearby venue
+        actionBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Check in to nearby venue';
+        actionBtn.disabled = false;
+        actionBtn.dataset.venueId = nearbyVenues[0].id; // Default to first
+        
+        // Or let user choose which venue to check into
+        actionBtn.onclick = () => this.showVenueCheckInOptions(nearbyVenues);
+    }
+}
+
 
             handleCheckInOut() {
                 if (!this.currentCheckIn) {
