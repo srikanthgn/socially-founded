@@ -1,40 +1,4 @@
-generateIdeaId() {
-                const chars = 'ABCDEFGHKLMNPQRSTUVWXYZ23456789'; // No confusing 0,O,I,1
-                let id = 'SF-';
-                
-                // Generate 4-4-2 format: SF-XXXX-XXXX-XX
-                for(let i = 0; i < 4; i++) {
-                    id += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                id += '-';
-                for(let i = 0; i < 4; i++) {
-                    id += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                id += '-';
-                for(let i = 0; i < 2; i++) {
-                    id += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                
-                return id;
-            }
-
-            publishIdea(ideaId) {
-                const idea = this.ideas.find(i => i.id === ideaId);
-                if (!idea) return;
-
-                // Generate SF Idea ID and mark as published
-                idea.sfIdeaId = this.generateIdeaId();
-                idea.stage = 'published';
-                idea.publishedAt = new Date();
-                
-                // Award XP for publishing
-                this.awardXP(100, 'Idea Published');
-                
-                // Show certificate
-                alert(`🎉 Idea Published Successfully!\n\nSF Idea ID: ${idea.sfIdeaId}\n\n📜 Your intellectual property is now protected with timestamp: ${idea.publishedAt.toLocaleString()}\n\n+100 XP earned\n\nYou can now share this ID as proof of your original concept!`);
-                
-                this.renderIdeas();
-            }<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -67,7 +31,7 @@ generateIdeaId() {
             padding-top: 60px;
         }
 
-        /* BULLETPROOF NAVIGATION */
+        /* NAVIGATION */
         .sf-navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -177,7 +141,7 @@ generateIdeaId() {
             border-color: #ff4444;
         }
 
-        /* FOUNDER IDEAS STYLES */
+        /* HEADER */
         .header {
             background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
             color: var(--white);
@@ -218,6 +182,7 @@ generateIdeaId() {
             z-index: 2;
         }
 
+        /* MAIN CONTENT */
         .main-content {
             padding: 20px;
             max-width: 1000px;
@@ -386,6 +351,24 @@ generateIdeaId() {
             color: var(--white);
         }
 
+        .publish-btn {
+            margin-top: 10px;
+            padding: 6px 12px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        .publish-btn:hover {
+            background: #059669;
+        }
+
+        /* SIDEBAR */
         .ai-assistant {
             margin-bottom: 20px;
         }
@@ -458,6 +441,7 @@ generateIdeaId() {
             color: var(--navy);
         }
 
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -582,7 +566,7 @@ generateIdeaId() {
     </style>
 </head>
 <body>
-    <!-- BULLETPROOF NAVIGATION -->
+    <!-- NAVIGATION -->
     <nav class="sf-navbar">
         <div class="sf-nav-container">
             <a href="../index.html" class="sf-logo">
@@ -590,7 +574,7 @@ generateIdeaId() {
                 SociallyFounded
             </a>
             
-            <ul class="sf-nav-menu" id="sfNavMenu">
+            <ul class="sf-nav-menu">
                 <li><a href="../index.html" class="sf-nav-link">Home</a></li>
                 <li><a href="../member/venues.html" class="sf-nav-link">Venues</a></li>
                 <li><a href="../core/passport.html" class="sf-nav-link">My Passport</a></li>
@@ -607,13 +591,15 @@ generateIdeaId() {
         </div>
     </nav>
 
+    <!-- HEADER -->
     <div class="header">
         <h1>🚀 My Ideas</h1>
         <p>Transform napkin scribbles into business strategies with AI assistance</p>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div class="main-content">
-        <!-- Quick Start Section -->
+        <!-- Quick Start -->
         <div class="quick-start">
             <h2>Ready to Build Something Amazing?</h2>
             <p>Every great business starts with a simple idea. Let's develop yours with AI-powered insights and protect your intellectual property.</p>
@@ -632,54 +618,7 @@ generateIdeaId() {
                 </h3>
                 
                 <div id="ideasList">
-                    <!-- Sample Ideas -->
-                    <div class="idea-card active" onclick="selectIdea('idea-001')">
-                        <div class="idea-header">
-                            <div>
-                                <div class="idea-title">AI-Powered Fitness Coach</div>
-                                <div class="idea-description">
-                                    A mobile app that uses computer vision to analyze workout form and provides real-time feedback, personalized training plans, and nutrition advice.
-                                </div>
-                            </div>
-                            <div class="idea-score">87/100</div>
-                        </div>
-                        <div class="idea-meta">
-                            <span class="idea-status status-development">Development</span>
-                            <span>Updated 2 days ago</span>
-                        </div>
-                    </div>
-
-                    <div class="idea-card" onclick="selectIdea('idea-002')">
-                        <div class="idea-header">
-                            <div>
-                                <div class="idea-title">Sustainable Food Delivery</div>
-                                <div class="idea-description">
-                                    Zero-waste food delivery platform using reusable containers and electric vehicles, partnering with local organic restaurants.
-                                </div>
-                            </div>
-                            <div class="idea-score">73/100</div>
-                        </div>
-                        <div class="idea-meta">
-                            <span class="idea-status status-concept">Concept</span>
-                            <span>Updated 1 week ago</span>
-                        </div>
-                    </div>
-
-                    <div class="idea-card" onclick="selectIdea('idea-003')">
-                        <div class="idea-header">
-                            <div>
-                                <div class="idea-title">Remote Work Wellness</div>
-                                <div class="idea-description">
-                                    Platform connecting remote workers with local wellness services, offering virtual classes and home visit options for massage, yoga, and mental health.
-                                </div>
-                            </div>
-                            <div class="idea-score">92/100</div>
-                        </div>
-                        <div class="idea-meta">
-                            <span class="idea-status status-published">Published</span>
-                            <span>SF-IDEA-20250614-001</span>
-                        </div>
-                    </div>
+                    <!-- Ideas will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -824,7 +763,7 @@ generateIdeaId() {
     </div>
 
     <script>
-        // SF Navigation System (simplified for 30-min sprint)
+        // SF Navigation System
         class SFNavigation {
             constructor() {
                 this.updateUserStatus();
@@ -836,9 +775,8 @@ generateIdeaId() {
                 if (userData && userData.passportId) {
                     document.getElementById('sfUserSection').style.display = 'flex';
                     document.getElementById('sfUserPassport').textContent = 
-                        `${userData.passportId} • Level ${userData.passport.level}`;
+                        userData.passportId + ' • Level ' + userData.passport.level;
                 } else {
-                    // Redirect to auth if not logged in
                     window.location.href = '../core/auth.html';
                 }
             }
@@ -850,6 +788,7 @@ generateIdeaId() {
                 this.ideas = [];
                 this.selectedIdeaId = 'idea-001';
                 this.initializeIdeas();
+                this.renderIdeas();
                 this.checkFounderAccess();
             }
 
@@ -864,7 +803,6 @@ generateIdeaId() {
             }
 
             initializeIdeas() {
-                // Sample ideas for demo
                 this.ideas = [
                     {
                         id: 'idea-001',
@@ -899,6 +837,40 @@ generateIdeaId() {
                 ];
             }
 
+            generateIdeaId() {
+                const chars = 'ABCDEFGHKLMNPQRSTUVWXYZ23456789';
+                let id = 'SF-';
+                
+                for(let i = 0; i < 4; i++) {
+                    id += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                id += '-';
+                for(let i = 0; i < 4; i++) {
+                    id += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                id += '-';
+                for(let i = 0; i < 2; i++) {
+                    id += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                
+                return id;
+            }
+
+            publishIdea(ideaId) {
+                const idea = this.ideas.find(i => i.id === ideaId);
+                if (!idea) return;
+
+                idea.sfIdeaId = this.generateIdeaId();
+                idea.stage = 'published';
+                idea.publishedAt = new Date();
+                
+                this.awardXP(100, 'Idea Published');
+                
+                alert('🎉 Idea Published Successfully!\n\nSF Idea ID: ' + idea.sfIdeaId + '\n\n📜 Your intellectual property is now protected with timestamp: ' + idea.publishedAt.toLocaleString() + '\n\n+100 XP earned\n\nYou can now share this ID as proof of your original concept!');
+                
+                this.renderIdeas();
+            }
+
             createNewIdea() {
                 const title = document.getElementById('ideaTitle').value;
                 const description = document.getElementById('ideaDescription').value;
@@ -915,7 +887,7 @@ generateIdeaId() {
                     description: description,
                     category: category,
                     stage: 'concept',
-                    score: Math.floor(Math.random() * 30) + 50, // Random score 50-80
+                    score: Math.floor(Math.random() * 30) + 50,
                     createdAt: new Date(),
                     sfIdeaId: null
                 };
@@ -923,15 +895,12 @@ generateIdeaId() {
                 this.ideas.unshift(newIdea);
                 this.renderIdeas();
                 this.closeNewIdeaModal();
-
-                // Award XP for creating idea
                 this.awardXP(50, 'Idea Created');
 
-                alert(`🎉 "${title}" napkin saved!\n\n+50 XP earned\n\nYour scribble is now ready for AI enhancement!`);
+                alert('🎉 "' + title + '" napkin saved!\n\n+50 XP earned\n\nYour scribble is now ready for AI enhancement!');
             }
 
             aiEnhance() {
-                // Mock AI enhancement
                 alert('🤖 AI Enhancement Demo:\n\n"Your fitness app napkin shows strong potential! Let me help you develop this:\n\n💡 Market Insights:\n• $4.4B fitness app market, growing 14.7% annually\n• AI form analysis = strong differentiator\n• 73% higher retention with personalized coaching\n\n🎯 Enhancement Suggestions:\n• Add social workout buddy features\n• Wearable device integration\n• Corporate wellness partnerships\n• Gamification with achievement system\n\n💰 Funding Strategy:\n• Estimated need: $500K seed round\n• Focus on AI technology patents\n• Target B2B corporate wellness market\n\nReady to turn your napkin into a business plan?"');
             }
 
@@ -940,7 +909,7 @@ generateIdeaId() {
                 if (userData) {
                     userData.passport.experience += points;
                     localStorage.setItem('sf_user', JSON.stringify(userData));
-                    console.log(`✅ Awarded ${points} XP for: ${reason}`);
+                    console.log('✅ Awarded ' + points + ' XP for: ' + reason);
                 }
             }
 
@@ -956,8 +925,7 @@ generateIdeaId() {
 
             createIdeaCard(idea) {
                 const card = document.createElement('div');
-                card.className = `idea-card ${idea.id === this.selectedIdeaId ? 'active' : ''}`;
-                card.onclick = () => this.selectIdea(idea.id);
+                card.className = 'idea-card' + (idea.id === this.selectedIdeaId ? ' active' : '');
 
                 const statusClass = {
                     concept: 'status-concept',
@@ -980,23 +948,20 @@ generateIdeaId() {
                         <span class="idea-status ${statusClass}">${statusText}</span>
                         <span>${rightText}</span>
                     </div>
-                    ${idea.stage !== 'published' ? `
-                        <button onclick="sfFounderIdeas.publishIdea('${idea.id}')" 
-                                style="margin-top: 10px; padding: 6px 12px; background: var(--success); color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">
-                            📜 Publish & Protect IP
-                        </button>
-                    ` : ''}
+                    ${idea.stage !== 'published' ? '<button class="publish-btn" onclick="sfFounderIdeas.publishIdea(\'' + idea.id + '\')">📜 Publish & Protect IP</button>' : ''}
                 `;
+
+                card.onclick = (e) => {
+                    if (e.target.classList.contains('publish-btn')) return;
+                    this.selectIdea(idea.id);
+                };
 
                 return card;
             }
 
             selectIdea(ideaId) {
                 this.selectedIdeaId = ideaId;
-                document.querySelectorAll('.idea-card').forEach(card => {
-                    card.classList.remove('active');
-                });
-                event.target.closest('.idea-card').classList.add('active');
+                this.renderIdeas();
             }
 
             formatDate(date) {
@@ -1006,8 +971,8 @@ generateIdeaId() {
                 
                 if (diffDays === 1) return 'Updated today';
                 if (diffDays === 2) return 'Updated yesterday'; 
-                if (diffDays <= 7) return `Updated ${diffDays} days ago`;
-                return `Updated ${Math.floor(diffDays / 7)} weeks ago`;
+                if (diffDays <= 7) return 'Updated ' + diffDays + ' days ago';
+                return 'Updated ' + Math.floor(diffDays / 7) + ' weeks ago';
             }
 
             openNewIdeaModal() {
@@ -1029,21 +994,16 @@ generateIdeaId() {
             sfFounderIdeas.closeNewIdeaModal();
         }
 
-        function selectIdea(ideaId) {
-            sfFounderIdeas.selectIdea(ideaId);
-        }
-
         function aiEnhance() {
             sfFounderIdeas.aiEnhance();
         }
 
         // Initialize systems
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             window.sfNav = new SFNavigation();
             window.sfFounderIdeas = new SFFounderIdeas();
 
-            // Form submission
-            document.getElementById('newIdeaForm').addEventListener('submit', (e) => {
+            document.getElementById('newIdeaForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 sfFounderIdeas.createNewIdea();
             });
@@ -1052,7 +1012,7 @@ generateIdeaId() {
         });
 
         // Close modal when clicking outside
-        window.addEventListener('click', (e) => {
+        window.addEventListener('click', function(e) {
             const modal = document.getElementById('newIdeaModal');
             if (e.target === modal) {
                 closeNewIdeaModal();
