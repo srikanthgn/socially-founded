@@ -32,7 +32,7 @@
             padding-top: 60px;
         }
 
-        /* NAVIGATION - Simplified for demo */
+        /* BULLETPROOF NAVIGATION */
         .sf-navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -41,11 +41,17 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            height: 60px;
+            transition: all 0.3s ease;
+        }
+
+        .sf-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            height: 60px;
         }
 
         .sf-logo {
@@ -72,10 +78,13 @@
             font-weight: 700;
         }
 
-        .sf-nav-links {
+        .sf-nav-menu {
             display: flex;
+            list-style: none;
             gap: 20px;
             align-items: center;
+            margin: 0;
+            padding: 0;
         }
 
         .sf-nav-link {
@@ -84,9 +93,10 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 500;
             font-size: 14px;
+            transition: all 0.3s ease;
             padding: 8px 12px;
             border-radius: 15px;
-            transition: all 0.3s ease;
+            position: relative;
         }
 
         .sf-nav-link:hover {
@@ -102,6 +112,105 @@
         .sf-nav-link.unlocked {
             color: var(--success);
             font-weight: 600;
+        }
+
+        .sf-nav-link.locked {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .sf-nav-link.locked::after {
+            content: '🔒';
+            font-size: 10px;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+        }
+
+        .sf-user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sf-user-passport {
+            background: var(--light-gray);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--navy);
+            font-family: 'Courier New', monospace;
+        }
+
+        .sf-logout-btn {
+            background: transparent;
+            border: 1px solid var(--accent-gray);
+            color: #666;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sf-logout-btn:hover {
+            background: #ff4444;
+            color: white;
+            border-color: #ff4444;
+        }
+
+        .sf-mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--navy);
+            padding: 5px;
+        }
+
+        /* MOBILE NAVIGATION */
+        @media (max-width: 768px) {
+            .sf-nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                border-radius: 0 0 12px 12px;
+                gap: 10px;
+            }
+            
+            .sf-nav-menu.mobile-open {
+                display: flex !important;
+            }
+            
+            .sf-mobile-toggle {
+                display: block !important;
+            }
+            
+            .sf-user-section {
+                display: none !important;
+                position: absolute;
+                top: 100%;
+                right: 20px;
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .sf-user-section.mobile-open {
+                display: flex !important;
+            }
         }
 
         /* PAGE STYLES */
@@ -546,27 +655,37 @@
             .personas-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .sf-nav-links {
-                display: none;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- SIMPLIFIED NAVIGATION -->
+    <!-- BULLETPROOF NAVIGATION -->
     <nav class="sf-navbar">
-        <a href="https://sociallyfounded.com/" class="sf-logo">
-            <div class="sf-logo-icon">SF</div>
-            SociallyFounded
-        </a>
-        
-        <div class="sf-nav-links">
-            <a href="https://sociallyfounded.com/" class="sf-nav-link">Home</a>
-            <a href="https://sociallyfounded.com/member/venues.html" class="sf-nav-link">Venues</a>
-            <a href="https://sociallyfounded.com/core/profile.html" class="sf-nav-link active">Profile</a>
-            <a href="https://sociallyfounded.com/founder/ideas.html" class="sf-nav-link" id="ideasLink">Ideas</a>
-            <a href="https://sociallyfounded.com/mentor/dashboard.html" class="sf-nav-link" id="mentorLink">Mentor</a>
+        <div class="sf-nav-container">
+            <a href="../index.html" class="sf-logo">
+                <div class="sf-logo-icon">SF</div>
+                SociallyFounded
+            </a>
+            
+            <ul class="sf-nav-menu" id="sfNavMenu">
+                <li><a href="../index.html" class="sf-nav-link">Home</a></li>
+                <li><a href="../member/venues.html" class="sf-nav-link">Venues</a></li>
+                <li><a href="../core/passport.html" class="sf-nav-link">My Passport</a></li>
+                <li><a href="../core/profile.html" class="sf-nav-link active">Profile</a></li>
+                <li><a href="../founder/ideas.html" class="sf-nav-link" id="ideasNavLink">Ideas</a></li>
+                <li><a href="../mentor/dashboard.html" class="sf-nav-link" id="mentorNavLink">Mentor</a></li>
+            </ul>
+            
+            <div class="sf-user-section" id="sfUserSection">
+                <div class="sf-user-passport" id="sfUserPassport">Not logged in</div>
+                <button class="sf-logout-btn" id="sfLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            
+            <button class="sf-mobile-toggle" id="sfMobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
@@ -608,7 +727,7 @@
                         </span>
                     </div>
                     <div class="action-buttons">
-                        <a href="linkedin-elevation.html" class="linkedin-elevation-btn" id="linkedinElevationBtn">
+                        <a href="../linkedin-elevation.html" class="linkedin-elevation-btn" id="linkedinElevationBtn">
                             <i class="fab fa-linkedin-in"></i> Connect LinkedIn
                         </a>
                     </div>
@@ -668,7 +787,7 @@
                     <div class="persona-requirements" id="founderRequirements">
                         🔗 Requires: LinkedIn Professional Verification
                     </div>
-                    <a href="linkedin-elevation.html" class="unlock-btn" id="founderUnlockBtn">
+                    <a href="../linkedin-elevation.html" class="unlock-btn" id="founderUnlockBtn">
                         Connect LinkedIn
                     </a>
                 </div>
@@ -683,7 +802,7 @@
                     <div class="persona-requirements" id="mentorRequirements">
                         🔗 Requires: LinkedIn Professional Verification
                     </div>
-                    <a href="linkedin-elevation.html" class="unlock-btn" id="mentorUnlockBtn">
+                    <a href="../linkedin-elevation.html" class="unlock-btn" id="mentorUnlockBtn">
                         Connect LinkedIn
                     </a>
                 </div>
@@ -716,6 +835,115 @@
     </div>
 
     <script>
+        // BULLETPROOF NAVIGATION SYSTEM
+        class SFNavigation {
+            constructor() {
+                this.mobileMenuOpen = false;
+                this.initializeNavigation();
+                this.updateUserStatus();
+                this.bindEvents();
+            }
+
+            initializeNavigation() {
+                console.log('🔧 Initializing SF Navigation...');
+                
+                this.hamburger = document.getElementById('sfMobileToggle');
+                this.menu = document.getElementById('sfNavMenu');
+                this.userSection = document.getElementById('sfUserSection');
+                this.logoutBtn = document.getElementById('sfLogoutBtn');
+                this.userPassport = document.getElementById('sfUserPassport');
+            }
+
+            bindEvents() {
+                if (this.hamburger) {
+                    this.hamburger.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.toggleMobileMenu();
+                    });
+                }
+
+                if (this.logoutBtn) {
+                    this.logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.handleLogout();
+                    });
+                }
+
+                document.addEventListener('click', (e) => {
+                    if (this.mobileMenuOpen && !e.target.closest('.sf-navbar')) {
+                        this.closeMobileMenu();
+                    }
+                });
+            }
+
+            toggleMobileMenu() {
+                this.mobileMenuOpen = !this.mobileMenuOpen;
+                
+                if (this.menu) {
+                    if (this.mobileMenuOpen) {
+                        this.menu.classList.add('mobile-open');
+                    } else {
+                        this.menu.classList.remove('mobile-open');
+                    }
+                }
+                
+                if (this.userSection && this.userSection.style.display !== 'none') {
+                    if (this.mobileMenuOpen) {
+                        this.userSection.classList.add('mobile-open');
+                    } else {
+                        this.userSection.classList.remove('mobile-open');
+                    }
+                }
+            }
+
+            closeMobileMenu() {
+                this.mobileMenuOpen = false;
+                if (this.menu) {
+                    this.menu.classList.remove('mobile-open');
+                }
+                if (this.userSection) {
+                    this.userSection.classList.remove('mobile-open');
+                }
+            }
+
+            updateUserStatus() {
+                const userData = JSON.parse(localStorage.getItem('sf_user'));
+                
+                if (userData && userData.passportId) {
+                    if (this.userSection) {
+                        this.userSection.style.display = 'flex';
+                    }
+                    
+                    if (this.userPassport) {
+                        let displayText = `${userData.passportId} • Level ${userData.passport.level}`;
+                        if (userData.loyaltyProgram && userData.loyaltyProgram.totalPoints > 0) {
+                            displayText += ` • ${userData.loyaltyProgram.totalPoints} pts`;
+                        }
+                        this.userPassport.textContent = displayText;
+                    }
+                } else {
+                    if (this.userSection) {
+                        this.userSection.style.display = 'none';
+                    }
+                }
+            }
+
+            handleLogout() {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('sf_user');
+                    localStorage.removeItem('sf_checkin');
+                    
+                    alert('👋 Logged out successfully!\n\nThanks for using SociallyFounded!');
+                    window.location.href = '../index.html';
+                }
+            }
+
+            refreshUserStatus() {
+                this.updateUserStatus();
+            }
+        }
+
+        // ENHANCED PROFILE MANAGER
         class SFProfileManager {
             constructor() {
                 this.userData = {};
@@ -889,13 +1117,13 @@
                     founderReq.textContent = '✅ LinkedIn Verified - Professional Access Unlocked';
                     founderBtn.className = 'access-btn';
                     founderBtn.textContent = 'Access Founder Tools';
-                    founderBtn.href = 'https://sociallyfounded.com/founder/ideas.html';
+                    founderBtn.href = '../founder/ideas.html';
 
                     mentorPersona.className = 'persona-card unlocked';
                     mentorReq.textContent = '✅ LinkedIn Verified - Professional Access Unlocked';
                     mentorBtn.className = 'access-btn';
                     mentorBtn.textContent = 'Access Mentor Dashboard';
-                    mentorBtn.href = 'https://sociallyfounded.com/mentor/dashboard.html';
+                    mentorBtn.href = '../mentor/dashboard.html';
                 } else {
                     // Keep professional requirement
                     founderPersona.className = 'persona-card professional-required';
@@ -906,17 +1134,33 @@
             }
 
             updateNavigation() {
-                const ideasLink = document.getElementById('ideasLink');
-                const mentorLink = document.getElementById('mentorLink');
+                const ideasLink = document.getElementById('ideasNavLink');
+                const mentorLink = document.getElementById('mentorNavLink');
                 
                 if (this.linkedinVerified) {
                     ideasLink.classList.add('unlocked');
+                    ideasLink.classList.remove('locked');
                     mentorLink.classList.add('unlocked');
-                    ideasLink.href = 'https://sociallyfounded.com/founder/ideas.html';
-                    mentorLink.href = 'https://sociallyfounded.com/mentor/dashboard.html';
+                    mentorLink.classList.remove('locked');
+                    ideasLink.href = '../founder/ideas.html';
+                    mentorLink.href = '../mentor/dashboard.html';
+                    ideasLink.onclick = null;
+                    mentorLink.onclick = null;
                 } else {
-                    ideasLink.onclick = () => this.showPersonaLocked('Founder');
-                    mentorLink.onclick = () => this.showPersonaLocked('Mentor');
+                    ideasLink.classList.add('locked');
+                    ideasLink.classList.remove('unlocked');
+                    mentorLink.classList.add('locked');
+                    mentorLink.classList.remove('unlocked');
+                    ideasLink.href = '#';
+                    mentorLink.href = '#';
+                    ideasLink.onclick = (e) => {
+                        e.preventDefault();
+                        this.showPersonaLocked('Founder');
+                    };
+                    mentorLink.onclick = (e) => {
+                        e.preventDefault();
+                        this.showPersonaLocked('Mentor');
+                    };
                 }
             }
 
@@ -925,19 +1169,31 @@
             }
         }
 
-        // Initialize profile manager
+        // Initialize systems
+        const sfNav = new SFNavigation();
         const profileManager = new SFProfileManager();
 
-        // Make it globally accessible
+        // Make globally accessible
+        window.sfNav = sfNav;
         window.profileManager = profileManager;
 
         // Auto-refresh every 30 seconds to catch changes
         setInterval(() => {
             profileManager.loadUserData();
             profileManager.updateDisplay();
+            sfNav.refreshUserStatus();
         }, 30000);
 
-        console.log('✅ SF Profile system loaded');
+        // Update when user data changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'sf_user') {
+                profileManager.loadUserData();
+                profileManager.updateDisplay();
+                sfNav.updateUserStatus();
+            }
+        });
+
+        console.log('✅ SF Profile system loaded with complete navigation');
     </script>
 </body>
 </html>
