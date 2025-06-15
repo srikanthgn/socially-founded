@@ -414,9 +414,9 @@
     <script>
         class LinkedInOAuth {
             constructor() {
-                this.clientId = 'YOUR_LINKEDIN_CLIENT_ID'; // Will be configured
-                this.redirectUri = window.location.origin + '/linkedin-callback';
-                this.scope = 'r_liteprofile r_emailaddress';
+                this.clientId = '77tpngrlwmwnz7'; // Your LinkedIn Client ID
+                this.redirectUri = 'https://sociallyfounded.com/linkedin-callback.html';
+                this.scope = 'openid profile email';
                 this.state = this.generateState();
                 
                 this.init();
