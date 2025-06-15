@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Where Entrepreneurs Connect, Create & Thrive</title>
+    <title>SociallyFounded - Where Founding is Socially Enhanced</title>
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
     <style>
-        :root {
-            --navy: #003554;
-            --light-gray: #F5F5F5;
-            --accent-gray: #E0E0E0;
-            --white: #FFFFFF;
-            --success: #10B981;
-            --gold: #D4AF37;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -24,778 +22,741 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        /* Navigation */
-        .navbar {
-            background: var(--white);
-            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 70px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--navy);
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--navy), #004a6b);
-            border-radius: 50%;
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
-            font-size: 16px;
+            color: white;
         }
 
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-            align-items: center;
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
         }
 
-        .nav-link {
-            color: #666;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            padding: 8px 16px;
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #003554;
+            backdrop-filter: blur(10px);
         }
 
-        .nav-link:hover {
-            color: var(--navy);
-            background: var(--light-gray);
-        }
-
-        .mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--navy);
-        }
-
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                border-radius: 0 0 12px 12px;
-            }
-            
-            .nav-menu.show {
-                display: flex;
-            }
-            
-            .mobile-toggle {
-                display: block;
-            }
-        }
-
-        .nav-link.active {
-            color: var(--white);
-            background: var(--navy);
-        }
-
-        .user-info {
-            display: none;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info.show {
-            display: flex;
-        }
-
-        .user-passport {
-            background: var(--light-gray);
-            padding: 8px 15px;
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--navy);
-            font-family: 'Courier New', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
         }
 
-        .join-btn {
-            background: var(--navy);
-            color: var(--white);
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-decoration: none;
+        h1 {
+            font-size: 28px;
             font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            color: #003554;
         }
 
-        .join-btn:hover {
-            background: #004a6b;
+        .tagline {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .auth-btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .auth-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
-            color: var(--white);
-            padding: 120px 20px 80px;
+        .google-btn {
+            background: #fff;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .google-btn:hover {
+            border-color: #4285f4;
+        }
+
+        .email-btn {
+            background: #003554;
+            color: white;
+        }
+
+        .email-btn:hover {
+            background: #004a6b;
+        }
+
+        .phone-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .phone-btn:hover {
+            background: #128C7E;
+        }
+
+        .anonymous-btn {
+            background: transparent;
+            color: #666;
+            border: 2px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .anonymous-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .divider {
+            margin: 20px 0;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            color: #999;
+            font-size: 14px;
         }
 
-        .hero::before {
+        .divider::before {
             content: '';
             position: absolute;
-            top: 0;
+            top: 50%;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
-            animation: float 30s linear infinite;
+            height: 1px;
+            background: #e0e0e0;
+            z-index: 1;
         }
 
-        @keyframes float {
-            0% { transform: translateX(-100px) translateY(-100px); }
-            100% { transform: translateX(0px) translateY(0px); }
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
+        .divider span {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 15px;
             position: relative;
             z-index: 2;
         }
 
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
+        .loading {
+            display: none;
+            margin: 20px 0;
         }
 
-        .hero .subtitle {
-            font-size: 20px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-
-        .hero .description {
-            font-size: 16px;
-            margin-bottom: 40px;
-            opacity: 0.8;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-btn {
-            padding: 15px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .cta-primary {
-            background: var(--white);
-            color: var(--navy);
-        }
-
-        .cta-primary:hover {
-            background: var(--light-gray);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .cta-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid var(--white);
-        }
-
-        .cta-secondary:hover {
-            background: var(--white);
-            color: var(--navy);
-            transform: translateY(-3px);
-        }
-
-        /* Features Section */
-        .features {
-            padding: 80px 20px;
-            background: var(--light-gray);
-        }
-
-        .features-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 20px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 60px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-
-        .feature-card {
-            background: var(--white);
-            padding: 40px 30px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--navy), #004a6b);
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e0e0e0;
+            border-top: 3px solid #003554;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 32px;
-            color: var(--white);
-        }
-
-        .feature-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--navy);
-            margin-bottom: 15px;
-        }
-
-        .feature-description {
-            color: #666;
-            line-height: 1.7;
-            margin-bottom: 20px;
-        }
-
-        .feature-link {
-            color: var(--navy);
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-link:hover {
-            color: #004a6b;
-            transform: translateX(5px);
-        }
-
-        /* Quick Access */
-        .quick-access {
-            background: var(--white);
-            padding: 60px 20px;
-        }
-
-        .quick-container {
-            max-width: 800px;
+            animation: spin 1s linear infinite;
             margin: 0 auto;
-            text-align: center;
         }
 
-        .quick-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .quick-card {
-            background: var(--light-gray);
-            padding: 30px 20px;
+        .error-message {
+            display: none;
+            background: #ffe6e6;
+            color: #d63031;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            border: 1px solid #fab1a0;
+        }
+
+        .success-message {
+            display: none;
+            background: #e6f7e6;
+            color: #00b894;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            border: 1px solid #a8e6a3;
+        }
+
+        .user-info {
+            display: none;
+            background: #f8f9fa;
             border-radius: 12px;
-            text-decoration: none;
-            color: var(--navy);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
         }
 
-        .quick-card:hover {
-            background: var(--navy);
-            color: var(--white);
-            transform: translateY(-5px);
-            border-color: var(--navy);
-        }
-
-        .quick-icon {
-            font-size: 40px;
+        .user-info h3 {
+            color: #003554;
             margin-bottom: 15px;
-        }
-
-        .quick-title {
-            font-weight: 600;
             font-size: 18px;
-            margin-bottom: 8px;
         }
 
-        .quick-desc {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--navy);
-            color: var(--white);
-            padding: 40px 20px 20px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
+        .user-detail {
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: var(--white);
-            text-decoration: none;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-
-        .footer-link:hover {
-            opacity: 1;
-        }
-
-        .copyright {
-            opacity: 0.6;
+            justify-content: space-between;
+            margin-bottom: 8px;
             font-size: 14px;
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-            
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero .subtitle {
-                font-size: 18px;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .quick-grid {
-                grid-template-columns: 1fr;
-            }
+        .user-detail strong {
+            color: #003554;
         }
 
-        /* Status Indicator */
-        .status-banner {
-            background: var(--success);
-            color: var(--white);
-            padding: 8px 20px;
-            text-align: center;
-            font-size: 12px;
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 14px;
             font-weight: 500;
         }
 
-        .status-banner.demo {
-            background: var(--gold);
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .continue-btn {
+            background: #003554;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        .continue-btn:hover {
+            background: #004a6b;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .auth-card {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .tagline {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Status Banner -->
-    <div class="status-banner demo">
-        🚀 SF MVP Live! Week 1-3 Complete • Test Authentication, Venues & Passport System
-    </div>
-
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <div class="logo-icon">SF</div>
-                SociallyFounded
-            </a>
+    <div class="container">
+        <div class="auth-card">
+            <div class="logo">SF</div>
+            <h1>SociallyFounded</h1>
+            <p class="tagline">Where founding is socially enhanced</p>
             
-            <ul class="nav-menu">
-                <li><a href="#features" class="nav-link">Features</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="member/venues.html" class="nav-link">Venues</a></li>
-                <li><a href="core/passport.html" class="nav-link" id="passportNavLink" style="display: none;">My Passport</a></li>
-                <li><a href="founder/ideas.html" class="nav-link">Ideas</a></li>
-                <li><a href="core/profile.html" class="nav-link">Profile</a></li>
-            </ul>
+            <div id="authSection">
+                <div class="auth-buttons">
+                    <button class="auth-btn google-btn" onclick="signInWithGoogle()">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+                    
+                    <button class="auth-btn email-btn" onclick="showEmailAuth()">
+                        <svg class="icon" fill="white" viewBox="0 0 24 24">
+                            <rect x="4" y="6" width="16" height="12" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M4 8l8 5 8-5" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <circle cx="7" cy="9" r="1" fill="currentColor"/>
+                            <circle cx="17" cy="15" r="1" fill="currentColor"/>
+                        </svg>
+                        Continue with Email
+                    </button>
+                    
+                    <button class="auth-btn phone-btn" onclick="showPhoneAuth()">
+                        <svg class="icon" fill="white" viewBox="0 0 24 24">
+                            <rect x="6" y="3" width="12" height="18" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M9 19h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M10 12h4" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Continue with Phone
+                    </button>
+                </div>
+                
+                <div class="divider">
+                    <span>or</span>
+                </div>
+                
+                <button class="auth-btn anonymous-btn" onclick="signInAnonymously()">
+                    <svg class="icon" fill="#666" viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M8 8h8" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+                        <path d="M10 12h4" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                    </svg>
+                    Just browsing (Guest)
+                </button>
+            </div>
+            
+            <div class="loading" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px; font-size: 14px; color: #666;">Authenticating...</p>
+            </div>
+            
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
             
             <div class="user-info" id="userInfo">
-                <div class="user-passport" id="userPassport">Not logged in</div>
-            </div>
-            
-            <a href="core/auth.html" class="join-btn" id="authBtn">
-                <i class="fas fa-user-plus"></i> Join SF
-            </a>
-            
-            <button class="mobile-toggle" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Where Entrepreneurs Connect, Create & Thrive</h1>
-            <p class="subtitle">The only platform that rewards you for time worked, not money spent</p>
-            <p class="description">
-                Join a revolutionary community where venues become your workspace, time builds loyalty points, 
-                and fellow entrepreneurs become your network. From idea napkins to business success.
-            </p>
-            <div class="cta-buttons">
-                <a href="core/auth.html" class="cta-btn cta-primary">
-                    <i class="fas fa-rocket"></i> Start Your Journey
-                </a>
-                <a href="member/venues.html" class="cta-btn cta-secondary">
-                    <i class="fas fa-map-marker-alt"></i> Explore Venues
-                </a>
+                <h3>🎉 Welcome to SociallyFounded!</h3>
+                <div id="userDetails"></div>
+                <button class="continue-btn" onclick="continueToProfile()">Continue to Profile</button>
+                <button class="logout-btn" onclick="signOut()">Sign Out</button>
             </div>
         </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="features-container">
-            <h2 class="section-title">Revolutionary Platform Features</h2>
-            <p class="section-subtitle">
-                Five interconnected personas, one unified ecosystem for entrepreneurial success
-            </p>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3 class="feature-title">Member Network</h3>
-                    <p class="feature-description">
-                        Discover entrepreneur-friendly venues, earn points for time worked, and connect with like-minded founders through our revolutionary time-based loyalty system.
-                    </p>
-                    <a href="member/venues.html" class="feature-link">
-                        Discover Venues <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
-                    <h3 class="feature-title">AI-Powered Ideas</h3>
-                    <p class="feature-description">
-                        Transform napkin scribbles into business strategies with AI assistance, protect your IP, and find co-founders within our verified community.
-                    </p>
-                    <a href="#" class="feature-link">
-                        Coming Soon <i class="fas fa-clock"></i>
-                    </a>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🎓</div>
-                    <h3 class="feature-title">Mentor Network</h3>
-                    <p class="feature-description">
-                        Connect with experienced mentors, track your impact, and even publish research based on entrepreneurial insights gained through the platform.
-                    </p>
-                    <a href="#" class="feature-link">
-                        Coming Soon <i class="fas fa-clock"></i>
-                    </a>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🏢</div>
-                    <h3 class="feature-title">Venue Partnerships</h3>
-                    <p class="feature-description">
-                        Transform dead time into revenue by becoming an SF Host. Get analytics, promote to entrepreneurs, and build a productive community.
-                    </p>
-                    <a href="#" class="feature-link">
-                        Coming Soon <i class="fas fa-clock"></i>
-                    </a>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3 class="feature-title">Investment Hub</h3>
-                    <p class="feature-description">
-                        Discover AI-scored startup opportunities, access automated deal rooms, and connect with verified founders ready for investment.
-                    </p>
-                    <a href="#" class="feature-link">
-                        Coming Soon <i class="fas fa-clock"></i>
-                    </a>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3 class="feature-title">SF Passport</h3>
-                    <p class="feature-description">
-                        Track your entrepreneurial journey with achievements, levels, and tier progression. See your impact across the entire ecosystem.
-                    </p>
-                    <a href="core/passport.html" class="feature-link">
-                        View Passport <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quick Access -->
-    <section class="quick-access">
-        <div class="quick-container">
-            <h2 class="section-title">Quick Access</h2>
-            <p class="section-subtitle">Jump directly to any part of the SF ecosystem</p>
-            
-            <div class="quick-grid">
-                <a href="core/auth.html" class="quick-card">
-                    <div class="quick-icon">🔐</div>
-                    <div class="quick-title">Join SF</div>
-                    <div class="quick-desc">Create your SF Passport</div>
-                </a>
-                
-                <a href="member/venues.html" class="quick-card">
-                    <div class="quick-icon">📍</div>
-                    <div class="quick-title">Find Venues</div>
-                    <div class="quick-desc">Discover workspaces</div>
-                </a>
-                
-                <a href="core/passport.html" class="quick-card">
-                    <div class="quick-icon">🎫</div>
-                    <div class="quick-title">My Passport</div>
-                    <div class="quick-desc">Track your progress</div>
-                </a>
-                
-                <a href="#demo" class="quick-card" onclick="startDemo()">
-                    <div class="quick-icon">▶️</div>
-                    <div class="quick-title">Live Demo</div>
-                    <div class="quick-desc">Try the full flow</div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#" class="footer-link">About SF</a>
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Contact</a>
-                <a href="https://github.com/srikanthgn/socially-founded" class="footer-link">GitHub</a>
-            </div>
-            <div class="copyright">
-                © 2025 SociallyFounded. Built with ❤️ for entrepreneurs worldwide.
-            </div>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        class SFLanding {
-            constructor() {
-                this.checkUserStatus();
-                this.initializeNavigation();
-                this.initializeSmoothScroll();
-            }
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994533610259",
+            appId: "1:994533610259:web:fe740378a4c000211e40e6",
+            measurementId: "G-EY0BZE30Q0"
+        };
 
-            checkUserStatus() {
-                const userData = JSON.parse(localStorage.getItem('sf_user'));
-                const passportLink = document.getElementById('passportNavLink');
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // UI Elements
+        const authSection = document.getElementById('authSection');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const userInfo = document.getElementById('userInfo');
+        const userDetails = document.getElementById('userDetails');
+
+        // Authentication State Observer
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                console.log('User signed in:', user);
+                await handleUserSignIn(user);
+            } else {
+                console.log('User signed out');
+                showAuthSection();
+            }
+        });
+
+        // Show/Hide UI Sections
+        function showLoading() {
+            authSection.style.display = 'none';
+            userInfo.style.display = 'none';
+            loadingSpinner.style.display = 'block';
+            hideMessages();
+        }
+
+        function showAuthSection() {
+            authSection.style.display = 'block';
+            userInfo.style.display = 'none';
+            loadingSpinner.style.display = 'none';
+            hideMessages();
+        }
+
+        function showUserInfo() {
+            authSection.style.display = 'none';
+            userInfo.style.display = 'block';
+            loadingSpinner.style.display = 'none';
+        }
+
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+
+        // Authentication Methods
+        async function signInWithGoogle() {
+            showLoading();
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                const result = await auth.signInWithPopup(provider);
+                console.log('Google sign-in successful:', result.user);
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                showError('Google sign-in failed. Please try again.');
+                showAuthSection();
+            }
+        }
+
+        function showEmailAuth() {
+            const email = prompt('Enter your email address:');
+            if (email) {
+                signInWithEmail(email);
+            }
+        }
+
+        async function signInWithEmail(email) {
+            showLoading();
+            try {
+                const actionCodeSettings = {
+                    url: window.location.href,
+                    handleCodeInApp: true
+                };
                 
-                if (userData) {
-                    // User is logged in
-                    document.getElementById('userInfo').classList.add('show');
-                    document.getElementById('userPassport').textContent = userData.passportId;
-                    document.getElementById('authBtn').innerHTML = '<i class="fas fa-user"></i> My Account';
-                    document.getElementById('authBtn').href = 'core/passport.html';
-                    
-                    // Show passport link
-                    if (passportLink) {
-                        passportLink.style.display = 'block';
-                    }
-                } else {
-                    // User not logged in - hide passport link
-                    if (passportLink) {
-                        passportLink.style.display = 'none';
-                    }
+                await auth.sendSignInLinkToEmail(email, actionCodeSettings);
+                localStorage.setItem('emailForSignIn', email);
+                showSuccess(`Sign-in link sent to ${email}. Check your inbox!`);
+                showAuthSection();
+            } catch (error) {
+                console.error('Email sign-in error:', error);
+                showError('Failed to send sign-in link. Please check your email and try again.');
+                showAuthSection();
+            }
+        }
+
+        function showPhoneAuth() {
+            const phoneNumber = prompt('Enter your phone number (with country code, e.g., +1234567890):');
+            if (phoneNumber) {
+                signInWithPhone(phoneNumber);
+            }
+        }
+
+        async function signInWithPhone(phoneNumber) {
+            showLoading();
+            try {
+                const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+                const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, appVerifier);
+                
+                const code = prompt('Enter the verification code sent to your phone:');
+                if (code) {
+                    await confirmationResult.confirm(code);
                 }
+            } catch (error) {
+                console.error('Phone sign-in error:', error);
+                showError('Phone sign-in failed. Please check your number and try again.');
+                showAuthSection();
             }
+        }
 
-            initializeNavigation() {
-                // Smooth scroll for anchor links
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', (e) => {
-                        const target = document.querySelector(anchor.getAttribute('href'));
-                        if (target) {
-                            e.preventDefault();
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    });
-                });
-
-                // Navbar scroll effect
-                window.addEventListener('scroll', () => {
-                    const navbar = document.querySelector('.navbar');
-                    if (window.scrollY > 100) {
-                        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                        navbar.style.backdropFilter = 'blur(10px)';
-                    } else {
-                        navbar.style.background = 'var(--white)';
-                        navbar.style.backdropFilter = 'none';
-                    }
-                });
+        async function signInAnonymously() {
+            showLoading();
+            try {
+                const result = await auth.signInAnonymously();
+                console.log('Anonymous sign-in successful:', result.user);
+            } catch (error) {
+                console.error('Anonymous sign-in error:', error);
+                showError('Anonymous sign-in failed. Please try again.');
+                showAuthSection();
             }
+        }
 
-            initializeSmoothScroll() {
-                // Add smooth scrolling to all internal links
-                document.querySelectorAll('a[href^="#"]').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        const targetId = link.getAttribute('href');
-                        const targetSection = document.querySelector(targetId);
+        // User Data Management
+        function generateSFPassport(countryCode = 'US') {
+            // Professional passport format: SF-{COUNTRY}-{8_DIGIT_NUMBER}
+            const randomNumber = Math.floor(Math.random() * 99999999).toString().padStart(8, '0');
+            return `SF-${countryCode.toUpperCase()}-${randomNumber}`;
+        }
+
+        async function detectUserCountry() {
+            try {
+                // Try to detect country from timezone/locale
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const locale = navigator.language || navigator.userLanguage;
+                
+                // Common country mappings
+                const countryMap = {
+                    'en-US': 'US', 'en-CA': 'CA', 'en-GB': 'UK', 'en-AU': 'AU',
+                    'ar-AE': 'AE', 'ar-SA': 'SA', 'ar-QA': 'QA', 'ar-KW': 'KW',
+                    'hi-IN': 'IN', 'en-IN': 'IN', 'fr-FR': 'FR', 'de-DE': 'DE',
+                    'es-ES': 'ES', 'pt-BR': 'BR', 'ja-JP': 'JP', 'ko-KR': 'KR',
+                    'zh-CN': 'CN', 'ru-RU': 'RU', 'it-IT': 'IT', 'nl-NL': 'NL'
+                };
+                
+                // Try locale first
+                if (countryMap[locale]) {
+                    return countryMap[locale];
+                }
+                
+                // Try timezone-based detection
+                if (timezone.includes('America/New_York') || timezone.includes('America/Los_Angeles')) return 'US';
+                if (timezone.includes('America/Toronto')) return 'CA';
+                if (timezone.includes('Europe/London')) return 'UK';
+                if (timezone.includes('Australia/')) return 'AU';
+                if (timezone.includes('Asia/Dubai')) return 'AE';
+                if (timezone.includes('Asia/Riyadh')) return 'SA';
+                if (timezone.includes('Asia/Kolkata')) return 'IN';
+                if (timezone.includes('Europe/Paris')) return 'FR';
+                if (timezone.includes('Europe/Berlin')) return 'DE';
+                if (timezone.includes('Asia/Tokyo')) return 'JP';
+                if (timezone.includes('Asia/Shanghai')) return 'CN';
+                
+                // Default to US if can't detect
+                return 'US';
+            } catch (error) {
+                console.log('Country detection failed, defaulting to US');
+                return 'US';
+            }
+        }
+
+        async function handleUserSignIn(user) {
+            try {
+                // Check if user document exists
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                
+                if (!userDoc.exists) {
+                    // Detect user's country for passport
+                    const countryCode = await detectUserCountry();
+                    
+                    // Create new user document
+                    const userData = {
+                        uid: user.uid,
+                        displayName: user.displayName || 'New Member',
+                        email: user.email || '',
+                        photoURL: user.photoURL || '',
+                        isAnonymous: user.isAnonymous,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
                         
-                        if (targetSection) {
-                            e.preventDefault();
-                            targetSection.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
+                        sfPassport: {
+                            id: generateSFPassport(countryCode),
+                            country: countryCode,
+                            level: 1,
+                            tier: 'Navy',
+                            experience: 0,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        },
+                        
+                        location: {
+                            country: countryCode,
+                            detectedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        },
+                        
+                        personas: {
+                            member: { 
+                                active: true, 
+                                activatedAt: firebase.firestore.FieldValue.serverTimestamp() 
+                            },
+                            founder: { active: false, linkedinVerified: false },
+                            mentor: { active: false, linkedinVerified: false },
+                            host: { active: false, businessVerified: false },
+                            investor: { active: false, accreditationVerified: false }
+                        },
+                        
+                        verification: {
+                            email: user.emailVerified || false,
+                            phone: false,
+                            linkedin: { verified: false }
+                        },
+                        
+                        settings: {
+                            notifications: true,
+                            privacy: 'standard'
                         }
+                    };
+                    
+                    await db.collection('users').doc(user.uid).set(userData);
+                    console.log('New user document created with passport:', userData.sfPassport.id);
+                    
+                    // Log activity
+                    await logActivity(user.uid, 'account_created', {
+                        method: user.isAnonymous ? 'anonymous' : 'oauth',
+                        sfPassport: userData.sfPassport.id,
+                        country: countryCode
                     });
+                    
+                } else {
+                    // Update last login
+                    await db.collection('users').doc(user.uid).update({
+                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    // Log activity
+                    await logActivity(user.uid, 'sign_in', {
+                        method: user.isAnonymous ? 'anonymous' : 'oauth'
+                    });
+                }
+                
+                // Get updated user data and display
+                const updatedDoc = await db.collection('users').doc(user.uid).get();
+                displayUserInfo(updatedDoc.data());
+                
+            } catch (error) {
+                console.error('Error handling user sign-in:', error);
+                showError('Failed to set up your account. Please try again.');
+                showAuthSection();
+            }
+        }
+
+        async function logActivity(userId, type, data) {
+            try {
+                await db.collection('activities').add({
+                    userId,
+                    type,
+                    data,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
-            }
-
-            startDemo() {
-                // Demo flow: Auth → Venues → Passport
-                localStorage.setItem('sf_demo_mode', 'true');
-                window.location.href = 'core/auth.html';
+            } catch (error) {
+                console.error('Error logging activity:', error);
             }
         }
 
-        // Global function for demo
-        function startDemo() {
-            const sf = new SFLanding();
-            sf.startDemo();
+        function displayUserInfo(userData) {
+            const isAnonymous = auth.currentUser?.isAnonymous;
+            const country = userData.sfPassport?.country || userData.location?.country || 'US';
+            const countryName = getCountryName(country);
+            
+            userDetails.innerHTML = `
+                <div class="user-detail">
+                    <span>SF Passport:</span>
+                    <strong>${userData.sfPassport?.id || 'Generating...'}</strong>
+                </div>
+                <div class="user-detail">
+                    <span>Issued By:</span>
+                    <strong>SociallyFounded ${countryName}</strong>
+                </div>
+                <div class="user-detail">
+                    <span>Name:</span>
+                    <strong>${userData.displayName || (isAnonymous ? 'Guest User' : 'New Member')}</strong>
+                </div>
+                <div class="user-detail">
+                    <span>Email:</span>
+                    <strong>${userData.email || (isAnonymous ? 'Not provided' : 'Pending verification')}</strong>
+                </div>
+                <div class="user-detail">
+                    <span>Member Level:</span>
+                    <strong>${userData.sfPassport?.tier || 'Navy'} Level ${userData.sfPassport?.level || 1}</strong>
+                </div>
+                <div class="user-detail">
+                    <span>Active Personas:</span>
+                    <strong>Member${userData.personas?.founder?.active ? ', Founder' : ''}${userData.personas?.mentor?.active ? ', Mentor' : ''}</strong>
+                </div>
+            `;
+            
+            showUserInfo();
+            showSuccess('Successfully signed in! Your SF Passport has been issued.');
         }
 
-        function toggleMobileMenu() {
-            const menu = document.querySelector('.nav-menu');
-            menu.classList.toggle('show');
-        }
-
-        // Initialize landing page
-        const sfLanding = new SFLanding();
-
-        // Add some interactive animations
-        document.addEventListener('DOMContentLoaded', () => {
-            // Animate feature cards on scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+        function getCountryName(countryCode) {
+            const countries = {
+                'US': 'United States', 'CA': 'Canada', 'UK': 'United Kingdom', 'AU': 'Australia',
+                'AE': 'UAE', 'SA': 'Saudi Arabia', 'QA': 'Qatar', 'KW': 'Kuwait',
+                'IN': 'India', 'FR': 'France', 'DE': 'Germany', 'ES': 'Spain',
+                'PT': 'Portugal', 'BR': 'Brazil', 'JP': 'Japan', 'KR': 'South Korea',
+                'CN': 'China', 'RU': 'Russia', 'IT': 'Italy', 'NL': 'Netherlands'
             };
+            return countries[countryCode] || countryCode;
+        }
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
+        function continueToProfile() {
+            // Redirect to profile/dashboard
+            window.location.href = '/core/passport.html';
+        }
 
-            // Observe all feature cards
-            document.querySelectorAll('.feature-card').forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                card.style.transition = 'all 0.6s ease';
-                observer.observe(card);
-            });
+        async function signOut() {
+            showLoading();
+            try {
+                await auth.signOut();
+                console.log('User signed out');
+                showAuthSection();
+            } catch (error) {
+                console.error('Sign-out error:', error);
+                showError('Failed to sign out. Please try again.');
+            }
+        }
+
+        // Handle email link sign-in (if user returns from email)
+        if (auth.isSignInWithEmailLink(window.location.href)) {
+            let email = localStorage.getItem('emailForSignIn');
+            if (!email) {
+                email = prompt('Please provide your email for confirmation:');
+            }
+            
+            if (email) {
+                showLoading();
+                auth.signInWithEmailLink(email, window.location.href)
+                    .then(() => {
+                        localStorage.removeItem('emailForSignIn');
+                        console.log('Email link sign-in successful');
+                    })
+                    .catch((error) => {
+                        console.error('Email link sign-in error:', error);
+                        showError('Email verification failed. Please try again.');
+                        showAuthSection();
+                    });
+            }
+        }
+
+        // Initialize reCAPTCHA for phone auth
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            size: 'invisible'
         });
     </script>
+    
+    <!-- Invisible reCAPTCHA container for phone auth -->
+    <div id="recaptcha-container"></div>
 </body>
 </html>
