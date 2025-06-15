@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkedIn Professional Elevation - SociallyFounded</title>
+    <title>LinkedIn Integration - SociallyFounded</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,6 +14,7 @@
             --success: #10B981;
             --linkedin: #0077B5;
             --gold: #D4AF37;
+            --error: #EF4444;
         }
 
         * {
@@ -50,7 +51,6 @@
         .header p {
             opacity: 0.9;
             font-size: 1.1rem;
-            margin-bottom: 20px;
         }
 
         .card {
@@ -60,6 +60,30 @@
             padding: 30px;
             margin-bottom: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-banner {
+            display: none;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .status-banner.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+            display: flex;
+        }
+
+        .status-banner.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--error);
+            display: flex;
         }
 
         .linkedin-btn {
@@ -88,87 +112,10 @@
             box-shadow: 0 5px 15px rgba(0, 119, 181, 0.3);
         }
 
-        .linkedin-btn i {
-            font-size: 20px;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .benefit-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            border-left: 4px solid var(--gold);
-        }
-
-        .benefit-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--navy);
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .benefit-text {
-            flex: 1;
-        }
-
-        .benefit-title {
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .benefit-desc {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .status-indicator.pending {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: rgba(245, 158, 11, 0.3);
-        }
-
-        .status-indicator.error {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .linkedin-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .profile-preview {
@@ -243,14 +190,7 @@
             font-weight: 500;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
         .btn {
-            flex: 1;
             padding: 12px 20px;
             border: none;
             border-radius: 8px;
@@ -258,6 +198,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 5px;
         }
 
         .btn-primary {
@@ -281,14 +222,27 @@
             border-color: rgba(255, 255, 255, 0.5);
         }
 
-        .privacy-notice {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .demo-notice {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 8px;
             padding: 15px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            opacity: 0.8;
+            margin-bottom: 20px;
+            color: #F59E0B;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .back-link {
@@ -309,79 +263,69 @@
             .header h1 {
                 font-size: 2rem;
             }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <a href="/core/profile.html" class="back-link">
+        <a href="https://sociallyfounded.com/core/profile.html" class="back-link">
             <i class="fas fa-arrow-left"></i> Back to Profile
         </a>
 
         <div class="header">
             <h1>🔗 LinkedIn Professional Elevation</h1>
-            <p>Verify your professional credentials to unlock Founder and Mentor personas</p>
+            <p>Connect your LinkedIn profile to unlock Founder and Mentor personas</p>
+        </div>
+
+        <!-- Demo Notice -->
+        <div class="demo-notice">
+            <h4><i class="fas fa-info-circle"></i> Demo Mode Active</h4>
+            <p>This demo simulates LinkedIn OAuth flow. In production, this would connect to real LinkedIn API.</p>
+        </div>
+
+        <!-- Status Banners -->
+        <div class="status-banner success" id="successBanner">
+            <i class="fab fa-linkedin-in"></i>
+            <div>
+                <h4>LinkedIn Connected Successfully!</h4>
+                <p>Your professional profile has been verified and personas unlocked.</p>
+            </div>
+        </div>
+
+        <div class="status-banner error" id="errorBanner">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <h4>Connection Failed</h4>
+                <p id="errorMessage">Please try again or contact support.</p>
+            </div>
         </div>
 
         <!-- LinkedIn Connection Card -->
         <div class="card" id="connectionCard">
-            <div class="status-indicator" id="statusIndicator" style="display: none;">
-                <div class="spinner" id="loadingSpinner"></div>
-                <span id="statusText">Connecting to LinkedIn...</span>
-            </div>
-
             <h3 style="color: var(--gold); margin-bottom: 20px;">Connect Your LinkedIn Profile</h3>
             
-            <button class="linkedin-btn" id="linkedinBtn" onclick="initiateLinkedInAuth()">
+            <button class="linkedin-btn" id="linkedinBtn" onclick="startLinkedInFlow()">
                 <i class="fab fa-linkedin-in"></i>
-                Connect with LinkedIn
+                <span id="btnText">Connect with LinkedIn</span>
             </button>
 
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">🚀</div>
-                    <div class="benefit-text">
-                        <div class="benefit-title">Unlock Founder Persona</div>
-                        <div class="benefit-desc">Access AI-powered idea development and IP protection</div>
-                    </div>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">🎓</div>
-                    <div class="benefit-text">
-                        <div class="benefit-title">Unlock Mentor Persona</div>
-                        <div class="benefit-desc">Guide entrepreneurs and publish research insights</div>
-                    </div>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">🤝</div>
-                    <div class="benefit-text">
-                        <div class="benefit-title">Professional Matching</div>
-                        <div class="benefit-desc">Connect with verified experts in your industry</div>
-                    </div>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">📊</div>
-                    <div class="benefit-text">
-                        <div class="benefit-title">AI-Structured Profile</div>
-                        <div class="benefit-desc">Automatically organize your professional background</div>
-                    </div>
-                </div>
+            <div style="margin: 20px 0; opacity: 0.8;">
+                <h4>What you'll unlock:</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 8px 0;"><i class="fas fa-rocket" style="color: var(--gold); margin-right: 10px;"></i> Founder Persona - AI-powered idea development</li>
+                    <li style="padding: 8px 0;"><i class="fas fa-graduation-cap" style="color: var(--gold); margin-right: 10px;"></i> Mentor Persona - Guide entrepreneurs and publish research</li>
+                    <li style="padding: 8px 0;"><i class="fas fa-handshake" style="color: var(--gold); margin-right: 10px;"></i> Professional Matching - Connect with verified experts</li>
+                    <li style="padding: 8px 0;"><i class="fas fa-chart-line" style="color: var(--gold); margin-right: 10px;"></i> AI-Structured Profile - Automatically organize your background</li>
+                </ul>
             </div>
 
-            <div class="privacy-notice">
+            <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 15px; font-size: 0.9rem; opacity: 0.8;">
                 <strong>🔒 Privacy Protected:</strong> We only access your basic profile information (name, headline, experience) and email address. Your data is never shared without permission.
             </div>
         </div>
 
-        <!-- Profile Preview Card (Hidden Initially) -->
+        <!-- Profile Preview Card -->
         <div class="card profile-preview" id="profilePreview">
             <h3 style="color: var(--gold); margin-bottom: 20px;">LinkedIn Profile Connected</h3>
             
@@ -390,6 +334,10 @@
                 <div class="profile-info">
                     <h3 id="profileName">Professional Name</h3>
                     <p id="profileHeadline">Professional Headline</p>
+                    <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">
+                        <i class="fas fa-star" style="color: var(--gold);"></i> 
+                        Credibility Score: <span id="credibilityScore">85</span>
+                    </p>
                 </div>
             </div>
 
@@ -400,198 +348,144 @@
                 </div>
             </div>
 
-            <div class="action-buttons">
+            <div style="margin-top: 20px;">
                 <button class="btn btn-primary" onclick="confirmElevation()">
                     <i class="fas fa-rocket"></i> Elevate to Professional
                 </button>
-                <button class="btn btn-secondary" onclick="disconnectLinkedIn()">
-                    <i class="fas fa-unlink"></i> Disconnect
+                <button class="btn btn-secondary" onclick="resetDemo()">
+                    <i class="fas fa-redo"></i> Try Again
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        class LinkedInOAuth {
+        class LinkedInIntegration {
             constructor() {
-                this.clientId = '77tpngrlwmwnz7'; // Your LinkedIn Client ID
-                this.redirectUri = 'https://sociallyfounded.com/linkedin-callback.html';
-                this.scope = 'openid profile email';
-                this.state = this.generateState();
-                
+                this.isProcessing = false;
+                this.profileData = null;
                 this.init();
             }
 
             init() {
-                // Check if we're returning from LinkedIn OAuth
+                // Check if user is already verified
+                const userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
+                if (userData.verification?.linkedin?.verified) {
+                    this.showAlreadyConnected();
+                }
+
+                // Check for success/error in URL
                 const urlParams = new URLSearchParams(window.location.search);
-                const code = urlParams.get('code');
-                const state = urlParams.get('state');
-                const error = urlParams.get('error');
-
-                if (error) {
-                    this.handleError(error);
-                } else if (code && state) {
-                    this.handleCallback(code, state);
+                if (urlParams.get('connected') === 'true') {
+                    document.getElementById('successBanner').style.display = 'flex';
+                }
+                if (urlParams.get('error')) {
+                    this.showError(urlParams.get('error'));
                 }
             }
 
-            generateState() {
-                return 'sf_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            }
-
-            initiateLinkedInAuth() {
-                // Store state for verification
-                localStorage.setItem('linkedin_oauth_state', this.state);
+            async startLinkedInFlow() {
+                if (this.isProcessing) return;
                 
-                // Show loading state
-                this.showStatus('pending', 'Redirecting to LinkedIn...');
+                this.isProcessing = true;
+                const btn = document.getElementById('linkedinBtn');
+                const btnText = document.getElementById('btnText');
                 
-                // Build LinkedIn OAuth URL
-                const authUrl = new URL('https://www.linkedin.com/oauth/v2/authorization');
-                authUrl.searchParams.set('response_type', 'code');
-                authUrl.searchParams.set('client_id', this.clientId);
-                authUrl.searchParams.set('redirect_uri', this.redirectUri);
-                authUrl.searchParams.set('scope', this.scope);
-                authUrl.searchParams.set('state', this.state);
+                // Update button state
+                btn.disabled = true;
+                btnText.innerHTML = '<div class="spinner"></div> Connecting...';
 
-                // Redirect to LinkedIn
-                window.location.href = authUrl.toString();
-            }
-
-            async handleCallback(code, state) {
                 try {
-                    // Verify state parameter
-                    const storedState = localStorage.getItem('linkedin_oauth_state');
-                    if (state !== storedState) {
-                        throw new Error('Invalid state parameter - possible CSRF attack');
-                    }
-
-                    this.showStatus('pending', 'Exchanging authorization code...');
-
-                    // Exchange code for access token
-                    const tokenData = await this.exchangeCodeForToken(code);
+                    // Simulate LinkedIn OAuth flow
+                    await this.simulateLinkedInAuth();
                     
-                    this.showStatus('pending', 'Fetching LinkedIn profile...');
-
-                    // Fetch user profile
-                    const profileData = await this.fetchLinkedInProfile(tokenData.access_token);
+                    // Show success
+                    this.showSuccess();
                     
-                    // Structure and save professional profile
-                    const structuredProfile = await this.structureProfile(profileData);
-                    
-                    // Show success and profile preview
-                    this.showProfilePreview(structuredProfile);
-                    this.showStatus('success', 'LinkedIn profile connected successfully!');
-
                 } catch (error) {
-                    console.error('LinkedIn OAuth Error:', error);
-                    this.showStatus('error', error.message);
+                    this.showError(error.message);
+                } finally {
+                    this.isProcessing = false;
+                    btn.disabled = false;
+                    btnText.textContent = 'Connect with LinkedIn';
                 }
             }
 
-            async exchangeCodeForToken(code) {
-                // In a real implementation, this would go through your backend
-                // to securely exchange the code for a token using your client secret
+            async simulateLinkedInAuth() {
+                // Step 1: Redirect simulation
+                await this.delay(1000);
                 
-                // DEMO: Simulate token exchange
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                // Step 2: OAuth code exchange simulation
+                await this.delay(1500);
                 
-                return {
-                    access_token: 'demo_access_token_' + Date.now(),
-                    expires_in: 3600
-                };
+                // Step 3: Profile fetch simulation
+                await this.delay(1200);
+                
+                // Generate mock LinkedIn profile
+                this.profileData = this.generateMockProfile();
+                
+                // Step 4: Structure professional data
+                await this.delay(800);
+                
+                return this.profileData;
             }
 
-            async fetchLinkedInProfile(accessToken) {
-                // DEMO: Simulate LinkedIn API calls
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // Mock LinkedIn profile data
-                return {
-                    id: 'demo_linkedin_id',
-                    firstName: { localized: { 'en_US': 'John' } },
-                    lastName: { localized: { 'en_US': 'Entrepreneur' } },
-                    headline: { localized: { 'en_US': 'Senior Software Engineer | Startup Founder | AI Enthusiast' } },
-                    profilePicture: null,
-                    emailAddress: 'john.entrepreneur@example.com',
-                    industry: 'Technology',
-                    positions: [
-                        {
-                            title: 'Senior Software Engineer',
-                            companyName: 'TechCorp Inc',
-                            summary: 'Leading development of AI-powered platforms'
-                        },
-                        {
-                            title: 'Startup Founder',
-                            companyName: 'InnovateTech',
-                            summary: 'Built and scaled B2B SaaS platform'
-                        }
-                    ],
-                    skills: [
-                        'JavaScript', 'React', 'Node.js', 'AI/ML', 'Startup Strategy',
-                        'Product Management', 'Team Leadership', 'Business Development'
-                    ]
-                };
-            }
-
-            async structureProfile(linkedinData) {
-                // AI-structure the LinkedIn data into SF professional format
-                const structuredProfile = {
-                    linkedin: {
-                        id: linkedinData.id,
-                        verified: true,
-                        connectedAt: new Date().toISOString()
+            generateMockProfile() {
+                const currentUser = JSON.parse(localStorage.getItem('sf_user') || '{}');
+                const mockProfiles = [
+                    {
+                        fullName: 'Alex Johnson',
+                        headline: 'Senior Software Engineer | Startup Founder | AI Enthusiast',
+                        skills: ['JavaScript', 'React', 'Node.js', 'AI/ML', 'Startup Strategy', 'Product Management', 'Team Leadership', 'Business Development'],
+                        positions: [
+                            { title: 'Senior Software Engineer', companyName: 'TechCorp Inc' },
+                            { title: 'Startup Founder', companyName: 'InnovateTech' }
+                        ],
+                        industry: 'Technology',
+                        credibilityScore: Math.floor(Math.random() * 20) + 80
                     },
-                    professional: {
-                        fullName: `${linkedinData.firstName.localized.en_US} ${linkedinData.lastName.localized.en_US}`,
-                        headline: linkedinData.headline.localized.en_US,
-                        email: linkedinData.emailAddress,
-                        industry: linkedinData.industry,
-                        positions: linkedinData.positions,
-                        skills: linkedinData.skills,
-                        experienceLevel: this.calculateExperienceLevel(linkedinData.positions),
-                        expertiseAreas: this.extractExpertiseAreas(linkedinData)
+                    {
+                        fullName: 'Sarah Chen',
+                        headline: 'Product Manager | Former Consultant | Tech Strategy Expert',
+                        skills: ['Product Strategy', 'Data Analysis', 'User Research', 'Agile', 'Business Development', 'Market Research', 'Leadership', 'Innovation'],
+                        positions: [
+                            { title: 'Senior Product Manager', companyName: 'Digital Solutions' },
+                            { title: 'Strategy Consultant', companyName: 'McKinsey & Company' }
+                        ],
+                        industry: 'Technology',
+                        credibilityScore: Math.floor(Math.random() * 15) + 85
+                    },
+                    {
+                        fullName: 'Michael Rodriguez',
+                        headline: 'Venture Capital Partner | Former Entrepreneur | Startup Mentor',
+                        skills: ['Venture Capital', 'Startup Strategy', 'Due Diligence', 'Portfolio Management', 'Entrepreneurship', 'Financial Analysis', 'Mentoring', 'Market Analysis'],
+                        positions: [
+                            { title: 'Partner', companyName: 'Growth Ventures' },
+                            { title: 'CEO & Founder', companyName: 'TechStart Solutions' }
+                        ],
+                        industry: 'Venture Capital',
+                        credibilityScore: Math.floor(Math.random() * 10) + 90
                     }
-                };
+                ];
 
-                return structuredProfile;
+                return mockProfiles[Math.floor(Math.random() * mockProfiles.length)];
             }
 
-            calculateExperienceLevel(positions) {
-                // Simple logic to determine experience level
-                if (positions.length >= 3) return 'Senior';
-                if (positions.length >= 2) return 'Mid-Level';
-                return 'Junior';
-            }
-
-            extractExpertiseAreas(data) {
-                // Extract expertise areas from positions and skills
-                const areas = new Set();
+            showSuccess() {
+                // Hide connection card
+                document.getElementById('connectionCard').style.display = 'none';
                 
-                data.positions.forEach(pos => {
-                    if (pos.title.toLowerCase().includes('engineer')) areas.add('Engineering');
-                    if (pos.title.toLowerCase().includes('founder')) areas.add('Entrepreneurship');
-                    if (pos.title.toLowerCase().includes('manager')) areas.add('Management');
-                    if (pos.title.toLowerCase().includes('product')) areas.add('Product');
-                });
-
-                if (data.skills.some(skill => skill.toLowerCase().includes('ai'))) areas.add('AI/ML');
-                if (data.skills.some(skill => skill.toLowerCase().includes('business'))) areas.add('Business Strategy');
-
-                return Array.from(areas);
-            }
-
-            showProfilePreview(profileData) {
+                // Show profile preview
                 const preview = document.getElementById('profilePreview');
-                const connectionCard = document.getElementById('connectionCard');
+                preview.classList.add('show');
                 
                 // Update profile display
-                document.getElementById('profileName').textContent = profileData.professional.fullName;
-                document.getElementById('profileHeadline').textContent = profileData.professional.headline;
+                document.getElementById('profileName').textContent = this.profileData.fullName;
+                document.getElementById('profileHeadline').textContent = this.profileData.headline;
+                document.getElementById('credibilityScore').textContent = this.profileData.credibilityScore;
                 
                 // Update avatar with initials
-                const initials = profileData.professional.fullName
+                const initials = this.profileData.fullName
                     .split(' ')
                     .map(n => n[0])
                     .join('');
@@ -600,133 +494,126 @@
                 // Update skills
                 const skillsList = document.getElementById('skillsList');
                 skillsList.innerHTML = '';
-                profileData.professional.skills.slice(0, 8).forEach(skill => {
+                this.profileData.skills.slice(0, 8).forEach(skill => {
                     const skillTag = document.createElement('span');
                     skillTag.className = 'skill-tag';
                     skillTag.textContent = skill;
                     skillsList.appendChild(skillTag);
                 });
 
-                // Store profile data for elevation
-                localStorage.setItem('sf_linkedin_profile', JSON.stringify(profileData));
-
-                // Show preview, hide connection card
-                preview.classList.add('show');
-                connectionCard.style.display = 'none';
+                // Show success banner
+                document.getElementById('successBanner').style.display = 'flex';
             }
 
-            showStatus(type, message) {
-                const indicator = document.getElementById('statusIndicator');
-                const spinner = document.getElementById('loadingSpinner');
-                const text = document.getElementById('statusText');
-
-                indicator.style.display = 'flex';
-                indicator.className = `status-indicator ${type}`;
-                text.textContent = message;
-
-                if (type === 'pending') {
-                    spinner.style.display = 'block';
-                } else {
-                    spinner.style.display = 'none';
-                }
-
-                // Auto-hide success/error after 3 seconds
-                if (type !== 'pending') {
-                    setTimeout(() => {
-                        indicator.style.display = 'none';
-                    }, 3000);
-                }
+            showError(message) {
+                document.getElementById('errorMessage').textContent = message;
+                document.getElementById('errorBanner').style.display = 'flex';
+                
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('errorBanner').style.display = 'none';
+                }, 5000);
             }
 
-            handleError(error) {
-                const errorMessages = {
-                    'access_denied': 'LinkedIn access was denied. Please try again.',
-                    'invalid_request': 'Invalid OAuth request. Please contact support.',
-                    'unauthorized_client': 'Application not authorized. Please contact support.'
-                };
+            showAlreadyConnected() {
+                document.getElementById('successBanner').style.display = 'flex';
+                document.getElementById('connectionCard').innerHTML = `
+                    <h3 style="color: var(--success); margin-bottom: 20px;">
+                        <i class="fab fa-linkedin-in"></i> Already Connected
+                    </h3>
+                    <p style="margin-bottom: 20px;">Your LinkedIn profile is already connected and verified.</p>
+                    <button class="btn btn-primary" onclick="window.location.href='https://sociallyfounded.com/core/profile.html'">
+                        <i class="fas fa-user"></i> View Profile
+                    </button>
+                `;
+            }
 
-                const message = errorMessages[error] || 'An error occurred during LinkedIn authentication.';
-                this.showStatus('error', message);
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
             }
         }
 
         // Global functions
-        function initiateLinkedInAuth() {
-            window.linkedInOAuth.initiateLinkedInAuth();
-        }
-
         function confirmElevation() {
-            const profileData = JSON.parse(localStorage.getItem('sf_linkedin_profile'));
             const userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
+            const profileData = window.linkedInIntegration.profileData;
+
+            if (!profileData) {
+                alert('Error: No profile data available. Please try connecting again.');
+                return;
+            }
 
             // Add LinkedIn verification to user data
             userData.verification = userData.verification || {};
-            userData.verification.linkedin = profileData.linkedin;
+            userData.verification.linkedin = {
+                verified: true,
+                connectedAt: new Date().toISOString(),
+                id: 'demo_linkedin_' + Date.now()
+            };
             
             // Add professional profile
-            userData.professionalProfile = profileData.professional;
+            userData.professionalProfile = {
+                ...profileData,
+                verifiedAt: new Date().toISOString()
+            };
 
             // Unlock Founder and Mentor personas
             userData.personas = userData.personas || {};
-            userData.personas.founder = { active: true, linkedinVerified: true };
-            userData.personas.mentor = { active: true, linkedinVerified: true };
+            userData.personas.founder = { 
+                active: true, 
+                linkedinVerified: true,
+                unlockedAt: new Date().toISOString()
+            };
+            userData.personas.mentor = { 
+                active: true, 
+                linkedinVerified: true,
+                unlockedAt: new Date().toISOString()
+            };
 
             // Update passport level for professional elevation
+            userData.passport = userData.passport || { level: 1, experience: 0, tier: 'Navy' };
             userData.passport.level = Math.max(userData.passport.level, 2);
-            userData.passport.experience += 500; // Bonus XP for LinkedIn verification
+            userData.passport.experience = (userData.passport.experience || 0) + 500;
 
             // Save updated user data
             localStorage.setItem('sf_user', JSON.stringify(userData));
 
-            alert(`🎉 Professional Elevation Complete!\n\n✅ LinkedIn Profile Connected\n✅ Founder Persona Unlocked\n✅ Mentor Persona Unlocked\n\n+500 XP bonus earned!\n\nYou can now access all professional features.`);
+            // Show success message
+            alert(`🎉 Professional Elevation Complete!\n\n✅ LinkedIn Profile Connected\n✅ Founder Persona Unlocked\n✅ Mentor Persona Unlocked\n\n+500 XP bonus earned!\n\nCredibility Score: ${profileData.credibilityScore}\n\nYou can now access all professional features.`);
 
             // Redirect to profile with success
-            window.location.href = '/core/profile.html?elevated=true';
+            window.location.href = 'https://sociallyfounded.com/core/profile.html?elevated=true';
         }
 
-        function disconnectLinkedIn() {
-            if (confirm('Are you sure you want to disconnect your LinkedIn profile? This will remove professional verification.')) {
-                localStorage.removeItem('sf_linkedin_profile');
-                
-                // Reset UI
-                document.getElementById('profilePreview').classList.remove('show');
-                document.getElementById('connectionCard').style.display = 'block';
-                
-                alert('LinkedIn profile disconnected successfully.');
-            }
+        function resetDemo() {
+            // Reset the demo
+            document.getElementById('profilePreview').classList.remove('show');
+            document.getElementById('connectionCard').style.display = 'block';
+            document.getElementById('successBanner').style.display = 'none';
+            document.getElementById('errorBanner').style.display = 'none';
+            
+            window.linkedInIntegration.profileData = null;
         }
 
-        // Initialize LinkedIn OAuth system
-        window.linkedInOAuth = new LinkedInOAuth();
+        // Initialize system
+        window.linkedInIntegration = new LinkedInIntegration();
 
-        // Handle demo mode
-        if (window.location.hash === '#demo') {
-            // Auto-simulate successful LinkedIn connection for demo
-            setTimeout(() => {
-                const demoProfile = {
-                    linkedin: {
-                        id: 'demo_linkedin_id',
-                        verified: true,
-                        connectedAt: new Date().toISOString()
-                    },
-                    professional: {
-                        fullName: 'Demo Professional',
-                        headline: 'Senior Software Engineer | Startup Mentor | AI Expert',
-                        email: 'demo@sociallyfounded.com',
-                        industry: 'Technology',
-                        positions: [
-                            { title: 'Senior Software Engineer', companyName: 'TechCorp' },
-                            { title: 'Startup Advisor', companyName: 'Multiple Startups' }
-                        ],
-                        skills: ['JavaScript', 'AI/ML', 'Startup Strategy', 'Product Management', 'Leadership'],
-                        experienceLevel: 'Senior',
-                        expertiseAreas: ['Engineering', 'AI/ML', 'Entrepreneurship']
-                    }
-                };
-                
-                window.linkedInOAuth.showProfilePreview(demoProfile);
-            }, 1000);
+        // Handle real LinkedIn OAuth in production
+        if (window.location.hostname !== 'localhost' && 
+            window.location.hostname !== '127.0.0.1' && 
+            !window.location.hash.includes('demo')) {
+            
+            // In production, replace the mock flow with real LinkedIn OAuth
+            console.log('🔗 Production LinkedIn OAuth would be implemented here');
+            
+            // Real implementation would:
+            // 1. Use actual LinkedIn Client ID
+            // 2. Redirect to LinkedIn OAuth
+            // 3. Handle callback with real profile data
+            // 4. Validate tokens and store securely
         }
+
+        console.log('✅ LinkedIn Integration system loaded');
     </script>
 </body>
 </html>
