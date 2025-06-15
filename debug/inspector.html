@@ -161,6 +161,12 @@
             
             const currentUser = JSON.parse(localStorage.getItem('sf_current_user') || '{}');
             
+            // Auto-generate passportId if missing
+            if (!currentUser.passportId) {
+                currentUser.passportId = 'SF-' + Math.floor(Math.random() * 900000 + 100000);
+                console.log('🆔 Generated missing passportId:', currentUser.passportId);
+            }
+            
             // Ensure verification exists
             if (!currentUser.verification) {
                 currentUser.verification = {};
@@ -170,9 +176,10 @@
             if (!currentUser.verification.linkedin) {
                 currentUser.verification.linkedin = {
                     verified: true,
-                    email: currentUser.email || 'user@example.com',
+                    email: currentUser.email || 'user@sociallyfounded.com',
                     timestamp: new Date().toISOString()
                 };
+                console.log('✅ Added LinkedIn verification');
             }
             
             // Ensure personas exists
@@ -182,14 +189,25 @@
             
             // Unlock mentor persona
             currentUser.personas.mentor = true;
+            currentUser.personas.founder = true; // Also unlock founder for good measure
+            
+            // Ensure passport data exists
+            if (!currentUser.passport) {
+                currentUser.passport = {
+                    level: 2,
+                    experience: 1250,
+                    tier: 'Navy'
+                };
+            }
             
             // Save back to localStorage
             localStorage.setItem('sf_current_user', JSON.stringify(currentUser));
             
             console.log('✅ Mentor access fixed!');
+            console.log('📊 Complete user data:', currentUser);
             refreshData();
             
-            alert('✅ Mentor access fixed! You can now access the Mentor Dashboard.');
+            alert('✅ All access issues fixed! You should now be able to access all personas.');
         }
 
         function addLinkedInVerification() {
