@@ -32,7 +32,7 @@
             padding-top: 60px;
         }
 
-        /* BULLETPROOF NAVIGATION */
+        /* NAVIGATION - Simplified for demo */
         .sf-navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -41,17 +41,11 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .sf-nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 60px;
+            padding: 0 20px;
         }
 
         .sf-logo {
@@ -78,13 +72,10 @@
             font-weight: 700;
         }
 
-        .sf-nav-menu {
+        .sf-nav-links {
             display: flex;
-            list-style: none;
             gap: 20px;
             align-items: center;
-            margin: 0;
-            padding: 0;
         }
 
         .sf-nav-link {
@@ -93,10 +84,9 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 500;
             font-size: 14px;
-            transition: all 0.3s ease;
             padding: 8px 12px;
             border-radius: 15px;
-            position: relative;
+            transition: all 0.3s ease;
         }
 
         .sf-nav-link:hover {
@@ -109,106 +99,12 @@
             background: var(--navy);
         }
 
-        .sf-nav-link.locked {
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .sf-nav-link.locked::after {
-            content: '🔒';
-            font-size: 10px;
-            position: absolute;
-            top: 2px;
-            right: 2px;
-        }
-
-        .sf-user-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .sf-user-passport {
-            background: var(--light-gray);
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 11px;
+        .sf-nav-link.unlocked {
+            color: var(--success);
             font-weight: 600;
-            color: var(--navy);
-            font-family: 'Courier New', monospace;
         }
 
-        .sf-logout-btn {
-            background: transparent;
-            border: 1px solid var(--accent-gray);
-            color: #666;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-family: 'Poppins', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .sf-logout-btn:hover {
-            background: #ff4444;
-            color: white;
-            border-color: #ff4444;
-        }
-
-        .sf-mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--navy);
-            padding: 5px;
-        }
-
-        /* MOBILE NAVIGATION */
-        @media (max-width: 768px) {
-            .sf-nav-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                border-radius: 0 0 12px 12px;
-                gap: 10px;
-            }
-            
-            .sf-nav-menu.mobile-open {
-                display: flex !important;
-            }
-            
-            .sf-mobile-toggle {
-                display: block !important;
-            }
-            
-            .sf-user-section {
-                display: none !important;
-                position: absolute;
-                top: 100%;
-                right: 20px;
-                background: white;
-                padding: 15px;
-                border-radius: 8px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .sf-user-section.mobile-open {
-                display: flex !important;
-            }
-        }
-
-        /* PROFILE PAGE STYLES */
+        /* PAGE STYLES */
         .header {
             background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
             color: var(--white);
@@ -232,6 +128,40 @@
             padding: 20px;
             max-width: 800px;
             margin: 0 auto;
+        }
+
+        .success-banner {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .success-banner.show {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-banner i {
+            font-size: 24px;
+        }
+
+        .success-banner-text h4 {
+            margin-bottom: 5px;
+        }
+
+        .success-banner-text p {
+            opacity: 0.9;
+            font-size: 14px;
         }
 
         .profile-card {
@@ -354,8 +284,26 @@
             color: var(--white);
         }
 
-        .complete-profile-btn, .linkedin-elevation-btn {
-            background: var(--navy);
+        .credibility-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--gold);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .linkedin-elevation-btn {
+            background: var(--linkedin);
             color: var(--white);
             border: none;
             padding: 10px 20px;
@@ -365,22 +313,26 @@
             font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-
-        .linkedin-elevation-btn {
-            background: var(--linkedin);
-        }
-
-        .complete-profile-btn:hover {
-            background: #004a6b;
-            transform: translateY(-2px);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .linkedin-elevation-btn:hover {
             background: #005885;
             transform: translateY(-2px);
+        }
+
+        .linkedin-elevation-btn.connected {
+            background: var(--success);
+            cursor: default;
+            transform: none;
+        }
+
+        .linkedin-elevation-btn.connected:hover {
+            background: var(--success);
+            transform: none;
         }
 
         .professional-section {
@@ -393,6 +345,7 @@
 
         .professional-section.show {
             display: block;
+            animation: slideIn 0.5s ease;
         }
 
         .professional-section h3 {
@@ -439,12 +392,6 @@
             margin-bottom: 8px;
         }
 
-        .experience-summary {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.4;
-        }
-
         .personas-section {
             margin-top: 30px;
         }
@@ -483,6 +430,11 @@
             color: var(--white);
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .persona-card.unlocked {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
         }
 
         .persona-card.locked {
@@ -535,8 +487,14 @@
             font-weight: 600;
         }
 
+        .persona-card.unlocked .persona-requirements {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            font-weight: 600;
+        }
+
         .unlock-btn {
-            background: var(--gold);
+            background: var(--linkedin);
             color: var(--white);
             border: none;
             padding: 8px 16px;
@@ -546,65 +504,33 @@
             font-size: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .unlock-btn:hover {
-            background: #B8860B;
+            background: #005885;
             transform: translateY(-1px);
         }
 
-        .unlock-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .linkedin-unlock-btn {
-            background: var(--linkedin);
-        }
-
-        .linkedin-unlock-btn:hover {
-            background: #005885;
-        }
-
-        .success-banner {
-            background: linear-gradient(135deg, var(--success), #059669);
+        .access-btn {
+            background: var(--success);
             color: var(--white);
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: none;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .success-banner.show {
-            display: flex;
-        }
-
-        .success-banner i {
-            font-size: 24px;
-        }
-
-        .success-banner-text h4 {
-            margin-bottom: 5px;
-        }
-
-        .success-banner-text p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-
-        .credibility-score {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: var(--gold);
-            color: var(--white);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 11px;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
             font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .access-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
         }
 
         @media (max-width: 768px) {
@@ -620,39 +546,27 @@
             .personas-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .sf-nav-links {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- BULLETPROOF NAVIGATION -->
+    <!-- SIMPLIFIED NAVIGATION -->
     <nav class="sf-navbar">
-        <div class="sf-nav-container">
-            <a href="../index.html" class="sf-logo">
-                <div class="sf-logo-icon">SF</div>
-                SociallyFounded
-            </a>
-            
-            <ul class="sf-nav-menu" id="sfNavMenu">
-                <li><a href="../index.html" class="sf-nav-link">Home</a></li>
-                <li><a href="../member/venues.html" class="sf-nav-link">Venues</a></li>
-                <li><a href="../core/passport.html" class="sf-nav-link">My Passport</a></li>
-                <li><a href="../core/profile.html" class="sf-nav-link active">Profile</a></li>
-                <li><a href="../founder/ideas.html" class="sf-nav-link" id="ideasNavLink">Ideas</a></li>
-                <li><a href="#" class="sf-nav-link locked" onclick="showPersonaLocked('Mentor')">Mentor</a></li>
-                <li><a href="#" class="sf-nav-link locked" onclick="showPersonaLocked('Host')">Host</a></li>
-                <li><a href="#" class="sf-nav-link locked" onclick="showPersonaLocked('Invest')">Invest</a></li>
-            </ul>
-            
-            <div class="sf-user-section" id="sfUserSection">
-                <div class="sf-user-passport" id="sfUserPassport">Not logged in</div>
-                <button class="sf-logout-btn" id="sfLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </div>
-            
-            <button class="sf-mobile-toggle" id="sfMobileToggle">
-                <i class="fas fa-bars"></i>
-            </button>
+        <a href="https://sociallyfounded.com/" class="sf-logo">
+            <div class="sf-logo-icon">SF</div>
+            SociallyFounded
+        </a>
+        
+        <div class="sf-nav-links">
+            <a href="https://sociallyfounded.com/" class="sf-nav-link">Home</a>
+            <a href="https://sociallyfounded.com/member/venues.html" class="sf-nav-link">Venues</a>
+            <a href="https://sociallyfounded.com/core/profile.html" class="sf-nav-link active">Profile</a>
+            <a href="https://sociallyfounded.com/founder/ideas.html" class="sf-nav-link" id="ideasLink">Ideas</a>
+            <a href="https://sociallyfounded.com/mentor/dashboard.html" class="sf-nav-link" id="mentorLink">Mentor</a>
         </div>
     </nav>
 
@@ -666,8 +580,8 @@
         <div class="success-banner" id="successBanner">
             <i class="fab fa-linkedin-in"></i>
             <div class="success-banner-text">
-                <h4>LinkedIn Connected Successfully!</h4>
-                <p>Your professional profile has been imported and verified. Founder and Mentor personas are now unlocked.</p>
+                <h4>LinkedIn Professional Elevation Complete!</h4>
+                <p>Your professional profile has been verified. Founder and Mentor personas are now unlocked with full access.</p>
             </div>
         </div>
 
@@ -693,12 +607,11 @@
                             <i class="fas fa-star"></i> Score: 0
                         </span>
                     </div>
-                    <button class="complete-profile-btn" id="completeProfileBtn">
-                        <i class="fas fa-user-edit"></i> Complete Profile
-                    </button>
-                    <button class="linkedin-elevation-btn" id="linkedinElevationBtn">
-                        <i class="fab fa-linkedin-in"></i> Connect LinkedIn
-                    </button>
+                    <div class="action-buttons">
+                        <a href="linkedin-elevation.html" class="linkedin-elevation-btn" id="linkedinElevationBtn">
+                            <i class="fab fa-linkedin-in"></i> Connect LinkedIn
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -752,12 +665,12 @@
                     <div class="persona-description">
                         AI-powered idea development, IP protection, and team building
                     </div>
-                    <div class="persona-requirements">
+                    <div class="persona-requirements" id="founderRequirements">
                         🔗 Requires: LinkedIn Professional Verification
                     </div>
-                    <button class="unlock-btn linkedin-unlock-btn" onclick="openLinkedInElevation()" id="founderUnlockBtn">
+                    <a href="linkedin-elevation.html" class="unlock-btn" id="founderUnlockBtn">
                         Connect LinkedIn
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Mentor Persona -->
@@ -767,12 +680,12 @@
                     <div class="persona-description">
                         Guide entrepreneurs, track impact, and publish research
                     </div>
-                    <div class="persona-requirements">
+                    <div class="persona-requirements" id="mentorRequirements">
                         🔗 Requires: LinkedIn Professional Verification
                     </div>
-                    <button class="unlock-btn linkedin-unlock-btn" onclick="openLinkedInElevation()" id="mentorUnlockBtn">
+                    <a href="linkedin-elevation.html" class="unlock-btn" id="mentorUnlockBtn">
                         Connect LinkedIn
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Host Persona -->
@@ -783,11 +696,8 @@
                         Manage venues, analyze customers, and build revenue
                     </div>
                     <div class="persona-requirements">
-                        🔒 Requires: Business verification + venue ownership
+                        🔒 Coming Soon - Business verification required
                     </div>
-                    <button class="unlock-btn" disabled>
-                        Coming Soon
-                    </button>
                 </div>
 
                 <!-- Investor Persona -->
@@ -798,76 +708,59 @@
                         Discover deals, automated due diligence, and portfolio management
                     </div>
                     <div class="persona-requirements">
-                        🔒 Requires: Accredited investor verification
+                        🔒 Coming Soon - Accredited investor verification
                     </div>
-                    <button class="unlock-btn" disabled>
-                        Coming Soon
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Enhanced Profile System with LinkedIn Integration
-        class SFProfileEnhanced {
+        class SFProfileManager {
             constructor() {
                 this.userData = {};
-                this.profileComplete = false;
                 this.linkedinVerified = false;
                 
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', () => {
-                        this.initialize();
-                    });
-                } else {
-                    this.initialize();
-                }
+                this.initialize();
             }
 
             initialize() {
-                this.initializeUser();
-                this.checkLinkedInConnection();
+                this.loadUserData();
+                this.checkElevationSuccess();
                 this.updateDisplay();
-                this.initializeEventListeners();
-                console.log('✅ Enhanced SF Profile initialized');
+                this.updateNavigation();
+                
+                console.log('✅ SF Profile Manager initialized');
             }
 
-            initializeUser() {
-                const userData = JSON.parse(localStorage.getItem('sf_user'));
-                if (userData) {
-                    this.userData = userData;
-                    this.checkProfileCompletion();
-                    this.checkLinkedInVerification();
-                } else {
-                    window.location.href = '../core/auth.html';
+            loadUserData() {
+                this.userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
+                this.linkedinVerified = !!(this.userData.verification?.linkedin?.verified);
+                
+                // Provide defaults if no user data
+                if (!this.userData.passportId) {
+                    this.userData = {
+                        passportId: 'SF-DEMO01',
+                        passport: { level: 1, experience: 0, tier: 'Navy' },
+                        profile: { fullName: 'SF Member' },
+                        personas: {},
+                        verification: {}
+                    };
                 }
             }
 
-            checkProfileCompletion() {
-                const profile = this.userData.profile || {};
-                this.profileComplete = !!(profile.fullName && profile.professionalTitle);
-            }
-
-            checkLinkedInVerification() {
-                this.linkedinVerified = !!(this.userData.verification?.linkedin?.verified);
-            }
-
-            checkLinkedInConnection() {
-                // Check for LinkedIn connection success from URL
+            checkElevationSuccess() {
                 const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('linkedin_connected') === 'true') {
+                if (urlParams.get('elevated') === 'true' || urlParams.get('linkedin_connected') === 'true') {
                     document.getElementById('successBanner').classList.add('show');
+                    
                     // Clean URL
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
             }
 
             updateDisplay() {
-                console.log('🔄 Updating enhanced profile display...');
-                
-                const profile = this.userData.profile || {};
-                const professionalProfile = this.userData.professionalProfile || {};
+                const profile = this.userData.professionalProfile || this.userData.profile || {};
                 
                 // Update user info
                 const userNameEl = document.getElementById('userName');
@@ -875,7 +768,7 @@
                 const professionalHeadlineEl = document.getElementById('professionalHeadline');
                 
                 if (userNameEl) {
-                    userNameEl.textContent = professionalProfile.fullName || profile.fullName || 'SF Member';
+                    userNameEl.textContent = profile.fullName || 'SF Member';
                 }
                 
                 if (userPassportEl) {
@@ -884,35 +777,35 @@
                 }
 
                 // Show professional headline if available
-                if (professionalProfile.headline) {
-                    professionalHeadlineEl.textContent = professionalProfile.headline;
+                if (profile.headline && this.linkedinVerified) {
+                    professionalHeadlineEl.textContent = profile.headline;
                     professionalHeadlineEl.style.display = 'block';
                 }
 
                 // Update avatar
+                this.updateAvatar(profile.fullName || 'SF');
+                this.updateVerificationStatus();
+                this.updateProfessionalSection();
+                this.updatePersonaCards();
+            }
+
+            updateAvatar(fullName) {
                 const avatar = document.getElementById('userAvatar');
                 if (avatar) {
-                    const name = professionalProfile.fullName || profile.fullName || 'SF';
-                    if (name !== 'SF') {
-                        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+                    if (fullName !== 'SF' && fullName !== 'SF Member') {
+                        const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase();
                         avatar.textContent = initials;
                     } else {
                         avatar.textContent = 'SF';
                     }
                 }
-
-                // Update verification status
-                this.updateVerificationStatus();
-                this.updateProfessionalSection();
-                this.updatePersonaCards();
-                
-                console.log('✅ Enhanced profile display updated');
             }
 
             updateVerificationStatus() {
                 const verificationBadge = document.getElementById('verificationBadge');
                 const verificationStatus = document.getElementById('verificationStatus');
                 const credibilityScore = document.getElementById('credibilityScore');
+                const linkedinBtn = document.getElementById('linkedinElevationBtn');
 
                 if (!verificationBadge || !verificationStatus) return;
 
@@ -921,6 +814,15 @@
                     verificationBadge.innerHTML = '<i class="fab fa-linkedin-in"></i>';
                     verificationStatus.className = 'status-badge linkedin-verified';
                     verificationStatus.textContent = 'LinkedIn Verified';
+                    
+                    // Update LinkedIn button
+                    linkedinBtn.className = 'linkedin-elevation-btn connected';
+                    linkedinBtn.innerHTML = '<i class="fas fa-check"></i> LinkedIn Connected';
+                    linkedinBtn.href = '#';
+                    linkedinBtn.onclick = (e) => {
+                        e.preventDefault();
+                        alert('LinkedIn is already connected and verified!');
+                    };
                     
                     // Show credibility score
                     if (this.userData.professionalProfile?.credibilityScore) {
@@ -964,7 +866,6 @@
                             expItem.innerHTML = `
                                 <div class="experience-title">${position.title}</div>
                                 <div class="experience-company">${position.companyName}</div>
-                                ${position.summary ? `<div class="experience-summary">${position.summary}</div>` : ''}
                             `;
                             experienceList.appendChild(expItem);
                         });
@@ -979,19 +880,22 @@
                 const mentorPersona = document.getElementById('mentorPersona');
                 const founderBtn = document.getElementById('founderUnlockBtn');
                 const mentorBtn = document.getElementById('mentorUnlockBtn');
+                const founderReq = document.getElementById('founderRequirements');
+                const mentorReq = document.getElementById('mentorRequirements');
 
                 if (this.linkedinVerified) {
                     // Enable professional personas
-                    founderPersona.className = 'persona-card active';
-                    founderPersona.querySelector('.persona-requirements').textContent = '✅ LinkedIn Verified - Full Access';
-                    founderBtn.style.display = 'none';
+                    founderPersona.className = 'persona-card unlocked';
+                    founderReq.textContent = '✅ LinkedIn Verified - Professional Access Unlocked';
+                    founderBtn.className = 'access-btn';
+                    founderBtn.textContent = 'Access Founder Tools';
+                    founderBtn.href = 'https://sociallyfounded.com/founder/ideas.html';
 
-                    mentorPersona.className = 'persona-card active';
-                    mentorPersona.querySelector('.persona-requirements').textContent = '✅ LinkedIn Verified - Full Access';
-                    mentorBtn.style.display = 'none';
-
-                    // Update navigation
-                    this.updateNavigation();
+                    mentorPersona.className = 'persona-card unlocked';
+                    mentorReq.textContent = '✅ LinkedIn Verified - Professional Access Unlocked';
+                    mentorBtn.className = 'access-btn';
+                    mentorBtn.textContent = 'Access Mentor Dashboard';
+                    mentorBtn.href = 'https://sociallyfounded.com/mentor/dashboard.html';
                 } else {
                     // Keep professional requirement
                     founderPersona.className = 'persona-card professional-required';
@@ -1002,87 +906,38 @@
             }
 
             updateNavigation() {
-                // Update navigation to show unlocked personas
-                const ideasLink = document.getElementById('ideasNavLink');
-                if (this.linkedinVerified && ideasLink) {
-                    ideasLink.classList.remove('locked');
-                    ideasLink.href = '../founder/ideas.html';
-                    ideasLink.onclick = null;
-                }
-            }
-
-            initializeEventListeners() {
-                // LinkedIn elevation button
-                const linkedinBtn = document.getElementById('linkedinElevationBtn');
-                if (linkedinBtn) {
-                    linkedinBtn.addEventListener('click', () => {
-                        this.openLinkedInElevation();
-                    });
-                }
-
-                // Complete profile button
-                const completeBtn = document.getElementById('completeProfileBtn');
-                if (completeBtn) {
-                    completeBtn.addEventListener('click', () => {
-                        // Redirect to basic profile completion (existing modal system)
-                        alert('Basic profile completion coming soon!\n\nFor now, connect LinkedIn for full professional access.');
-                    });
-                }
-
-                // Hide buttons if already verified
-                if (this.linkedinVerified) {
-                    linkedinBtn.style.display = 'none';
-                    completeBtn.textContent = '✅ Profile Complete';
-                    completeBtn.disabled = true;
-                }
-            }
-
-            openLinkedInElevation() {
-                // Redirect to LinkedIn elevation page
-                window.location.href = '/linkedin-elevation.html';
-            }
-        }
-
-        // Navigation system (simplified for this demo)
-        class SFNavigation {
-            constructor() {
-                this.updateUserStatus();
-            }
-
-            updateUserStatus() {
-                const userData = JSON.parse(localStorage.getItem('sf_user'));
-                const userSection = document.getElementById('sfUserSection');
-                const userPassport = document.getElementById('sfUserPassport');
+                const ideasLink = document.getElementById('ideasLink');
+                const mentorLink = document.getElementById('mentorLink');
                 
-                if (userData && userData.passportId && userSection) {
-                    userSection.style.display = 'flex';
-                    if (userPassport) {
-                        userPassport.textContent = `${userData.passportId} • Level ${userData.passport.level}`;
-                    }
+                if (this.linkedinVerified) {
+                    ideasLink.classList.add('unlocked');
+                    mentorLink.classList.add('unlocked');
+                    ideasLink.href = 'https://sociallyfounded.com/founder/ideas.html';
+                    mentorLink.href = 'https://sociallyfounded.com/mentor/dashboard.html';
+                } else {
+                    ideasLink.onclick = () => this.showPersonaLocked('Founder');
+                    mentorLink.onclick = () => this.showPersonaLocked('Mentor');
                 }
+            }
+
+            showPersonaLocked(persona) {
+                alert(`🔒 ${persona} persona is locked\n\nConnect your LinkedIn profile to unlock professional personas and access advanced features.\n\nClick "Connect LinkedIn" to get started!`);
             }
         }
 
-        // Global functions
-        function showPersonaLocked(feature) {
-            alert(`🔒 ${feature} is locked\n\nConnect your LinkedIn profile to unlock professional personas.\n\nClick "Connect LinkedIn" to get started!`);
-        }
+        // Initialize profile manager
+        const profileManager = new SFProfileManager();
 
-        function openLinkedInElevation() {
-            window.location.href = '/linkedin-elevation.html';
-        }
+        // Make it globally accessible
+        window.profileManager = profileManager;
 
-        // Initialize systems when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 DOM Content Loaded - Initializing enhanced SF systems...');
-            
-            window.sfNav = new SFNavigation();
-            window.sfProfile = new SFProfileEnhanced();
+        // Auto-refresh every 30 seconds to catch changes
+        setInterval(() => {
+            profileManager.loadUserData();
+            profileManager.updateDisplay();
+        }, 30000);
 
-            console.log('✅ All enhanced SF systems initialized');
-        });
-
-        console.log('✅ Enhanced SF Profile system loaded');
+        console.log('✅ SF Profile system loaded');
     </script>
 </body>
 </html>
