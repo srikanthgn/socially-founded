@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SF Profile - SociallyFounded</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            color: #003554;
+            backdrop-filter: blur(10px);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="profile-pattern" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse"><circle cx="7.5" cy="7.5" r="0.8" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23profile-pattern)"/></svg>');
+            opacity: 0.4;
+        }
+
+        .profile-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            backdrop-filter: blur(10px);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-name {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .profile-passport {
+            font-size: 16px;
+            opacity: 0.9;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .profile-country {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .profile-body {
+            padding: 30px;
+        }
+
+        .personas-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #003554;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .personas-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .persona-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .persona-member {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .persona-founder {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .persona-mentor {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .persona-host {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .persona-investor {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .stats-section {
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #003554;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .actions-section {
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+        }
+
+        .connect-btn {
+            background: #003554;
+            color: white;
+        }
+
+        .connect-btn:hover {
+            background: #004a6b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 53, 84, 0.3);
+        }
+
+        .connect-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .join-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .join-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .visit-count {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .error-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .home-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .profile-header {
+                padding: 30px 20px;
+            }
+            
+            .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 28px;
+            }
+            
+            .profile-name {
+                font-size: 22px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav" id="backNav" style="display: none;">
+            <button class="back-btn" onclick="goBack()">
+                <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+                    <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back to Circle
+            </button>
+        </div>
+
+        <div id="loadingSection" class="loading">
+            <div class="spinner"></div>
+            <h2>Loading Profile...</h2>
+            <p>Fetching passport information</p>
+        </div>
+
+        <div id="errorSection" class="error-state" style="display: none;">
+            <div class="error-icon">🚫</div>
+            <h2 class="error-title">Profile Not Found</h2>
+            <p class="error-message">The SF Passport you're looking for doesn't exist or has been deactivated.</p>
+            <button class="home-btn" onclick="window.location.href='/'">Join SociallyFounded</button>
+        </div>
+
+        <div id="profileSection" class="profile-card" style="display: none;">
+            <div class="profile-header">
+                <div class="profile-content">
+                    <div class="avatar" id="profileAvatar">SF</div>
+                    <div class="profile-name" id="profileName">Loading...</div>
+                    <div class="profile-passport" id="profilePassport">SF-XX-00000000</div>
+                    <div class="profile-country" id="profileCountry">SociallyFounded</div>
+                </div>
+            </div>
+
+            <div class="profile-body">
+                <div class="personas-section">
+                    <div class="section-title">
+                        🎭 Active Personas
+                    </div>
+                    <div class="personas-grid" id="personasGrid">
+                        <!-- Personas will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="section-title">
+                        📊 Member Stats
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" id="memberLevel">1</div>
+                            <div class="stat-label">Level</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="memberTier">Navy</div>
+                            <div class="stat-label">Tier</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="joinDate">2025</div>
+                            <div class="stat-label">Member Since</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="profileViews">0</div>
+                            <div class="stat-label">Profile Views</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions-section">
+                    <div class="section-title">
+                        🤝 Connect
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn connect-btn" id="connectBtn" onclick="addToMyCircle()">
+                            <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                                <path d="M8 12h8M12 8v8M8 8l8 8M8 16l8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Add to My Circle
+                        </button>
+                        
+                        <a href="/" class="action-btn join-btn">
+                            <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>
+                                <circle cx="12" cy="12" r="4" fill="white"/>
+                            </svg>
+                            Join SociallyFounded
+                        </a>
+                    </div>
+                </div>
+
+                <div class="visit-count" id="visitCount">
+                    👁️ This profile has been viewed 0 times
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994533610259",
+            appId: "1:994533610259:web:fe740378a4c000211e40e6",
+            measurementId: "G-EY0BZE30Q0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null;
+        let profileData = null;
+        let passportId = null;
+
+        // Get passport ID from URL
+        function getPassportIdFromURL() {
+            const path = window.location.pathname;
+            const matches = path.match(/\/profile\/(.+)/);
+            return matches ? matches[1] : null;
+        }
+
+        // Check if user came from Circle (for back navigation)
+        function checkReferrer() {
+            const referrer = document.referrer;
+            if (referrer.includes('/core/circle.html')) {
+                document.getElementById('backNav').style.display = 'block';
+            }
+        }
+
+        function goBack() {
+            if (document.referrer.includes('/core/circle.html')) {
+                window.history.back();
+            } else {
+                window.location.href = '/core/circle.html';
+            }
+        }
+
+        // Authentication State Observer
+        auth.onAuthStateChanged(async (user) => {
+            currentUser = user;
+            checkReferrer();
+            await loadProfile();
+        });
+
+        async function loadProfile() {
+            passportId = getPassportIdFromURL();
+            
+            if (!passportId) {
+                showError();
+                return;
+            }
+
+            try {
+                // Find user with this passport ID
+                const usersSnapshot = await db.collection('users')
+                    .where('sfPassport.id', '==', passportId)
+                    .limit(1)
+                    .get();
+
+                if (usersSnapshot.empty) {
+                    showError();
+                    return;
+                }
+
+                const userDoc = usersSnapshot.docs[0];
+                profileData = userDoc.data();
+                
+                // Track profile view
+                await trackProfileView(userDoc.id);
+                
+                // Display profile
+                displayProfile(profileData);
+                
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showError();
+            }
+        }
+
+        async function trackProfileView(profileUserId) {
+            try {
+                // Check if user is viewing their own profile
+                if (currentUser && currentUser.uid === profileUserId) {
+                    return;
+                }
+
+                // Add to profile views collection
+                await db.collection('profileViews').add({
+                    profileUserId: profileUserId,
+                    viewerUserId: currentUser?.uid || 'anonymous',
+                    passportId: passportId,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    userAgent: navigator.userAgent,
+                    referrer: document.referrer || 'direct'
+                });
+
+                // Update view count in user document
+                await db.collection('users').doc(profileUserId).update({
+                    'stats.profileViews': firebase.firestore.FieldValue.increment(1)
+                });
+
+            } catch (error) {
+                console.error('Error tracking profile view:', error);
+            }
+        }
+
+        function displayProfile(userData) {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('profileSection').style.display = 'block';
+
+            // Basic info
+            const displayName = userData.displayName || 'SF Member';
+            const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2);
+            
+            document.getElementById('profileAvatar').textContent = initials;
+            document.getElementById('profileName').textContent = displayName;
+            document.getElementById('profilePassport').textContent = userData.sfPassport?.id || passportId;
+            
+            // Country info
+            const country = userData.sfPassport?.country || userData.location?.country || 'US';
+            const countryName = getCountryName(country);
+            document.getElementById('profileCountry').textContent = `SociallyFounded ${countryName}`;
+
+            // Personas
+            displayPersonas(userData.personas);
+
+            // Stats
+            document.getElementById('memberLevel').textContent = userData.sfPassport?.level || 1;
+            document.getElementById('memberTier').textContent = userData.sfPassport?.tier || 'Navy';
+            
+            const joinDate = userData.sfPassport?.createdAt?.toDate();
+            if (joinDate) {
+                document.getElementById('joinDate').textContent = joinDate.getFullYear();
+            }
+
+            const profileViews = userData.stats?.profileViews || 0;
+            document.getElementById('profileViews').textContent = profileViews;
+            document.getElementById('visitCount').textContent = 
+                `👁️ This profile has been viewed ${profileViews} time${profileViews !== 1 ? 's' : ''}`;
+
+            // Connect button state
+            updateConnectButton();
+        }
+
+        function displayPersonas(personas) {
+            const personasGrid = document.getElementById('personasGrid');
+            const activePersonas = [];
+
+            if (personas?.member?.active) {
+                activePersonas.push({ name: 'Member', class: 'persona-member', icon: '👤' });
+            }
+            if (personas?.founder?.active) {
+                activePersonas.push({ name: 'Founder', class: 'persona-founder', icon: '🚀' });
+            }
+            if (personas?.mentor?.active) {
+                activePersonas.push({ name: 'Mentor', class: 'persona-mentor', icon: '🎓' });
+            }
+            if (personas?.host?.active) {
+                activePersonas.push({ name: 'Host', class: 'persona-host', icon: '🏢' });
+            }
+            if (personas?.investor?.active) {
+                activePersonas.push({ name: 'Investor', class: 'persona-investor', icon: '💰' });
+            }
+
+            if (activePersonas.length === 0) {
+                activePersonas.push({ name: 'Member', class: 'persona-member', icon: '👤' });
+            }
+
+            personasGrid.innerHTML = activePersonas.map(persona => `
+                <div class="persona-badge ${persona.class}">
+                    <span>${persona.icon}</span>
+                    ${persona.name}
+                </div>
+            `).join('');
+        }
+
+        function updateConnectButton() {
+            const connectBtn = document.getElementById('connectBtn');
+            
+            if (!currentUser) {
+                connectBtn.innerHTML = `
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="4" fill="white"/>
+                    </svg>
+                    Sign in to Connect
+                `;
+                connectBtn.onclick = () => window.location.href = '/';
+                return;
+            }
+
+            if (currentUser.uid === profileData.uid) {
+                connectBtn.innerHTML = `
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                        <rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <rect x="7" y="7" width="4" height="4" rx="1" fill="currentColor"/>
+                        <line x1="13" y1="8" x2="17" y2="8" stroke="currentColor" stroke-width="2"/>
+                        <line x1="13" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="2"/>
+                        <line x1="7" y1="14" x2="17" y2="14" stroke="currentColor" stroke-width="2"/>
+                        <line x1="7" y1="16" x2="13" y2="16" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    This is Your Profile
+                `;
+                connectBtn.disabled = true;
+                connectBtn.onclick = null;
+                return;
+            }
+
+            // Default state
+            connectBtn.innerHTML = `
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                    <path d="M8 12h8M12 8v8M8 8l8 8M8 16l8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+                Add to My Circle
+            `;
+        }
+
+        async function addToMyCircle() {
+            if (!currentUser) {
+                window.location.href = '/';
+                return;
+            }
+
+            if (!profileData) {
+                alert('Profile data not loaded. Please try again.');
+                return;
+            }
+
+            try {
+                // Check if connection already exists
+                const existingConnection = await db.collection('connections')
+                    .where('userId', '==', currentUser.uid)
+                    .where('connectedUserId', '==', profileData.uid)
+                    .limit(1)
+                    .get();
+
+                if (!existingConnection.empty) {
+                    alert(`You're already connected to ${profileData.displayName}!`);
+                    return;
+                }
+
+                // Create bidirectional connection
+                const connectionData = {
+                    userId: currentUser.uid,
+                    connectedUserId: profileData.uid,
+                    connectedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    connectionMethod: 'profile_view',
+                    passportId: passportId
+                };
+
+                const reverseConnectionData = {
+                    userId: profileData.uid,
+                    connectedUserId: currentUser.uid,
+                    connectedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    connectionMethod: 'profile_view',
+                    passportId: passportId
+                };
+
+                await Promise.all([
+                    db.collection('connections').add(connectionData),
+                    db.collection('connections').add(reverseConnectionData)
+                ]);
+
+                // Update button
+                const connectBtn = document.getElementById('connectBtn');
+                connectBtn.innerHTML = `
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="3" fill="none"/>
+                        <path d="M12 2L15.5 8.5L22 9L17 14L18.5 22L12 18.5L5.5 22L7 14L2 9L8.5 8.5L12 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                    Connected!
+                `;
+                connectBtn.disabled = true;
+
+                alert(`🎉 You're now connected to ${profileData.displayName}!`);
+
+            } catch (error) {
+                console.error('Error adding connection:', error);
+                alert('Failed to add connection. Please try again.');
+            }
+        }
+
+        function getCountryName(countryCode) {
+            const countries = {
+                'US': 'United States', 'CA': 'Canada', 'UK': 'United Kingdom', 'AU': 'Australia',
+                'AE': 'UAE', 'SA': 'Saudi Arabia', 'QA': 'Qatar', 'KW': 'Kuwait',
+                'IN': 'India', 'FR': 'France', 'DE': 'Germany', 'ES': 'Spain',
+                'PT': 'Portugal', 'BR': 'Brazil', 'JP': 'Japan', 'KR': 'South Korea',
+                'CN': 'China', 'RU': 'Russia', 'IT': 'Italy', 'NL': 'Netherlands'
+            };
+            return countries[countryCode] || countryCode;
+        }
+
+        function showError() {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('errorSection').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
