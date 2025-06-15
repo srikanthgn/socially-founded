@@ -483,14 +483,23 @@
             
             console.log('🔧 DEBUG: Checking mentor access for user:', currentUser);
             
-            if (!currentUser.passportId) {
-                console.log('❌ No passport found, redirecting to auth');
+            // Check if user exists at all (either passportId OR verification data)
+            if (!currentUser.passportId && !currentUser.verification && !currentUser.personas) {
+                console.log('❌ No user data found, redirecting to auth');
                 alert('Please log in first!');
                 window.location.href = '../core/auth.html';
                 return false;
             }
             
-            // More flexible persona check - check for any verification
+            // Auto-fix missing passportId if user has other data
+            if (!currentUser.passportId && (currentUser.verification || currentUser.personas)) {
+                console.log('🔧 Auto-fixing missing passportId');
+                currentUser.passportId = 'SF-' + Math.floor(Math.random() * 900000 + 100000);
+                localStorage.setItem('sf_current_user', JSON.stringify(currentUser));
+                console.log('✅ Generated passportId:', currentUser.passportId);
+            }
+            
+            // Check for verification (more flexible)
             if (!currentUser.verification || !currentUser.verification.linkedin) {
                 console.log('❌ No LinkedIn verification found:', currentUser.verification);
                 alert('Mentor access requires LinkedIn verification. Please complete verification in your profile first.');
@@ -498,7 +507,7 @@
                 return false;
             }
             
-            // If LinkedIn verified, auto-unlock mentor persona
+            // Auto-unlock mentor persona if verified
             if (!currentUser.personas) {
                 currentUser.personas = {};
             }
@@ -509,7 +518,7 @@
                 localStorage.setItem('sf_current_user', JSON.stringify(currentUser));
             }
             
-            console.log('✅ Mentor access granted');
+            console.log('✅ Mentor access granted for user:', currentUser.passportId);
             return true;
         }
 
