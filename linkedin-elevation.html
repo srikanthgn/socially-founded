@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Professional Elevation - SociallyFounded</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #003554;
+            --light-gray: #F5F5F5;
+            --accent-gray: #E0E0E0;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --linkedin: #0077B5;
+            --gold: #D4AF37;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--gold);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .linkedin-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 15px 25px;
+            background: var(--linkedin);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .linkedin-btn:hover {
+            background: #005885;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 119, 181, 0.3);
+        }
+
+        .linkedin-btn i {
+            font-size: 20px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .benefit-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--navy);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .benefit-text {
+            flex: 1;
+        }
+
+        .benefit-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .benefit-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .status-indicator.pending {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .status-indicator.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .profile-preview {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .profile-preview.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--linkedin);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .profile-info h3 {
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .skills-section {
+            margin-top: 20px;
+        }
+
+        .skills-section h4 {
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background: var(--navy);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .btn-primary:hover {
+            background: #B8860B;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .privacy-notice {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/core/profile.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Profile
+        </a>
+
+        <div class="header">
+            <h1>🔗 LinkedIn Professional Elevation</h1>
+            <p>Verify your professional credentials to unlock Founder and Mentor personas</p>
+        </div>
+
+        <!-- LinkedIn Connection Card -->
+        <div class="card" id="connectionCard">
+            <div class="status-indicator" id="statusIndicator" style="display: none;">
+                <div class="spinner" id="loadingSpinner"></div>
+                <span id="statusText">Connecting to LinkedIn...</span>
+            </div>
+
+            <h3 style="color: var(--gold); margin-bottom: 20px;">Connect Your LinkedIn Profile</h3>
+            
+            <button class="linkedin-btn" id="linkedinBtn" onclick="initiateLinkedInAuth()">
+                <i class="fab fa-linkedin-in"></i>
+                Connect with LinkedIn
+            </button>
+
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🚀</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Unlock Founder Persona</div>
+                        <div class="benefit-desc">Access AI-powered idea development and IP protection</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎓</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Unlock Mentor Persona</div>
+                        <div class="benefit-desc">Guide entrepreneurs and publish research insights</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">🤝</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Professional Matching</div>
+                        <div class="benefit-desc">Connect with verified experts in your industry</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">📊</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">AI-Structured Profile</div>
+                        <div class="benefit-desc">Automatically organize your professional background</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="privacy-notice">
+                <strong>🔒 Privacy Protected:</strong> We only access your basic profile information (name, headline, experience) and email address. Your data is never shared without permission.
+            </div>
+        </div>
+
+        <!-- Profile Preview Card (Hidden Initially) -->
+        <div class="card profile-preview" id="profilePreview">
+            <h3 style="color: var(--gold); margin-bottom: 20px;">LinkedIn Profile Connected</h3>
+            
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">SF</div>
+                <div class="profile-info">
+                    <h3 id="profileName">Professional Name</h3>
+                    <p id="profileHeadline">Professional Headline</p>
+                </div>
+            </div>
+
+            <div class="skills-section">
+                <h4>Professional Skills</h4>
+                <div class="skills-list" id="skillsList">
+                    <!-- Skills populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="confirmElevation()">
+                    <i class="fas fa-rocket"></i> Elevate to Professional
+                </button>
+                <button class="btn btn-secondary" onclick="disconnectLinkedIn()">
+                    <i class="fas fa-unlink"></i> Disconnect
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class LinkedInOAuth {
+            constructor() {
+                this.clientId = 'YOUR_LINKEDIN_CLIENT_ID'; // Will be configured
+                this.redirectUri = window.location.origin + '/linkedin-callback';
+                this.scope = 'r_liteprofile r_emailaddress';
+                this.state = this.generateState();
+                
+                this.init();
+            }
+
+            init() {
+                // Check if we're returning from LinkedIn OAuth
+                const urlParams = new URLSearchParams(window.location.search);
+                const code = urlParams.get('code');
+                const state = urlParams.get('state');
+                const error = urlParams.get('error');
+
+                if (error) {
+                    this.handleError(error);
+                } else if (code && state) {
+                    this.handleCallback(code, state);
+                }
+            }
+
+            generateState() {
+                return 'sf_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            }
+
+            initiateLinkedInAuth() {
+                // Store state for verification
+                localStorage.setItem('linkedin_oauth_state', this.state);
+                
+                // Show loading state
+                this.showStatus('pending', 'Redirecting to LinkedIn...');
+                
+                // Build LinkedIn OAuth URL
+                const authUrl = new URL('https://www.linkedin.com/oauth/v2/authorization');
+                authUrl.searchParams.set('response_type', 'code');
+                authUrl.searchParams.set('client_id', this.clientId);
+                authUrl.searchParams.set('redirect_uri', this.redirectUri);
+                authUrl.searchParams.set('scope', this.scope);
+                authUrl.searchParams.set('state', this.state);
+
+                // Redirect to LinkedIn
+                window.location.href = authUrl.toString();
+            }
+
+            async handleCallback(code, state) {
+                try {
+                    // Verify state parameter
+                    const storedState = localStorage.getItem('linkedin_oauth_state');
+                    if (state !== storedState) {
+                        throw new Error('Invalid state parameter - possible CSRF attack');
+                    }
+
+                    this.showStatus('pending', 'Exchanging authorization code...');
+
+                    // Exchange code for access token
+                    const tokenData = await this.exchangeCodeForToken(code);
+                    
+                    this.showStatus('pending', 'Fetching LinkedIn profile...');
+
+                    // Fetch user profile
+                    const profileData = await this.fetchLinkedInProfile(tokenData.access_token);
+                    
+                    // Structure and save professional profile
+                    const structuredProfile = await this.structureProfile(profileData);
+                    
+                    // Show success and profile preview
+                    this.showProfilePreview(structuredProfile);
+                    this.showStatus('success', 'LinkedIn profile connected successfully!');
+
+                } catch (error) {
+                    console.error('LinkedIn OAuth Error:', error);
+                    this.showStatus('error', error.message);
+                }
+            }
+
+            async exchangeCodeForToken(code) {
+                // In a real implementation, this would go through your backend
+                // to securely exchange the code for a token using your client secret
+                
+                // DEMO: Simulate token exchange
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                return {
+                    access_token: 'demo_access_token_' + Date.now(),
+                    expires_in: 3600
+                };
+            }
+
+            async fetchLinkedInProfile(accessToken) {
+                // DEMO: Simulate LinkedIn API calls
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Mock LinkedIn profile data
+                return {
+                    id: 'demo_linkedin_id',
+                    firstName: { localized: { 'en_US': 'John' } },
+                    lastName: { localized: { 'en_US': 'Entrepreneur' } },
+                    headline: { localized: { 'en_US': 'Senior Software Engineer | Startup Founder | AI Enthusiast' } },
+                    profilePicture: null,
+                    emailAddress: 'john.entrepreneur@example.com',
+                    industry: 'Technology',
+                    positions: [
+                        {
+                            title: 'Senior Software Engineer',
+                            companyName: 'TechCorp Inc',
+                            summary: 'Leading development of AI-powered platforms'
+                        },
+                        {
+                            title: 'Startup Founder',
+                            companyName: 'InnovateTech',
+                            summary: 'Built and scaled B2B SaaS platform'
+                        }
+                    ],
+                    skills: [
+                        'JavaScript', 'React', 'Node.js', 'AI/ML', 'Startup Strategy',
+                        'Product Management', 'Team Leadership', 'Business Development'
+                    ]
+                };
+            }
+
+            async structureProfile(linkedinData) {
+                // AI-structure the LinkedIn data into SF professional format
+                const structuredProfile = {
+                    linkedin: {
+                        id: linkedinData.id,
+                        verified: true,
+                        connectedAt: new Date().toISOString()
+                    },
+                    professional: {
+                        fullName: `${linkedinData.firstName.localized.en_US} ${linkedinData.lastName.localized.en_US}`,
+                        headline: linkedinData.headline.localized.en_US,
+                        email: linkedinData.emailAddress,
+                        industry: linkedinData.industry,
+                        positions: linkedinData.positions,
+                        skills: linkedinData.skills,
+                        experienceLevel: this.calculateExperienceLevel(linkedinData.positions),
+                        expertiseAreas: this.extractExpertiseAreas(linkedinData)
+                    }
+                };
+
+                return structuredProfile;
+            }
+
+            calculateExperienceLevel(positions) {
+                // Simple logic to determine experience level
+                if (positions.length >= 3) return 'Senior';
+                if (positions.length >= 2) return 'Mid-Level';
+                return 'Junior';
+            }
+
+            extractExpertiseAreas(data) {
+                // Extract expertise areas from positions and skills
+                const areas = new Set();
+                
+                data.positions.forEach(pos => {
+                    if (pos.title.toLowerCase().includes('engineer')) areas.add('Engineering');
+                    if (pos.title.toLowerCase().includes('founder')) areas.add('Entrepreneurship');
+                    if (pos.title.toLowerCase().includes('manager')) areas.add('Management');
+                    if (pos.title.toLowerCase().includes('product')) areas.add('Product');
+                });
+
+                if (data.skills.some(skill => skill.toLowerCase().includes('ai'))) areas.add('AI/ML');
+                if (data.skills.some(skill => skill.toLowerCase().includes('business'))) areas.add('Business Strategy');
+
+                return Array.from(areas);
+            }
+
+            showProfilePreview(profileData) {
+                const preview = document.getElementById('profilePreview');
+                const connectionCard = document.getElementById('connectionCard');
+                
+                // Update profile display
+                document.getElementById('profileName').textContent = profileData.professional.fullName;
+                document.getElementById('profileHeadline').textContent = profileData.professional.headline;
+                
+                // Update avatar with initials
+                const initials = profileData.professional.fullName
+                    .split(' ')
+                    .map(n => n[0])
+                    .join('');
+                document.getElementById('profileAvatar').textContent = initials;
+
+                // Update skills
+                const skillsList = document.getElementById('skillsList');
+                skillsList.innerHTML = '';
+                profileData.professional.skills.slice(0, 8).forEach(skill => {
+                    const skillTag = document.createElement('span');
+                    skillTag.className = 'skill-tag';
+                    skillTag.textContent = skill;
+                    skillsList.appendChild(skillTag);
+                });
+
+                // Store profile data for elevation
+                localStorage.setItem('sf_linkedin_profile', JSON.stringify(profileData));
+
+                // Show preview, hide connection card
+                preview.classList.add('show');
+                connectionCard.style.display = 'none';
+            }
+
+            showStatus(type, message) {
+                const indicator = document.getElementById('statusIndicator');
+                const spinner = document.getElementById('loadingSpinner');
+                const text = document.getElementById('statusText');
+
+                indicator.style.display = 'flex';
+                indicator.className = `status-indicator ${type}`;
+                text.textContent = message;
+
+                if (type === 'pending') {
+                    spinner.style.display = 'block';
+                } else {
+                    spinner.style.display = 'none';
+                }
+
+                // Auto-hide success/error after 3 seconds
+                if (type !== 'pending') {
+                    setTimeout(() => {
+                        indicator.style.display = 'none';
+                    }, 3000);
+                }
+            }
+
+            handleError(error) {
+                const errorMessages = {
+                    'access_denied': 'LinkedIn access was denied. Please try again.',
+                    'invalid_request': 'Invalid OAuth request. Please contact support.',
+                    'unauthorized_client': 'Application not authorized. Please contact support.'
+                };
+
+                const message = errorMessages[error] || 'An error occurred during LinkedIn authentication.';
+                this.showStatus('error', message);
+            }
+        }
+
+        // Global functions
+        function initiateLinkedInAuth() {
+            window.linkedInOAuth.initiateLinkedInAuth();
+        }
+
+        function confirmElevation() {
+            const profileData = JSON.parse(localStorage.getItem('sf_linkedin_profile'));
+            const userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
+
+            // Add LinkedIn verification to user data
+            userData.verification = userData.verification || {};
+            userData.verification.linkedin = profileData.linkedin;
+            
+            // Add professional profile
+            userData.professionalProfile = profileData.professional;
+
+            // Unlock Founder and Mentor personas
+            userData.personas = userData.personas || {};
+            userData.personas.founder = { active: true, linkedinVerified: true };
+            userData.personas.mentor = { active: true, linkedinVerified: true };
+
+            // Update passport level for professional elevation
+            userData.passport.level = Math.max(userData.passport.level, 2);
+            userData.passport.experience += 500; // Bonus XP for LinkedIn verification
+
+            // Save updated user data
+            localStorage.setItem('sf_user', JSON.stringify(userData));
+
+            alert(`🎉 Professional Elevation Complete!\n\n✅ LinkedIn Profile Connected\n✅ Founder Persona Unlocked\n✅ Mentor Persona Unlocked\n\n+500 XP bonus earned!\n\nYou can now access all professional features.`);
+
+            // Redirect to profile with success
+            window.location.href = '/core/profile.html?elevated=true';
+        }
+
+        function disconnectLinkedIn() {
+            if (confirm('Are you sure you want to disconnect your LinkedIn profile? This will remove professional verification.')) {
+                localStorage.removeItem('sf_linkedin_profile');
+                
+                // Reset UI
+                document.getElementById('profilePreview').classList.remove('show');
+                document.getElementById('connectionCard').style.display = 'block';
+                
+                alert('LinkedIn profile disconnected successfully.');
+            }
+        }
+
+        // Initialize LinkedIn OAuth system
+        window.linkedInOAuth = new LinkedInOAuth();
+
+        // Handle demo mode
+        if (window.location.hash === '#demo') {
+            // Auto-simulate successful LinkedIn connection for demo
+            setTimeout(() => {
+                const demoProfile = {
+                    linkedin: {
+                        id: 'demo_linkedin_id',
+                        verified: true,
+                        connectedAt: new Date().toISOString()
+                    },
+                    professional: {
+                        fullName: 'Demo Professional',
+                        headline: 'Senior Software Engineer | Startup Mentor | AI Expert',
+                        email: 'demo@sociallyfounded.com',
+                        industry: 'Technology',
+                        positions: [
+                            { title: 'Senior Software Engineer', companyName: 'TechCorp' },
+                            { title: 'Startup Advisor', companyName: 'Multiple Startups' }
+                        ],
+                        skills: ['JavaScript', 'AI/ML', 'Startup Strategy', 'Product Management', 'Leadership'],
+                        experienceLevel: 'Senior',
+                        expertiseAreas: ['Engineering', 'AI/ML', 'Entrepreneurship']
+                    }
+                };
+                
+                window.linkedInOAuth.showProfilePreview(demoProfile);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
