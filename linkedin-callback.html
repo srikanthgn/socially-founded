@@ -399,106 +399,64 @@
             }
 
             async exchangeCodeForToken(code) {
+                // DEMO MODE: Skip actual token exchange for now
                 // In production, this would call your backend API
-                // Backend would securely exchange code for token using client secret
-                
-                // DEMO: Simulate token exchange with delay
                 await this.delay(1000);
                 
-                // Simulate potential API errors
-                if (Math.random() < 0.05) { // 5% chance of simulated error
-                    throw new Error('Token exchange failed - invalid authorization code');
-                }
+                console.log('🔧 Demo Mode: Simulating token exchange for code:', code);
                 
                 return {
-                    access_token: 'linkedin_access_token_' + Date.now(),
+                    access_token: 'demo_linkedin_token_' + Date.now(),
                     expires_in: 3600,
-                    scope: 'r_liteprofile r_emailaddress'
+                    scope: 'openid profile email'
                 };
             }
 
             async fetchLinkedInProfile(accessToken) {
-                // DEMO: Simulate LinkedIn API calls
+                // DEMO MODE: Return realistic profile data
                 await this.delay(1200);
                 
-                // Mock realistic LinkedIn profile data
-                const profiles = [
-                    {
-                        id: 'linkedin_' + Date.now(),
-                        firstName: { localized: { 'en_US': 'Sarah' } },
-                        lastName: { localized: { 'en_US': 'Johnson' } },
-                        headline: { localized: { 'en_US': 'Senior Product Manager | AI & Healthcare Tech | Startup Advisor' } },
-                        emailAddress: 'sarah.johnson@example.com',
-                        industry: 'Healthcare Technology',
-                        positions: [
-                            {
-                                title: 'Senior Product Manager',
-                                companyName: 'HealthTech Solutions',
-                                summary: 'Leading AI-powered healthcare product development',
-                                isCurrent: true
-                            },
-                            {
-                                title: 'Product Manager',
-                                companyName: 'MedTech Innovations',
-                                summary: 'Managed telemedicine platform serving 100K+ patients'
-                            },
-                            {
-                                title: 'Business Analyst',
-                                companyName: 'Digital Health Corp',
-                                summary: 'Analyzed healthcare market trends and user behavior'
-                            }
-                        ],
-                        skills: [
-                            'Product Management', 'Healthcare Technology', 'AI/ML', 
-                            'Strategy', 'Data Analysis', 'Team Leadership',
-                            'User Experience', 'Market Research', 'Agile Development'
-                        ],
-                        educations: [
-                            {
-                                schoolName: 'Stanford University',
-                                fieldOfStudy: 'Computer Science',
-                                degree: 'Master of Science'
-                            }
-                        ]
-                    },
-                    {
-                        id: 'linkedin_' + Date.now(),
-                        firstName: { localized: { 'en_US': 'David' } },
-                        lastName: { localized: { 'en_US': 'Chen' } },
-                        headline: { localized: { 'en_US': 'Full Stack Engineer | Startup CTO | Open Source Contributor' } },
-                        emailAddress: 'david.chen@example.com',
-                        industry: 'Technology',
-                        positions: [
-                            {
-                                title: 'Chief Technology Officer',
-                                companyName: 'TechStartup Inc',
-                                summary: 'Leading technical strategy and engineering team',
-                                isCurrent: true
-                            },
-                            {
-                                title: 'Senior Software Engineer',
-                                companyName: 'CloudTech Solutions',
-                                summary: 'Built scalable microservices architecture'
-                            }
-                        ],
-                        skills: [
-                            'JavaScript', 'React', 'Node.js', 'Python', 'AWS',
-                            'System Architecture', 'Team Leadership', 'DevOps',
-                            'Machine Learning', 'Startup Strategy'
-                        ]
-                    }
-                ];
+                console.log('🔧 Demo Mode: Simulating profile fetch with token:', accessToken);
                 
-                // Return random profile for demo
-                return profiles[Math.floor(Math.random() * profiles.length)];
+                // Return demo profile based on your business
+                return {
+                    id: 'linkedin_' + Date.now(),
+                    name: 'Srikanth Gaurav',
+                    given_name: 'Srikanth',
+                    family_name: 'Gaurav', 
+                    email: 'srikanth@sociallyfounded.com',
+                    picture: null,
+                    locale: 'en_US',
+                    // Additional demo data
+                    headline: 'CEO & Co-Founder at SociallyFounded | Entrepreneur | Business Transformation Expert',
+                    industry: 'Technology',
+                    positions: [
+                        {
+                            title: 'CEO & Co-Founder',
+                            companyName: 'SociallyFounded',
+                            summary: 'Building the future of entrepreneurial communities',
+                            isCurrent: true
+                        },
+                        {
+                            title: 'COO',
+                            companyName: 'RheinBrücke IT Consulting',
+                            summary: 'Led operational excellence and business transformation'
+                        }
+                    ],
+                    skills: [
+                        'Business Transformation', 'Entrepreneurship', 'Strategic Planning',
+                        'Operational Excellence', 'Technology Innovation', 'Leadership',
+                        'Product Management', 'Global Delivery', 'AI Integration'
+                    ]
+                };
             }
 
             async structureProfileData(linkedinData) {
                 // AI-structure the LinkedIn data into SF professional format
                 await this.delay(800);
                 
-                const fullName = `${linkedinData.firstName.localized.en_US} ${linkedinData.lastName.localized.en_US}`;
-                const headline = linkedinData.headline.localized.en_US;
+                const fullName = `${linkedinData.given_name} ${linkedinData.family_name}`;
+                const headline = linkedinData.headline || 'Professional at SociallyFounded Community';
                 
                 return {
                     linkedin: {
@@ -510,8 +468,8 @@
                     professional: {
                         fullName: fullName,
                         headline: headline,
-                        email: linkedinData.emailAddress,
-                        industry: linkedinData.industry,
+                        email: linkedinData.email,
+                        industry: linkedinData.industry || 'Technology',
                         positions: linkedinData.positions || [],
                         skills: linkedinData.skills || [],
                         educations: linkedinData.educations || [],
