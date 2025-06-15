@@ -3,21 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkedIn Professional Elevation - SociallyFounded</title>
+    <title>🔗 LinkedIn Professional Elevation | SociallyFounded</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --navy: #003554;
-            --light-gray: #F5F5F5;
-            --accent-gray: #E0E0E0;
-            --white: #FFFFFF;
-            --success: #10B981;
-            --linkedin: #0077B5;
-            --gold: #D4AF37;
-            --error: #EF4444;
-            --warning: #F59E0B;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -26,868 +16,775 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
             color: white;
             min-height: 100vh;
-            padding: 20px;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--gold);
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .status-banner {
-            display: none;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            animation: slideIn 0.5s ease;
-        }
-
-        .status-banner.success {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: var(--success);
+            padding: 2rem;
+            min-height: 100vh;
             display: flex;
-        }
-
-        .status-banner.error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: var(--error);
-            display: flex;
-        }
-
-        .status-banner.warning {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: var(--warning);
-            display: flex;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .linkedin-btn {
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 15px 25px;
-            background: var(--linkedin);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            margin-bottom: 20px;
-        }
-
-        .linkedin-btn:hover {
-            background: #005885;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 119, 181, 0.3);
-        }
-
-        .linkedin-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .linkedin-btn.processing {
-            background: #666;
-            cursor: not-allowed;
-        }
-
-        .profile-preview {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .profile-preview.show {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .profile-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--linkedin);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 24px;
-        }
-
-        .profile-info h3 {
-            color: var(--gold);
-            margin-bottom: 5px;
-        }
-
-        .profile-info p {
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-
-        .skills-section {
-            margin-top: 20px;
-        }
-
-        .skills-section h4 {
-            color: var(--gold);
-            margin-bottom: 10px;
-        }
-
-        .skills-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .skill-tag {
-            background: var(--navy);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 5px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: var(--gold);
-            color: var(--navy);
-        }
-
-        .btn-primary:hover {
-            background: #B8860B;
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .demo-notice {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            color: #F59E0B;
-        }
-
-        .demo-notice h4 {
-            margin-bottom: 8px;
-        }
-
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
             color: white;
             text-decoration: none;
-            margin-bottom: 20px;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
 
         .back-link:hover {
-            transform: translateX(-5px);
-        }
-
-        .benefits-list {
-            margin: 20px 0;
-            opacity: 0.8;
-        }
-
-        .benefits-list h4 {
-            margin-bottom: 15px;
-            color: var(--gold);
-        }
-
-        .benefits-list ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .benefits-list li {
-            padding: 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .benefits-list li i {
-            color: var(--gold);
-        }
-
-        .privacy-notice {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .processing-steps {
-            display: none;
-            margin: 20px 0;
-        }
-
-        .processing-steps.show {
-            display: block;
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-size: 0.9rem;
-            opacity: 0.6;
-        }
-
-        .step.active {
-            opacity: 1;
-            color: var(--linkedin);
-        }
-
-        .step.completed {
-            opacity: 1;
-            color: var(--success);
-        }
-
-        .step-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .step.active .step-icon {
-            background: var(--linkedin);
+        .elevation-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        .step.completed .step-icon {
-            background: var(--success);
+        .demo-notice {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .status-indicator {
+            display: none;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .success {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .already-connected {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .main-content {
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        .progress-container {
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-step.active .step-circle {
+            background: linear-gradient(135deg, #0077b5 0%, #005885 100%);
+            border-color: #0077b5;
+            animation: pulse 1.5s infinite;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            text-align: center;
+            max-width: 120px;
+        }
+
+        .benefits-section {
+            margin: 2rem 0;
+        }
+
+        .benefits-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        .benefits-list {
+            text-align: left;
+            margin: 1rem 0;
+        }
+
+        .benefit-item {
+            margin: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .benefit-item::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .privacy-notice {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #0077b5 0%, #005885 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 1rem 0.5rem;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 119, 181, 0.3);
+        }
+
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-preview {
+            display: none;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-preview h3 {
+            color: #FFD700;
+            margin-bottom: 1rem;
+        }
+
+        .profile-data {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .profile-data div {
+            margin: 0.5rem 0;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .skill-tag {
+            background: rgba(212, 175, 55, 0.2);
+            color: #D4AF37;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .credibility-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            margin-top: 1rem;
+        }
+
+        .score-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.5s ease-out;
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
             .container {
-                padding: 20px 10px;
+                padding: 1rem;
             }
-            
-            .card {
-                padding: 20px;
+
+            .elevation-card {
+                padding: 2rem;
+            }
+
+            .progress-steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .benefits-list {
+                margin-left: 1rem;
+            }
+
+            .back-link {
+                position: relative;
+                top: 0;
+                left: 0;
+                display: inline-block;
+                margin-bottom: 1rem;
             }
         }
+
+        .storage-debug {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            z-index: 1000;
+            max-width: 200px;
+        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div class="storage-debug" id="storageDebug">
+        Storage: Checking...
+    </div>
+
+    <a href="core/profile.html" class="back-link" id="backLink">← Back to Profile</a>
+
     <div class="container">
-        <a href="core/profile.html" class="back-link">
-            <i class="fas fa-arrow-left"></i> Back to Profile
-        </a>
-
-        <div class="header">
-            <h1>🔗 LinkedIn Professional Elevation</h1>
-            <p>Connect your LinkedIn profile to unlock Founder and Mentor personas</p>
-        </div>
-
-        <!-- Demo Notice -->
-        <div class="demo-notice">
-            <h4><i class="fas fa-info-circle"></i> Demo Mode Active</h4>
-            <p>This demo simulates LinkedIn OAuth flow. In production, this would connect to real LinkedIn API with your actual credentials.</p>
-        </div>
-
-        <!-- Status Banners -->
-        <div class="status-banner success" id="successBanner">
-            <i class="fab fa-linkedin-in"></i>
-            <div>
-                <h4>LinkedIn Connected Successfully!</h4>
-                <p>Your professional profile has been verified and personas unlocked.</p>
+        <div class="elevation-card">
+            <div class="demo-notice">
+                <strong>Demo Mode Active</strong><br>
+                This demo simulates LinkedIn OAuth flow. In production, this would connect to real LinkedIn API with your actual credentials.
             </div>
-        </div>
 
-        <div class="status-banner error" id="errorBanner">
-            <i class="fas fa-exclamation-triangle"></i>
-            <div>
-                <h4>Connection Failed</h4>
-                <p id="errorMessage">Please try again or contact support.</p>
+            <div class="status-indicator success" id="successIndicator">
+                <strong>LinkedIn Connected Successfully!</strong><br>
+                Your professional profile has been verified and personas unlocked.
             </div>
-        </div>
 
-        <div class="status-banner warning" id="warningBanner">
-            <i class="fas fa-info-circle"></i>
-            <div>
-                <h4>Already Connected</h4>
-                <p>Your LinkedIn profile is already connected and verified.</p>
+            <div class="status-indicator error" id="errorIndicator">
+                <strong>Connection Failed</strong><br>
+                Please try again or contact support.
             </div>
-        </div>
 
-        <!-- LinkedIn Connection Card -->
-        <div class="card" id="connectionCard">
-            <h3 style="color: var(--gold); margin-bottom: 20px;">Connect Your LinkedIn Profile</h3>
-            
-            <button class="linkedin-btn" id="linkedinBtn" onclick="startLinkedInFlow()">
-                <i class="fab fa-linkedin-in"></i>
-                <span id="btnText">Connect with LinkedIn</span>
-            </button>
+            <div class="status-indicator already-connected" id="alreadyConnectedIndicator">
+                <strong>Already Connected</strong><br>
+                Your LinkedIn profile is already connected and verified.
+            </div>
 
-            <!-- Processing Steps -->
-            <div class="processing-steps" id="processingSteps">
-                <div class="step" id="step1">
-                    <div class="step-icon">1</div>
-                    <span>Connecting to LinkedIn...</span>
+            <div class="main-content" id="mainContent">
+                <h1 class="main-title">Connect Your LinkedIn Profile</h1>
+
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-steps">
+                        <div class="progress-step" id="step1">
+                            <div class="step-circle">1</div>
+                            <div class="step-label">Connecting to LinkedIn...</div>
+                        </div>
+                        <div class="progress-step" id="step2">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">Retrieving profile data...</div>
+                        </div>
+                        <div class="progress-step" id="step3">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">Analyzing professional background...</div>
+                        </div>
+                        <div class="progress-step" id="step4">
+                            <div class="step-circle">4</div>
+                            <div class="step-label">Structuring profile data...</div>
+                        </div>
+                        <div class="progress-step" id="step5">
+                            <div class="step-circle">5</div>
+                            <div class="step-label">Updating SociallyFounded profile...</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="step" id="step2">
-                    <div class="step-icon">2</div>
-                    <span>Retrieving profile data...</span>
-                </div>
-                <div class="step" id="step3">
-                    <div class="step-icon">3</div>
-                    <span>Analyzing professional background...</span>
-                </div>
-                <div class="step" id="step4">
-                    <div class="step-icon">4</div>
-                    <span>Structuring profile data...</span>
-                </div>
-                <div class="step" id="step5">
-                    <div class="step-icon">5</div>
-                    <span>Updating SociallyFounded profile...</span>
-                </div>
-            </div>
 
-            <div class="benefits-list">
-                <h4>What you'll unlock:</h4>
-                <ul>
-                    <li><i class="fas fa-rocket"></i> Founder Persona - AI-powered idea development with IP protection</li>
-                    <li><i class="fas fa-graduation-cap"></i> Mentor Persona - Guide entrepreneurs and publish research insights</li>
-                    <li><i class="fas fa-handshake"></i> Professional Matching - Connect with verified industry experts</li>
-                    <li><i class="fas fa-chart-line"></i> AI-Structured Profile - Automatically organize your background</li>
-                    <li><i class="fas fa-star"></i> Credibility Score - Boost your professional reputation</li>
-                </ul>
-            </div>
-
-            <div class="privacy-notice">
-                <strong>🔒 Privacy Protected:</strong> We only access your basic profile information (name, headline, experience) and email address. Your data is never shared without permission and stored securely.
-            </div>
-        </div>
-
-        <!-- Profile Preview Card -->
-        <div class="card profile-preview" id="profilePreview">
-            <h3 style="color: var(--gold); margin-bottom: 20px;">LinkedIn Profile Connected</h3>
-            
-            <div class="profile-header">
-                <div class="profile-avatar" id="profileAvatar">SF</div>
-                <div class="profile-info">
-                    <h3 id="profileName">Professional Name</h3>
-                    <p id="profileHeadline">Professional Headline</p>
-                    <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">
-                        <i class="fas fa-star" style="color: var(--gold);"></i> 
-                        Credibility Score: <span id="credibilityScore">85</span>
-                    </p>
+                <div class="benefits-section">
+                    <div class="benefits-title">What you'll unlock:</div>
+                    <div class="benefits-list">
+                        <div class="benefit-item"><strong>Founder Persona</strong> - AI-powered idea development with IP protection</div>
+                        <div class="benefit-item"><strong>Mentor Persona</strong> - Guide entrepreneurs and publish research insights</div>
+                        <div class="benefit-item"><strong>Professional Matching</strong> - Connect with verified industry experts</div>
+                        <div class="benefit-item"><strong>AI-Structured Profile</strong> - Automatically organize your background</div>
+                        <div class="benefit-item"><strong>Credibility Score</strong> - Boost your professional reputation</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="skills-section">
-                <h4>Professional Skills</h4>
-                <div class="skills-list" id="skillsList">
-                    <!-- Skills populated by JavaScript -->
+                <div class="privacy-notice">
+                    🔒 <strong>Privacy Protected:</strong> We only access your basic profile information (name, headline, experience) and email address. Your data is never shared without permission and stored securely.
                 </div>
-            </div>
 
-            <div class="skills-section" style="margin-top: 15px;">
-                <h4>Experience Summary</h4>
-                <p id="experienceSummary" style="opacity: 0.8; font-size: 0.9rem;">
-                    <!-- Experience summary populated by JavaScript -->
-                </p>
-            </div>
-
-            <div style="margin-top: 20px;">
-                <button class="btn btn-primary" onclick="confirmElevation()">
-                    <i class="fas fa-rocket"></i> Elevate to Professional
+                <button class="action-button" id="connectButton" onclick="startLinkedInDemo()">
+                    LinkedIn Profile Connected
                 </button>
-                <button class="btn btn-secondary" onclick="resetDemo()">
-                    <i class="fas fa-redo"></i> Try Again
-                </button>
+
+                <div class="profile-preview" id="profilePreview">
+                    <h3>Your Professional Profile Preview</h3>
+                    <div class="profile-data" id="profileData">
+                        <!-- Profile data will be populated here -->
+                    </div>
+                    <div style="margin-top: 1.5rem;">
+                        <button class="action-button" onclick="confirmElevation()">Confirm & Continue</button>
+                        <button class="action-button secondary-button" onclick="resetDemo()">Start Over</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        class LinkedInIntegration {
+        // Same robust storage system as profile page
+        class SFStorage {
             constructor() {
-                this.isProcessing = false;
-                this.profileData = null;
-                this.currentStep = 0;
-                this.init();
+                this.method = this.detectBestStorage();
+                this.updateDebug();
             }
 
-            init() {
-                // Check if user is already verified
-                const userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
-                if (userData.verification?.linkedin?.verified) {
-                    this.showAlreadyConnected();
-                    return;
+            detectBestStorage() {
+                try {
+                    localStorage.setItem('sf_test', 'test');
+                    localStorage.removeItem('sf_test');
+                    return 'localStorage';
+                } catch (e) {
+                    console.log('localStorage blocked:', e.message);
                 }
-
-                // Check for success/error in URL
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('connected') === 'true') {
-                    this.showSuccess();
-                }
-                if (urlParams.get('error')) {
-                    this.showError(urlParams.get('error'));
-                }
-
-                console.log('✅ LinkedIn Integration initialized');
-            }
-
-            async startLinkedInFlow() {
-                if (this.isProcessing) return;
-                
-                this.isProcessing = true;
-                const btn = document.getElementById('linkedinBtn');
-                const btnText = document.getElementById('btnText');
-                
-                // Update button state
-                btn.disabled = true;
-                btn.className = 'linkedin-btn processing';
-                btnText.innerHTML = '<div class="spinner"></div> Connecting...';
-
-                // Show processing steps
-                document.getElementById('processingSteps').classList.add('show');
 
                 try {
-                    // Simulate LinkedIn OAuth flow with realistic steps
-                    await this.simulateLinkedInAuth();
-                    
-                    // Show success
-                    this.showProfilePreview();
-                    
-                } catch (error) {
-                    this.showError(error.message);
-                } finally {
-                    this.isProcessing = false;
-                    btn.disabled = false;
-                    btn.className = 'linkedin-btn';
-                    btnText.innerHTML = '<i class="fab fa-linkedin-in"></i> Connect with LinkedIn';
-                    document.getElementById('processingSteps').classList.remove('show');
-                }
-            }
-
-            async simulateLinkedInAuth() {
-                // Step 1: Connect to LinkedIn
-                this.updateStep(1, 'active');
-                await this.delay(1000);
-                this.updateStep(1, 'completed');
-                
-                // Step 2: Retrieve profile data
-                this.updateStep(2, 'active');
-                await this.delay(1500);
-                this.updateStep(2, 'completed');
-                
-                // Step 3: Analyze background
-                this.updateStep(3, 'active');
-                await this.delay(1200);
-                this.updateStep(3, 'completed');
-                
-                // Step 4: Structure data
-                this.updateStep(4, 'active');
-                this.profileData = this.generateMockProfile();
-                await this.delay(800);
-                this.updateStep(4, 'completed');
-                
-                // Step 5: Update profile
-                this.updateStep(5, 'active');
-                await this.delay(600);
-                this.updateStep(5, 'completed');
-                
-                return this.profileData;
-            }
-
-            updateStep(stepNumber, status) {
-                const step = document.getElementById(`step${stepNumber}`);
-                if (!step) return;
-
-                // Remove all status classes
-                step.classList.remove('active', 'completed');
-                
-                // Add new status
-                if (status !== 'pending') {
-                    step.classList.add(status);
+                    sessionStorage.setItem('sf_test', 'test');
+                    sessionStorage.removeItem('sf_test');
+                    return 'sessionStorage';
+                } catch (e) {
+                    console.log('sessionStorage blocked:', e.message);
                 }
 
-                // Update icon for completed steps
-                if (status === 'completed') {
-                    const icon = step.querySelector('.step-icon');
-                    icon.innerHTML = '<i class="fas fa-check"></i>';
-                }
-            }
-
-            generateMockProfile() {
-                const currentUser = JSON.parse(localStorage.getItem('sf_user') || '{}');
-                const mockProfiles = [
-                    {
-                        fullName: 'Alex Johnson',
-                        headline: 'Senior Software Engineer | Startup Founder | AI Enthusiast',
-                        skills: ['JavaScript', 'React', 'Node.js', 'AI/ML', 'Startup Strategy', 'Product Management', 'Team Leadership', 'Business Development'],
-                        positions: [
-                            { title: 'Senior Software Engineer', companyName: 'TechCorp Inc' },
-                            { title: 'Startup Founder', companyName: 'InnovateTech' }
-                        ],
-                        industry: 'Technology',
-                        experienceLevel: 'Senior',
-                        credibilityScore: Math.floor(Math.random() * 20) + 80
-                    },
-                    {
-                        fullName: 'Sarah Chen',
-                        headline: 'Product Manager | Former Consultant | Tech Strategy Expert',
-                        skills: ['Product Strategy', 'Data Analysis', 'User Research', 'Agile', 'Business Development', 'Market Research', 'Leadership', 'Innovation'],
-                        positions: [
-                            { title: 'Senior Product Manager', companyName: 'Digital Solutions' },
-                            { title: 'Strategy Consultant', companyName: 'McKinsey & Company' }
-                        ],
-                        industry: 'Technology',
-                        experienceLevel: 'Senior',
-                        credibilityScore: Math.floor(Math.random() * 15) + 85
-                    },
-                    {
-                        fullName: 'Michael Rodriguez',
-                        headline: 'Venture Capital Partner | Former Entrepreneur | Startup Mentor',
-                        skills: ['Venture Capital', 'Startup Strategy', 'Due Diligence', 'Portfolio Management', 'Entrepreneurship', 'Financial Analysis', 'Mentoring', 'Market Analysis'],
-                        positions: [
-                            { title: 'Partner', companyName: 'Growth Ventures' },
-                            { title: 'CEO & Founder', companyName: 'TechStart Solutions' }
-                        ],
-                        industry: 'Venture Capital',
-                        experienceLevel: 'Executive',
-                        credibilityScore: Math.floor(Math.random() * 10) + 90
+                try {
+                    document.cookie = 'sf_test=test; path=/';
+                    if (document.cookie.includes('sf_test=test')) {
+                        document.cookie = 'sf_test=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+                        return 'cookie';
                     }
-                ];
+                } catch (e) {
+                    console.log('Cookie storage blocked:', e.message);
+                }
 
-                return mockProfiles[Math.floor(Math.random() * mockProfiles.length)];
+                return 'url';
             }
 
-            showProfilePreview() {
-                // Hide connection card
-                document.getElementById('connectionCard').style.display = 'none';
+            setItem(key, value) {
+                const serialized = JSON.stringify(value);
                 
-                // Show profile preview
-                const preview = document.getElementById('profilePreview');
-                preview.classList.add('show');
-                
-                // Update profile display
-                document.getElementById('profileName').textContent = this.profileData.fullName;
-                document.getElementById('profileHeadline').textContent = this.profileData.headline;
-                document.getElementById('credibilityScore').textContent = this.profileData.credibilityScore;
-                
-                // Update avatar with initials
-                const initials = this.profileData.fullName
-                    .split(' ')
-                    .map(n => n[0])
-                    .join('');
-                document.getElementById('profileAvatar').textContent = initials;
-
-                // Update skills
-                const skillsList = document.getElementById('skillsList');
-                skillsList.innerHTML = '';
-                this.profileData.skills.slice(0, 8).forEach(skill => {
-                    const skillTag = document.createElement('span');
-                    skillTag.className = 'skill-tag';
-                    skillTag.textContent = skill;
-                    skillsList.appendChild(skillTag);
-                });
-
-                // Update experience summary
-                const experienceSummary = document.getElementById('experienceSummary');
-                const positionTitles = this.profileData.positions.map(p => p.title);
-                experienceSummary.textContent = `${this.profileData.experienceLevel} level professional with experience in: ${positionTitles.join(', ')}`;
-
-                // Show success banner
-                document.getElementById('successBanner').classList.add('show');
+                try {
+                    switch (this.method) {
+                        case 'localStorage':
+                            localStorage.setItem(key, serialized);
+                            break;
+                        case 'sessionStorage':
+                            sessionStorage.setItem(key, serialized);
+                            break;
+                        case 'cookie':
+                            document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=86400`;
+                            break;
+                        case 'url':
+                            window[key] = value;
+                            break;
+                    }
+                    this.updateDebug();
+                    return true;
+                } catch (e) {
+                    console.error('Storage failed:', e);
+                    this.updateDebug();
+                    return false;
+                }
             }
 
-            showError(message) {
-                document.getElementById('errorMessage').textContent = message;
-                document.getElementById('errorBanner').classList.add('show');
-                
-                // Hide after 5 seconds
-                setTimeout(() => {
-                    document.getElementById('errorBanner').classList.remove('show');
-                }, 5000);
+            getItem(key) {
+                try {
+                    let value = null;
+                    
+                    switch (this.method) {
+                        case 'localStorage':
+                            value = localStorage.getItem(key);
+                            break;
+                        case 'sessionStorage':
+                            value = sessionStorage.getItem(key);
+                            break;
+                        case 'cookie':
+                            const match = document.cookie.match(new RegExp('(^| )' + key + '=([^;]+)'));
+                            value = match ? decodeURIComponent(match[2]) : null;
+                            break;
+                        case 'url':
+                            value = window[key] ? JSON.stringify(window[key]) : null;
+                            break;
+                    }
+                    
+                    return value ? JSON.parse(value) : null;
+                } catch (e) {
+                    console.error('Storage retrieval failed:', e);
+                    return null;
+                }
             }
 
-            showAlreadyConnected() {
-                document.getElementById('warningBanner').classList.add('show');
-                document.getElementById('connectionCard').innerHTML = `
-                    <h3 style="color: var(--success); margin-bottom: 20px;">
-                        <i class="fab fa-linkedin-in"></i> Already Connected
-                    </h3>
-                    <p style="margin-bottom: 20px;">Your LinkedIn profile is already connected and verified. You have full access to professional features.</p>
-                    <a href="core/profile.html" class="btn btn-primary">
-                        <i class="fas fa-user"></i> View Profile
-                    </a>
-                    <button class="btn btn-secondary" onclick="resetDemo()">
-                        <i class="fas fa-redo"></i> Reset Demo
-                    </button>
-                `;
-            }
-
-            showSuccess() {
-                document.getElementById('successBanner').classList.add('show');
-            }
-
-            delay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
+            updateDebug() {
+                const debugEl = document.getElementById('storageDebug');
+                if (debugEl) {
+                    debugEl.textContent = `Storage: ${this.method}`;
+                    debugEl.style.background = this.method === 'url' ? 'rgba(239, 68, 68, 0.8)' : 'rgba(34, 197, 94, 0.8)';
+                }
             }
         }
 
-        // Global functions
-        function confirmElevation() {
-            const userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
-            const profileData = window.linkedInIntegration.profileData;
+        const sfStorage = new SFStorage();
+        let currentLinkedInData = null;
 
-            if (!profileData) {
-                alert('Error: No profile data available. Please try connecting again.');
+        // Check if already connected
+        function checkExistingConnection() {
+            const userData = sfStorage.getItem('sf_user');
+            if (userData?.verification?.linkedin?.verified) {
+                showAlreadyConnected();
+                return true;
+            }
+            return false;
+        }
+
+        function showAlreadyConnected() {
+            document.getElementById('alreadyConnectedIndicator').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'none';
+            
+            setTimeout(() => {
+                redirectToProfile();
+            }, 2000);
+        }
+
+        function startLinkedInDemo() {
+            if (checkExistingConnection()) return;
+            
+            // Hide main content and show progress
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+            
+            // Simulate the 5-step process
+            simulateOAuthFlow();
+        }
+
+        function simulateOAuthFlow() {
+            const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+            let currentStep = 0;
+            
+            function activateNextStep() {
+                if (currentStep < steps.length) {
+                    document.getElementById(steps[currentStep]).classList.add('active');
+                    currentStep++;
+                    
+                    if (currentStep < steps.length) {
+                        setTimeout(activateNextStep, 1500);
+                    } else {
+                        setTimeout(showProfilePreview, 1000);
+                    }
+                }
+            }
+            
+            activateNextStep();
+        }
+
+        function showProfilePreview() {
+            // Generate mock LinkedIn data
+            const mockLinkedInData = generateMockLinkedInData();
+            currentLinkedInData = mockLinkedInData;
+            
+            // Hide progress and show preview
+            document.getElementById('progressContainer').style.display = 'none';
+            
+            // Populate profile preview
+            populateProfilePreview(mockLinkedInData.professionalProfile);
+            
+            // Show preview
+            document.getElementById('profilePreview').style.display = 'block';
+            document.getElementById('profilePreview').classList.add('fade-in');
+        }
+
+        function generateMockLinkedInData() {
+            const names = ['Alex Johnson', 'Sarah Chen', 'Michael Rodriguez', 'Emily Davis', 'David Kim'];
+            const headlines = [
+                'Senior Software Engineer | AI Enthusiast',
+                'Product Manager | Digital Innovation Leader',
+                'Data Scientist | Machine Learning Expert',
+                'UX Designer | Human-Centered Design Advocate',
+                'Marketing Director | Growth Strategy Specialist'
+            ];
+            const skillSets = [
+                ['JavaScript', 'React', 'Node.js', 'AI/ML', 'Product Strategy'],
+                ['Product Management', 'Data Analysis', 'UX Research', 'Agile', 'Strategy'],
+                ['Python', 'Machine Learning', 'Data Science', 'Statistics', 'TensorFlow'],
+                ['UI/UX Design', 'Figma', 'User Research', 'Prototyping', 'Design Systems'],
+                ['Digital Marketing', 'Growth Hacking', 'Analytics', 'Content Strategy', 'SEO']
+            ];
+            const positions = [
+                [
+                    { title: 'Senior Software Engineer', companyName: 'TechCorp Inc.' },
+                    { title: 'Software Engineer', companyName: 'StartupXYZ' }
+                ],
+                [
+                    { title: 'Product Manager', companyName: 'InnovateLabs' },
+                    { title: 'Associate Product Manager', companyName: 'GrowthCo' }
+                ],
+                [
+                    { title: 'Data Scientist', companyName: 'DataDriven LLC' },
+                    { title: 'Junior Data Analyst', companyName: 'Analytics Pro' }
+                ],
+                [
+                    { title: 'Senior UX Designer', companyName: 'DesignStudio' },
+                    { title: 'UI Designer', companyName: 'Creative Agency' }
+                ],
+                [
+                    { title: 'Marketing Director', companyName: 'GrowthMarketing' },
+                    { title: 'Marketing Manager', companyName: 'BrandBuilders' }
+                ]
+            ];
+            
+            const randomIndex = Math.floor(Math.random() * names.length);
+            
+            return {
+                id: `demo_linkedin_${Date.now()}`,
+                professionalProfile: {
+                    fullName: names[randomIndex],
+                    headline: headlines[randomIndex],
+                    skills: skillSets[randomIndex],
+                    positions: positions[randomIndex],
+                    credibilityScore: Math.floor(Math.random() * 20) + 80 // 80-99
+                }
+            };
+        }
+
+        function populateProfilePreview(profile) {
+            const profileData = document.getElementById('profileData');
+            
+            profileData.innerHTML = `
+                <div><strong>Name:</strong> ${profile.fullName}</div>
+                <div><strong>Headline:</strong> ${profile.headline}</div>
+                <div><strong>Experience:</strong></div>
+                ${profile.positions.map(pos => 
+                    `<div style="margin-left: 1rem;">• ${pos.title} at ${pos.companyName}</div>`
+                ).join('')}
+                <div><strong>Skills:</strong></div>
+                <div class="skill-tags">
+                    ${profile.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                </div>
+                <div class="credibility-score">
+                    <div class="score-number">${profile.credibilityScore}</div>
+                    <div>
+                        <div>Credibility Score</div>
+                        <div style="font-size: 0.8rem; opacity: 0.8;">Based on LinkedIn verification</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function confirmElevation() {
+            if (!currentLinkedInData) {
+                showError();
                 return;
             }
-
-            // Add LinkedIn verification to user data
-            userData.verification = userData.verification || {};
-            userData.verification.linkedin = {
-                verified: true,
-                connectedAt: new Date().toISOString(),
-                id: 'demo_linkedin_' + Date.now()
+            
+            // Generate complete user data
+            const userData = {
+                passportId: 'SF-DEMO01',
+                passport: {
+                    level: 2,
+                    experience: 500,
+                    tier: 'Silver'
+                },
+                verification: {
+                    linkedin: {
+                        verified: true,
+                        connectedAt: new Date().toISOString(),
+                        id: currentLinkedInData.id
+                    }
+                },
+                professionalProfile: currentLinkedInData.professionalProfile,
+                personas: {
+                    founder: { active: true, linkedinVerified: true },
+                    mentor: { active: true, linkedinVerified: true }
+                }
             };
             
-            // Add professional profile
-            userData.professionalProfile = {
-                ...profileData,
-                verifiedAt: new Date().toISOString()
-            };
+            // Try to save to storage
+            const saved = sfStorage.setItem('sf_user', userData);
+            
+            if (saved && sfStorage.method !== 'url') {
+                // Storage worked, show success and redirect
+                showSuccess();
+                setTimeout(redirectToProfile, 2000);
+            } else {
+                // Storage failed or using URL fallback, pass data via URL
+                redirectWithData(currentLinkedInData);
+            }
+        }
 
-            // Unlock Founder and Mentor personas
-            userData.personas = userData.personas || {};
-            userData.personas.founder = { 
-                active: true, 
-                linkedinVerified: true,
-                unlockedAt: new Date().toISOString()
-            };
-            userData.personas.mentor = { 
-                active: true, 
-                linkedinVerified: true,
-                unlockedAt: new Date().toISOString()
-            };
+        function redirectWithData(linkedinData) {
+            const profileUrl = new URL('core/profile.html', window.location.origin);
+            profileUrl.searchParams.set('elevated', 'true');
+            profileUrl.searchParams.set('linkedin', encodeURIComponent(JSON.stringify(linkedinData)));
+            
+            window.location.href = profileUrl.toString();
+        }
 
-            // Update passport level for professional elevation
-            userData.passport = userData.passport || { level: 1, experience: 0, tier: 'Navy' };
-            userData.passport.level = Math.max(userData.passport.level, 2);
-            userData.passport.experience = (userData.passport.experience || 0) + 500;
-            userData.passport.tier = 'Silver'; // Upgrade tier for professional verification
+        function redirectToProfile() {
+            window.location.href = 'core/profile.html';
+        }
 
-            // Save updated user data
-            localStorage.setItem('sf_user', JSON.stringify(userData));
+        function showSuccess() {
+            document.getElementById('profilePreview').style.display = 'none';
+            document.getElementById('successIndicator').style.display = 'block';
+        }
 
-            // Show success message
-            alert(`🎉 Professional Elevation Complete!\n\n✅ LinkedIn Profile Connected\n✅ Founder Persona Unlocked\n✅ Mentor Persona Unlocked\n✅ Tier Upgraded to Silver\n\n+500 XP bonus earned!\n\nCredibility Score: ${profileData.credibilityScore}\n\nYou can now access all professional features including AI-powered idea development and mentor matching.`);
-
-            // Redirect to profile with success
-            window.location.href = 'core/profile.html?elevated=true';
+        function showError() {
+            document.getElementById('profilePreview').style.display = 'none';
+            document.getElementById('errorIndicator').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('errorIndicator').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            }, 3000);
         }
 
         function resetDemo() {
-            // Clear any existing LinkedIn verification
-            const userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
-            if (userData.verification) {
-                delete userData.verification.linkedin;
-            }
-            if (userData.professionalProfile) {
-                delete userData.professionalProfile;
-            }
-            if (userData.personas) {
-                delete userData.personas.founder;
-                delete userData.personas.mentor;
-            }
-            localStorage.setItem('sf_user', JSON.stringify(userData));
-
-            // Reset the demo UI
-            document.getElementById('profilePreview').classList.remove('show');
-            document.getElementById('connectionCard').style.display = 'block';
-            document.getElementById('successBanner').classList.remove('show');
-            document.getElementById('errorBanner').classList.remove('show');
-            document.getElementById('warningBanner').classList.remove('show');
+            // Clear any stored data
+            sfStorage.removeItem('sf_user');
             
-            // Reset connection card to original state
-            document.getElementById('connectionCard').innerHTML = `
-                <h3 style="color: var(--gold); margin-bottom: 20px;">Connect Your LinkedIn Profile</h3>
-                
-                <button class="linkedin-btn" id="linkedinBtn" onclick="startLinkedInFlow()">
-                    <i class="fab fa-linkedin-in"></i>
-                    <span id="btnText">Connect with LinkedIn</span>
-                </button>
-
-                <div class="processing-steps" id="processingSteps">
-                    <div class="step" id="step1">
-                        <div class="step-icon">1</div>
-                        <span>Connecting to LinkedIn...</span>
-                    </div>
-                    <div class="step" id="step2">
-                        <div class="step-icon">2</div>
-                        <span>Retrieving profile data...</span>
-                    </div>
-                    <div class="step" id="step3">
-                        <div class="step-icon">3</div>
-                        <span>Analyzing professional background...</span>
-                    </div>
-                    <div class="step" id="step4">
-                        <div class="step-icon">4</div>
-                        <span>Structuring profile data...</span>
-                    </div>
-                    <div class="step" id="step5">
-                        <div class="step-icon">5</div>
-                        <span>Updating SociallyFounded profile...</span>
-                    </div>
-                </div>
-
-                <div class="benefits-list">
-                    <h4>What you'll unlock:</h4>
-                    <ul>
-                        <li><i class="fas fa-rocket"></i> Founder Persona - AI-powered idea development with IP protection</li>
-                        <li><i class="fas fa-graduation-cap"></i> Mentor Persona - Guide entrepreneurs and publish research insights</li>
-                        <li><i class="fas fa-handshake"></i> Professional Matching - Connect with verified industry experts</li>
-                        <li><i class="fas fa-chart-line"></i> AI-Structured Profile - Automatically organize your background</li>
-                        <li><i class="fas fa-star"></i> Credibility Score - Boost your professional reputation</li>
-                    </ul>
-                </div>
-
-                <div class="privacy-notice">
-                    <strong>🔒 Privacy Protected:</strong> We only access your basic profile information (name, headline, experience) and email address. Your data is never shared without permission and stored securely.
-                </div>
-            `;
+            // Reset UI
+            document.getElementById('profilePreview').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
             
-            // Reset the integration object
-            window.linkedInIntegration = new LinkedInIntegration();
+            // Reset progress steps
+            const steps = document.querySelectorAll('.progress-step');
+            steps.forEach(step => step.classList.remove('active'));
             
-            alert('Demo reset successfully! You can now test the LinkedIn connection flow again.');
+            currentLinkedInData = null;
         }
 
-        // Initialize system
-        window.linkedInIntegration = new LinkedInIntegration();
-
-        // Handle real LinkedIn OAuth in production
-        if (window.location.hostname !== 'localhost' && 
-            window.location.hostname !== '127.0.0.1' && 
-            !window.location.hash.includes('demo')) {
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already connected
+            checkExistingConnection();
             
-            // In production, replace the mock flow with real LinkedIn OAuth
-            console.log('🔗 Production LinkedIn OAuth would be implemented here');
-            
-            // Real implementation would:
-            // 1. Use actual LinkedIn Client ID: '77tpngrlwmwnz7'
-            // 2. Redirect to LinkedIn OAuth: https://www.linkedin.com/oauth/v2/authorization
-            // 3. Handle callback with real profile data
-            // 4. Validate tokens and store securely
-            // 5. Use backend API for token exchange
-        }
+            // Update back link if needed
+            const backLink = document.getElementById('backLink');
+            if (sfStorage.method === 'url') {
+                backLink.href = 'core/profile.html';
+            }
+        });
 
-        console.log('✅ LinkedIn Integration system loaded');
+        // Debug functions
+        window.linkedinDebug = {
+            storage: sfStorage,
+            reset: resetDemo,
+            skip: () => {
+                const mockData = generateMockLinkedInData();
+                currentLinkedInData = mockData;
+                confirmElevation();
+            }
+        };
     </script>
 </body>
 </html>
