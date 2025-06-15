@@ -227,6 +227,36 @@
             display: none;
         }
 
+        /* Profile preview */
+        .profile-preview {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .profile-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #003554;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
         /* Icons using CSS */
         .icon-google::before {
             content: "🔍";
@@ -308,10 +338,19 @@
         <!-- Success State -->
         <div id="successState" class="hidden">
             <div class="success-message">
-                <strong>Successfully signed in! Your SF Passport has been issued.</strong>
+                <strong>🎉 Welcome! Your SF Passport has been issued.</strong>
             </div>
 
             <div class="welcome-section">
+                <!-- Profile Preview -->
+                <div class="profile-preview" id="profilePreview">
+                    <div class="profile-placeholder" id="profilePhotoPreview">SF</div>
+                    <div>
+                        <div style="font-weight: 600; color: #003554;" id="previewName">Loading...</div>
+                        <div style="font-size: 0.9rem; color: #666;" id="previewEmail">Loading...</div>
+                    </div>
+                </div>
+
                 <h2 style="color: #003554; margin-bottom: 20px;">
                     <span class="icon-celebration"></span>Welcome to SociallyFounded!
                 </h2>
@@ -326,14 +365,6 @@
                         <span class="info-value" id="issuingAuthority">SociallyFounded United States</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">Name:</span>
-                        <span class="info-value" id="userName">Loading...</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Email:</span>
-                        <span class="info-value" id="userEmail">Loading...</span>
-                    </div>
-                    <div class="info-item">
                         <span class="info-label">Member Level:</span>
                         <span class="info-value">Navy Level 1</span>
                     </div>
@@ -341,10 +372,18 @@
                         <span class="info-label">Active Personas:</span>
                         <span class="info-value">Member</span>
                     </div>
+                    <div class="info-item">
+                        <span class="info-label">Photo Source:</span>
+                        <span class="info-value" id="photoSource">Detected automatically</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Profile Status:</span>
+                        <span class="info-value">✅ Ready</span>
+                    </div>
                 </div>
 
                 <button class="continue-btn" onclick="goToProfile()">
-                    Continue to Profile
+                    Continue to Your Passport
                 </button>
             </div>
         </div>
@@ -397,6 +436,10 @@
         window.signInWithGoogle = async function() {
             try {
                 const provider = new GoogleAuthProvider();
+                // Request additional profile information
+                provider.addScope('profile');
+                provider.addScope('email');
+                
                 const result = await signInWithPopup(auth, provider);
                 await createUserDocument(result.user);
             } catch (error) {
@@ -457,11 +500,22 @@
                     // Generate SF Passport ID
                     const passportId = generatePassportId();
                     
+                    // Determine photo source and URL
+                    let photoSource = 'Manual upload';
+                    let inheritedPhotoURL = null;
+                    
+                    if (user.photoURL && user.providerData.some(p => p.providerId === 'google.com')) {
+                        photoSource = 'Google account';
+                        inheritedPhotoURL = user.photoURL;
+                    }
+                    
                     const userData = {
                         uid: user.uid,
                         displayName: user.displayName || user.email?.split('@')[0] || 'SF Member',
                         email: user.email || 'guest@sociallyfounded.com',
                         photoURL: user.photoURL || null,
+                        inheritedPhotoURL: inheritedPhotoURL,
+                        photoSource: photoSource,
                         createdAt: serverTimestamp(),
                         lastLoginAt: serverTimestamp(),
                         
@@ -520,8 +574,20 @@
                     
                     // Update UI with user data
                     document.getElementById('passportId').textContent = userData.sfPassport?.id || 'SF-US-000000';
-                    document.getElementById('userName').textContent = userData.displayName || 'SF Member';
-                    document.getElementById('userEmail').textContent = userData.email || 'guest@sociallyfounded.com';
+                    document.getElementById('previewName').textContent = userData.displayName || 'SF Member';
+                    document.getElementById('previewEmail').textContent = userData.email || 'guest@sociallyfounded.com';
+                    document.getElementById('photoSource').textContent = userData.photoSource || 'Manual upload';
+
+                    // Update profile photo preview
+                    const photoPreview = document.getElementById('profilePhotoPreview');
+                    
+                    if (userData.inheritedPhotoURL || user.photoURL) {
+                        const photoUrl = userData.inheritedPhotoURL || user.photoURL;
+                        photoPreview.innerHTML = `<img src="${photoUrl}" alt="Profile" class="profile-photo">`;
+                    } else {
+                        const initials = (userData.displayName || 'SF').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                        photoPreview.textContent = initials;
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
