@@ -399,56 +399,31 @@
             }
 
             async exchangeCodeForToken(code) {
-                // DEMO MODE: Skip actual token exchange for now
-                // In production, this would call your backend API
-                await this.delay(1000);
-                
-                console.log('🔧 Demo Mode: Simulating token exchange for code:', code);
-                
-                return {
-                    access_token: 'demo_linkedin_token_' + Date.now(),
-                    expires_in: 3600,
-                    scope: 'openid profile email'
-                };
+                // Call your backend API for secure token exchange
+                const response = await fetch('/api/linkedin/exchange-token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        code: code,
+                        state: this.state,
+                        redirectUri: window.location.origin + '/linkedin-callback.html'
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Token exchange failed');
+                }
+
+                const data = await response.json();
+                return data;
             }
 
-            async fetchLinkedInProfile(accessToken) {
-                // DEMO MODE: Return realistic profile data
-                await this.delay(1200);
-                
-                console.log('🔧 Demo Mode: Simulating profile fetch with token:', accessToken);
-                
-                // Return demo profile based on your business
-                return {
-                    id: 'linkedin_' + Date.now(),
-                    name: 'Srikanth Gaurav',
-                    given_name: 'Srikanth',
-                    family_name: 'Gaurav', 
-                    email: 'srikanth@sociallyfounded.com',
-                    picture: null,
-                    locale: 'en_US',
-                    // Additional demo data
-                    headline: 'CEO & Co-Founder at SociallyFounded | Entrepreneur | Business Transformation Expert',
-                    industry: 'Technology',
-                    positions: [
-                        {
-                            title: 'CEO & Co-Founder',
-                            companyName: 'SociallyFounded',
-                            summary: 'Building the future of entrepreneurial communities',
-                            isCurrent: true
-                        },
-                        {
-                            title: 'COO',
-                            companyName: 'RheinBrücke IT Consulting',
-                            summary: 'Led operational excellence and business transformation'
-                        }
-                    ],
-                    skills: [
-                        'Business Transformation', 'Entrepreneurship', 'Strategic Planning',
-                        'Operational Excellence', 'Technology Innovation', 'Leadership',
-                        'Product Management', 'Global Delivery', 'AI Integration'
-                    ]
-                };
+            async fetchLinkedInProfile(tokenData) {
+                // Profile data is already returned from backend
+                return tokenData.profile;
             }
 
             async structureProfileData(linkedinData) {
