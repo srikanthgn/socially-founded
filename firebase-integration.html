@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Integration | SociallyFounded</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            color: white;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .integration-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-indicator {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+        .connected { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+        .connecting { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .error { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        .test-results {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .action-button {
+            background: linear-gradient(135deg, #0077b5 0%, #005885 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-weight: 600;
+        }
+        .action-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 119, 181, 0.3);
+        }
+        .success { color: #22c55e; }
+        .error-text { color: #ef4444; }
+        .warning { color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Firebase Integration Status</h1>
+        
+        <div class="integration-card">
+            <h2>Connection Status</h2>
+            <div id="connectionStatus">
+                <span class="status-indicator connecting">Initializing...</span>
+            </div>
+        </div>
+
+        <div class="integration-card">
+            <h2>Database Tests</h2>
+            <button class="action-button" onclick="testFirebaseConnection()">Test Connection</button>
+            <button class="action-button" onclick="testUserOperations()">Test User CRUD</button>
+            <button class="action-button" onclick="testRealtimeUpdates()">Test Real-time</button>
+            <button class="action-button" onclick="clearTestData()">Clear Test Data</button>
+            
+            <div class="test-results" id="testResults">
+                Ready to test Firebase integration...
+            </div>
+        </div>
+
+        <div class="integration-card">
+            <h2>Migration Status</h2>
+            <button class="action-button" onclick="migrateFromLocalStorage()">Migrate localStorage → Firestore</button>
+            <button class="action-button" onclick="validateMigration()">Validate Migration</button>
+            
+            <div class="test-results" id="migrationResults">
+                Migration tools ready...
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase v9 SDK -->
+    <script type="module">
+        // Import Firebase v9 SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            addDoc, 
+            setDoc, 
+            getDoc, 
+            getDocs, 
+            updateDoc, 
+            deleteDoc, 
+            onSnapshot,
+            query,
+            where,
+            orderBy,
+            serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { 
+            getAuth, 
+            signInAnonymously, 
+            onAuthStateChanged,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmoOAqGYGIMKYipg._jPFZYWEGNG6",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994539361659",
+            appId: "1:994539361659:web:fc74D378a4c0B821e406e",
+            measurementId: "G-EVNBZE0BQ0"
+        };
+
+        // Initialize Firebase
+        let app, db, auth;
+        let currentUser = null;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            logResult('✅ Firebase initialized successfully');
+            updateConnectionStatus('connected', 'Firebase Connected');
+            
+            // Listen for auth state changes
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                if (user) {
+                    logResult(`✅ User authenticated: ${user.uid}`);
+                } else {
+                    logResult('ℹ️ No user authenticated');
+                }
+            });
+            
+        } catch (error) {
+            logResult(`❌ Firebase initialization failed: ${error.message}`);
+            updateConnectionStatus('error', 'Connection Failed');
+        }
+
+        // Utility Functions
+        function logResult(message) {
+            const resultsDiv = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            resultsDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function logMigration(message) {
+            const resultsDiv = document.getElementById('migrationResults');
+            const timestamp = new Date().toLocaleTimeString();
+            resultsDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function updateConnectionStatus(status, message) {
+            const statusDiv = document.getElementById('connectionStatus');
+            statusDiv.innerHTML = `<span class="status-indicator ${status}">${message}</span>`;
+        }
+
+        // Test Functions
+        window.testFirebaseConnection = async function() {
+            logResult('🔄 Testing Firebase connection...');
+            
+            try {
+                // Test anonymous authentication
+                const userCredential = await signInAnonymously(auth);
+                logResult(`✅ Anonymous auth successful: ${userCredential.user.uid}`);
+                
+                // Test basic Firestore write
+                const testRef = doc(db, 'test', 'connection-test');
+                await setDoc(testRef, {
+                    message: 'Firebase connection test',
+                    timestamp: serverTimestamp(),
+                    uid: userCredential.user.uid
+                });
+                logResult('✅ Firestore write successful');
+                
+                // Test basic Firestore read
+                const testDoc = await getDoc(testRef);
+                if (testDoc.exists()) {
+                    logResult('✅ Firestore read successful');
+                    logResult(`📄 Document data: ${JSON.stringify(testDoc.data())}`);
+                } else {
+                    logResult('❌ Firestore read failed - document not found');
+                }
+                
+                // Clean up test document
+                await deleteDoc(testRef);
+                logResult('✅ Test cleanup completed');
+                
+            } catch (error) {
+                logResult(`❌ Connection test failed: ${error.message}`);
+            }
+        };
+
+        window.testUserOperations = async function() {
+            logResult('🔄 Testing user CRUD operations...');
+            
+            if (!currentUser) {
+                await signInAnonymously(auth);
+            }
+            
+            try {
+                // Create test user document
+                const userId = currentUser.uid;
+                const userRef = doc(db, 'users', userId);
+                
+                const userData = {
+                    uid: userId,
+                    displayName: 'Test User',
+                    email: 'test@sociallyfounded.com',
+                    createdAt: serverTimestamp(),
+                    sfPassport: {
+                        id: `SF-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-01`,
+                        level: 1,
+                        tier: 'Navy',
+                        experience: 100
+                    },
+                    personas: {
+                        member: { active: true, activatedAt: serverTimestamp() },
+                        founder: { active: false, linkedinVerified: false },
+                        mentor: { active: false, linkedinVerified: false },
+                        host: { active: false, businessVerified: false },
+                        investor: { active: false, accreditationVerified: false }
+                    },
+                    verification: {
+                        linkedin: { verified: false }
+                    }
+                };
+                
+                // CREATE
+                await setDoc(userRef, userData);
+                logResult('✅ User document created');
+                
+                // READ
+                const userDoc = await getDoc(userRef);
+                if (userDoc.exists()) {
+                    logResult('✅ User document read successfully');
+                    logResult(`📄 SF Passport: ${userDoc.data().sfPassport.id}`);
+                }
+                
+                // UPDATE
+                await updateDoc(userRef, {
+                    'personas.founder.active': true,
+                    'personas.founder.linkedinVerified': true,
+                    lastUpdated: serverTimestamp()
+                });
+                logResult('✅ User document updated');
+                
+                // Verify UPDATE
+                const updatedDoc = await getDoc(userRef);
+                if (updatedDoc.data().personas.founder.active) {
+                    logResult('✅ Update verification successful');
+                }
+                
+                // Query test
+                const usersQuery = query(
+                    collection(db, 'users'),
+                    where('personas.member.active', '==', true)
+                );
+                const querySnapshot = await getDocs(usersQuery);
+                logResult(`✅ Query test: Found ${querySnapshot.size} active members`);
+                
+                // Clean up
+                await deleteDoc(userRef);
+                logResult('✅ User CRUD test cleanup completed');
+                
+            } catch (error) {
+                logResult(`❌ User operations test failed: ${error.message}`);
+            }
+        };
+
+        window.testRealtimeUpdates = async function() {
+            logResult('🔄 Testing real-time updates...');
+            
+            try {
+                // Create test document for real-time monitoring
+                const testRef = doc(db, 'test', 'realtime-test');
+                
+                // Set up real-time listener
+                let updateCount = 0;
+                const unsubscribe = onSnapshot(testRef, (doc) => {
+                    updateCount++;
+                    if (doc.exists()) {
+                        logResult(`🔄 Real-time update #${updateCount}: ${JSON.stringify(doc.data())}`);
+                    } else {
+                        logResult(`🔄 Real-time update #${updateCount}: Document deleted`);
+                    }
+                });
+                
+                // Create initial document
+                await setDoc(testRef, {
+                    status: 'initial',
+                    timestamp: serverTimestamp()
+                });
+                
+                // Wait a moment then update
+                setTimeout(async () => {
+                    await updateDoc(testRef, {
+                        status: 'updated',
+                        timestamp: serverTimestamp()
+                    });
+                }, 1000);
+                
+                // Wait another moment then delete
+                setTimeout(async () => {
+                    await deleteDoc(testRef);
+                    unsubscribe(); // Stop listening
+                    logResult('✅ Real-time test completed');
+                }, 2000);
+                
+            } catch (error) {
+                logResult(`❌ Real-time test failed: ${error.message}`);
+            }
+        };
+
+        window.clearTestData = async function() {
+            logResult('🔄 Clearing test data...');
+            
+            try {
+                // Clear test collection
+                const testQuery = query(collection(db, 'test'));
+                const testSnapshot = await getDocs(testQuery);
+                
+                const deletePromises = testSnapshot.docs.map(doc => deleteDoc(doc.ref));
+                await Promise.all(deletePromises);
+                
+                logResult(`✅ Cleared ${testSnapshot.size} test documents`);
+                
+            } catch (error) {
+                logResult(`❌ Clear test data failed: ${error.message}`);
+            }
+        };
+
+        window.migrateFromLocalStorage = async function() {
+            logMigration('🔄 Starting migration from localStorage to Firestore...');
+            
+            try {
+                // Check for existing localStorage data
+                const localStorageKeys = ['sf_user', 'sf_ideas', 'sf_venues', 'sf_checkins'];
+                let migrationData = {};
+                
+                localStorageKeys.forEach(key => {
+                    const data = localStorage.getItem(key);
+                    if (data) {
+                        try {
+                            migrationData[key] = JSON.parse(data);
+                            logMigration(`📦 Found localStorage data for: ${key}`);
+                        } catch (e) {
+                            logMigration(`⚠️ Invalid JSON in localStorage key: ${key}`);
+                        }
+                    }
+                });
+                
+                if (Object.keys(migrationData).length === 0) {
+                    logMigration('ℹ️ No localStorage data found to migrate');
+                    return;
+                }
+                
+                // Ensure user is authenticated
+                if (!currentUser) {
+                    await signInAnonymously(auth);
+                }
+                
+                // Migrate user data
+                if (migrationData.sf_user) {
+                    const userData = migrationData.sf_user;
+                    const userRef = doc(db, 'users', currentUser.uid);
+                    
+                    const firestoreUserData = {
+                        uid: currentUser.uid,
+                        displayName: userData.displayName || userData.professionalProfile?.fullName || 'Migrated User',
+                        email: userData.email || 'migrated@sociallyfounded.com',
+                        createdAt: serverTimestamp(),
+                        migratedAt: serverTimestamp(),
+                        migratedFrom: 'localStorage',
+                        
+                        sfPassport: userData.passport ? {
+                            id: userData.passportId || `SF-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-01`,
+                            level: userData.passport.level || 1,
+                            tier: userData.passport.tier || 'Navy',
+                            experience: userData.passport.experience || 100
+                        } : {
+                            id: `SF-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-01`,
+                            level: 1,
+                            tier: 'Navy',
+                            experience: 100
+                        },
+                        
+                        personas: userData.personas || {
+                            member: { active: true, activatedAt: serverTimestamp() },
+                            founder: { active: false, linkedinVerified: false },
+                            mentor: { active: false, linkedinVerified: false },
+                            host: { active: false, businessVerified: false },
+                            investor: { active: false, accreditationVerified: false }
+                        },
+                        
+                        verification: userData.verification || {
+                            linkedin: { verified: false }
+                        },
+                        
+                        professionalProfile: userData.professionalProfile || null
+                    };
+                    
+                    await setDoc(userRef, firestoreUserData);
+                    logMigration('✅ User data migrated successfully');
+                }
+                
+                // Create migration record
+                const migrationRef = doc(collection(db, 'migrations'));
+                await setDoc(migrationRef, {
+                    userId: currentUser.uid,
+                    migratedAt: serverTimestamp(),
+                    dataTypes: Object.keys(migrationData),
+                    success: true
+                });
+                
+                logMigration('✅ Migration completed successfully');
+                logMigration('💡 You can now safely clear localStorage data');
+                
+            } catch (error) {
+                logMigration(`❌ Migration failed: ${error.message}`);
+            }
+        };
+
+        window.validateMigration = async function() {
+            logMigration('🔄 Validating migration...');
+            
+            try {
+                if (!currentUser) {
+                    logMigration('❌ No authenticated user for validation');
+                    return;
+                }
+                
+                // Check user document
+                const userRef = doc(db, 'users', currentUser.uid);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    logMigration('✅ User document exists in Firestore');
+                    logMigration(`📄 SF Passport: ${userData.sfPassport?.id}`);
+                    logMigration(`👤 Display Name: ${userData.displayName}`);
+                    logMigration(`🎭 Active Personas: ${Object.entries(userData.personas || {}).filter(([_, p]) => p.active).map(([name, _]) => name).join(', ')}`);
+                    
+                    if (userData.migratedFrom === 'localStorage') {
+                        logMigration('✅ Migration metadata confirmed');
+                    }
+                } else {
+                    logMigration('❌ No user document found in Firestore');
+                }
+                
+                // Check migration record
+                const migrationsQuery = query(
+                    collection(db, 'migrations'),
+                    where('userId', '==', currentUser.uid)
+                );
+                const migrationDocs = await getDocs(migrationsQuery);
+                
+                if (migrationDocs.size > 0) {
+                    logMigration(`✅ Found ${migrationDocs.size} migration record(s)`);
+                    migrationDocs.forEach(doc => {
+                        const data = doc.data();
+                        logMigration(`📅 Migration date: ${data.migratedAt?.toDate?.()?.toLocaleString() || 'Unknown'}`);
+                        logMigration(`📦 Migrated data types: ${data.dataTypes?.join(', ') || 'Unknown'}`);
+                    });
+                } else {
+                    logMigration('⚠️ No migration records found');
+                }
+                
+            } catch (error) {
+                logMigration(`❌ Validation failed: ${error.message}`);
+            }
+        };
+
+        // Make Firebase utilities available globally for integration
+        window.SFFirebase = {
+            app,
+            db,
+            auth,
+            // Firestore utilities
+            collection,
+            doc,
+            addDoc,
+            setDoc,
+            getDoc,
+            getDocs,
+            updateDoc,
+            deleteDoc,
+            onSnapshot,
+            query,
+            where,
+            orderBy,
+            serverTimestamp,
+            // Auth utilities
+            signInAnonymously,
+            onAuthStateChanged,
+            // Current user
+            getCurrentUser: () => currentUser
+        };
+
+        logResult('🚀 Firebase Integration Module loaded successfully');
+        logResult('💡 Use SFFirebase global object for database operations');
+    </script>
+</body>
+</html>
