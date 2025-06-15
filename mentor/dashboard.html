@@ -481,18 +481,35 @@
         function checkMentorAccess() {
             const currentUser = JSON.parse(localStorage.getItem('sf_current_user') || '{}');
             
+            console.log('🔧 DEBUG: Checking mentor access for user:', currentUser);
+            
             if (!currentUser.passportId) {
+                console.log('❌ No passport found, redirecting to auth');
                 alert('Please log in first!');
                 window.location.href = '../core/auth.html';
                 return false;
             }
             
-            if (!currentUser.personas || !currentUser.personas.mentor) {
-                alert('Mentor access requires LinkedIn verification. Redirecting to profile...');
+            // More flexible persona check - check for any verification
+            if (!currentUser.verification || !currentUser.verification.linkedin) {
+                console.log('❌ No LinkedIn verification found:', currentUser.verification);
+                alert('Mentor access requires LinkedIn verification. Please complete verification in your profile first.');
                 window.location.href = '../core/profile.html';
                 return false;
             }
             
+            // If LinkedIn verified, auto-unlock mentor persona
+            if (!currentUser.personas) {
+                currentUser.personas = {};
+            }
+            
+            if (!currentUser.personas.mentor) {
+                console.log('🔧 Auto-unlocking mentor persona for verified user');
+                currentUser.personas.mentor = true;
+                localStorage.setItem('sf_current_user', JSON.stringify(currentUser));
+            }
+            
+            console.log('✅ Mentor access granted');
             return true;
         }
 
