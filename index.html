@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Where founding is socially enhanced</title>
+    <title>SociallyFounded - Where Ideas Meet Intelligence | Join the Waitlist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,590 +14,1151 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .auth-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .sf-logo {
-            width: 80px;
-            height: 80px;
-            background: #003554;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px;
-            color: white;
-            font-size: 2rem;
-            font-weight: 700;
-            box-shadow: 0 5px 15px rgba(0, 53, 84, 0.3);
-        }
-
-        .brand-title {
-            font-size: 2rem;
-            font-weight: 700;
+            background: #F5F5F5;
             color: #003554;
-            margin-bottom: 10px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        .brand-tagline {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 40px;
+        /* Network Visualization Background */
+        #networkCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
         }
 
-        .auth-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        /* Subtle passport pattern background */
+        .passport-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            opacity: 0.1;
+            background-image: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 100px,
+                    rgba(212, 175, 55, 0.05) 100px,
+                    rgba(212, 175, 55, 0.05) 200px
+                );
+            pointer-events: none;
         }
 
-        .auth-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
+        /* Floating passport glimpses */
+        .passport-glimpse {
+            position: fixed;
+            width: 60px;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 6px;
+            backdrop-filter: blur(5px);
+            z-index: 2;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            text-align: center;
+            opacity: 0.6;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .auth-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        .passport-glimpse:hover {
+            transform: scale(1.1);
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
         }
 
-        .google-btn {
-            background: white;
-            color: #333;
-            border: 2px solid #e0e0e0;
-        }
-
-        .google-btn:hover {
-            border-color: #4285f4;
-        }
-
-        .email-btn {
-            background: #003554;
+        .passport-glimpse .sf-mini {
+            width: 16px;
+            height: 16px;
+            background: #D4AF37;
+            border-radius: 50%;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6px;
+            font-weight: bold;
             color: white;
         }
 
-        .email-btn:hover {
-            background: #004a6b;
+        .passport-id-preview {
+            font-family: 'Courier New', monospace;
+            font-size: 6px;
+            color: #003554;
+            margin-top: 2px;
         }
 
-        .phone-btn {
-            background: #25d366;
-            color: white;
-        }
-
-        .phone-btn:hover {
-            background: #22c55e;
-        }
-
-        .divider {
-            margin: 20px 0;
-            color: #999;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
             position: relative;
+            z-index: 10;
         }
 
-        .divider::before {
+        .header {
+            text-align: center;
+            margin: 50px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .sf-logo img {
+            height: 80px;
+            width: auto;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .tagline {
+            font-size: 18px;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            color: #003554;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin: 80px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .main-headline {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 30px;
+            animation: slideUp 1s ease-out;
+            color: #003554;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sub-headline {
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 50px;
+            opacity: 0.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: slideUp 1s ease-out 0.3s both;
+            color: #003554;
+        }
+
+        /* Passport curiosity section */
+        /* Stacked passport cards */
+        .passport-showcase {
+            display: flex;
+            justify-content: center;
+            margin: 50px 0;
+            animation: slideUp 1s ease-out 0.4s both;
+            perspective: 1000px;
+        }
+
+        .passport-stack {
+            position: relative;
+            width: 220px;
+            height: 300px;
+            cursor: pointer;
+        }
+
+        .passport-card {
+            position: absolute;
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #D4AF37;
+            transition: all 0.5s ease;
+            width: 200px;
+            height: 280px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            transform-origin: bottom center;
+        }
+
+        .passport-card:nth-child(1) {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); /* Burgundy - Member */
+            z-index: 1;
+            transform: translateY(0px) rotate(-2deg);
+        }
+
+        .passport-card:nth-child(2) {
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%); /* Blue - Founder */
+            z-index: 2;
+            transform: translateY(-10px) rotate(-1deg);
+        }
+
+        .passport-card:nth-child(3) {
+            background: linear-gradient(135deg, #B8860B 0%, #DAA520 100%); /* Gold - Mentor */
+            z-index: 3;
+            transform: translateY(-20px) rotate(0deg);
+        }
+
+        .passport-card:nth-child(4) {
+            background: linear-gradient(135deg, #2C2C54 0%, #40407A 100%); /* Platinum - Investor */
+            z-index: 4;
+            transform: translateY(-30px) rotate(1deg);
+        }
+
+        .passport-stack:hover .passport-card:nth-child(1) {
+            transform: translateY(20px) translateX(-60px) rotate(-5deg);
+        }
+
+        .passport-stack:hover .passport-card:nth-child(2) {
+            transform: translateY(-5px) translateX(-20px) rotate(-2deg);
+        }
+
+        .passport-stack:hover .passport-card:nth-child(3) {
+            transform: translateY(-25px) translateX(20px) rotate(2deg);
+        }
+
+        .passport-stack:hover .passport-card:nth-child(4) {
+            transform: translateY(-45px) translateX(60px) rotate(5deg);
+        }
+
+        .passport-title {
+            font-size: 11px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .passport-sf-emblem {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 3px solid #D4AF37;
+        }
+
+        .passport-sf-emblem img {
+            width: 25px;
+            height: 25px;
+            object-fit: contain;
+        }
+
+        .passport-id {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            color: #D4AF37;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .passport-type {
+            font-size: 13px;
+            color: white;
+            text-align: center;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .passport-status {
+            background: linear-gradient(45deg, #D4AF37, #F7E98E);
+            color: #003554;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .passport-decorative-lines {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 25px;
+            height: 15px;
+            opacity: 0.3;
+        }
+
+        .passport-decorative-lines::before,
+        .passport-decorative-lines::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
+            width: 100%;
             height: 1px;
-            background: #e0e0e0;
+            background: #D4AF37;
         }
 
-        .divider span {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 0 15px;
-            position: relative;
+        .passport-decorative-lines::before {
+            top: 0;
         }
 
-        .guest-btn {
-            background: #f8f9fa;
-            color: #666;
-            border: 2px solid #e0e0e0;
+        .passport-decorative-lines::after {
+            bottom: 0;
         }
 
-        .guest-btn:hover {
-            background: #e9ecef;
+        .passport-security-pattern {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 7px;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
         }
 
-        .success-message {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid #10b981;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            color: #10b981;
+        .passport-hint {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+            color: #003554;
+            font-style: italic;
         }
 
-        .welcome-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .passport-info {
+        .features-preview {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 80px 0;
+            animation: slideUp 1s ease-out 0.6s both;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+            border-color: #D4AF37;
+        }
+
+        .feature-icon {
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #003554, #D4AF37);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.05);
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #003554;
+        }
+
+        .feature-desc {
+            opacity: 0.8;
+            line-height: 1.6;
+            color: #003554;
+        }
+
+        .waitlist-section {
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            margin: 80px 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            animation: slideUp 1s ease-out 0.9s both;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .waitlist-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #003554;
+        }
+
+        .waitlist-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #003554;
+        }
+
+        .early-bird-offer {
+            background: linear-gradient(45deg, #D4AF37, #F7E98E);
+            color: #003554;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .waitlist-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
             margin-bottom: 20px;
             text-align: left;
         }
 
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-        }
-
-        .info-label {
-            color: #666;
-        }
-
-        .info-value {
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
             color: #003554;
-            font-weight: 600;
         }
 
-        .continue-btn {
-            background: #003554;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
+        .form-group input,
+        .form-group select {
             width: 100%;
-            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid rgba(0, 53, 84, 0.3);
+            border-radius: 10px;
+            background: #F5F5F5;
+            color: #003554;
+            font-size: 16px;
             transition: all 0.3s ease;
         }
 
-        .continue-btn:hover {
-            background: #004a6b;
-            transform: translateY(-2px);
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23003554' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 50px;
         }
 
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #003554;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
+        .form-group select option {
+            background: white;
+            color: #003554;
+            padding: 10px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #D4AF37;
+            background: white;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
         }
 
-        .hidden {
-            display: none;
+        .form-group input::placeholder {
+            color: rgba(0, 53, 84, 0.6);
         }
 
-        /* Profile preview */
-        .profile-preview {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-        }
-
-        .profile-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .profile-placeholder {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #003554;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .join-waitlist-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #003554, #D4AF37);
             color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
         }
 
-        /* Icons using CSS */
-        .icon-google::before {
-            content: "🔍";
-            font-size: 1.2rem;
+        .join-waitlist-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.4);
         }
 
-        .icon-email::before {
-            content: "✉️";
-            font-size: 1.2rem;
+        .countdown-section {
+            text-align: center;
+            margin: 60px 0;
+            position: relative;
+            z-index: 10;
         }
 
-        .icon-phone::before {
-            content: "📱";
-            font-size: 1.2rem;
+        .countdown-title {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            color: #003554;
         }
 
-        .icon-user::before {
-            content: "👤";
-            font-size: 1.2rem;
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
         }
 
-        .icon-celebration::before {
-            content: "🎉";
-            font-size: 1.2rem;
-            margin-right: 8px;
+        .countdown-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            min-width: 80px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        @media (max-width: 480px) {
-            .auth-container {
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+            color: #D4AF37;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #003554;
+        }
+
+        .social-proof {
+            text-align: center;
+            margin: 50px 0;
+            opacity: 0.8;
+            position: relative;
+            z-index: 10;
+            color: #003554;
+        }
+
+        .linkedin-follow-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: #0077B5;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .linkedin-follow-btn:hover {
+            background: #005885;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 119, 181, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .qr-section {
+            text-align: center;
+        }
+
+        .qr-code-container {
+            position: relative;
+            display: inline-block;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .qr-code-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.3);
+        }
+
+        .qr-code {
+            display: block;
+        }
+
+        .sf-logo-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid rgba(0, 53, 84, 0.1);
+            margin-top: 80px;
+            position: relative;
+            z-index: 10;
+            color: #003554;
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(45px, #28a745, #34ce57);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        .passport-tooltip {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .main-headline {
+                font-size: 2.5rem;
+            }
+            .waitlist-section {
                 padding: 30px 20px;
             }
-            
-            .brand-title {
-                font-size: 1.5rem;
+            .countdown {
+                gap: 15px;
             }
-            
-            .passport-info {
-                grid-template-columns: 1fr;
+            .countdown-item {
+                min-width: 60px;
+                padding: 15px;
+            }
+            .passport-showcase {
+                flex-direction: column;
+                align-items: center;
+            }
+            .passport-glimpse {
+                display: none;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="auth-container">
-        <!-- Initial Authentication Form -->
-        <div id="authForm">
-            <div class="sf-logo">SF</div>
-            <h1 class="brand-title">SociallyFounded</h1>
-            <p class="brand-tagline">Where founding is socially enhanced</p>
-
-            <div class="auth-buttons">
-                <button class="auth-btn google-btn" onclick="signInWithGoogle()">
-                    <span class="icon-google"></span>
-                    Continue with Google
-                </button>
-                
-                <button class="auth-btn email-btn" onclick="signInWithEmail()">
-                    <span class="icon-email"></span>
-                    Continue with Email
-                </button>
-                
-                <button class="auth-btn phone-btn" onclick="signInWithPhone()">
-                    <span class="icon-phone"></span>
-                    Continue with Phone
-                </button>
-            </div>
-
-            <div class="divider">
-                <span>or</span>
-            </div>
-
-            <button class="auth-btn guest-btn" onclick="continueAsGuest()">
-                <span class="icon-user"></span>
-                Just browsing (Guest)
-            </button>
-        </div>
-
-        <!-- Success State -->
-        <div id="successState" class="hidden">
-            <div class="success-message">
-                <strong>🎉 Welcome! Your SF Passport has been issued.</strong>
-            </div>
-
-            <div class="welcome-section">
-                <!-- Profile Preview -->
-                <div class="profile-preview" id="profilePreview">
-                    <div class="profile-placeholder" id="profilePhotoPreview">SF</div>
-                    <div>
-                        <div style="font-weight: 600; color: #003554;" id="previewName">Loading...</div>
-                        <div style="font-size: 0.9rem; color: #666;" id="previewEmail">Loading...</div>
-                    </div>
-                </div>
-
-                <h2 style="color: #003554; margin-bottom: 20px;">
-                    <span class="icon-celebration"></span>Welcome to SociallyFounded!
-                </h2>
-
-                <div class="passport-info">
-                    <div class="info-item">
-                        <span class="info-label">SF Passport:</span>
-                        <span class="info-value" id="passportId">Generating...</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Issued By:</span>
-                        <span class="info-value" id="issuingAuthority">SociallyFounded United States</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Member Level:</span>
-                        <span class="info-value">Navy Level 1</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Active Personas:</span>
-                        <span class="info-value">Member</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Photo Source:</span>
-                        <span class="info-value" id="photoSource">Detected automatically</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Profile Status:</span>
-                        <span class="info-value">✅ Ready</span>
-                    </div>
-                </div>
-
-                <button class="continue-btn" onclick="goToProfile()">
-                    Continue to Your Passport
-                </button>
-            </div>
-        </div>
+    <canvas id="networkCanvas"></canvas>
+    <div class="passport-pattern"></div>
+    
+    <!-- Floating Passport Glimpses -->
+    <div class="passport-glimpse" style="top: 12%; left: 6%;" data-tooltip="SF Passport System">
+        <div class="sf-mini">SF</div>
+        <div style="font-size: 6px;">PASSPORT</div>
+        <div class="passport-id-preview">SF-***-**</div>
+    </div>
+    <div class="passport-glimpse" style="top: 28%; right: 8%;" data-tooltip="Professional Verification">
+        <div class="sf-mini">SF</div>
+        <div style="font-size: 6px;">VERIFIED</div>
+        <div class="passport-id-preview">SF-***-**</div>
+    </div>
+    <div class="passport-glimpse" style="top: 65%; left: 4%;" data-tooltip="Community Access">
+        <div class="sf-mini">SF</div>
+        <div style="font-size: 6px;">ACCESS</div>
+        <div class="passport-id-preview">SF-***-**</div>
+    </div>
+    <div class="passport-glimpse" style="bottom: 15%; right: 6%;" data-tooltip="Global Network">
+        <div class="sf-mini">SF</div>
+        <div style="font-size: 6px;">GLOBAL</div>
+        <div class="passport-id-preview">SF-***-**</div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { 
-            getAuth, 
-            GoogleAuthProvider, 
-            signInWithPopup, 
-            createUserWithEmailAndPassword,
-            signInWithEmailAndPassword,
-            signInAnonymously,
-            onAuthStateChanged 
-        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc,
-            serverTimestamp 
-        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+    <!-- Tooltip element -->
+    <div class="passport-tooltip" id="tooltip"></div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="sf-logo">
+                <img src="/assets/sf-logo.png" alt="SociallyFounded Logo">
+            </div>
+            <div class="tagline">SociallyFounded</div>
+        </header>
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
-            authDomain: "sociallyfounded-df98f.firebaseapp.com",
-            projectId: "sociallyfounded-df98f",
-            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
-            messagingSenderId: "994533610259",
-            appId: "1:994533610259:web:fe740378a4c000211e40e6",
-            measurementId: "G-EY0BZE30Q0"
-        };
+        <main class="hero-section">
+            <h1 class="main-headline">Where Ideas Meet Intelligence</h1>
+            <p class="sub-headline">The world's first AI-powered platform that takes your startup idea from concept to MVP through real-time collaboration. No coding skills required.</p>
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+            <!-- Stacked Passport Showcase -->
+            <div class="passport-showcase">
+                <div class="passport-stack">
+                    <div class="passport-card">
+                        <div class="passport-decorative-lines"></div>
+                        <div class="passport-header">
+                            <div class="passport-title">SociallyFounded</div>
+                            <div class="passport-sf-emblem">
+                                <img src="/assets/sf-logo.png" alt="SF Logo">
+                            </div>
+                        </div>
+                        <div class="passport-id">SF-240616-01</div>
+                        <div class="passport-type">Member Access</div>
+                        <div class="passport-status">STANDARD</div>
+                        <div class="passport-security-pattern">SF • VERIFIED • 2025</div>
+                    </div>
+                    <div class="passport-card">
+                        <div class="passport-decorative-lines"></div>
+                        <div class="passport-header">
+                            <div class="passport-title">SociallyFounded</div>
+                            <div class="passport-sf-emblem">
+                                <img src="/assets/sf-logo.png" alt="SF Logo">
+                            </div>
+                        </div>
+                        <div class="passport-id">SF-240616-02</div>
+                        <div class="passport-type">Founder Access</div>
+                        <div class="passport-status">ACTIVE</div>
+                        <div class="passport-security-pattern">SF • VERIFIED • 2025</div>
+                    </div>
+                    <div class="passport-card">
+                        <div class="passport-decorative-lines"></div>
+                        <div class="passport-header">
+                            <div class="passport-title">SociallyFounded</div>
+                            <div class="passport-sf-emblem">
+                                <img src="/assets/sf-logo.png" alt="SF Logo">
+                            </div>
+                        </div>
+                        <div class="passport-id">SF-240616-03</div>
+                        <div class="passport-type">Mentor Access</div>
+                        <div class="passport-status">VERIFIED</div>
+                        <div class="passport-security-pattern">SF • VERIFIED • 2025</div>
+                    </div>
+                    <div class="passport-card">
+                        <div class="passport-decorative-lines"></div>
+                        <div class="passport-header">
+                            <div class="passport-title">SociallyFounded</div>
+                            <div class="passport-sf-emblem">
+                                <img src="/assets/sf-logo.png" alt="SF Logo">
+                            </div>
+                        </div>
+                        <div class="passport-id">SF-240616-04</div>
+                        <div class="passport-type">Investor Access</div>
+                        <div class="passport-status">PREMIUM</div>
+                        <div class="passport-security-pattern">SF • VERIFIED • 2025</div>
+                    </div>
+                </div>
+                <div class="passport-hint">Hover to reveal access levels</div>
+            </div>
 
-        // Check if user is already authenticated
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                await showSuccessState(user);
+            <div class="features-preview">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <circle cx="24" cy="24" r="20" stroke="white" stroke-width="2" fill="none"/>
+                            <path d="M16 24l6 6 12-12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="35" cy="13" r="3" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">AI-Powered Idea Incubation</h3>
+                    <p class="feature-desc">From concept to MVP through real-time AI collaboration - no developers needed. Just like our conversation right now!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect x="8" y="16" width="32" height="24" rx="4" stroke="white" stroke-width="2" fill="none"/>
+                            <circle cx="18" cy="26" r="4" stroke="white" stroke-width="2" fill="none"/>
+                            <circle cx="30" cy="26" r="4" stroke="white" stroke-width="2" fill="none"/>
+                            <path d="M24 8v8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Expert Mentorship</h3>
+                    <p class="feature-desc">LinkedIn-verified professionals matched to your specific industry and skill requirements</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect x="8" y="20" width="32" height="20" rx="3" stroke="white" stroke-width="2" fill="none"/>
+                            <circle cx="24" cy="14" r="6" stroke="white" stroke-width="2" fill="none"/>
+                            <path d="M16 30h16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="36" cy="12" r="2" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Community Venues</h3>
+                    <p class="feature-desc">Time-based loyalty rewards at entrepreneur-friendly cafés and co-working spaces</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect x="6" y="12" width="36" height="24" rx="4" stroke="white" stroke-width="2" fill="none"/>
+                            <rect x="12" y="18" width="8" height="12" rx="2" fill="white" opacity="0.7"/>
+                            <rect x="22" y="21" width="8" height="9" rx="2" fill="white" opacity="0.5"/>
+                            <rect x="32" y="24" width="8" height="6" rx="2" fill="white" opacity="0.3"/>
+                            <circle cx="38" cy="10" r="2" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Investor Deal Rooms</h3>
+                    <p class="feature-desc">AI-scored opportunities with automated due diligence and seamless deal flow management</p>
+                </div>
+            </div>
+        </main>
+
+        <section class="waitlist-section">
+            <h2 class="waitlist-title">Join the Founder Revolution</h2>
+            <p class="waitlist-subtitle">Be among the first to experience the future of entrepreneurial collaboration, powered by DIANA AI</p>
+            
+            <div class="early-bird-offer">
+                🎯 FOUNDING MEMBERS: Free Premium Access for 3 Months (Limited to First 100 Members)
+            </div>
+
+            <form class="waitlist-form" id="waitlistForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="founder@startup.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="persona">I'm interested in</label>
+                    <select id="persona" name="persona" required>
+                        <option value="">Select your primary interest</option>
+                        <option value="founder">Founder - Develop my startup idea with AI-enhanced guidance</option>
+                        <option value="mentor">Mentor - Share my expertise with verified professional matching</option>
+                        <option value="venue">Venue Owner - Partner to create entrepreneur community spaces</option>
+                        <option value="investor">Investor - Discover AI-scored opportunities and deal rooms</option>
+                        <option value="partner">Service Partner - Support founders with business solutions</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="referral">How did you hear about us?</label>
+                    <select id="referral" name="referral">
+                        <option value="">Select source</option>
+                        <option value="word-of-mouth">Word of mouth from entrepreneur network</option>
+                        <option value="linkedin">LinkedIn - Professional connections</option>
+                        <option value="social-media">Social media - Innovation communities</option>
+                        <option value="search">Google search - Found us organically</option>
+                        <option value="event">Event or Conference - Startup ecosystem</option>
+                        <option value="4square">4Square Capital - Enterprise connection</option>
+                        <option value="other">Other source</option>
+                    </select>
+                </div>
+                <button type="submit" class="join-waitlist-btn">
+                    Join the Waitlist - It's Free!
+                </button>
+            </form>
+
+            <div class="success-message" id="successMessage">
+                🎉 Welcome to the revolution! Check your email for exclusive founding member details.
+            </div>
+        </section>
+
+        <section class="countdown-section">
+            <h3 class="countdown-title">Platform Launch Countdown</h3>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">30</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="social-proof">
+            <p>🌟 Join entrepreneurs, mentors, and innovators worldwide in shaping the future of startup collaboration</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">First 100 founding members get exclusive access to all premium features</p>
+            
+            <div style="margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                <a href="https://www.linkedin.com/company/sociallyfounded/" target="_blank" class="linkedin-follow-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-right: 10px;">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="currentColor"/>
+                    </svg>
+                    Follow us on LinkedIn
+                </a>
+                
+                <div class="qr-section">
+                    <p style="font-size: 0.9rem; margin-bottom: 15px; opacity: 0.8;">Scan to follow us on LinkedIn</p>
+                    <div class="qr-code-container">
+                        <svg width="120" height="120" viewBox="0 0 120 120" class="qr-code">
+                            <!-- QR Code pattern -->
+                            <rect width="120" height="120" fill="white" rx="8"/>
+                            
+                            <!-- Corner markers -->
+                            <rect x="8" y="8" width="28" height="28" fill="black"/>
+                            <rect x="12" y="12" width="20" height="20" fill="white"/>
+                            <rect x="16" y="16" width="12" height="12" fill="black"/>
+                            
+                            <rect x="84" y="8" width="28" height="28" fill="black"/>
+                            <rect x="88" y="12" width="20" height="20" fill="white"/>
+                            <rect x="92" y="16" width="12" height="12" fill="black"/>
+                            
+                            <rect x="8" y="84" width="28" height="28" fill="black"/>
+                            <rect x="12" y="88" width="20" height="20" fill="white"/>
+                            <rect x="16" y="92" width="12" height="12" fill="black"/>
+                            
+                            <!-- QR pattern dots -->
+                            <rect x="44" y="8" width="4" height="4" fill="black"/>
+                            <rect x="52" y="8" width="4" height="4" fill="black"/>
+                            <rect x="60" y="8" width="4" height="4" fill="black"/>
+                            <rect x="68" y="8" width="4" height="4" fill="black"/>
+                            <rect x="76" y="8" width="4" height="4" fill="black"/>
+                            
+                            <rect x="8" y="44" width="4" height="4" fill="black"/>
+                            <rect x="8" y="52" width="4" height="4" fill="black"/>
+                            <rect x="8" y="60" width="4" height="4" fill="black"/>
+                            <rect x="8" y="68" width="4" height="4" fill="black"/>
+                            <rect x="8" y="76" width="4" height="4" fill="black"/>
+                            
+                            <!-- Data pattern -->
+                            <rect x="44" y="44" width="4" height="4" fill="black"/>
+                            <rect x="52" y="44" width="4" height="4" fill="black"/>
+                            <rect x="60" y="52" width="4" height="4" fill="black"/>
+                            <rect x="68" y="44" width="4" height="4" fill="black"/>
+                            <rect x="76" y="52" width="4" height="4" fill="black"/>
+                            <rect x="84" y="44" width="4" height="4" fill="black"/>
+                            <rect x="92" y="52" width="4" height="4" fill="black"/>
+                            <rect x="100" y="44" width="4" height="4" fill="black"/>
+                            <rect x="108" y="52" width="4" height="4" fill="black"/>
+                            
+                            <rect x="44" y="60" width="4" height="4" fill="black"/>
+                            <rect x="52" y="68" width="4" height="4" fill="black"/>
+                            <rect x="60" y="60" width="4" height="4" fill="black"/>
+                            <rect x="68" y="68" width="4" height="4" fill="black"/>
+                            <rect x="76" y="60" width="4" height="4" fill="black"/>
+                            <rect x="84" y="68" width="4" height="4" fill="black"/>
+                            <rect x="92" y="60" width="4" height="4" fill="black"/>
+                            <rect x="100" y="68" width="4" height="4" fill="black"/>
+                            <rect x="108" y="60" width="4" height="4" fill="black"/>
+                            
+                            <rect x="44" y="76" width="4" height="4" fill="black"/>
+                            <rect x="52" y="84" width="4" height="4" fill="black"/>
+                            <rect x="60" y="76" width="4" height="4" fill="black"/>
+                            <rect x="68" y="84" width="4" height="4" fill="black"/>
+                            <rect x="76" y="76" width="4" height="4" fill="black"/>
+                            <rect x="84" y="84" width="4" height="4" fill="black"/>
+                            <rect x="92" y="76" width="4" height="4" fill="black"/>
+                            <rect x="100" y="84" width="4" height="4" fill="black"/>
+                            <rect x="108" y="76" width="4" height="4" fill="black"/>
+                            
+                            <rect x="44" y="92" width="4" height="4" fill="black"/>
+                            <rect x="52" y="100" width="4" height="4" fill="black"/>
+                            <rect x="60" y="92" width="4" height="4" fill="black"/>
+                            <rect x="68" y="100" width="4" height="4" fill="black"/>
+                            <rect x="76" y="92" width="4" height="4" fill="black"/>
+                            <rect x="84" y="100" width="4" height="4" fill="black"/>
+                            <rect x="92" y="92" width="4" height="4" fill="black"/>
+                            <rect x="100" y="100" width="4" height="4" fill="black"/>
+                            <rect x="108" y="92" width="4" height="4" fill="black"/>
+                        </svg>
+                        
+                        <div class="sf-logo-overlay">
+                            <img src="/assets/sf-logo.png" alt="SF Logo" style="width: 24px; height: 24px; border-radius: 50%; background: white; padding: 2px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2025 SociallyFounded. Where Ideas Meet Intelligence.</p>
+            <p style="margin-top: 10px; opacity: 0.7;">Empowering entrepreneurs worldwide</p>
+        </footer>
+    </div>
+
+    <script>
+        // Network Visualization (Subtle for light background)
+        function initNetworkVisualization() {
+            const canvas = document.getElementById('networkCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            const nodes = [];
+            
+            // Create fewer, more subtle nodes
+            for (let i = 0; i < 30; i++) {
+                nodes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    size: Math.random() * 2 + 1
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Update nodes
+                nodes.forEach(node => {
+                    node.x += node.vx;
+                    node.y += node.vy;
+                    
+                    if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                    if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+                });
+                
+                // Draw subtle connections
+                ctx.strokeStyle = 'rgba(0, 53, 84, 0.08)';
+                ctx.lineWidth = 1;
+                
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const dx = nodes[i].x - nodes[j].x;
+                        const dy = nodes[i].y - nodes[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 200) {
+                            ctx.beginPath();
+                            ctx.moveTo(nodes[i].x, nodes[i].y);
+                            ctx.lineTo(nodes[j].x, nodes[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                
+                // Draw nodes
+                nodes.forEach(node => {
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(212, 175, 55, 0.4)';
+                    ctx.fill();
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        // Passport hover tooltips
+        function initPassportTooltips() {
+            const passports = document.querySelectorAll('.passport-glimpse');
+            const tooltip = document.getElementById('tooltip');
+            
+            passports.forEach(passport => {
+                passport.addEventListener('mouseenter', (e) => {
+                    const tooltipText = e.target.dataset.tooltip;
+                    tooltip.textContent = tooltipText;
+                    tooltip.style.opacity = '1';
+                });
+                
+                passport.addEventListener('mousemove', (e) => {
+                    tooltip.style.left = e.clientX + 10 + 'px';
+                    tooltip.style.top = e.clientY - 30 + 'px';
+                });
+                
+                passport.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        // Countdown timer
+        function updateCountdown() {
+            const launchDate = new Date();
+            launchDate.setDate(launchDate.getDate() + 30);
+            
+            function update() {
+                const now = new Date().getTime();
+                const distance = launchDate.getTime() - now;
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                
+                if (distance < 0) {
+                    document.querySelector('.countdown-section').innerHTML = '<h3>🚀 We\'re Live! Welcome to SociallyFounded!</h3>';
+                }
+            }
+            
+            update();
+            setInterval(update, 1000);
+        }
+
+        // Form handling
+        document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            console.log('Waitlist signup:', data);
+            
+            document.getElementById('successMessage').style.display = 'block';
+            this.style.display = 'none';
+            
+            const waitlistData = JSON.parse(localStorage.getItem('sf_waitlist') || '[]');
+            waitlistData.push({
+                ...data,
+                timestamp: new Date().toISOString(),
+                id: 'WL-' + Date.now()
+            });
+            localStorage.setItem('sf_waitlist', JSON.stringify(waitlistData));
         });
 
-        // Authentication functions
-        window.signInWithGoogle = async function() {
-            try {
-                const provider = new GoogleAuthProvider();
-                // Request additional profile information
-                provider.addScope('profile');
-                provider.addScope('email');
-                
-                const result = await signInWithPopup(auth, provider);
-                await createUserDocument(result.user);
-            } catch (error) {
-                console.error('Google sign in error:', error);
-                alert('Sign in failed. Please try again.');
-            }
-        };
-
-        window.signInWithEmail = async function() {
-            const email = prompt('Enter your email:');
-            if (!email) return;
-
-            const password = prompt('Enter your password (or create a new one):');
-            if (!password) return;
-
-            try {
-                // Try to sign in first
-                try {
-                    const result = await signInWithEmailAndPassword(auth, email, password);
-                    await createUserDocument(result.user);
-                } catch (signInError) {
-                    // If sign in fails, try to create new account
-                    if (signInError.code === 'auth/user-not-found') {
-                        const result = await createUserWithEmailAndPassword(auth, email, password);
-                        await createUserDocument(result.user);
-                    } else {
-                        throw signInError;
-                    }
-                }
-            } catch (error) {
-                console.error('Email sign in error:', error);
-                alert('Sign in failed. Please check your email and password.');
-            }
-        };
-
-        window.signInWithPhone = async function() {
-            // For now, use anonymous auth as phone auth requires additional setup
-            alert('Phone authentication coming soon! Using guest access for now.');
-            await continueAsGuest();
-        };
-
-        window.continueAsGuest = async function() {
-            try {
-                const result = await signInAnonymously(auth);
-                await createUserDocument(result.user);
-            } catch (error) {
-                console.error('Anonymous sign in error:', error);
-                alert('Guest access failed. Please try again.');
-            }
-        };
-
-        async function createUserDocument(user) {
-            try {
-                const userRef = doc(db, 'users', user.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (!userSnap.exists()) {
-                    // Generate SF Passport ID
-                    const passportId = generatePassportId();
-                    
-                    // Determine photo source and URL
-                    let photoSource = 'Manual upload';
-                    let inheritedPhotoURL = null;
-                    
-                    if (user.photoURL && user.providerData.some(p => p.providerId === 'google.com')) {
-                        photoSource = 'Google account';
-                        inheritedPhotoURL = user.photoURL;
-                    }
-                    
-                    const userData = {
-                        uid: user.uid,
-                        displayName: user.displayName || user.email?.split('@')[0] || 'SF Member',
-                        email: user.email || 'guest@sociallyfounded.com',
-                        photoURL: user.photoURL || null,
-                        inheritedPhotoURL: inheritedPhotoURL,
-                        photoSource: photoSource,
-                        createdAt: serverTimestamp(),
-                        lastLoginAt: serverTimestamp(),
-                        
-                        sfPassport: {
-                            id: passportId,
-                            level: 1,
-                            tier: 'Navy',
-                            experience: 0
-                        },
-                        
-                        personas: {
-                            member: { active: true, activatedAt: serverTimestamp() }
-                        },
-                        
-                        verification: {
-                            linkedin: { verified: false }
-                        }
-                    };
-
-                    await setDoc(userRef, userData);
-                } else {
-                    // Update last login
-                    await setDoc(userRef, { 
-                        lastLoginAt: serverTimestamp() 
-                    }, { merge: true });
-                }
-
-                await showSuccessState(user);
-            } catch (error) {
-                console.error('Error creating user document:', error);
-                alert('Account setup failed. Please try again.');
-            }
-        }
-
-        function generatePassportId() {
-            // Simple ID generation - in production, this would be more sophisticated
-            const year = new Date().getFullYear().toString().slice(-2);
-            const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-            const day = new Date().getDate().toString().padStart(2, '0');
-            const random = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-            return `SF-US-${year}${month}${day}${random}`;
-        }
-
-        async function showSuccessState(user) {
-            // Hide auth form, show success
-            document.getElementById('authForm').classList.add('hidden');
-            document.getElementById('successState').classList.remove('hidden');
-
-            // Get user data from Firestore
-            try {
-                const userRef = doc(db, 'users', user.uid);
-                const userSnap = await getDoc(userRef);
-                
-                if (userSnap.exists()) {
-                    const userData = userSnap.data();
-                    
-                    // Update UI with user data
-                    document.getElementById('passportId').textContent = userData.sfPassport?.id || 'SF-US-000000';
-                    document.getElementById('previewName').textContent = userData.displayName || 'SF Member';
-                    document.getElementById('previewEmail').textContent = userData.email || 'guest@sociallyfounded.com';
-                    document.getElementById('photoSource').textContent = userData.photoSource || 'Manual upload';
-
-                    // Update profile photo preview
-                    const photoPreview = document.getElementById('profilePhotoPreview');
-                    
-                    if (userData.inheritedPhotoURL || user.photoURL) {
-                        const photoUrl = userData.inheritedPhotoURL || user.photoURL;
-                        photoPreview.innerHTML = `<img src="${photoUrl}" alt="Profile" class="profile-photo">`;
-                    } else {
-                        const initials = (userData.displayName || 'SF').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-                        photoPreview.textContent = initials;
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        }
-
-        window.goToProfile = function() {
-            window.location.href = '/core/passport.html';
-        };
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initNetworkVisualization();
+            initPassportTooltips();
+            updateCountdown();
+        });
     </script>
 </body>
 </html>
