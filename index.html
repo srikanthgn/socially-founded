@@ -86,8 +86,8 @@
 
         .content-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 60px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
             align-items: start;
         }
 
@@ -180,21 +180,21 @@
             background: #FFFFFF;
             border: 1px solid rgba(0, 53, 84, 0.1);
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px 25px;
             box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
         }
 
         .signup-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-align: center;
         }
 
         .signup-subtitle {
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0.8;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-align: center;
         }
 
@@ -202,8 +202,8 @@
         .smart-signup {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .smart-btn {
@@ -211,19 +211,19 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 25px 20px;
+            gap: 6px;
+            padding: 20px 15px;
             border: 2px solid #003554;
-            border-radius: 15px;
+            border-radius: 12px;
             background: #FFFFFF;
             color: #003554;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             font-family: 'Poppins', sans-serif;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            min-height: 100px;
+            min-height: 80px;
         }
 
         .smart-btn:hover {
@@ -234,8 +234,8 @@
         }
 
         .smart-btn-icon {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             fill: currentColor;
         }
 
@@ -357,15 +357,15 @@
 
         /* LinkedIn Section */
         .linkedin-section {
-            margin-top: 30px;
-            padding-top: 30px;
+            margin-top: 20px;
+            padding-top: 20px;
             border-top: 1px solid rgba(0, 53, 84, 0.1);
             text-align: center;
         }
 
         .linkedin-text {
-            font-size: 14px;
-            margin-bottom: 15px;
+            font-size: 12px;
+            margin-bottom: 12px;
             opacity: 0.8;
             color: #003554;
         }
@@ -459,7 +459,7 @@
         }
 
         /* Mobile Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 968px) {
             .content-grid {
                 grid-template-columns: 1fr;
                 gap: 30px;
@@ -474,12 +474,23 @@
             }
 
             .signup-section {
-                padding: 30px 20px;
+                padding: 25px 20px;
             }
 
             .passport-cards {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .passport-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .hero-title {
+                font-size: 36px;
             }
         }
 
@@ -493,7 +504,7 @@
             }
 
             .hero-title {
-                font-size: 32px;
+                font-size: 28px;
             }
 
             .subtitle {
@@ -501,7 +512,7 @@
             }
 
             .signup-title {
-                font-size: 24px;
+                font-size: 20px;
             }
 
             .passport-cards {
@@ -529,8 +540,8 @@
             <p class="subtitle">The future of entrepreneurial collaboration is coming. Join the waitlist to be first in line.</p>
             
             <div class="content-grid">
-                <!-- Left Content -->
-                <div class="left-content">
+                <!-- Left Content - Passport Cards -->
+                <div class="cards-content">
                     <!-- Passport Cards -->
                     <div class="passport-cards">
                         <div class="passport-card">
@@ -576,7 +587,10 @@
                             <div class="passport-desc">Service providers & resources</div>
                         </div>
                     </div>
+                </div>
 
+                <!-- Center Content - Features -->
+                <div class="features-content">
                     <!-- Features -->
                     <ul class="features-list">
                         <li>
@@ -620,8 +634,8 @@
 
                 <!-- Right Content - Signup Form -->
                 <div class="signup-section">
-                    <h2 class="signup-title">World's Easiest Signup</h2>
-                    <p class="signup-subtitle">One tap. That's it. We'll figure out the rest.</p>
+                    <h2 class="signup-title">Sign Up</h2>
+                    <p class="signup-subtitle">One Tap</p>
 
                     <!-- Smart Signup Options -->
                     <div class="smart-signup">
