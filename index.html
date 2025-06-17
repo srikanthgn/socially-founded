@@ -460,7 +460,35 @@
             background: #004a6b;
         }
 
-        /* Mobile Responsive */
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding: 30px 0;
+            border-top: 1px solid rgba(0, 53, 84, 0.1);
+            text-align: center;
+            color: #003554;
+            opacity: 0.7;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .footer-links {
+            font-size: 12px;
+        }
+
+        .footer-link {
+            color: #003554;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
         @media (max-width: 968px) {
             .content-grid {
                 grid-template-columns: 1fr;
@@ -706,6 +734,16 @@
                 </div>
             </div>
         </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-text">© 2025 SociallyFounded. All rights reserved.</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+        </footer>
     </div>
 
     <!-- Success Modal -->
