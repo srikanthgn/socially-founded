@@ -319,7 +319,7 @@
             background: var(--white);
             border: 1px solid rgba(0, 53, 84, 0.1);
             border-radius: 20px;
-            padding: 20px 15px;
+            padding: 30px 25px;
             box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
         }
 
@@ -337,103 +337,71 @@
             text-align: center;
         }
 
-        /* Smart Signup Options */
-        .smart-signup {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
+        /* Smart Signup Grid */
+        .smart-signup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .smart-btn {
+        .smart-grid-btn {
+            aspect-ratio: 1;
+            border: 2px solid var(--deep-navy);
+            border-radius: 12px;
+            background: var(--white);
+            color: var(--deep-navy);
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 12px 15px;
-            border: 2px solid var(--deep-navy);
-            border-radius: 10px;
-            background: var(--white);
-            color: var(--deep-navy);
-            font-size: 14px;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            min-height: 50px;
+            padding: 20px;
         }
 
-        .smart-btn:hover {
+        .smart-grid-btn:hover {
             background: var(--deep-navy);
             color: var(--white);
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 53, 84, 0.3);
         }
 
-        .smart-btn-icon {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
-
-        .smart-btn.primary {
+        .smart-grid-btn.primary {
             background: var(--accent-gold);
             border-color: var(--accent-gold);
             color: var(--deep-navy);
         }
 
-        .smart-btn.primary:hover {
+        .smart-grid-btn.primary:hover {
             background: var(--accent-gold-hover);
             border-color: var(--accent-gold-hover);
             color: var(--deep-navy);
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-            color: var(--deep-navy);
-            opacity: 0.6;
+        .smart-grid-btn svg {
+            width: 40px;
+            height: 40px;
+            fill: currentColor;
         }
 
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(0, 53, 84, 0.2);
-        }
-
-        .divider span {
-            padding: 0 15px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .manual-form {
+        /* Hide old button styles */
+        .smart-signup,
+        .smart-btn,
+        .smart-btn-icon {
             display: none;
         }
 
-        .manual-form.show {
-            display: block;
+        .divider {
+            display: none;
         }
 
         .manual-toggle {
+            display: none;
+        }
+
+        .manual-form-toggle {
             text-align: center;
-            margin-top: 10px;
-        }
-
-        .manual-link {
-            color: var(--deep-navy);
-            text-decoration: none;
-            font-size: 14px;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .manual-link:hover {
-            opacity: 1;
+            margin-top: 15px;
         }
 
         .form-group {
@@ -838,35 +806,44 @@
                     <h2 class="signup-title">Start Your Journey</h2>
                     <p class="signup-subtitle">Join in seconds</p>
 
-                    <!-- Smart Signup Options -->
-                    <div class="smart-signup">
-                        <button class="smart-btn primary" onclick="smartSignup('qr')">
-                            <svg class="smart-btn-icon" viewBox="0 0 24 24">
+                    <!-- Smart Signup Grid -->
+                    <div class="smart-signup-grid">
+                        <button class="smart-grid-btn primary" onclick="smartSignup('qr')" title="Smart Scan">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 13h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 19h2v2h-2zM19 17h2v2h-2z"/>
                             </svg>
-                            📱 Smart Scan
                         </button>
 
-                        <button class="smart-btn" onclick="smartSignup('linkedin')">
-                            <svg class="smart-btn-icon" viewBox="0 0 24 24">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                            LinkedIn Import
-                        </button>
-
-                        <button class="smart-btn" onclick="smartSignup('google')">
-                            <svg class="smart-btn-icon" viewBox="0 0 24 24">
+                        <button class="smart-grid-btn" onclick="smartSignup('google')" title="Google Sign In">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                             </svg>
-                            Google Import
+                        </button>
+
+                        <button class="smart-grid-btn" onclick="smartSignup('linkedin')" title="LinkedIn Sign In">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </button>
+
+                        <button class="smart-grid-btn" onclick="toggleManualForm()" title="Email Sign Up">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
                         </button>
                     </div>
 
-                    <div class="divider">
-                        <span>or if you prefer the old way</span>
+                    <div class="linkedin-section">
+                        <p class="linkedin-text">Follow our journey and get updates</p>
+                        <a href="https://linkedin.com/company/sociallyfounded" target="_blank" class="linkedin-btn">
+                            <svg class="linkedin-icon" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                            Follow on LinkedIn
+                        </a>
                     </div>
 
                     <!-- Traditional Form (Hidden by Default) -->
@@ -889,8 +866,8 @@
                         <button type="submit" class="signup-btn">Join Waitlist</button>
                     </form>
 
-                    <div class="manual-toggle">
-                        <a href="#" class="manual-link" onclick="toggleManualForm()">Prefer manual entry?</a>
+                    <div class="manual-toggle manual-form-toggle" style="display: none;">
+                        <a href="#" class="manual-link" onclick="toggleManualForm()">Back to options</a>
                     </div>
                 </div>
             </div>
@@ -1008,16 +985,19 @@
 
         function toggleManualForm() {
             const form = document.getElementById('waitlistForm');
-            const smartSignup = document.querySelector('.smart-signup');
-            const toggle = document.querySelector('.manual-toggle');
+            const grid = document.querySelector('.smart-signup-grid');
+            const toggle = document.querySelector('.manual-form-toggle');
+            const linkedinSection = document.querySelector('.linkedin-section');
             
             form.classList.toggle('show');
             if (form.classList.contains('show')) {
-                smartSignup.style.display = 'none';
-                toggle.querySelector('a').textContent = 'Back to smart signup';
+                grid.style.display = 'none';
+                linkedinSection.style.display = 'none';
+                toggle.style.display = 'block';
             } else {
-                smartSignup.style.display = 'flex';
-                toggle.querySelector('a').textContent = 'Prefer manual entry?';
+                grid.style.display = 'grid';
+                linkedinSection.style.display = 'block';
+                toggle.style.display = 'none';
             }
         }
 
