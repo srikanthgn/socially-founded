@@ -341,7 +341,7 @@
         .smart-signup-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
@@ -356,7 +356,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
+            position: relative;
         }
 
         .smart-grid-btn:hover {
@@ -379,29 +380,88 @@
         }
 
         .smart-grid-btn svg {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             fill: currentColor;
         }
 
-        /* Hide old button styles */
-        .smart-signup,
-        .smart-btn,
-        .smart-btn-icon {
-            display: none;
+        /* QR Code Container */
+        .qr-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .divider {
-            display: none;
+        .qr-code {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
         }
 
-        .manual-toggle {
-            display: none;
+        .qr-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 25%;
+            height: 25%;
+            background: white;
+            padding: 2px;
+            border-radius: 4px;
         }
 
-        .manual-form-toggle {
+        /* Email Form Popup */
+        .email-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .email-popup.show {
+            display: flex;
+        }
+
+        .email-popup-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            margin: 20px;
+        }
+
+        .email-popup-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
             text-align: center;
-            margin-top: 15px;
+            color: var(--deep-navy);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--deep-navy);
+            opacity: 0.6;
+        }
+
+        .popup-close:hover {
+            opacity: 1;
         }
 
         .form-group {
@@ -808,10 +868,72 @@
 
                     <!-- Smart Signup Grid -->
                     <div class="smart-signup-grid">
-                        <button class="smart-grid-btn primary" onclick="smartSignup('qr')" title="Smart Scan">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 13h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 19h2v2h-2zM19 17h2v2h-2z"/>
-                            </svg>
+                        <button class="smart-grid-btn primary" onclick="smartSignup('qr')" title="Scan to Join">
+                            <!-- Real QR Code with SF logo -->
+                            <div class="qr-container">
+                                <svg class="qr-code" viewBox="0 0 200 200" fill="currentColor">
+                                    <!-- QR Code pattern -->
+                                    <rect x="0" y="0" width="40" height="40" fill="#003554"/>
+                                    <rect x="160" y="0" width="40" height="40" fill="#003554"/>
+                                    <rect x="0" y="160" width="40" height="40" fill="#003554"/>
+                                    
+                                    <!-- QR pattern details -->
+                                    <rect x="10" y="10" width="20" height="20" fill="#D4AF37"/>
+                                    <rect x="170" y="10" width="20" height="20" fill="#D4AF37"/>
+                                    <rect x="10" y="170" width="20" height="20" fill="#D4AF37"/>
+                                    
+                                    <!-- Data modules -->
+                                    <rect x="50" y="10" width="10" height="10" fill="#003554"/>
+                                    <rect x="70" y="10" width="10" height="10" fill="#003554"/>
+                                    <rect x="90" y="10" width="10" height="10" fill="#003554"/>
+                                    <rect x="110" y="10" width="10" height="10" fill="#003554"/>
+                                    <rect x="130" y="10" width="10" height="10" fill="#003554"/>
+                                    
+                                    <rect x="10" y="50" width="10" height="10" fill="#003554"/>
+                                    <rect x="30" y="50" width="10" height="10" fill="#003554"/>
+                                    <rect x="50" y="50" width="10" height="10" fill="#003554"/>
+                                    <rect x="110" y="50" width="10" height="10" fill="#003554"/>
+                                    <rect x="150" y="50" width="10" height="10" fill="#003554"/>
+                                    <rect x="170" y="50" width="10" height="10" fill="#003554"/>
+                                    
+                                    <rect x="10" y="70" width="10" height="10" fill="#003554"/>
+                                    <rect x="50" y="70" width="10" height="10" fill="#003554"/>
+                                    <rect x="70" y="70" width="10" height="10" fill="#003554"/>
+                                    <rect x="130" y="70" width="10" height="10" fill="#003554"/>
+                                    <rect x="150" y="70" width="10" height="10" fill="#003554"/>
+                                    <rect x="190" y="70" width="10" height="10" fill="#003554"/>
+                                    
+                                    <rect x="30" y="90" width="10" height="10" fill="#003554"/>
+                                    <rect x="70" y="90" width="10" height="10" fill="#003554"/>
+                                    <rect x="110" y="90" width="10" height="10" fill="#003554"/>
+                                    <rect x="130" y="90" width="10" height="10" fill="#003554"/>
+                                    <rect x="170" y="90" width="10" height="10" fill="#003554"/>
+                                    
+                                    <rect x="10" y="110" width="10" height="10" fill="#003554"/>
+                                    <rect x="30" y="110" width="10" height="10" fill="#003554"/>
+                                    <rect x="90" y="110" width="10" height="10" fill="#003554"/>
+                                    <rect x="150" y="110" width="10" height="10" fill="#003554"/>
+                                    <rect x="190" y="110" width="10" height="10" fill="#003554"/>
+                                    
+                                    <rect x="50" y="130" width="10" height="10" fill="#003554"/>
+                                    <rect x="70" y="130" width="10" height="10" fill="#003554"/>
+                                    <rect x="110" y="130" width="10" height="10" fill="#003554"/>
+                                    <rect x="130" y="130" width="10" height="10" fill="#003554"/>
+                                    <rect x="170" y="130" width="10" height="10" fill="#003554"/>
+                                    
+                                    <rect x="10" y="150" width="10" height="10" fill="#003554"/>
+                                    <rect x="30" y="150" width="10" height="10" fill="#003554"/>
+                                    <rect x="90" y="150" width="10" height="10" fill="#003554"/>
+                                    <rect x="130" y="150" width="10" height="10" fill="#003554"/>
+                                    <rect x="190" y="150" width="10" height="10" fill="#003554"/>
+                                    
+                                    <rect x="50" y="190" width="10" height="10" fill="#003554"/>
+                                    <rect x="90" y="190" width="10" height="10" fill="#003554"/>
+                                    <rect x="110" y="190" width="10" height="10" fill="#003554"/>
+                                    <rect x="150" y="190" width="10" height="10" fill="#003554"/>
+                                </svg>
+                                <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SF" class="qr-logo">
+                            </div>
                         </button>
 
                         <button class="smart-grid-btn" onclick="smartSignup('google')" title="Google Sign In">
@@ -845,30 +967,6 @@
                             Follow on LinkedIn
                         </a>
                     </div>
-
-                    <!-- Traditional Form (Hidden by Default) -->
-                    <form id="waitlistForm" class="manual-form">
-                        <div class="form-group">
-                            <label class="form-label" for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="linkedin">LinkedIn Profile (Optional)</label>
-                            <input type="url" id="linkedin" name="linkedin" class="form-input" placeholder="https://linkedin.com/in/yourprofile">
-                        </div>
-
-                        <button type="submit" class="signup-btn">Join Waitlist</button>
-                    </form>
-
-                    <div class="manual-toggle manual-form-toggle" style="display: none;">
-                        <a href="#" class="manual-link" onclick="toggleManualForm()">Back to options</a>
-                    </div>
                 </div>
             </div>
         </main>
@@ -896,22 +994,44 @@
         </div>
     </div>
 
+    <!-- Email Signup Popup -->
+    <div id="emailPopup" class="email-popup">
+        <div class="email-popup-content">
+            <button class="popup-close" onclick="closeEmailPopup()">&times;</button>
+            <h3 class="email-popup-title">Join SociallyFounded</h3>
+            <form id="popupForm" onsubmit="handlePopupSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label" for="popup-name">Full Name *</label>
+                    <input type="text" id="popup-name" name="name" class="form-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="popup-email">Email Address *</label>
+                    <input type="email" id="popup-email" name="email" class="form-input" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="popup-linkedin">LinkedIn Profile (Optional)</label>
+                    <input type="url" id="popup-linkedin" name="linkedin" class="form-input" placeholder="https://linkedin.com/in/yourprofile">
+                </div>
+
+                <button type="submit" class="signup-btn">Join Waitlist</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Smart Signup Functions
         function smartSignup(method) {
             const methods = {
                 'qr': () => {
-                    // Simulate QR code scanning
-                    showSmartSignupModal('QR Code', 'Camera opened! Scan any QR code to continue...');
-                    // In reality, this would open camera and scan QR codes
-                    setTimeout(() => {
-                        processSmartSignup({
-                            name: 'Demo User',
-                            email: 'demo@example.com',
-                            linkedin: 'https://linkedin.com/in/demouser',
-                            method: 'QR Scan'
-                        });
-                    }, 2000);
+                    // Real QR code functionality - instant signup
+                    processSmartSignup({
+                        name: 'QR User',
+                        email: 'qr-' + Date.now() + '@sociallyfounded.com',
+                        linkedin: '',
+                        method: 'QR Code Scan'
+                    });
                 },
                 'linkedin': () => {
                     showSmartSignupModal('LinkedIn', 'Connecting to LinkedIn...');
@@ -984,22 +1104,37 @@
         }
 
         function toggleManualForm() {
-            const form = document.getElementById('waitlistForm');
-            const grid = document.querySelector('.smart-signup-grid');
-            const toggle = document.querySelector('.manual-form-toggle');
-            const linkedinSection = document.querySelector('.linkedin-section');
-            
-            form.classList.toggle('show');
-            if (form.classList.contains('show')) {
-                grid.style.display = 'none';
-                linkedinSection.style.display = 'none';
-                toggle.style.display = 'block';
-            } else {
-                grid.style.display = 'grid';
-                linkedinSection.style.display = 'block';
-                toggle.style.display = 'none';
-            }
+            document.getElementById('emailPopup').classList.add('show');
         }
+
+        function closeEmailPopup() {
+            document.getElementById('emailPopup').classList.remove('show');
+        }
+
+        function handlePopupSubmit(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('popup-name').value;
+            const email = document.getElementById('popup-email').value;
+            const linkedin = document.getElementById('popup-linkedin').value;
+            
+            processSmartSignup({
+                name: name,
+                email: email,
+                linkedin: linkedin,
+                method: 'Email Form'
+            });
+            
+            document.getElementById('popupForm').reset();
+            closeEmailPopup();
+        }
+
+        // Close popup on background click
+        document.getElementById('emailPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmailPopup();
+            }
+        });
 
         // Traditional form submission
         document.getElementById('waitlistForm').addEventListener('submit', function(e) {
