@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SociallyFounded - Member Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #003554, #D4AF37);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .notifications {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #D4AF37;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #003554;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 10px;
+            min-width: 200px;
+            display: none;
+        }
+        
+        .user-dropdown.active {
+            display: block;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .dropdown-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+            color: #003554;
+        }
+        
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        .welcome-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .welcome-text h1 {
+            font-size: 28px;
+            color: #003554;
+            margin-bottom: 5px;
+        }
+        
+        .welcome-text p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        /* SF Passport Card */
+        .sf-passport {
+            background: linear-gradient(135deg, #003554, #004a6b);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,53,84,0.3);
+            position: relative;
+            overflow: hidden;
+            min-width: 280px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .sf-passport:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,53,84,0.4);
+        }
+        
+        .sf-passport::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+        }
+        
+        .passport-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .passport-tier {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        
+        .passport-id {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .passport-name {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #003554, #D4AF37);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #003554;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .stat-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #4caf50;
+            margin-top: 8px;
+        }
+        
+        /* Action Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .action-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: #003554;
+            transition: all 0.3s ease;
+        }
+        
+        .action-card:hover .action-icon {
+            background: linear-gradient(135deg, #003554, #004a6b);
+            color: white;
+        }
+        
+        .action-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #003554;
+            margin-bottom: 10px;
+        }
+        
+        .action-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Activity Feed */
+        .activity-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #003554;
+        }
+        
+        .view-all {
+            color: #003554;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #003554;
+            flex-shrink: 0;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .activity-time {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        /* Diana Assistant */
+        .diana-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #D4AF37, #F4E5A3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(212,175,55,0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .diana-assistant:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(212,175,55,0.5);
+        }
+        
+        .diana-icon {
+            font-size: 28px;
+            color: white;
+        }
+        
+        .diana-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #D4AF37, #F4E5A3);
+            opacity: 0.3;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+        }
+        
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #003554;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Bottom Navigation (Mobile) */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 20px;
+            text-decoration: none;
+            color: #666;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item.active {
+            color: #003554;
+        }
+        
+        .nav-item i {
+            font-size: 20px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 15px;
+            }
+            
+            .main-container {
+                padding: 20px 15px 80px;
+            }
+            
+            .welcome-section {
+                padding: 20px;
+            }
+            
+            .welcome-text h1 {
+                font-size: 24px;
+            }
+            
+            .sf-passport {
+                min-width: 100%;
+                margin-top: 20px;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .stat-card {
+                padding: 20px;
+            }
+            
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .bottom-nav {
+                display: block;
+            }
+            
+            .diana-assistant {
+                bottom: 80px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">SF</div>
+                <h2 style="font-size: 20px; color: #003554;">SociallyFounded</h2>
+            </div>
+            
+            <div class="user-menu">
+                <div class="notifications">
+                    <i class="fas fa-bell" style="font-size: 20px; color: #666;"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-avatar" id="userAvatar" onclick="toggleUserDropdown()">
+                    <span id="userInitial">?</span>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="/member/profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="/member/settings.html" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <div class="dropdown-item" onclick="signOut()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Sign Out</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Loading State -->
+        <div id="loadingContainer" class="loading-container">
+            <div class="loading-spinner"></div>
+        </div>
+        
+        <!-- Dashboard Content (Hidden initially) -->
+        <div id="dashboardContent" style="display: none;">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="welcome-header">
+                    <div class="welcome-text">
+                        <h1>Welcome back, <span id="userName">Member</span>!</h1>
+                        <p>Ready to connect with the entrepreneurial community?</p>
+                    </div>
+                    
+                    <!-- SF Passport -->
+                    <div class="sf-passport">
+                        <div class="passport-header">
+                            <span class="passport-tier">NAVY TIER</span>
+                            <i class="fas fa-passport" style="font-size: 24px; opacity: 0.8;"></i>
+                        </div>
+                        <div class="passport-id" id="passportId">SF-00000000-00</div>
+                        <div class="passport-name" id="passportName">Loading...</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Quick Stats -->
+            <section class="quick-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="stat-value" id="venuesVisited">0</div>
+                    <div class="stat-label">Venues Visited</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+2 this week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value" id="connections">0</div>
+                    <div class="stat-label">Connections</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+5 this month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value" id="networkHours">0h</div>
+                    <div class="stat-label">Network Hours</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+3h this week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="stat-value" id="loyaltyPoints">0</div>
+                    <div class="stat-label">Loyalty Points</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+50 this week</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Action Grid -->
+            <section class="action-grid">
+                <a href="/member/venues.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-search-location"></i>
+                    </div>
+                    <h3 class="action-title">Discover Venues</h3>
+                    <p class="action-description">Find entrepreneurial spaces near you and check in to earn rewards</p>
+                </a>
+                
+                <a href="/member/network.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3 class="action-title">My Network</h3>
+                    <p class="action-description">Connect with founders, mentors, and fellow entrepreneurs</p>
+                </a>
+                
+                <a href="/member/upgrade.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="action-title">Become a Founder</h3>
+                    <p class="action-description">Unlock AI-powered idea development and mentor matching</p>
+                </a>
+            </section>
+            
+            <!-- Activity Feed -->
+            <section class="activity-section">
+                <div class="section-header">
+                    <h3 class="section-title">Recent Activity</h3>
+                    <a href="/member/activity.html" class="view-all">
+                        View all
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="activity-feed" id="activityFeed">
+                    <!-- Activity items will be populated here -->
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- DIANA Assistant -->
+    <div class="diana-assistant" onclick="openDianaChat()">
+        <div class="diana-pulse"></div>
+        <i class="fas fa-robot diana-icon"></i>
+    </div>
+    
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav">
+        <div class="nav-items">
+            <a href="/member/dashboard.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="/member/venues.html" class="nav-item">
+                <i class="fas fa-map"></i>
+                <span>Venues</span>
+            </a>
+            <a href="/member/network.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Network</span>
+            </a>
+            <a href="/member/profile.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+    
+    <script type="module">
+        // Import Firebase v9 SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            signOut as firebaseSignOut
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc,
+            collection,
+            query,
+            where,
+            orderBy,
+            limit,
+            getDocs,
+            onSnapshot
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994533610259",
+            appId: "1:994533610259:web:fe740378a4c000211e40e6",
+            measurementId: "G-EY0BZE30Q0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let currentUser = null;
+        let userData = null;
+        let unsubscribeActivity = null;
+        
+        // Check authentication state
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData();
+            } else {
+                // Not authenticated, redirect to login
+                window.location.href = '/core/auth.html';
+            }
+        });
+        
+        // Load user data from Firestore
+        async function loadUserData() {
+            try {
+                const userRef = doc(db, 'users', currentUser.uid);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    userData = userDoc.data();
+                    displayUserData();
+                    loadUserActivity();
+                } else {
+                    console.error('User profile not found');
+                    // Could redirect to profile setup
+                    alert('User profile not found. Please complete your profile setup.');
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                alert('Error loading your profile. Please try again.');
+            }
+        }
+        
+        // Display user data in the dashboard
+        function displayUserData() {
+            // Hide loading, show content
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+            
+            // Update user info
+            const displayName = userData.displayName || currentUser.email.split('@')[0];
+            document.getElementById('userName').textContent = displayName;
+            document.getElementById('userInitial').textContent = displayName.charAt(0).toUpperCase();
+            
+            // Update passport info
+            if (userData.sfPassport) {
+                document.getElementById('passportId').textContent = userData.sfPassport.id;
+                document.getElementById('passportName').textContent = displayName;
+                
+                // Update passport tier if not Navy
+                if (userData.sfPassport.tier && userData.sfPassport.tier !== 'Navy') {
+                    document.querySelector('.passport-tier').textContent = userData.sfPassport.tier.toUpperCase() + ' TIER';
+                }
+            }
+            
+            // Update stats (these would come from real data in production)
+            updateStats();
+        }
+        
+        // Update dashboard stats
+        function updateStats() {
+            // In a real app, these would come from the database
+            // For now, using placeholder data or data from user profile
+            const stats = {
+                venuesVisited: userData.stats?.venuesVisited || 3,
+                connections: userData.stats?.connections || 12,
+                networkHours: userData.stats?.networkHours || 24,
+                loyaltyPoints: userData.sfPassport?.points || 150
+            };
+            
+            document.getElementById('venuesVisited').textContent = stats.venuesVisited;
+            document.getElementById('connections').textContent = stats.connections;
+            document.getElementById('networkHours').textContent = stats.networkHours + 'h';
+            document.getElementById('loyaltyPoints').textContent = stats.loyaltyPoints;
+        }
+        
+        // Load recent activity
+        async function loadUserActivity() {
+            const activityFeed = document.getElementById('activityFeed');
+            
+            try {
+                // Query for user's recent activities
+                const activitiesRef = collection(db, 'activities');
+                const q = query(
+                    activitiesRef, 
+                    where('userId', '==', currentUser.uid),
+                    orderBy('timestamp', 'desc'),
+                    limit(5)
+                );
+                
+                // Set up real-time listener
+                unsubscribeActivity = onSnapshot(q, (querySnapshot) => {
+                    activityFeed.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        // Show default activities if no real ones exist
+                        displayDefaultActivities();
+                        return;
+                    }
+                    
+                    querySnapshot.forEach((doc) => {
+                        const activity = doc.data();
+                        displayActivity(activity);
+                    });
+                });
+                
+            } catch (error) {
+                console.error('Error loading activities:', error);
+                // Show default activities on error
+                displayDefaultActivities();
+            }
+        }
+        
+        // Display a single activity
+        function displayActivity(activity) {
+            const activityFeed = document.getElementById('activityFeed');
+            const activityItem = document.createElement('div');
+            activityItem.className = 'activity-item';
+            
+            const icon = getActivityIcon(activity.type);
+            const timeAgo = getTimeAgo(activity.timestamp?.toDate?.() || new Date());
+            
+            activityItem.innerHTML = `
+                <div class="activity-icon">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">${activity.title || activity.type}</div>
+                    <div class="activity-time">${timeAgo}</div>
+                </div>
+            `;
+            
+            activityFeed.appendChild(activityItem);
+        }
+        
+        // Display default activities
+        function displayDefaultActivities() {
+            const defaultActivities = [
+                { type: 'welcome', title: 'Welcome to SociallyFounded!', icon: 'fas fa-sparkles', time: 'Just now' },
+                { type: 'profile', title: 'Complete your profile to unlock features', icon: 'fas fa-user-check', time: '5 minutes ago' },
+                { type: 'venues', title: 'Discover entrepreneurial venues nearby', icon: 'fas fa-map-marker-alt', time: '1 hour ago' },
+                { type: 'ai', title: 'DIANA AI is ready to assist you', icon: 'fas fa-robot', time: '2 hours ago' }
+            ];
+            
+            const activityFeed = document.getElementById('activityFeed');
+            activityFeed.innerHTML = '';
+            
+            defaultActivities.forEach(activity => {
+                const activityItem = document.createElement('div');
+                activityItem.className = 'activity-item';
+                
+                activityItem.innerHTML = `
+                    <div class="activity-icon">
+                        <i class="${activity.icon}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                `;
+                
+                activityFeed.appendChild(activityItem);
+            });
+        }
+        
+        // Get activity icon based on type
+        function getActivityIcon(type) {
+            const iconMap = {
+                checkin: 'fas fa-coffee',
+                connection: 'fas fa-user-plus',
+                achievement: 'fas fa-trophy',
+                ai: 'fas fa-sparkles',
+                profile: 'fas fa-user-check',
+                venues: 'fas fa-map-marker-alt',
+                welcome: 'fas fa-star'
+            };
+            
+            return iconMap[type] || 'fas fa-circle';
+        }
+        
+        // Get time ago string
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return Math.floor(seconds / 60) + ' minutes ago';
+            if (seconds < 86400) return Math.floor(seconds / 3600) + ' hours ago';
+            if (seconds < 604800) return Math.floor(seconds / 86400) + ' days ago';
+            
+            return date.toLocaleDateString();
+        }
+        
+        // Toggle user dropdown
+        window.toggleUserDropdown = function() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!e.target.closest('.user-avatar')) {
+                    dropdown.classList.remove('active');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        };
+        
+        // Sign out
+        window.signOut = async function() {
+            try {
+                // Unsubscribe from listeners
+                if (unsubscribeActivity) {
+                    unsubscribeActivity();
+                }
+                
+                await firebaseSignOut(auth);
+                window.location.href = '/';
+            } catch (error) {
+                console.error('Sign out error:', error);
+                alert('Error signing out. Please try again.');
+            }
+        };
+        
+        // Open DIANA chat
+        window.openDianaChat = function() {
+            alert('DIANA AI Assistant coming soon! 🤖\n\nDIANA will help you:\n• Find the best venues\n• Connect with relevant people\n• Get personalized recommendations\n• Track your progress');
+        };
+        
+        // Handle notifications click
+        document.querySelector('.notifications').addEventListener('click', () => {
+            alert('Notifications:\n\n• Sarah Chen wants to connect\n• New venue opened nearby\n• You earned 50 loyalty points!');
+        });
+    </script>
+</body>
+</html>
