@@ -209,19 +209,42 @@ function updateDashboardDisplay() {
   document.getElementById('passport-display').textContent = userProfile.sfPassport.id;
   document.getElementById('points-display').textContent = `${userProfile.gamification.sfPoints} SF Points`;
   document.getElementById('diana-credits').textContent = `${userProfile.gamification.brainstormCredits} daily brainstorms available`;
+
+  // Force update community cards display
+setTimeout(() => {
+  console.log('🔄 Force updating display...', userProfile);
+  if (userProfile && userProfile.communities) {
+    Object.keys(userProfile.communities).forEach(communityType => {
+      console.log(`✅ User is in ${communityType} community`);
+    });
+  }
+}, 1000);
   
   // Update community cards
-  const communityCards = document.querySelectorAll('.community-card');
-  communityCards.forEach(card => {
-    const communityType = card.getAttribute('data-community');
-    const button = card.querySelector('.join-button');
+
+// Update community cards
+const communityCards = document.querySelectorAll('.community-card');
+communityCards.forEach(card => {
+  const communityType = card.getAttribute('data-community');
+  const button = card.querySelector('.join-button');
+  
+  if (userProfile.communities && userProfile.communities[communityType]) {
+    // User is already in this community
+    card.classList.add('joined');
+    button.textContent = `✓ Active in ${communityType.charAt(0).toUpperCase() + communityType.slice(1)}`;
+    button.style.background = '#2ECC71';
+    button.style.color = '#FFFFFF';
     
-    if (userProfile.communities && userProfile.communities[communityType]) {
-      card.classList.add('joined');
-      button.textContent = `✓ Active in ${communityType.charAt(0).toUpperCase() + communityType.slice(1)}`;
+    // Special styling for entrepreneur community
+    if (communityType === 'entrepreneur') {
+      card.style.background = 'linear-gradient(135deg, #2ECC71 0%, #27AE60 100%)';
+      card.style.color = '#FFFFFF';
+      button.style.background = '#FFFFFF';
+      button.style.color = '#2ECC71';
     }
-  });
-}
+  }
+});
+  
 
 // Initialize dashboard
 async function initializeDashboard() {
