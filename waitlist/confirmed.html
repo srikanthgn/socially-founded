@@ -42,6 +42,57 @@
             margin: 0 auto;
         }
 
+        /* Header with navigation */
+        .header-nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--sf-white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-home:hover {
+            color: var(--sf-gold);
+            transform: translateX(-3px);
+        }
+
+        .logout-link {
+            color: var(--sf-white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--sf-gold);
+            color: var(--sf-gold);
+        }
+
         .waitlist-card {
             background: var(--sf-white);
             border-radius: 20px;
@@ -330,11 +381,30 @@
                 flex-direction: column;
                 align-items: center;
             }
+
+            .header-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header with Navigation -->
+        <div class="header-nav">
+            <div class="logo-section">
+                <a href="/" class="back-home">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Homepage
+                </a>
+            </div>
+            <a href="#" class="logout-link" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+
         <!-- Main Waitlist Card -->
         <div class="waitlist-card">
             <div class="success-icon">
@@ -350,7 +420,7 @@
             <!-- SF Passport Display -->
             <div class="passport-display">
                 <div class="passport-title">SociallyFounded Digital Passport</div>
-                <div class="passport-id" id="passportId">SF-20250621-XX</div>
+                <div class="passport-id" id="passportId">SF-XXXXXXX-XX</div>
                 <div class="passport-details">
                     <div class="detail-item">
                         <div class="detail-label">Member Since</div>
@@ -458,13 +528,57 @@
         </div>
     </div>
 
+    <script type="module">
+        // Import Firebase for logout functionality
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994533610259",
+            appId: "1:994533610259:web:fe740378a4c000211e40e6",
+            measurementId: "G-EY0BZE30Q0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Make logout function available globally
+        window.handleLogout = async () => {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('sf_user');
+                // Redirect to homepage with logout message
+                window.location.href = '/?logout=true';
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Error logging out. Please try again.');
+            }
+        };
+    </script>
+
     <script>
         // Get passport ID from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const passportId = urlParams.get('passport');
+        const authMethod = urlParams.get('auth');
         
         if (passportId) {
             document.getElementById('passportId').textContent = passportId;
+            
+            // Extract country code from passport
+            const countryCode = passportId.split('-')[2];
+            console.log(`User registered from country: ${countryCode}`);
+        }
+        
+        // Show authentication method if provided
+        if (authMethod) {
+            console.log(`User authenticated via: ${authMethod}`);
         }
 
         // Set member since date
