@@ -1234,24 +1234,8 @@ function showSuccessAndRedirect(userData) {
     }
 }
 
-        
-        // Animate progress bar
-        setTimeout(() => {
-            const progressBar = modal.querySelector('.progress-bar > div');
-            if (progressBar) {
-                progressBar.style.width = '100%';
-            }
-        }, 100);
-        
-        // Mark user as onboarded
-        const userRef = doc(db, 'users', userData.uid);
-        setDoc(userRef, { onboardingCompleted: true }, { merge: true });
-        
-        // Redirect after 3 seconds
-        setTimeout(() => {
-            window.location.href = `/waitlist/confirmed.html?passport=${userData.sfPassport.id}&auth=${userData.authProvider || 'email'}`;
-        }, 3000);
-    }
+      
+   
 
     // Show error message
     function showError(message) {
