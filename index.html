@@ -881,14 +881,15 @@
                     <h2 class="signup-title">Join the Waitlist</h2>
                     <p class="signup-subtitle">Get unrestricted Early Access</p>
 
-                    <!-- Smart Signup Grid -->
+                    <!-- Smart Signup Grid - UPDATED WITH REAL FIREBASE AUTH -->
                     <div class="smart-signup-grid">
-                        <button class="smart-grid-btn primary" onclick="smartSignup('qr')" title="Scan to Join">
-                            <!-- Real QR Code that encodes https://sociallyfounded.com -->
+                        <!-- QR Code Card -->
+                        <button class="smart-grid-btn primary" onclick="SFAuth.showQRCode()" title="Scan to Join">
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://sociallyfounded.com/waitlist?ref=qr&color=003554&bgcolor=D4AF37" alt="Scan to Join" style="width: 100%; height: 100%; border-radius: 8px;">
                         </button>
 
-                        <button class="smart-grid-btn" onclick="smartSignup('google')" title="Google Sign In">
+                        <!-- Google Card -->
+                        <button class="smart-grid-btn" onclick="SFAuth.authenticateWithGoogle()" title="Google Sign In">
                             <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -897,13 +898,15 @@
                             </svg>
                         </button>
 
-                        <button class="smart-grid-btn" onclick="smartSignup('linkedin')" title="LinkedIn Sign In">
+                        <!-- LinkedIn Card -->
+                        <button class="smart-grid-btn" onclick="SFAuth.authenticateWithLinkedIn()" title="LinkedIn Sign In">
                             <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                             </svg>
                         </button>
 
-                        <button class="smart-grid-btn" onclick="toggleManualForm()" title="Email Sign Up">
+                        <!-- Email Card -->
+                        <button class="smart-grid-btn" onclick="SFAuth.authenticateWithEmail()" title="Email Sign Up">
                             <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                             </svg>
@@ -962,167 +965,7 @@
         </div>
     </div>
 
-    <script>
-        // Smart Signup Functions - Updated to redirect to Welcome Page
-        function smartSignup(method) {
-            const methods = {
-                'qr': () => {
-                    // Real QR code functionality - instant signup
-                    processSmartSignup({
-                        name: 'QR User',
-                        email: 'qr-' + Date.now() + '@sociallyfounded.com',
-                        linkedin: '',
-                        method: 'QR Code Scan'
-                    });
-                },
-                'linkedin': () => {
-                    showLoadingModal('LinkedIn', 'Connecting to LinkedIn...');
-                    // Simulate LinkedIn OAuth
-                    setTimeout(() => {
-                        processSmartSignup({
-                            name: 'John Professional',
-                            email: 'john@company.com',
-                            linkedin: 'https://linkedin.com/in/johnprofessional',
-                            method: 'LinkedIn Import'
-                        });
-                    }, 1500);
-                },
-                'google': () => {
-                    showLoadingModal('Google', 'Connecting to Google...');
-                    // Simulate Google OAuth
-                    setTimeout(() => {
-                        processSmartSignup({
-                            name: 'Google User',
-                            email: 'user@gmail.com',
-                            linkedin: '',
-                            method: 'Google Import'
-                        });
-                    }, 1500);
-                }
-            };
-            
-            if (methods[method]) {
-                methods[method]();
-            }
-        }
-
-        function showLoadingModal(provider, message) {
-            const modal = document.getElementById('successModal');
-            const modalContent = modal.querySelector('.modal-content');
-            modalContent.innerHTML = `
-                <div class="loading-content" style="display: block;">
-                    <div class="loading-spinner"></div>
-                    <h3 class="modal-title">Connecting via ${provider}</h3>
-                    <p class="modal-text">${message}</p>
-                </div>
-            `;
-            modal.classList.add('show');
-        }
-
-        function processSmartSignup(userData) {
-            // Store the smart signup data
-            let waitlistData = JSON.parse(localStorage.getItem('waitlistSignups') || '[]');
-            userData.timestamp = new Date().toISOString();
-            userData.smartSignup = true;
-            userData.foundingNumber = waitlistData.length + 1;
-            waitlistData.push(userData);
-            localStorage.setItem('waitlistSignups', JSON.stringify(waitlistData));
-            
-            // Show loading message
-            const modal = document.getElementById('successModal');
-            const modalContent = modal.querySelector('.modal-content');
-            modalContent.innerHTML = `
-                <div class="loading-content" style="display: block;">
-                    <div class="loading-spinner"></div>
-                    <h3 class="modal-title">Welcome to SociallyFounded! 🎉</h3>
-                    <p class="modal-text">Setting up your exclusive welcome experience...</p>
-                </div>
-            `;
-            modal.classList.add('show');
-            
-            // Redirect to welcome page after 2 seconds
-            setTimeout(() => {
-                window.location.href = '/welcome/';
-            }, 2000);
-        }
-
-        function toggleManualForm() {
-            document.getElementById('emailPopup').classList.add('show');
-        }
-
-        function closeEmailPopup() {
-            document.getElementById('emailPopup').classList.remove('show');
-        }
-
-        function handlePopupSubmit(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('popup-name').value;
-            const email = document.getElementById('popup-email').value;
-            const linkedin = document.getElementById('popup-linkedin').value;
-            
-            processSmartSignup({
-                name: name,
-                email: email,
-                linkedin: linkedin,
-                method: 'Email Form'
-            });
-            
-            document.getElementById('popupForm').reset();
-            closeEmailPopup();
-        }
-
-        // Close popup on background click
-        const emailPopup = document.getElementById('emailPopup');
-        if (emailPopup) {
-            emailPopup.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeEmailPopup();
-                }
-            });
-        }
-
-        // Close modal on background click
-        document.getElementById('successModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                // Don't allow closing during redirect process
-                // modal will close automatically when redirecting
-            }
-        });
-        
-        // Passport card animations
-        document.querySelectorAll('.passport-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Update stats dynamically
-        function updateStats() {
-            const waitlistData = JSON.parse(localStorage.getItem('waitlistSignups') || '[]');
-            const statNumbers = document.querySelectorAll('.stat-number');
-            if (statNumbers[0]) {
-                statNumbers[0].textContent = 47 + waitlistData.length;
-            }
-        }
-
-        // Update on page load
-        updateStats();
-
-        console.log('🚀 SociallyFounded Homepage - Updated with Welcome Page Redirect');
-        console.log('📍 Successful signups now redirect to /welcome/');
-    </script>
-<!-- 
-This script integrates with your EXISTING homepage
-Add this to the bottom of your current homepage HTML file
-No new pages needed - just makes the 4 signup cards functional!
--->
-
-<!-- Firebase v9 SDK -->
+<!-- REAL FIREBASE AUTHENTICATION -->
 <script type="module">
     // Import Firebase v9 SDK (same as your firebase-integration.html)
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
@@ -1227,28 +1070,13 @@ No new pages needed - just makes the 4 signup cards functional!
 
     // Show success message and redirect
     function showSuccessAndRedirect(userData) {
-        // Create success overlay
-        const overlay = document.createElement('div');
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 53, 84, 0.95);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-        `;
-        
-        overlay.innerHTML = `
-            <div style="max-width: 400px; padding: 40px;">
+        // Update modal content
+        const modal = document.getElementById('successModal');
+        const modalContent = modal.querySelector('.modal-content');
+        modalContent.innerHTML = `
+            <div style="text-align: center;">
                 <div style="font-size: 64px; margin-bottom: 20px;">🎉</div>
-                <h2 style="font-size: 28px; margin-bottom: 15px; color: #D4AF37;">Welcome to SociallyFounded!</h2>
+                <h3 style="font-size: 28px; margin-bottom: 15px; color: #D4AF37;">Welcome to SociallyFounded!</h3>
                 <p style="font-size: 16px; margin-bottom: 20px; opacity: 0.9;">
                     Your SF Passport is ready: <strong>${userData.sfPassport.id}</strong>
                 </p>
@@ -1257,8 +1085,7 @@ No new pages needed - just makes the 4 signup cards functional!
                 </div>
             </div>
         `;
-        
-        document.body.appendChild(overlay);
+        modal.classList.add('show');
         
         // Redirect after 3 seconds
         setTimeout(() => {
@@ -1304,10 +1131,10 @@ No new pages needed - just makes the 4 signup cards functional!
         
         document.body.appendChild(qrOverlay);
         
-        // Generate QR code (you can use a QR code library or service)
+        // Generate QR code for mobile signup
         const qrCodeDiv = qrOverlay.querySelector('#qrcode');
         qrCodeDiv.innerHTML = `
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin + '/auth/signup.html')}" 
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin)}" 
                  alt="QR Code" style="border: 1px solid #ddd; border-radius: 8px;">
         `;
         
@@ -1386,42 +1213,70 @@ No new pages needed - just makes the 4 signup cards functional!
         authenticateWithEmail
     };
 
-    console.log('🔥 SociallyFounded authentication ready!');
+    console.log('🔥 SociallyFounded Firebase authentication ready!');
 </script>
 
-<!-- 
-ADD THESE ONCLICK HANDLERS TO YOUR EXISTING HOMEPAGE CARDS:
+<script>
+    // Keep your existing JavaScript functions but make them simpler since Firebase handles auth
+    function smartSignup(method) {
+        // This function is now replaced by SFAuth functions
+        // Keeping for backwards compatibility
+        console.log('Use SFAuth functions instead');
+    }
 
-Update your 4 signup cards on the right side:
+    function toggleManualForm() {
+        document.getElementById('emailPopup').classList.add('show');
+    }
 
-1. QR Code card: onclick="SFAuth.showQRCode()"
-2. Google card: onclick="SFAuth.authenticateWithGoogle()"  
-3. LinkedIn card: onclick="SFAuth.authenticateWithLinkedIn()"
-4. Email card: onclick="SFAuth.authenticateWithEmail()"
+    function closeEmailPopup() {
+        document.getElementById('emailPopup').classList.remove('show');
+    }
 
-Example for Google card:
-<div class="signup-card" onclick="SFAuth.authenticateWithGoogle()">
-    <div class="google-icon">G</div>
-</div>
+    function handlePopupSubmit(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('popup-name').value;
+        const email = document.getElementById('popup-email').value;
+        const linkedin = document.getElementById('popup-linkedin').value;
+        
+        // Use Firebase email authentication instead
+        SFAuth.authenticateWithEmail();
+        
+        document.getElementById('popupForm').reset();
+        closeEmailPopup();
+    }
 
--->
+    // Close popup on background click
+    const emailPopup = document.getElementById('emailPopup');
+    if (emailPopup) {
+        emailPopup.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmailPopup();
+            }
+        });
+    }
 
-<style>
-/* Add hover effects to your signup cards */
-.signup-card {
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+    // Close modal on background click
+    document.getElementById('successModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            // Don't allow closing during redirect process
+            // modal will close automatically when redirecting
+        }
+    });
+    
+    // Passport card animations
+    document.querySelectorAll('.passport-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
 
-.signup-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 53, 84, 0.2);
-}
-
-.signup-card:active {
-    transform: translateY(-1px);
-}
-</style>
+    console.log('🚀 SociallyFounded Homepage - Firebase Auth Integration Complete');
+</script>
     
 </body>
 </html>
