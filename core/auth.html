@@ -507,6 +507,25 @@
             
             // Check URL params for special flows
             checkSpecialFlows();
+// Check for redirect result on page load
+getRedirectResult(auth).then(async (result) => {
+    if (result && result.user) {
+        console.log('Redirect sign in successful:', result.user.email);
+        showSuccess('Sign in successful! Setting up your Member dashboard...');
+        
+        await createOrUpdateUserProfile(result.user, 'google');
+        
+        setTimeout(() => {
+            window.location.href = '/member/dashboard.html';
+        }, 1500);
+    }
+}).catch((error) => {
+    console.error('Redirect result error:', error);
+    // Handle errors from redirect flow
+    if (error.code && error.code !== 'auth/popup-blocked') {
+        showError('Sign in failed. Please try again.');
+    }
+});
             
             // Check if user is already logged in
             onAuthStateChanged(auth, (user) => {
