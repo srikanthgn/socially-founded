@@ -116,6 +116,28 @@
             font-family: monospace;
         }
 
+        .logout-btn {
+            background: var(--deep-navy);
+            color: var(--pure-white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 10px;
+        }
+
+        .logout-btn:hover {
+            background: #004a6b;
+            transform: translateY(-1px);
+        }
+
         /* Main Content */
         main {
             margin-top: 80px;
@@ -156,8 +178,9 @@
             font-size: 20px;
             font-weight: 400;
             color: var(--dark-gray);
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
+            line-height: 1.8;
         }
 
         /* Community Pills */
@@ -178,9 +201,12 @@
 
         .community-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
             margin-bottom: 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .community-pill {
@@ -407,7 +433,7 @@
             }
 
             .community-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             }
 
             .features-grid {
@@ -434,6 +460,9 @@
                 </div>
                 <span id="userName">Member</span>
                 <span class="passport-badge" id="passportBadge">SF-XXXXXXX-XX</span>
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
         </div>
     </header>
@@ -458,6 +487,10 @@
                     <div class="community-pill"><i class="fas fa-rocket" style="margin-right: 5px;"></i>Entrepreneur</div>
                     <div class="community-pill"><i class="fas fa-graduation-cap" style="margin-right: 5px;"></i>Learning</div>
                     <div class="community-pill"><i class="fas fa-heartbeat" style="margin-right: 5px;"></i>Lifestyle</div>
+                    <div class="community-pill"><i class="fas fa-store" style="margin-right: 5px;"></i>Hosts & Venues</div>
+                    <div class="community-pill"><i class="fas fa-dumbbell" style="margin-right: 5px;"></i>Health & Fitness</div>
+                    <div class="community-pill"><i class="fas fa-paw" style="margin-right: 5px;"></i>Pets</div>
+                    <div class="community-pill"><i class="fas fa-plus-circle" style="margin-right: 5px;"></i>Build Your Own</div>
                 </div>
                 <p style="text-align: center; color: var(--dark-gray); margin-top: 20px;">
                     Choose the communities that resonate with you. Connect across boundaries.
