@@ -593,9 +593,10 @@
                     <span id="userName">User</span>
                     <span class="passport-badge" id="passportBadge">SF-XXXX-XX</span>
                 </div>
-                <button class="logout-btn" onclick="SFAuth.logout()">
-                    Logout
-                </button>
+<button class="logout-btn" id="logoutBtn">
+    Logout
+</button>
+                
             </div>
         </div>
     </header>
@@ -810,7 +811,7 @@
         messagingSenderId: "994533610259",
         appId: "1:994533610259:web:fe740378a4c000211e40e6",
         measurementId: "G-EY0BZE30Q0"
-    };
+    }
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
