@@ -11,6 +11,10 @@
     <!-- Font Awesome Pro Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- Firebase (for logout functionality) -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+    
     <style>
         /* BRAND GUIDELINES ENFORCEMENT */
         :root {
@@ -481,16 +485,12 @@
                 <h2 class="community-title">Your Communities, Infinite Connections</h2>
                 <div class="community-grid">
                     <div class="community-pill"><i class="fas fa-briefcase" style="margin-right: 5px;"></i>Professional</div>
-                    <div class="community-pill"><i class="fas fa-palette" style="margin-right: 5px;"></i>Creative</div>
                     <div class="community-pill"><i class="fas fa-home" style="margin-right: 5px;"></i>Neighborhood</div>
-                    <div class="community-pill"><i class="fas fa-laptop" style="margin-right: 5px;"></i>Remote Work</div>
-                    <div class="community-pill"><i class="fas fa-rocket" style="margin-right: 5px;"></i>Entrepreneur</div>
                     <div class="community-pill"><i class="fas fa-graduation-cap" style="margin-right: 5px;"></i>Learning</div>
-                    <div class="community-pill"><i class="fas fa-heartbeat" style="margin-right: 5px;"></i>Lifestyle</div>
-                    <div class="community-pill"><i class="fas fa-store" style="margin-right: 5px;"></i>Hosts & Venues</div>
-                    <div class="community-pill"><i class="fas fa-dumbbell" style="margin-right: 5px;"></i>Health & Fitness</div>
+                    <div class="community-pill"><i class="fas fa-heartbeat" style="margin-right: 5px;"></i>Lifestyle & Fitness</div>
                     <div class="community-pill"><i class="fas fa-paw" style="margin-right: 5px;"></i>Pets</div>
-                    <div class="community-pill"><i class="fas fa-plus-circle" style="margin-right: 5px;"></i>Build Your Own</div>
+                    <div class="community-pill"><i class="fas fa-list-alt" style="margin-right: 5px;"></i>Craigslist</div>
+                    <div class="community-pill"><i class="fas fa-plus-circle" style="margin-right: 5px;"></i>Add Your Own</div>
                 </div>
                 <p style="text-align: center; color: var(--dark-gray); margin-top: 20px;">
                     Choose the communities that resonate with you. Connect across boundaries.
@@ -583,7 +583,7 @@
                     
                     <div class="timeline-item">
                         <span class="timeline-status development">In Development</span>
-                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">DIANA AI Launch</h3>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">Founder Launchpad</h3>
                         <p style="font-size: 14px; color: var(--dark-gray);">AI co-founder for entrepreneurs, community matching for all</p>
                     </div>
                     
@@ -632,6 +632,20 @@
     </footer>
 
     <script>
+        // Initialize Firebase for logout functionality
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994533610259",
+            appId: "1:994533610259:web:fe740378a4c000211e40e6",
+            measurementId: "G-EY0BZE30Q0"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const passport = urlParams.get('passport');
