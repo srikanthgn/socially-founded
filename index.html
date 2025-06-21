@@ -437,6 +437,7 @@
             max-width: 400px;
             width: 90%;
             margin: 20px;
+            position: relative;
         }
 
         .email-popup-title {
@@ -560,7 +561,7 @@
             fill: currentColor;
         }
 
-        /* Success Modal */
+        /* Success Modal - Updated for Welcome Page */
         .modal {
             display: none;
             position: fixed;
@@ -621,6 +622,21 @@
 
         .modal-btn:hover {
             background: #004a6b;
+        }
+
+        /* Loading State */
+        .loading-content {
+            display: none;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
 
         /* Footer */
@@ -908,15 +924,14 @@
         </footer>
     </div>
 
-    <!-- Success Modal -->
+    <!-- Success Modal - Updated for Welcome Page Redirect -->
     <div id="successModal" class="modal">
         <div class="modal-content">
-            <svg class="modal-icon" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-            <h3 class="modal-title">Welcome to the Future!</h3>
-            <p class="modal-text">You're now on the SociallyFounded waitlist. We'll notify you as soon as we launch.</p>
-            <button class="modal-btn" onclick="closeModal()">Continue</button>
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h3 class="modal-title">Welcome to SociallyFounded! 🎉</h3>
+                <p class="modal-text">Setting up your exclusive welcome experience...</p>
+            </div>
         </div>
     </div>
 
@@ -947,7 +962,7 @@
     </div>
 
     <script>
-        // Smart Signup Functions
+        // Smart Signup Functions - Updated to redirect to Welcome Page
         function smartSignup(method) {
             const methods = {
                 'qr': () => {
@@ -960,7 +975,7 @@
                     });
                 },
                 'linkedin': () => {
-                    showSmartSignupModal('LinkedIn', 'Connecting to LinkedIn...');
+                    showLoadingModal('LinkedIn', 'Connecting to LinkedIn...');
                     // Simulate LinkedIn OAuth
                     setTimeout(() => {
                         processSmartSignup({
@@ -972,7 +987,7 @@
                     }, 1500);
                 },
                 'google': () => {
-                    showSmartSignupModal('Google', 'Connecting to Google...');
+                    showLoadingModal('Google', 'Connecting to Google...');
                     // Simulate Google OAuth
                     setTimeout(() => {
                         processSmartSignup({
@@ -990,18 +1005,14 @@
             }
         }
 
-        function showSmartSignupModal(provider, message) {
+        function showLoadingModal(provider, message) {
             const modal = document.getElementById('successModal');
             const modalContent = modal.querySelector('.modal-content');
             modalContent.innerHTML = `
-                <svg class="modal-icon" viewBox="0 0 24 24" fill="#D4AF37">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 6v6l4 2"/>
-                </svg>
-                <h3 class="modal-title">Connecting via ${provider}</h3>
-                <p class="modal-text">${message}</p>
-                <div style="margin: 20px 0;">
-                    <div style="width: 40px; height: 40px; border: 3px solid #f3f3f3; border-top: 3px solid #D4AF37; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <div class="loading-content" style="display: block;">
+                    <div class="loading-spinner"></div>
+                    <h3 class="modal-title">Connecting via ${provider}</h3>
+                    <p class="modal-text">${message}</p>
                 </div>
             `;
             modal.classList.add('show');
@@ -1016,17 +1027,22 @@
             waitlistData.push(userData);
             localStorage.setItem('waitlistSignups', JSON.stringify(waitlistData));
             
-            // Show success message
+            // Show loading message
             const modal = document.getElementById('successModal');
             const modalContent = modal.querySelector('.modal-content');
             modalContent.innerHTML = `
-                <svg class="modal-icon" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <h3 class="modal-title">Welcome to SociallyFounded! 🎉</h3>
-                <p class="modal-text">You're now part of a global community of entrepreneurs. We'll notify you as soon as early access opens.</p>
-                <button class="modal-btn" onclick="closeModal()">Continue</button>
+                <div class="loading-content" style="display: block;">
+                    <div class="loading-spinner"></div>
+                    <h3 class="modal-title">Welcome to SociallyFounded! 🎉</h3>
+                    <p class="modal-text">Setting up your exclusive welcome experience...</p>
+                </div>
             `;
+            modal.classList.add('show');
+            
+            // Redirect to welcome page after 2 seconds
+            setTimeout(() => {
+                window.location.href = '/welcome/';
+            }, 2000);
         }
 
         function toggleManualForm() {
@@ -1065,36 +1081,11 @@
             });
         }
 
-        // Traditional form submission
-        const waitlistForm = document.getElementById('waitlistForm');
-        if (waitlistForm) {
-            waitlistForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const linkedin = document.getElementById('linkedin').value;
-                
-                processSmartSignup({
-                    name: name,
-                    email: email,
-                    linkedin: linkedin,
-                    method: 'Manual Entry'
-                });
-                
-                this.reset();
-            });
-        }
-        
-        // Close modal
-        function closeModal() {
-            document.getElementById('successModal').classList.remove('show');
-        }
-        
         // Close modal on background click
         document.getElementById('successModal').addEventListener('click', function(e) {
             if (e.target === this) {
-                closeModal();
+                // Don't allow closing during redirect process
+                // modal will close automatically when redirecting
             }
         });
         
@@ -1120,6 +1111,9 @@
 
         // Update on page load
         updateStats();
+
+        console.log('🚀 SociallyFounded Homepage - Updated with Welcome Page Redirect');
+        console.log('📍 Successful signups now redirect to /welcome/');
     </script>
 </body>
 </html>
