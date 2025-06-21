@@ -466,6 +466,8 @@
         import { 
             getAuth, 
             signInWithPopup,
+            signInWithRedirect,     // ADD THIS LINE
+    getRedirectResult,      // ADD THIS LINE
             GoogleAuthProvider,
             signInWithEmailAndPassword,
             createUserWithEmailAndPassword,
@@ -678,36 +680,71 @@
         }
 
         // Sign in with Google
-        window.signInWithGoogle = async function() {
-            hideAllMessages();
-            showInfo('Opening Google sign-in...');
-            
+
+        // Sign in with Google
+window.signInWithGoogle = async function() {
+    hideAllMessages();
+    showInfo('Opening Google sign-in...');
+    
+    try {
+        const provider = new GoogleAuthProvider();
+        
+        // COOP FIX: Use different auth flow based on browser and device
+        let result;
+        
+        // Check if we're on mobile or if popup might be problematic
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        
+        if (isMobile) {
+            // Mobile devices: Use redirect flow (more reliable)
+            await signInWithRedirect(auth, provider);
+            return; // The page will redirect
+        } else if (isChrome) {
+            // Chrome desktop: Try popup with fallback
             try {
-                const provider = new GoogleAuthProvider();
-                const result = await signInWithPopup(auth, provider);
+                result = await signInWithPopup(auth, provider);
+            } catch (popupError) {
+                console.warn('Popup failed, trying redirect:', popupError);
                 
-                console.log('Google sign in successful:', result.user.email);
-                showSuccess('Sign in successful! Setting up your Member dashboard...');
-                
-                await createOrUpdateUserProfile(result.user, 'google');
-                
-                // Small delay to show success message
-                setTimeout(() => {
-                    window.location.href = '/member/dashboard.html';
-                }, 1500);
-                
-            } catch (error) {
-                console.error('Google sign in error:', error);
-                
-                if (error.code === 'auth/popup-closed-by-user') {
-                    showError('Sign in cancelled. Please try again.');
-                } else if (error.code === 'auth/popup-blocked') {
-                    showError('Popup blocked. Please allow popups for this site.');
+                // If popup fails, use redirect
+                if (popupError.code === 'auth/popup-blocked' || 
+                    popupError.code === 'auth/popup-closed-by-user' ||
+                    popupError.code === 'auth/cancelled-popup-request') {
+                    await signInWithRedirect(auth, provider);
+                    return;
                 } else {
-                    showError('Google sign in failed. Please try again.');
+                    throw popupError; // Re-throw other errors
                 }
             }
-        };
+        } else {
+            // Other browsers: Use popup (Firefox, Safari don't have COOP issues)
+            result = await signInWithPopup(auth, provider);
+        }
+        
+        // If we got here, popup succeeded
+        console.log('Google sign in successful:', result.user.email);
+        showSuccess('Sign in successful! Setting up your Member dashboard...');
+        
+        await createOrUpdateUserProfile(result.user, 'google');
+        
+        // Small delay to show success message
+        setTimeout(() => {
+            window.location.href = '/member/dashboard.html';
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Google sign in error:', error);
+        
+        if (error.code === 'auth/popup-closed-by-user') {
+            showError('Sign in cancelled. Please try again.');
+        } else if (error.code === 'auth/popup-blocked') {
+            showError('Popup blocked. Please allow popups for this site.');
+        } else {
+            showError('Google sign in failed. Please try again.');
+        }
+    }
+};
 
         // Sign in with QR (simulate instant auth)
         window.signInWithQR = function() {
