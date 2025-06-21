@@ -3,475 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Member Dashboard</title>
-    
-    <!-- Google Fonts -->
+    <title>Member Dashboard - SociallyFounded</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-            min-height: 100vh;
+            background: #FFFFFF;
             color: #003554;
+            line-height: 1.6;
         }
-        
+
         /* Header */
         .header {
-            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.2);
+            background: #FFFFFF;
+            padding: 15px 20px;
+            border-bottom: 1px solid #E0E0E0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
-        
+
         .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .sf-logo {
-            width: 40px;
+
+        .logo {
             height: 40px;
-            background: #D4AF37;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-weight: 700;
+            font-size: 24px;
             color: #003554;
-            font-weight: bold;
-            font-size: 18px;
+            text-decoration: none;
         }
-        
-        .brand-name {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: #D4AF37;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #003554;
-            font-weight: bold;
-        }
-        
+
         .user-info {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
-        
-        .user-name {
-            font-size: 14px;
+
+        .sf-passport {
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 25px;
             font-weight: 500;
-        }
-        
-        .user-passport {
-            font-size: 11px;
-            opacity: 0.8;
-            color: #D4AF37;
-        }
-        
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
             font-size: 14px;
-            transition: all 0.3s ease;
         }
-        
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+
+        .sf-points {
+            background: #D4AF37;
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 14px;
         }
-        
-        /* Main Container */
-        .container {
+
+        /* Main Content */
+        .main-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 30px 20px;
         }
-        
-        /* Welcome Section */
+
         .welcome-section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
-            position: relative;
-            overflow: hidden;
+            text-align: center;
+            margin-bottom: 40px;
         }
-        
-        .welcome-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #003554, #D4AF37, #003554);
-        }
-        
+
         .welcome-title {
-            font-size: 28px;
-            font-weight: 600;
+            font-size: 32px;
+            font-weight: 700;
+            color: #003554;
             margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #666666;
+            margin-bottom: 20px;
+        }
+
+        /* Community Grid */
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .community-card {
+            background: #FFFFFF;
+            border: 2px solid #E0E0E0;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .community-card:hover {
+            border-color: #D4AF37;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,53,84,0.1);
+        }
+
+        .community-card.entrepreneur {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: #FFFFFF;
+            border-color: #D4AF37;
+        }
+
+        .community-card.entrepreneur .premium-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #003554;
+            color: #FFFFFF;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .community-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
             color: #003554;
         }
-        
-        .welcome-subtitle {
-            font-size: 16px;
-            opacity: 0.7;
-            margin-bottom: 25px;
+
+        .entrepreneur .community-icon {
+            color: #FFFFFF;
         }
-        
-        .passport-card {
-            background: linear-gradient(135deg, #003554, #004a6b);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 25px rgba(0, 53, 84, 0.3);
+
+        .community-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
-        
-        .passport-icon {
-            width: 50px;
-            height: 50px;
+
+        .community-description {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .join-button {
+            background: #003554;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .join-button:hover {
+            background: #004a6b;
+        }
+
+        .entrepreneur .join-button {
+            background: #FFFFFF;
+            color: #D4AF37;
+        }
+
+        .entrepreneur .join-button:hover {
+            background: #F5F5F5;
+        }
+
+        /* DIANA AI Section */
+        .diana-section {
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: #FFFFFF;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .diana-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #D4AF37;
+            margin: 0 auto 20px;
             background: #D4AF37;
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 36px;
             color: #003554;
-            font-size: 20px;
-            font-weight: bold;
         }
-        
-        .passport-details h4 {
-            font-size: 18px;
+
+        .diana-title {
+            font-size: 24px;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
-        
-        .passport-details p {
-            font-size: 14px;
-            opacity: 0.8;
+
+        .diana-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
         }
-        
-        /* Dashboard Grid */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
+
+        .credits-display {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-bottom: 20px;
         }
-        
-        /* Main Actions */
-        .main-actions {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
+
+        .try-diana-button {
+            background: #D4AF37;
+            color: #003554;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        
+
+        .try-diana-button:hover {
+            background: #B8941F;
+        }
+
+        .try-diana-button:disabled {
+            background: #666666;
+            color: #FFFFFF;
+            cursor: not-allowed;
+        }
+
+        /* Venue Discovery */
+        .venue-section {
+            margin-bottom: 40px;
+        }
+
         .section-title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 600;
             margin-bottom: 20px;
             color: #003554;
         }
-        
-        .action-grid {
+
+        .venue-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
-        
-        .action-card {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border: 1px solid rgba(0, 53, 84, 0.1);
+
+        .venue-card {
+            background: #FFFFFF;
+            border: 1px solid #E0E0E0;
             border-radius: 15px;
-            padding: 25px;
-            cursor: pointer;
+            padding: 20px;
             transition: all 0.3s ease;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
         }
-        
-        .action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 53, 84, 0.15);
+
+        .venue-card:hover {
             border-color: #D4AF37;
+            box-shadow: 0 5px 15px rgba(0,53,84,0.1);
         }
-        
-        .action-card.premium {
-            background: linear-gradient(135deg, #D4AF37, #E5C047);
-            color: #003554;
-        }
-        
-        .action-card.premium:hover {
-            transform: translateY(-5px) scale(1.02);
-        }
-        
-        .action-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px;
-            background: #003554;
-            color: white;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-        
-        .action-card.premium .action-icon {
-            background: white;
-            color: #003554;
-        }
-        
-        .action-title {
+
+        .venue-name {
             font-size: 18px;
             font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .action-desc {
-            font-size: 14px;
-            opacity: 0.7;
-            line-height: 1.4;
-        }
-        
-        .upgrade-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #D4AF37;
-            color: #003554;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        
-        /* Quick Stats */
-        .quick-stats {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
-        }
-        
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(0, 53, 84, 0.1);
-        }
-        
-        .stat-item:last-child {
-            border-bottom: none;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .stat-value {
-            font-size: 18px;
-            font-weight: 600;
-            color: #003554;
-        }
-        
-        .stat-value.gold {
-            color: #D4AF37;
-        }
-        
-        /* Activity Feed */
-        .activity-section {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
-        }
-        
-        .activity-item {
-            display: flex;
-            gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(0, 53, 84, 0.1);
-        }
-        
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-        
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #003554, #004a6b);
-            color: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        
-        .activity-content {
-            flex: 1;
-        }
-        
-        .activity-text {
-            font-size: 14px;
             margin-bottom: 5px;
-            line-height: 1.4;
         }
-        
-        .activity-time {
-            font-size: 12px;
-            color: #666;
+
+        .venue-type {
+            color: #666666;
+            font-size: 14px;
+            margin-bottom: 10px;
         }
-        
-        /* DIANA Assistant */
-        .diana-assistant {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #D4AF37, #E5C047);
-            border-radius: 50%;
+
+        .venue-communities {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .community-tag {
+            background: #F5F5F5;
             color: #003554;
-            font-size: 24px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .checkin-button {
+            background: #D4AF37;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            animation: pulse 3s ease-in-out infinite;
+            width: 100%;
         }
-        
-        .diana-assistant:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
+
+        .checkin-button:hover {
+            background: #B8941F;
         }
-        
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
-            }
-            50% {
-                box-shadow: 0 10px 30px rgba(212, 175, 55, 0.8);
-            }
-        }
-        
-        /* Loading States */
-        .loading {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #003554;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
+
         /* Responsive Design */
-        @media (max-width: 968px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .header-content {
-                padding: 0 15px;
-            }
-            
-            .user-info {
-                display: none;
-            }
-        }
-        
         @media (max-width: 768px) {
-            .container {
-                padding: 20px 15px;
+            .community-grid {
+                grid-template-columns: 1fr;
             }
             
-            .welcome-section {
-                padding: 20px;
+            .venue-grid {
+                grid-template-columns: 1fr;
             }
             
             .welcome-title {
                 font-size: 24px;
             }
             
-            .action-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .diana-assistant {
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
             }
         }
-        
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -480,86 +350,74 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.5);
             z-index: 2000;
-            align-items: center;
-            justify-content: center;
         }
-        
-        .modal.show {
-            display: flex;
-        }
-        
+
         .modal-content {
-            background: white;
-            border-radius: 20px;
+            background: #FFFFFF;
+            margin: 5% auto;
             padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            text-align: center;
-        }
-        
-        .modal-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 20px;
-            background: #D4AF37;
-            color: #003554;
             border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
             font-size: 24px;
-        }
-        
-        .modal-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #003554;
-        }
-        
-        .modal-text {
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-            color: #666;
-        }
-        
-        .modal-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-        
-        .modal-btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            color: #666666;
         }
-        
-        .modal-btn.primary {
-            background: #003554;
-            color: white;
+
+        .diana-chat {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #E0E0E0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
         }
-        
-        .modal-btn.primary:hover {
-            background: #004a6b;
+
+        .chat-message {
+            margin-bottom: 15px;
         }
-        
-        .modal-btn.secondary {
-            background: #f5f5f5;
+
+        .user-message {
+            text-align: right;
             color: #003554;
         }
-        
-        .modal-btn.secondary:hover {
-            background: #e8e8e8;
+
+        .diana-message {
+            text-align: left;
+            color: #666666;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #E0E0E0;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #D4AF37;
+        }
+
+        .send-button {
+            background: #D4AF37;
+            color: #FFFFFF;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -567,365 +425,288 @@
     <!-- Header -->
     <header class="header">
         <div class="header-content">
-            <div class="logo-section">
-                <div class="sf-logo">SF</div>
-                <div class="brand-name">SociallyFounded</div>
-            </div>
-            
-            <div class="user-section">
-                <div class="user-avatar" id="userAvatar">?</div>
-                <div class="user-info">
-                    <div class="user-name" id="userName">Loading...</div>
-                    <div class="user-passport" id="userPassport">SF-••••••-••</div>
-                </div>
-                <button class="logout-btn" onclick="handleLogout()">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
+            <a href="/" class="logo">SF</a>
+            <div class="user-info">
+                <div class="sf-passport" id="passport-display">SF-1234567-AE</div>
+                <div class="sf-points" id="points-display">250 SF Points</div>
             </div>
         </div>
     </header>
-    
+
     <!-- Main Content -->
-    <div class="container">
+    <main class="main-content">
         <!-- Welcome Section -->
-        <div class="welcome-section">
-            <h1 class="welcome-title">Welcome to SociallyFounded!</h1>
-            <p class="welcome-subtitle">Your journey as an entrepreneur starts here. Connect, learn, and grow with our global community.</p>
-            
-            <div class="passport-card" id="passportCard">
-                <div class="passport-icon">SF</div>
-                <div class="passport-details">
-                    <h4 id="passportTitle">Member Access</h4>
-                    <p id="passportDesc">Navy Tier • Level 1</p>
+        <section class="welcome-section">
+            <h1 class="welcome-title">Find Your Tribe in Spaces You Love</h1>
+            <p class="welcome-subtitle">Join thriving communities across Dubai and accelerate meaningful connections</p>
+        </section>
+
+        <!-- Community Selection Grid -->
+        <section class="community-selection">
+            <h2 class="section-title">Discover Your Communities</h2>
+            <div class="community-grid">
+                <!-- Professional Community -->
+                <div class="community-card professional" onclick="joinCommunity('professional')">
+                    <div class="community-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3 class="community-name">Professional</h3>
+                    <p class="community-description">Connect with industry peers, advance your career, share expertise</p>
+                    <button class="join-button">Explore Professional Community</button>
+                </div>
+
+                <!-- Creative Community -->
+                <div class="community-card creative" onclick="joinCommunity('creative')">
+                    <div class="community-icon"><i class="fas fa-palette"></i></div>
+                    <h3 class="community-name">Creative</h3>
+                    <p class="community-description">Collaborate with artists, writers, designers, and makers</p>
+                    <button class="join-button">Explore Creative Community</button>
+                </div>
+
+                <!-- Entrepreneur Community (Premium Featured) -->
+                <div class="community-card entrepreneur" onclick="joinCommunity('entrepreneur')">
+                    <div class="premium-badge">PREMIUM</div>
+                    <div class="community-icon"><i class="fas fa-rocket"></i></div>
+                    <h3 class="community-name">Entrepreneur</h3>
+                    <p class="community-description">Build startups with AI co-founder DIANA and community support</p>
+                    <button class="join-button">Start Building with DIANA AI</button>
+                </div>
+
+                <!-- Neighborhood Community -->
+                <div class="community-card neighborhood" onclick="joinCommunity('neighborhood')">
+                    <div class="community-icon"><i class="fas fa-home"></i></div>
+                    <h3 class="community-name">Neighborhood</h3>
+                    <p class="community-description">Connect with local residents and build stronger communities</p>
+                    <button class="join-button">Explore Neighborhood</button>
+                </div>
+
+                <!-- Remote Worker Community -->
+                <div class="community-card remote" onclick="joinCommunity('remote')">
+                    <div class="community-icon"><i class="fas fa-laptop"></i></div>
+                    <h3 class="community-name">Remote Worker</h3>
+                    <p class="community-description">Find co-working partners and productive workspace connections</p>
+                    <button class="join-button">Find Co-workers</button>
+                </div>
+
+                <!-- Learning Community -->
+                <div class="community-card learning" onclick="joinCommunity('learning')">
+                    <div class="community-icon"><i class="fas fa-book"></i></div>
+                    <h3 class="community-name">Learning</h3>
+                    <p class="community-description">Join study groups, skill exchanges, and educational communities</p>
+                    <button class="join-button">Start Learning</button>
+                </div>
+
+                <!-- Lifestyle Community -->
+                <div class="community-card lifestyle" onclick="joinCommunity('lifestyle')">
+                    <div class="community-icon"><i class="fas fa-heart"></i></div>
+                    <h3 class="community-name">Lifestyle</h3>
+                    <p class="community-description">Connect over fitness, food, travel, and shared interests</p>
+                    <button class="join-button">Explore Lifestyle</button>
                 </div>
             </div>
-        </div>
-        
-        <!-- Dashboard Grid -->
-        <div class="dashboard-grid">
-            <!-- Main Actions -->
-            <div class="main-actions">
-                <h2 class="section-title">Quick Actions</h2>
-                <div class="action-grid">
-                    <div class="action-card" onclick="navigateToVenues()">
-                        <div class="action-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <h3 class="action-title">Discover Venues</h3>
-                        <p class="action-desc">Find entrepreneurial cafés and co-working spaces near you</p>
+        </section>
+
+        <!-- DIANA AI Section -->
+        <section class="diana-section">
+            <div class="diana-avatar">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h2 class="diana-title">Meet DIANA - Your AI Community Catalyst</h2>
+            <p class="diana-subtitle">Intelligent community matching and entrepreneurship support</p>
+            <div class="credits-display" id="diana-credits">3 daily brainstorms available</div>
+            <button class="try-diana-button" onclick="openDianaChat()">Ask DIANA Anything</button>
+        </section>
+
+        <!-- Venue Discovery -->
+        <section class="venue-section">
+            <h2 class="section-title">Discover Community Spaces</h2>
+            <div class="venue-grid">
+                <div class="venue-card">
+                    <h3 class="venue-name">The Coffee Lab</h3>
+                    <p class="venue-type">Specialty Coffee Shop • Business Bay</p>
+                    <div class="venue-communities">
+                        <span class="community-tag">Professional</span>
+                        <span class="community-tag">Remote Work</span>
+                        <span class="community-tag">Creative</span>
                     </div>
-                    
-                    <div class="action-card" onclick="exploreNetwork()">
-                        <div class="action-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3 class="action-title">My Network</h3>
-                        <p class="action-desc">Connect with fellow entrepreneurs and expand your circle</p>
+                    <button class="checkin-button" onclick="checkIn('coffee-lab')">Check In (+2 SF Points)</button>
+                </div>
+
+                <div class="venue-card">
+                    <h3 class="venue-name">Innovation Hub DIFC</h3>
+                    <p class="venue-type">Co-working Space • DIFC</p>
+                    <div class="venue-communities">
+                        <span class="community-tag">Entrepreneur</span>
+                        <span class="community-tag">Professional</span>
+                        <span class="community-tag">Remote Work</span>
                     </div>
-                    
-                    <div class="action-card premium" onclick="showUpgradeModal('founder')">
-                        <div class="upgrade-badge">UPGRADE</div>
-                        <div class="action-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <h3 class="action-title">Become a Founder</h3>
-                        <p class="action-desc">AI-powered idea development & IP protection</p>
+                    <button class="checkin-button" onclick="checkIn('innovation-hub')">Check In (+2 SF Points)</button>
+                </div>
+
+                <div class="venue-card">
+                    <h3 class="venue-name">Alserkal Art District</h3>
+                    <p class="venue-type">Creative Space • Al Quoz</p>
+                    <div class="venue-communities">
+                        <span class="community-tag">Creative</span>
+                        <span class="community-tag">Learning</span>
+                        <span class="community-tag">Neighborhood</span>
                     </div>
-                    
-                    <div class="action-card premium" onclick="showUpgradeModal('mentor')">
-                        <div class="upgrade-badge">UPGRADE</div>
-                        <div class="action-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h3 class="action-title">Become a Mentor</h3>
-                        <p class="action-desc">Share expertise and guide emerging founders</p>
-                    </div>
+                    <button class="checkin-button" onclick="checkIn('alserkal')">Check In (+2 SF Points)</button>
                 </div>
             </div>
-            
-            <!-- Quick Stats -->
-            <div class="quick-stats">
-                <h2 class="section-title">Your Stats</h2>
-                <div class="stat-item">
-                    <span class="stat-label">Member Since</span>
-                    <span class="stat-value" id="memberSince">Today</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Venues Visited</span>
-                    <span class="stat-value" id="venuesVisited">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Connections</span>
-                    <span class="stat-value" id="connectionsCount">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">SF Points</span>
-                    <span class="stat-value gold" id="sfPoints">100</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Recent Activity -->
-        <div class="activity-section">
-            <h2 class="section-title">Recent Activity</h2>
-            <div id="activityFeed">
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-text">Welcome to SociallyFounded! Your Member journey begins now.</div>
-                        <div class="activity-time">Just now</div>
-                    </div>
-                </div>
-                
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-gift"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-text">You earned 100 SF Points for joining the community!</div>
-                        <div class="activity-time">Just now</div>
-                    </div>
-                </div>
-                
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-text">Complete your profile to unlock more features and connect with entrepreneurs.</div>
-                        <div class="activity-time">Just now</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- DIANA Assistant -->
-    <div class="diana-assistant" onclick="openDianaChat()" title="Chat with DIANA - Your AI Assistant">
-        <i class="fas fa-robot"></i>
-    </div>
-    
-    <!-- Upgrade Modal -->
-    <div id="upgradeModal" class="modal">
+        </section>
+    </main>
+
+    <!-- DIANA Chat Modal -->
+    <div class="modal" id="diana-modal">
         <div class="modal-content">
-            <div class="modal-icon">
-                <i class="fas fa-crown"></i>
+            <span class="close-modal" onclick="closeDianaChat()">&times;</span>
+            <h2>Chat with DIANA</h2>
+            <div class="diana-chat" id="chat-container">
+                <div class="chat-message diana-message">
+                    <strong>DIANA:</strong> Hi! I'm DIANA, your AI community catalyst. I can help you with community connections, startup ideas, professional networking, and cross-community collaboration. What would you like to explore today?
+                </div>
             </div>
-            <h3 class="modal-title" id="upgradeTitle">Upgrade to Founder</h3>
-            <p class="modal-text" id="upgradeText">
-                Unlock AI-powered idea development, IP protection, and access to verified mentors. 
-                LinkedIn verification required for professional credibility.
-            </p>
-            <div class="modal-actions">
-                <button class="modal-btn primary" id="upgradeBtn" onclick="startUpgrade()">
-                    <i class="fas fa-linkedin"></i> Verify with LinkedIn
-                </button>
-                <button class="modal-btn secondary" onclick="closeUpgradeModal()">Maybe Later</button>
+            <div style="display: flex; align-items: center;">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Ask DIANA about communities, startups, networking..." onkeypress="handleChatKeypress(event)">
+                <button class="send-button" onclick="sendMessage()">Send</button>
             </div>
         </div>
     </div>
-    
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import Firebase v9 SDK
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { 
-            getAuth, 
-            onAuthStateChanged,
-            signOut
-        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-        import { 
-            getFirestore, 
-            doc, 
-            getDoc,
-            updateDoc,
-            serverTimestamp
-        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
 
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
-            authDomain: "sociallyfounded-df98f.firebaseapp.com",
-            projectId: "sociallyfounded-df98f",
-            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
-            messagingSenderId: "994533610259",
-            appId: "1:994533610259:web:fe740378a4c000211e40e6",
-            measurementId: "G-EY0BZE30Q0"
+    <script>
+        // User data simulation
+        let userData = {
+            passportId: 'SF-1234567-AE',
+            sfPoints: 250,
+            dianaCredits: 3,
+            joinedCommunities: [],
+            dailyStreak: 1
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        // Update display
+        function updateDisplay() {
+            document.getElementById('passport-display').textContent = userData.passportId;
+            document.getElementById('points-display').textContent = `${userData.sfPoints} SF Points`;
+            document.getElementById('diana-credits').textContent = `${userData.dianaCredits} daily brainstorms available`;
+        }
 
-        let currentUser = null;
-        let userData = null;
-
-        // Authentication State Listener
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                console.log('User authenticated:', user.email);
-                await loadUserData();
-                updateUI();
-            } else {
-                console.log('No user authenticated');
-                // Redirect to auth page
-                window.location.href = '/core/auth.html';
-            }
-        });
-
-        // Load User Data from Firestore
-        async function loadUserData() {
-            try {
-                const userRef = doc(db, 'users', currentUser.uid);
-                const userDoc = await getDoc(userRef);
+        // Community joining
+        function joinCommunity(communityType) {
+            if (!userData.joinedCommunities.includes(communityType)) {
+                userData.joinedCommunities.push(communityType);
+                userData.sfPoints += 10; // Bonus for joining new community
                 
-                if (userDoc.exists()) {
-                    userData = userDoc.data();
-                    console.log('User data loaded:', userData);
+                if (communityType === 'entrepreneur') {
+                    alert('🚀 Welcome to the Entrepreneur Community! You now have access to DIANA AI brainstorming, mentor matching, and investor connections. Your first 3 sessions are free daily!');
                 } else {
-                    console.log('No user document found');
-                    // Could create a new user document here if needed
+                    alert(`🎉 Welcome to the ${communityType.charAt(0).toUpperCase() + communityType.slice(1)} Community! You earned 10 SF Points. Start connecting with like-minded people in your area.`);
                 }
-            } catch (error) {
-                console.error('Error loading user data:', error);
-            }
-        }
-
-        // Update UI with User Data
-        function updateUI() {
-            if (!userData) return;
-
-            // Update header
-            const userName = document.getElementById('userName');
-            const userPassport = document.getElementById('userPassport');
-            const userAvatar = document.getElementById('userAvatar');
-
-            userName.textContent = userData.displayName || currentUser.email.split('@')[0];
-            userPassport.textContent = userData.sfPassport?.id || 'SF-••••••-••';
-            
-            // Set avatar
-            const firstLetter = (userData.displayName || currentUser.email)[0].toUpperCase();
-            userAvatar.textContent = firstLetter;
-
-            // Update passport card
-            const passportTitle = document.getElementById('passportTitle');
-            const passportDesc = document.getElementById('passportDesc');
-            
-            if (userData.sfPassport) {
-                passportTitle.textContent = `${userData.sfPassport.tier} Member`;
-                passportDesc.textContent = `${userData.sfPassport.tier} Tier • Level ${userData.sfPassport.level}`;
-            }
-
-            // Update stats
-            updateStats();
-        }
-
-        // Update Statistics
-        function updateStats() {
-            const memberSince = document.getElementById('memberSince');
-            const venuesVisited = document.getElementById('venuesVisited');
-            const connectionsCount = document.getElementById('connectionsCount');
-            const sfPoints = document.getElementById('sfPoints');
-
-            // Calculate member since
-            const createdAt = userData.createdAt?.toDate?.() || new Date();
-            const daysSince = Math.floor((new Date() - createdAt) / (1000 * 60 * 60 * 24));
-            
-            if (daysSince === 0) {
-                memberSince.textContent = 'Today';
-            } else if (daysSince === 1) {
-                memberSince.textContent = '1 day';
+                
+                updateDisplay();
             } else {
-                memberSince.textContent = `${daysSince} days`;
+                alert(`You're already part of the ${communityType} community! Check out events and connect with members.`);
             }
-
-            // Mock data for now - replace with real data later
-            venuesVisited.textContent = '0';
-            connectionsCount.textContent = '0';
-            sfPoints.textContent = userData.sfPassport?.experience || '100';
         }
 
-        // Navigation Functions
-        window.navigateToVenues = function() {
-            window.location.href = '/member/venues.html';
-        };
+        // Venue check-in
+        function checkIn(venueId) {
+            userData.sfPoints += 2;
+            userData.dailyStreak += 1;
+            
+            const venueNames = {
+                'coffee-lab': 'The Coffee Lab',
+                'innovation-hub': 'Innovation Hub DIFC', 
+                'alserkal': 'Alserkal Art District'
+            };
+            
+            alert(`✅ Checked in at ${venueNames[venueId]}! You earned 2 SF Points. Look for other community members nearby!`);
+            updateDisplay();
+        }
 
-        window.exploreNetwork = function() {
-            // TODO: Implement network page
-            alert('Network feature coming soon! Connect with entrepreneurs in your area.');
-        };
-
-        // Logout Function
-        window.handleLogout = async function() {
-            try {
-                await signOut(auth);
-                window.location.href = '/';
-            } catch (error) {
-                console.error('Logout error:', error);
-                alert('Error signing out. Please try again.');
+        // DIANA Chat functionality
+        function openDianaChat() {
+            if (userData.dianaCredits <= 0) {
+                alert('💡 You\'ve used your daily DIANA credits! Earn more by:\n• Checking in at venues (+1 credit per 3 hours)\n• Helping community members (+1 credit)\n• Cross-community connections (+2 credits)\n\nOr upgrade to Premium for unlimited access!');
+                return;
             }
-        };
+            document.getElementById('diana-modal').style.display = 'block';
+        }
 
-        // Upgrade Modal Functions
-        let currentUpgradeType = null;
+        function closeDianaChat() {
+            document.getElementById('diana-modal').style.display = 'none';
+        }
 
-        window.showUpgradeModal = function(type) {
-            currentUpgradeType = type;
-            const modal = document.getElementById('upgradeModal');
-            const title = document.getElementById('upgradeTitle');
-            const text = document.getElementById('upgradeText');
-            const btn = document.getElementById('upgradeBtn');
+        function handleChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
 
-            if (type === 'founder') {
-                title.textContent = 'Upgrade to Founder';
-                text.textContent = 'Unlock AI-powered idea development, IP protection, and access to verified mentors. LinkedIn verification required for professional credibility.';
-                btn.innerHTML = '<i class="fas fa-linkedin"></i> Verify with LinkedIn';
-            } else if (type === 'mentor') {
-                title.textContent = 'Become a Mentor';
-                text.textContent = 'Share your expertise with emerging founders and help shape the next generation of entrepreneurs. LinkedIn verification required to validate your professional background.';
-                btn.innerHTML = '<i class="fas fa-linkedin"></i> Verify with LinkedIn';
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            if (userData.dianaCredits <= 0) {
+                alert('No DIANA credits remaining! Earn more through community engagement.');
+                return;
             }
 
-            modal.classList.add('show');
-        };
+            // Add user message
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.innerHTML += `
+                <div class="chat-message user-message">
+                    <strong>You:</strong> ${message}
+                </div>
+            `;
 
-        window.closeUpgradeModal = function() {
-            document.getElementById('upgradeModal').classList.remove('show');
-            currentUpgradeType = null;
-        };
+            // Simulate DIANA response (in real implementation, this would call OpenAI API)
+            setTimeout(() => {
+                let response = getDianaResponse(message);
+                chatContainer.innerHTML += `
+                    <div class="chat-message diana-message">
+                        <strong>DIANA:</strong> ${response}
+                    </div>
+                `;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+                // Use a credit
+                userData.dianaCredits -= 1;
+                updateDisplay();
+            }, 1000);
 
-        window.startUpgrade = function() {
-            // For now, redirect to LinkedIn elevation page
-            // In production, this would initiate actual LinkedIn OAuth
-            window.location.href = '/linkedin-elevation.html?persona=' + currentUpgradeType;
-        };
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
 
-        // DIANA Assistant
-        window.openDianaChat = function() {
-            alert('DIANA AI Assistant coming soon! Get personalized advice and insights for your entrepreneurial journey.');
-        };
-
-        // Close modal on background click
-        document.getElementById('upgradeModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeUpgradeModal();
+        function getDianaResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('startup') || lowerMessage.includes('business') || lowerMessage.includes('idea')) {
+                return "🚀 Great to hear you're interested in startups! As an entrepreneur community member, I can help you validate ideas, connect with potential co-founders, and prepare for investor meetings. What specific aspect of your startup journey would you like to explore? I can also connect you with mentors in your industry through our professional community.";
             }
-        });
+            
+            if (lowerMessage.includes('community') || lowerMessage.includes('connect') || lowerMessage.includes('network')) {
+                return "🤝 Community connections are powerful! Based on your interests, I can suggest cross-community opportunities. For example, if you're in the professional community, you might find creative collaborators for marketing projects, or neighborhood connections for local business insights. Which communities interest you most?";
+            }
+            
+            if (lowerMessage.includes('venue') || lowerMessage.includes('space') || lowerMessage.includes('coffee')) {
+                return "📍 Finding the right spaces for community building is key! I recommend checking in at venues that align with your communities. Coffee shops are great for professional networking, co-working spaces foster entrepreneur connections, and creative venues spark innovation. Which type of environment energizes you most?";
+            }
+            
+            return "That's an interesting question! As your AI community catalyst, I'm here to help you navigate all aspects of community building, professional development, and entrepreneurship. Could you be more specific about what you'd like to explore? I can help with networking strategies, startup ideas, community events, or venue recommendations.";
+        }
 
-        // Make Firebase utilities available globally
-        window.SFMember = {
-            auth,
-            db,
-            currentUser: () => currentUser,
-            userData: () => userData,
-            refreshData: loadUserData
-        };
+        // Initialize
+        updateDisplay();
 
-        console.log('Member Dashboard loaded successfully');
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('diana-modal');
+            if (event.target === modal) {
+                closeDianaChat();
+            }
+        }
     </script>
 </body>
 </html>
