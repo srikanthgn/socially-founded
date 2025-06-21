@@ -744,6 +744,31 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 SociallyFounded Dashboard Loading...');
 });
 </script>
+    <script>
+// Logout function
+async function signOut() {
+    try {
+        console.log('Signing out...');
+        
+        // Check if Firebase auth is loaded
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            await firebase.auth().signOut();
+            console.log('✅ Signed out successfully');
+        }
+        
+        // Always redirect to welcome page
+        window.location.href = '/welcome/';
+        
+    } catch (error) {
+        console.error('❌ Sign out error:', error);
+        // Even if there's an error, still redirect
+        window.location.href = '/welcome/';
+    }
+}
+
+// Make signOut function available globally
+window.signOut = signOut;
+</script>
 </body>
 </html>
 
