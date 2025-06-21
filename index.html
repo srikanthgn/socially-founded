@@ -829,6 +829,16 @@
         return `SF-${randomDigits}-${countryCode}`;
     }
 
+// Helper function to generate random string
+function generateRandomString(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
+    
     // Function to get country code
     async function getCountryCode() {
         try {
