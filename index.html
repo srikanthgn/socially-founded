@@ -1023,6 +1023,234 @@ async function createUserProfile(user, additionalData = {}) {
                 // Return merged data
                 return { ...existingData, ...updateData };
             } else {
+            // User authenticated but no Firestore document
+            userMenu.style.display = 'flex';
+            document.getElementById('userName').textContent = user.email;
+        }
+    } else {
+        // No user logged in
+        userMenu.style.display = 'none';
+        authStatus.classList.remove('show');
+    }
+});
+    
+    
+    // Logout function
+    async function logout() {
+        try {
+            await signOut(auth);
+            
+            // Clear localStorage
+            localStorage.removeItem('sf_user');
+            
+            // Show logout message
+            const authStatus = document.getElementById('authStatus');
+            authStatus.classList.add('show', 'error');
+            document.getElementById('authMessage').textContent = 'Successfully logged out. You can now test with a different account.';
+            
+            // Hide user menu
+            document.getElementById('userMenu').style.display = 'none';
+            
+            // Remove success message after 3 seconds
+            setTimeout(() => {
+                authStatus.classList.remove('show', 'error');
+            }, 3000);
+            
+            console.log('User logged out successfully');
+            
+        } catch (error) {
+            console.error('Logout error:', error);
+            showError('Error logging out. Please try again.');
+        }
+    }
+
+    window.logout = logout;
+
+    // QR Code functionality
+    function showQRCode() {
+        const qrOverlay = document.createElement('div');
+        qrOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            font-family: 'Poppins', sans-serif;
+        `;
+        
+        qrOverlay.innerHTML = `
+            <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 400px;">
+                <h3 style="color: #003554; margin-bottom: 20px;">Scan to Join on Mobile</h3>
+                <div id="qrcode" style="margin: 20px auto;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin)}" 
+                         alt="QR Code" style="border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+                <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
+                    Scan this QR code with your phone to join SociallyFounded
+                </p>
+                <button onclick="this.parentElement.parentElement.remove()" 
+                        style="background: #003554; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Close
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(qrOverlay);
+        
+        // Close on outside click
+        qrOverlay.addEventListener('click', (e) => {
+            if (e.target === qrOverlay) {
+                qrOverlay.remove();
+            }
+        });
+    }
+
+ 
+    // LinkedIn authentication - PRODUCTION READY
+    // LinkedIn Configuration - REPLACE WITH YOUR ACTUAL CLIENT ID
+    const LINKEDIN_CLIENT_ID = '78p9m46n9ropqr'; // YOUR ACTUAL CLIENT ID from LinkedIn Developer App
+    const LINKEDIN_REDIRECT_URI = window.location.origin + '/linkedin-callback.html';
+    const LINKEDIN_SCOPE = 'openid profile email'; // OAuth 2.0 scopes
+
+    // LinkedIn authentication
+    async function authenticateWithLinkedIn() {
+        try {
+            showLoadingState();
+            
+            // Check if we're in development or production
+            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            if (isDevelopment) {
+                // Development mode - simulate LinkedIn auth
+                await simulateLinkedInAuth();
+            } else {
+                // Production mode - use real LinkedIn OAuth
+                initiateLinkedInOAuth();
+            }
+        } catch (error) {
+            console.error('LinkedIn auth error:', error);
+            hideLoadingState();
+            showError('LinkedIn sign in failed. Please try again.');
+        }
+    }
+
+    // LinkedIn OAuth flow - PRODUCTION VERSION
+    function initiateLinkedInOAuth() {
+        // Generate a random state for CSRF protection
+        const state = generateRandomString(16);
+        sessionStorage.setItem('linkedin_oauth_state', state);
+        sessionStorage.setItem('linkedin_auth_intent', 'waitlist');
+        
+        // Build the LinkedIn OAuth URL with correct parameters
+        const authUrl = 'https://www.linkedin.com/oauth/v2/authorization?' +
+            `response_type=code&` +
+            `client_id=${LINKEDIN_CLIENT_ID}&` +
+            `redirect_uri=${encodeURIComponent(LINKEDIN_REDIRECT_URI)}&` +
+            `state=${state}&` +
+            `scope=${encodeURIComponent(LINKEDIN_SCOPE)}`;
+        
+        console.log('Redirecting to LinkedIn OAuth:', authUrl);
+        
+        // Redirect to LinkedIn for authentication
+        window.location.href = authUrl;
+    }
+
+// Simulate LinkedIn auth for development
+async function simulateLinkedInAuth() {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const mockProfile = {
+        id: 'ln_' + generateRandomString(10),
+        fullName: 'LinkedIn Professional',
+        headline: 'Senior Professional | Industry Expert',
+        email: 'linkedin_' + generateRandomString(6) + '@example.com',
+        profilePicture: 'https://ui-avatars.com/api/?name=LinkedIn+Professional&background=0077B5&color=fff',
+        industry: 'Technology',
+        skills: ['Leadership', 'Strategy', 'Innovation'],
+        credibilityScore: 92
+    };
+    
+    try {
+        const email = mockProfile.email;
+        const password = 'LinkedIn' + generateRandomString(8);
+        
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        
+        const userData = await createUserProfile(userCredential.user, {
+            authProvider: 'linkedin',
+            displayName: mockProfile.fullName,
+            photoURL: mockProfile.profilePicture,
+            linkedinProfile: mockProfile
+        });
+        
+        localStorage.setItem('sf_user', JSON.stringify({
+            uid: userCredential.user.uid,
+            email: mockProfile.email,
+            displayName: mockProfile.fullName,
+            photoURL: mockProfile.profilePicture,
+            sfPassport: userData.sfPassport || { id: 'SF-PENDING' },
+            linkedinVerified: true
+        }));
+        
+        // Show success modal
+        const modal = document.getElementById('successModal');
+        const modalContent = modal.querySelector('.modal-content');
+        modalContent.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 64px; margin-bottom: 20px;">🎉</div>
+                <h3 style="font-size: 28px; margin-bottom: 15px; color: #D4AF37;">Welcome to SociallyFounded!</h3>
+                <p style="font-size: 18px; margin-bottom: 10px; font-weight: 600;">
+                    ${mockProfile.fullName}
+                </p>
+                <p style="font-size: 16px; margin-bottom: 20px; opacity: 0.9;">
+                    Your SF Passport: <strong style="color: #D4AF37;">${userData.sfPassport?.id || 'SF-PENDING'}</strong>
+                </p>
+                <p style="font-size: 14px; color: #0077B5; margin-bottom: 20px;">
+                    ✓ LinkedIn Professional Verified
+                </p>
+                <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p style="font-size: 14px; margin-bottom: 8px;">🎁 Founding Member Benefits:</p>
+                    <p style="font-size: 13px; opacity: 0.8;">• Pre-verified for Founder/Mentor roles</p>
+                    <p style="font-size: 13px; opacity: 0.8;">• Early access to DIANA AI</p>
+                    <p style="font-size: 13px; opacity: 0.8;">• Professional credibility score: ${mockProfile.credibilityScore}</p>
+                </div>
+                <div style="font-size: 14px; opacity: 0.7;">
+                    Redirecting to your exclusive member area...
+                </div>
+                <div class="progress-bar" style="width: 100%; height: 4px; background: #ddd; border-radius: 2px; margin-top: 15px; overflow: hidden;">
+                    <div style="width: 0%; height: 100%; background: #D4AF37; transition: width 3s linear;"></div>
+                </div>
+            </div>
+        `;
+        modal.classList.add('show');
+        
+        setTimeout(() => {
+            const progressBar = modal.querySelector('.progress-bar > div');
+            if (progressBar) {
+                progressBar.style.width = '100%';
+            }
+        }, 100);
+        
+        hideLoadingState();
+        
+        setTimeout(() => {
+            window.location.href = `/welcome/?passport=${userData.sfPassport?.id || 'SF-PENDING'}&auth=linkedin`;
+        }, 3000);
+        
+    } catch (error) {
+        hideLoadingState();
+        if (error.code === 'auth/email-already-in-use') {
+            showError('This LinkedIn account was already used. Please try Google or Email.');
+        } else {
+            showError('LinkedIn authentication failed. Please try again.');
+        }
+    }
+}
                 // User has passport, just update login time
                 await setDoc(userRef, { 
                     lastLoginAt: serverTimestamp() 
@@ -1433,404 +1661,3 @@ onAuthStateChanged(auth, async (user) => {
             }
             
         } else {
-            // User authenticated but no Firestore document
-            userMenu.style.display = 'flex';
-            document.getElementById('userName').textContent = user.email;
-        }
-    } else {
-        // No user logged in
-        userMenu.style.display = 'none';
-        authStatus.classList.remove('show');
-    }
-});
-    
-    
-    // Logout function
-    async function logout() {
-        try {
-            await signOut(auth);
-            
-            // Clear localStorage
-            localStorage.removeItem('sf_user');
-            
-            // Show logout message
-            const authStatus = document.getElementById('authStatus');
-            authStatus.classList.add('show', 'error');
-            document.getElementById('authMessage').textContent = 'Successfully logged out. You can now test with a different account.';
-            
-            // Hide user menu
-            document.getElementById('userMenu').style.display = 'none';
-            
-            // Remove success message after 3 seconds
-            setTimeout(() => {
-                authStatus.classList.remove('show', 'error');
-            }, 3000);
-            
-            console.log('User logged out successfully');
-            
-        } catch (error) {
-            console.error('Logout error:', error);
-            showError('Error logging out. Please try again.');
-        }
-    }
-
-    window.logout = logout;
-
-    // QR Code functionality
-    function showQRCode() {
-        const qrOverlay = document.createElement('div');
-        qrOverlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            font-family: 'Poppins', sans-serif;
-        `;
-        
-        qrOverlay.innerHTML = `
-            <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 400px;">
-                <h3 style="color: #003554; margin-bottom: 20px;">Scan to Join on Mobile</h3>
-                <div id="qrcode" style="margin: 20px auto;">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin)}" 
-                         alt="QR Code" style="border: 1px solid #ddd; border-radius: 8px;">
-                </div>
-                <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
-                    Scan this QR code with your phone to join SociallyFounded
-                </p>
-                <button onclick="this.parentElement.parentElement.remove()" 
-                        style="background: #003554; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
-                    Close
-                </button>
-            </div>
-        `;
-        
-        document.body.appendChild(qrOverlay);
-        
-        // Close on outside click
-        qrOverlay.addEventListener('click', (e) => {
-            if (e.target === qrOverlay) {
-                qrOverlay.remove();
-            }
-        });
-    }
-
- 
-    // LinkedIn authentication (placeholder)
- // LinkedIn Configuration
-
-const LINKEDIN_CLIENT_ID = 'YOUR_LINKEDIN_CLIENT_ID'; // Replace in production
-const LINKEDIN_REDIRECT_URI = window.location.origin + '/linkedin-callback.html';
-
-// LinkedIn authentication
-async function authenticateWithLinkedIn() {
-    try {
-        showLoadingState();
-        
-        // For development, simulate LinkedIn auth
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            await simulateLinkedInAuth();
-        } else {
-            // Production LinkedIn OAuth
-            initiateLinkedInOAuth();
-        }
-    } catch (error) {
-        console.error('LinkedIn auth error:', error);
-        hideLoadingState();
-        showError('LinkedIn sign in failed. Please try again.');
-    }
-}
-
-// LinkedIn OAuth flow
-function initiateLinkedInOAuth() {
-    const state = generateRandomString(16);
-    sessionStorage.setItem('linkedin_oauth_state', state);
-    sessionStorage.setItem('linkedin_auth_intent', 'waitlist');
-    
-    const scope = 'r_liteprofile r_emailaddress';
-    const authUrl = `https://www.linkedin.com/oauth/v2/authorization?` +
-        `response_type=code&` +
-        `client_id=${LINKEDIN_CLIENT_ID}&` +
-        `redirect_uri=${encodeURIComponent(LINKEDIN_REDIRECT_URI)}&` +
-        `state=${state}&` +
-        `scope=${encodeURIComponent(scope)}`;
-    
-    window.location.href = authUrl;
-}
-
-// Simulate LinkedIn auth for development
-async function simulateLinkedInAuth() {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const mockProfile = {
-        id: 'ln_' + generateRandomString(10),
-        fullName: 'LinkedIn Professional',
-        headline: 'Senior Professional | Industry Expert',
-        email: 'linkedin_' + generateRandomString(6) + '@example.com',
-        profilePicture: 'https://ui-avatars.com/api/?name=LinkedIn+Professional&background=0077B5&color=fff',
-        industry: 'Technology',
-        skills: ['Leadership', 'Strategy', 'Innovation'],
-        credibilityScore: 92
-    };
-    
-    try {
-        const email = mockProfile.email;
-        const password = 'LinkedIn' + generateRandomString(8);
-        
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        
-        const userData = await createUserProfile(userCredential.user, {
-            authProvider: 'linkedin',
-            displayName: mockProfile.fullName,
-            photoURL: mockProfile.profilePicture,
-            linkedinProfile: mockProfile
-        });
-        
-        localStorage.setItem('sf_user', JSON.stringify({
-            uid: userCredential.user.uid,
-            email: mockProfile.email,
-            displayName: mockProfile.fullName,
-            photoURL: mockProfile.profilePicture,
-            sfPassport: userData.sfPassport || { id: 'SF-PENDING' },
-            linkedinVerified: true
-        }));
-        
-        // Show success modal
-        const modal = document.getElementById('successModal');
-        const modalContent = modal.querySelector('.modal-content');
-        modalContent.innerHTML = `
-            <div style="text-align: center;">
-                <div style="font-size: 64px; margin-bottom: 20px;">🎉</div>
-                <h3 style="font-size: 28px; margin-bottom: 15px; color: #D4AF37;">Welcome to SociallyFounded!</h3>
-                <p style="font-size: 18px; margin-bottom: 10px; font-weight: 600;">
-                    ${mockProfile.fullName}
-                </p>
-                <p style="font-size: 16px; margin-bottom: 20px; opacity: 0.9;">
-                    Your SF Passport: <strong style="color: #D4AF37;">${userData.sfPassport?.id || 'SF-PENDING'}</strong>
-                </p>
-                <p style="font-size: 14px; color: #0077B5; margin-bottom: 20px;">
-                    ✓ LinkedIn Professional Verified
-                </p>
-                <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                    <p style="font-size: 14px; margin-bottom: 8px;">🎁 Founding Member Benefits:</p>
-                    <p style="font-size: 13px; opacity: 0.8;">• Pre-verified for Founder/Mentor roles</p>
-                    <p style="font-size: 13px; opacity: 0.8;">• Early access to DIANA AI</p>
-                    <p style="font-size: 13px; opacity: 0.8;">• Professional credibility score: ${mockProfile.credibilityScore}</p>
-                </div>
-                <div style="font-size: 14px; opacity: 0.7;">
-                    Redirecting to your exclusive member area...
-                </div>
-                <div class="progress-bar" style="width: 100%; height: 4px; background: #ddd; border-radius: 2px; margin-top: 15px; overflow: hidden;">
-                    <div style="width: 0%; height: 100%; background: #D4AF37; transition: width 3s linear;"></div>
-                </div>
-            </div>
-        `;
-        modal.classList.add('show');
-        
-        setTimeout(() => {
-            const progressBar = modal.querySelector('.progress-bar > div');
-            if (progressBar) {
-                progressBar.style.width = '100%';
-            }
-        }, 100);
-        
-        hideLoadingState();
-        
-        setTimeout(() => {
-            window.location.href = `/welcome/?passport=${userData.sfPassport?.id || 'SF-PENDING'}&auth=linkedin`;
-        }, 3000);
-        
-    } catch (error) {
-        hideLoadingState();
-        if (error.code === 'auth/email-already-in-use') {
-            showError('This LinkedIn account was already used. Please try Google or Email.');
-        } else {
-            showError('LinkedIn authentication failed. Please try again.');
-        }
-    }
-}
-    // Email authentication (improved)
-    function authenticateWithEmail() {
-        // Create email modal
-        const emailModal = document.createElement('div');
-        emailModal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            font-family: 'Poppins', sans-serif;
-        `;
-        
-        emailModal.innerHTML = `
-            <div style="background: white; padding: 40px; border-radius: 16px; max-width: 400px; width: 90%;">
-                <h3 style="color: #003554; margin-bottom: 20px;">Join with Email</h3>
-                <form id="emailAuthForm" style="display: flex; flex-direction: column; gap: 15px;">
-                    <input type="email" id="emailInput" placeholder="Email address" required
-                           style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
-                    <input type="password" id="passwordInput" placeholder="Create password (min 6 characters)" required minlength="6"
-                           style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
-                    <button type="submit" style="background: #D4AF37; color: #003554; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        Create Account
-                    </button>
-                    <button type="button" onclick="this.closest('.modal').remove()" 
-                            style="background: transparent; color: #666; border: 1px solid #ddd; padding: 12px; border-radius: 8px; cursor: pointer;">
-                        Cancel
-                    </button>
-                </form>
-            </div>
-        `;
-        
-        document.body.appendChild(emailModal);
-        
-        // Handle form submission
-        document.getElementById('emailAuthForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('emailInput').value;
-            const password = document.getElementById('passwordInput').value;
-            
-            try {
-                showLoadingState();
-                emailModal.remove();
-                
-                const result = await createUserWithEmailAndPassword(auth, email, password);
-                const user = result.user;
-                
-                const userData = await createUserProfile(user, { 
-                    displayName: email.split('@')[0],
-                    authProvider: 'email',
-                    referralSource: getReferralSource()
-                });
-                
-                showSuccessAndRedirect(userData);
-                
-            } catch (error) {
-                console.error('Email auth error:', error);
-                if (error.code === 'auth/email-already-in-use') {
-                    // Try to sign in instead
-                    try {
-                        const result = await signInWithEmailAndPassword(auth, email, password);
-                        const userRef = doc(db, 'users', result.user.uid);
-                        const userDoc = await getDoc(userRef);
-                        
-                        if (userDoc.exists()) {
-                            showSuccessAndRedirect(userDoc.data());
-                        }
-                    } catch (signInError) {
-                        showError('Email already exists. Please check your password or use a different email.');
-                    }
-                } else {
-                    showError(error.message);
-                }
-            }
-        });
-        
-        // Close on outside click
-        emailModal.addEventListener('click', (e) => {
-            if (e.target === emailModal) {
-                emailModal.remove();
-            }
-        });
-    }
-
-    // Make functions available globally
-    window.SFAuth = {
-        showQRCode,
-        authenticateWithGoogle,
-        authenticateWithLinkedIn,
-        authenticateWithEmail,
-        logout
-    };
-
-    // Test function for developers
-    window.testPassportGeneration = async () => {
-        const passportId = await generateSFPassportId();
-        console.log('Generated SF Passport ID:', passportId);
-        console.log('Format: SF-[7 digits]-[Country Code]');
-        console.log('Your timezone:', Intl.DateTimeFormat().resolvedOptions().timeZone);
-    };
-
-    // Clear any existing success modals on page load
-    window.addEventListener('load', () => {
-        // Check if user is coming from waitlist confirmation
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('from') === 'waitlist') {
-            const authStatus = document.getElementById('authStatus');
-            authStatus.classList.add('show');
-            document.getElementById('authMessage').textContent = 'You\'re already on the waitlist! You can logout to test with another account.';
-        }
-        
-        // Hide any lingering success modals
-        const successModal = document.getElementById('successModal');
-        if (successModal) {
-            successModal.classList.remove('show');
-        }
-    });
-
-    // Developer tools
-    window.SFAuth.checkAuthStatus = () => {
-        const user = auth.currentUser;
-        if (user) {
-            console.log('Current user:', user.email, user.uid);
-            return true;
-        } else {
-            console.log('No user logged in');
-            return false;
-        }
-    };
-
-    window.SFAuth.clearAllData = async () => {
-        if (confirm('This will logout and clear all local data. Continue?')) {
-            await logout();
-            localStorage.clear();
-            console.log('All data cleared');
-        }
-    };
-
-    // Add keyboard shortcut for developer logout (Ctrl+Shift+L)
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.shiftKey && e.key === 'L') {
-            console.log('Developer logout shortcut triggered');
-            SFAuth.logout();
-        }
-    });
-
-    // Add console helper messages
-    console.log('%c🔥 SociallyFounded Developer Tools', 'color: #D4AF37; font-size: 16px; font-weight: bold;');
-    console.log('%cAvailable commands:', 'color: #003554; font-weight: bold;');
-    console.log('- SFAuth.checkAuthStatus() - Check if user is logged in');
-    console.log('- SFAuth.logout() - Logout current user');
-    console.log('- SFAuth.clearAllData() - Clear all local data and logout');
-    console.log('- testPassportGeneration() - Test passport ID generation');
-    console.log('- Press Ctrl+Shift+L for quick logout');
-
-    console.log('🔥 SociallyFounded Firebase authentication ready!');
-
-// 4. Add a safety check to prevent the button from staying in loading state:
-setInterval(() => {
-    const googleBtn = document.getElementById('google-auth-btn');
-    if (googleBtn && googleBtn.textContent.includes('Authenticating')) {
-        // If button has been showing "Authenticating" for more than 10 seconds, reset it
-        const btnHTML = googleBtn.innerHTML;
-        if (btnHTML.includes('Authenticating')) {
-            console.log('Resetting stuck authentication button');
-            hideLoadingState();
-        }
-    }
-}, 10000); // Check every 10 seconds
-    
-</script>
-    
-</body>
-</html>
