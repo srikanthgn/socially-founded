@@ -3,63 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to SociallyFounded - You're In!</title>
-    <link rel="icon" type="image/png" href="https://sociallyfounded.com/assets/sf-logo.png">
+    <title>Welcome to SociallyFounded - Your Community Awaits</title>
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- MANDATORY: Poppins Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
+    <!-- Font Awesome Pro Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* BRAND GUIDELINES ENFORCEMENT */
+        :root {
+            /* ONLY APPROVED COLORS */
+            --deep-navy: #003554;
+            --accent-gold: #D4AF37;
+            --pure-white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #666666;
+            --success-green: #2ECC71;
+            
+            /* Community Type Colors (Use Sparingly) */
+            --professional: #003554;
+            --creative: #8B4CB8;
+            --neighborhood: #2ECC71;
+            --remote-work: #3498DB;
+            --entrepreneur: #D4AF37;
+            --learning: #E67E22;
+            --lifestyle: #E91E63;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --deep-navy: #003554;
-            --white: #FFFFFF;
-            --light-gray: #F5F5F5;
-            --accent-gray: #E0E0E0;
-            --accent-gold: #D4AF37;
-            --accent-gold-hover: #E5C047;
-            --gradient-primary: linear-gradient(135deg, #003554 0%, #004a6b 100%);
-            --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #E5C047 100%);
-            --shadow-soft: 0 10px 30px rgba(0, 53, 84, 0.1);
-            --shadow-strong: 0 20px 40px rgba(0, 53, 84, 0.2);
-        }
-
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--light-gray);
+            background: var(--pure-white);
             color: var(--deep-navy);
             line-height: 1.6;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Header */
-        .header {
-            background: var(--gradient-primary);
-            color: var(--white);
+        /* Header - EXACT BRAND COMPLIANCE */
+        header {
+            background: var(--pure-white);
+            border-bottom: 1px solid var(--medium-gray);
             padding: 20px 0;
             position: fixed;
+            width: 100%;
             top: 0;
-            left: 0;
-            right: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
         }
 
-        .header.scrolled {
-            padding: 15px 0;
-            box-shadow: var(--shadow-strong);
-        }
-
-        .header-content {
+        .header-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
@@ -68,1121 +67,583 @@
             align-items: center;
         }
 
-        .logo-section {
+        .logo-container {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .sf-logo {
-            width: 45px;
-            height: 45px;
+        .logo {
+            height: 40px; /* EXACT BRAND REQUIREMENT */
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--light-gray);
+            padding: 8px 15px;
+            border-radius: 25px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             background: var(--accent-gold);
-            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 600;
             color: var(--deep-navy);
-            font-weight: 800;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
-
-        .brand-name {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .status-badge {
-            background: rgba(212, 175, 55, 0.2);
-            color: var(--accent-gold);
-            padding: 8px 16px;
-            border-radius: 25px;
             font-size: 14px;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .passport-badge {
+            background: var(--accent-gold);
+            color: var(--deep-navy);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
             font-weight: 600;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        /* Hero Section */
-        .hero {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 120px 0 80px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.5;
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .welcome-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(212, 175, 55, 0.2);
-            color: var(--accent-gold);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 25px;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-            }
-            to {
-                box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
-            }
-        }
-
-        .hero-title {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            line-height: 1.1;
-            background: linear-gradient(135deg, var(--white) 0%, var(--accent-gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 22px;
-            font-weight: 300;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .member-counter {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 40px auto 0;
-            max-width: 400px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .counter-item {
-            text-align: center;
-        }
-
-        .counter-number {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--accent-gold);
-            display: block;
-        }
-
-        .counter-label {
-            font-size: 14px;
-            opacity: 0.8;
-            font-weight: 500;
+            font-family: monospace;
         }
 
         /* Main Content */
-        .main-content {
-            padding: 80px 0;
+        main {
+            margin-top: 80px;
+            padding: 40px 20px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
         }
 
-        /* Feature Sections */
-        .feature-section {
-            margin-bottom: 100px;
-        }
-
-        .section-header {
+        /* Hero Section */
+        .hero {
             text-align: center;
             margin-bottom: 60px;
         }
 
-        .section-title {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 20px;
+        .welcome-badge {
+            display: inline-block;
+            background: var(--accent-gold);
             color: var(--deep-navy);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
 
-        .section-subtitle {
-            font-size: 18px;
-            color: #666;
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--deep-navy);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--dark-gray);
             max-width: 600px;
             margin: 0 auto;
         }
 
-        .feature-grid {
+        /* Community Pills */
+        .community-showcase {
+            background: var(--light-gray);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 60px;
+        }
+
+        .community-title {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--deep-navy);
+        }
+
+        .community-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            align-items: start;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .community-pill {
+            background: var(--pure-white);
+            color: var(--deep-navy);
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            border: 2px solid var(--medium-gray);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .community-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 53, 84, 0.1);
+            border-color: var(--accent-gold);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
         }
 
         .feature-card {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 40px;
-            box-shadow: var(--shadow-soft);
+            background: var(--pure-white);
+            border: 1px solid var(--medium-gray);
+            border-radius: 15px;
+            padding: 30px;
             transition: all 0.3s ease;
-            border: 1px solid rgba(0, 53, 84, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-gold);
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-strong);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
         }
 
         .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--gradient-gold);
-            color: var(--deep-navy);
-            border-radius: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--light-gray);
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .feature-icon.gold {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent-gold);
         }
 
         .feature-title {
-            font-size: 24px;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--deep-navy);
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        /* DIANA Section */
+        .diana-section {
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            color: var(--pure-white);
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .diana-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            padding: 3px;
+            background: var(--pure-white);
+        }
+
+        .diana-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .diana-title {
+            font-size: 32px;
             font-weight: 700;
             margin-bottom: 15px;
-            color: var(--deep-navy);
         }
 
-        .feature-description {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 25px;
-            line-height: 1.7;
-        }
-
-        .feature-demo {
-            background: var(--light-gray);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            font-style: italic;
-            border: 2px dashed rgba(0, 53, 84, 0.2);
-        }
-
-        /* AI Demo Section */
-        .ai-demo {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 40px;
-            box-shadow: var(--shadow-strong);
-            margin: 60px 0;
-            border: 1px solid rgba(0, 53, 84, 0.1);
-        }
-
-        .chat-interface {
-            background: var(--light-gray);
-            border-radius: 20px;
-            padding: 30px;
+        .diana-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 0.9;
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0 auto 30px;
         }
 
-        .chat-message {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            align-items: flex-start;
-        }
-
-        .chat-message.user {
-            flex-direction: row-reverse;
-        }
-
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .chat-avatar.user {
-            background: var(--deep-navy);
-            color: var(--white);
-        }
-
-        .chat-avatar.ai {
-            background: var(--accent-gold);
-            color: var(--deep-navy);
-        }
-
-        .chat-bubble {
-            background: var(--white);
-            padding: 15px 20px;
-            border-radius: 20px;
-            max-width: 400px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-message.user .chat-bubble {
-            background: var(--deep-navy);
-            color: var(--white);
-        }
-
-        .typing-indicator {
-            display: flex;
-            gap: 5px;
-            padding: 15px 20px;
-            background: var(--white);
-            border-radius: 20px;
-            max-width: 100px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent-gold);
-            border-radius: 50%;
-            animation: typing 1.4s infinite ease-in-out;
-        }
-
-        .dot:nth-child(1) { animation-delay: -0.32s; }
-        .dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes typing {
-            0%, 80%, 100% {
-                transform: scale(0);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* Timeline Section */
+        /* Timeline */
         .timeline {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 50px;
-            box-shadow: var(--shadow-soft);
-            margin: 60px 0;
-        }
-
-        .timeline-item {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 40px;
-            align-items: center;
-        }
-
-        .timeline-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .timeline-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-gold);
-            color: var(--deep-navy);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
-
-        .timeline-content {
-            flex: 1;
+            margin-bottom: 60px;
         }
 
         .timeline-title {
-            font-size: 20px;
+            font-size: 32px;
             font-weight: 600;
-            margin-bottom: 8px;
+            text-align: center;
+            margin-bottom: 40px;
             color: var(--deep-navy);
         }
 
-        .timeline-description {
-            color: #666;
-            margin-bottom: 10px;
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .timeline-item {
+            background: var(--light-gray);
+            padding: 25px;
+            border-radius: 15px;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item.active {
+            border-color: var(--accent-gold);
+            background: var(--pure-white);
         }
 
         .timeline-status {
-            display: inline-block;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--success-green);
+            color: var(--pure-white);
             padding: 4px 12px;
-            border-radius: 20px;
+            border-radius: 15px;
             font-size: 12px;
             font-weight: 600;
         }
 
-        .status-ready {
-            background: #e7f5e7;
-            color: #2d662d;
-        }
-
-        .status-development {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-planned {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-
-        /* Benefits Section */
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .benefit-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(0, 53, 84, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .benefit-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-strong);
-        }
-
-        .benefit-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-primary);
-            color: var(--white);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin: 0 auto 20px;
-        }
-
-        .benefit-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
+        .timeline-status.development {
+            background: var(--accent-gold);
             color: var(--deep-navy);
         }
 
-        .benefit-description {
-            font-size: 14px;
-            color: #666;
+        .timeline-status.upcoming {
+            background: var(--medium-gray);
+            color: var(--dark-gray);
         }
 
         /* CTA Section */
         .cta-section {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 80px 0;
+            background: var(--deep-navy);
+            color: var(--pure-white);
+            padding: 60px 40px;
+            border-radius: 20px;
             text-align: center;
-            margin-top: 100px;
+            margin-bottom: 40px;
         }
 
         .cta-title {
-            font-size: 42px;
+            font-size: 36px;
             font-weight: 700;
             margin-bottom: 20px;
         }
 
         .cta-subtitle {
             font-size: 18px;
-            margin-bottom: 40px;
+            font-weight: 400;
             opacity: 0.9;
+            margin-bottom: 30px;
         }
 
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-btn {
-            padding: 18px 35px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .cta-btn.primary {
+        .cta-button {
+            display: inline-block;
             background: var(--accent-gold);
             color: var(--deep-navy);
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
 
-        .cta-btn.primary:hover {
-            background: var(--accent-gold-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
-        }
-
-        .cta-btn.secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--white);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .cta-btn.secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
 
         /* Footer */
-        .footer {
-            background: var(--deep-navy);
-            color: var(--white);
-            padding: 60px 0 30px 0;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        footer {
             text-align: center;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .footer-text {
-            font-size: 16px;
-            margin-bottom: 30px;
-            opacity: 0.8;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: var(--white);
-            text-decoration: none;
+            padding: 40px 20px;
+            color: var(--dark-gray);
             font-size: 14px;
-            opacity: 0.8;
-            transition: all 0.3s ease;
         }
 
-        .footer-link:hover {
-            opacity: 1;
-            color: var(--accent-gold);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            opacity: 0.6;
-        }
-
-        .team-link {
-            opacity: 0.3;
-            font-size: 11px;
-            color: var(--white);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .team-link:hover {
-            opacity: 0.6;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 968px) {
-            .hero-title {
-                font-size: 42px;
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
             }
 
-            .hero-subtitle {
+            .subtitle {
                 font-size: 18px;
             }
 
-            .feature-grid {
+            .community-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
                 grid-template-columns: 1fr;
-                gap: 30px;
             }
 
-            .timeline-item {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
+            .diana-section {
+                padding: 40px 20px;
             }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 0 15px;
-            }
-
-            .hero {
-                padding: 100px 0 60px 0;
-            }
-
-            .hero-title {
-                font-size: 32px;
-            }
-
-            .section-title {
-                font-size: 32px;
-            }
-
-            .feature-card,
-            .ai-demo,
-            .timeline {
-                padding: 25px;
-                margin: 40px 0;
-            }
-
-            .member-counter {
-                flex-direction: column;
-                gap: 20px;
-                padding: 20px;
-            }
-
-            .benefits-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        /* Loading Animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Scroll Animations */
-        .scroll-animate {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease-out;
-        }
-
-        .scroll-animate.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header" id="header">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="sf-logo">SF</div>
-                <div class="brand-name">SociallyFounded</div>
+    <!-- Header with Brand Compliance -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SociallyFounded" class="logo">
             </div>
             
-            <div class="status-badge">
-                <i class="fas fa-check-circle"></i>
-                You're In!
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">
+                    <span id="userInitials">SF</span>
+                </div>
+                <span id="userName">Member</span>
+                <span class="passport-badge" id="passportBadge">SF-XXXXXXX-XX</span>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="welcome-badge fade-in">
-                <i class="fas fa-star"></i>
-                Welcome to the Future
-            </div>
-            
-            <h1 class="hero-title fade-in" style="animation-delay: 0.2s;">
-                You're In!
-            </h1>
-            
-            <p class="hero-subtitle fade-in" style="animation-delay: 0.4s;">
-                Welcome to SociallyFounded - where entrepreneurship meets AI innovation. 
-                Here's what's coming to transform your founder journey.
-            </p>
-
-            <div class="member-counter fade-in" style="animation-delay: 0.6s;">
-                <div class="counter-item">
-                    <span class="counter-number" id="memberCount">47</span>
-                    <span class="counter-label">Founding Members</span>
-                </div>
-                <div class="counter-item">
-                    <span class="counter-number">100</span>
-                    <span class="counter-label">Total Spots</span>
-                </div>
-                <div class="counter-item">
-                    <span class="counter-number" id="daysLeft">23</span>
-                    <span class="counter-label">Days to Launch</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="main-content">
+    <main>
         <div class="container">
-            <!-- AI Incubation Feature -->
-            <section class="feature-section scroll-animate">
-                <div class="section-header">
-                    <h2 class="section-title">Your AI Co-Founder</h2>
-                    <p class="section-subtitle">
-                        Meet DIANA - the world's first AI system designed specifically for non-technical founders. 
-                        From concept to MVP without writing a single line of code.
-                    </p>
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="welcome-badge"><i class="fas fa-trophy" style="margin-right: 8px;"></i>Founding Member</div>
+                <h1>Welcome to SociallyFounded!</h1>
+                <p class="subtitle">You're among the first to join our community acceleration platform. Your journey to finding your tribe in spaces you love starts here.</p>
+            </section>
+
+            <!-- Community Types Showcase -->
+            <section class="community-showcase">
+                <h2 class="community-title">Your Communities, Infinite Connections</h2>
+                <div class="community-grid">
+                    <div class="community-pill"><i class="fas fa-briefcase" style="margin-right: 5px;"></i>Professional</div>
+                    <div class="community-pill"><i class="fas fa-palette" style="margin-right: 5px;"></i>Creative</div>
+                    <div class="community-pill"><i class="fas fa-home" style="margin-right: 5px;"></i>Neighborhood</div>
+                    <div class="community-pill"><i class="fas fa-laptop" style="margin-right: 5px;"></i>Remote Work</div>
+                    <div class="community-pill"><i class="fas fa-rocket" style="margin-right: 5px;"></i>Entrepreneur</div>
+                    <div class="community-pill"><i class="fas fa-graduation-cap" style="margin-right: 5px;"></i>Learning</div>
+                    <div class="community-pill"><i class="fas fa-heartbeat" style="margin-right: 5px;"></i>Lifestyle</div>
+                </div>
+                <p style="text-align: center; color: var(--dark-gray); margin-top: 20px;">
+                    Choose the communities that resonate with you. Connect across boundaries.
+                </p>
+            </section>
+
+            <!-- Core Features -->
+            <section class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon gold">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="feature-title">DIANA AI Co-Founder</h3>
+                    <p class="feature-desc">DIANA is your virtual co-founder for entrepreneurs. Incubate your idea into a viable business - websites, apps, and more. No tech skills required.</p>
                 </div>
 
-                <div class="ai-demo">
-                    <div class="chat-interface">
-                        <div class="chat-message user">
-                            <div class="chat-avatar user">You</div>
-                            <div class="chat-bubble">
-                                I have an idea for a health app but I'm not technical. Can you help me build it?
-                            </div>
-                        </div>
-                        
-                        <div class="chat-message ai">
-                            <div class="chat-avatar ai">DIANA</div>
-                            <div class="chat-bubble">
-                                Absolutely! Let's start by defining your health app concept. What specific health problem are you solving? I'll help you validate the idea, create wireframes, and build a working prototype.
-                            </div>
-                        </div>
-                        
-                        <div class="chat-message user">
-                            <div class="chat-avatar user">You</div>
-                            <div class="chat-bubble">
-                                It's a meditation app for busy entrepreneurs. I want to track stress levels and provide personalized sessions.
-                            </div>
-                        </div>
-                        
-                        <div class="chat-message ai">
-                            <div class="chat-avatar ai">DIANA</div>
-                            <div class="typing-indicator">
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-linkedin"></i>
                     </div>
+                    <h3 class="feature-title">LinkedIn-Verified Network</h3>
+                    <p class="feature-desc">Every mentor and founder is verified through LinkedIn. Connect with real professionals who've walked your path.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="feature-title">Global Venue Network</h3>
+                    <p class="feature-desc">Work from entrepreneurial cafés and innovation spaces worldwide. Your SF Passport opens doors everywhere.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon gold">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">IP Protection</h3>
+                    <p class="feature-desc">Every idea gets a unique ID with blockchain-backed timestamps. Document your innovation journey securely.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Community Matching</h3>
+                    <p class="feature-desc">DIANA will find the right connections across communities. Find collaborators, mentors, friends, investors, and other accelerators.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon gold">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="feature-title">Venue Rewards</h3>
+                    <p class="feature-desc">Earn rewards while engaging with our participating hosts & venues. Build community connections while enjoying venue benefits.</p>
                 </div>
             </section>
 
-            <!-- Feature Grid -->
-            <section class="feature-section scroll-animate">
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-users-crown"></i>
-                        </div>
-                        <h3 class="feature-title">Verified Expert Network</h3>
-                        <p class="feature-description">
-                            Connect with LinkedIn-verified mentors, successful founders, and industry experts. 
-                            Every professional on our platform is authenticated for credibility.
-                        </p>
-                        <div class="feature-demo">
-                            Interactive mentor profiles with expertise matching coming soon
-                        </div>
+            <!-- DIANA Section -->
+            <section class="diana-section">
+                <div class="diana-avatar">
+                    <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" alt="DIANA AI">
+                </div>
+                <h2 class="diana-title">Meet DIANA - Your AI Community Catalyst</h2>
+                <p class="diana-subtitle">Intelligent assistance across all community types. From business brainstorming to creative collaboration, DIANA accelerates your journey.</p>
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 36px; font-weight: 700; color: var(--accent-gold);">∞</div>
+                        <div style="font-size: 14px; opacity: 0.8;">Community powered</div>
                     </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-globe"></i>
-                        </div>
-                        <h3 class="feature-title">Global Venue Network</h3>
-                        <p class="feature-description">
-                            Access entrepreneurial cafés, co-working spaces, and innovation hubs worldwide. 
-                            Work from anywhere while staying connected to local startup communities.
-                        </p>
-                        <div class="feature-demo">
-                            Interactive global map with 500+ partner venues launching soon
-                        </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 36px; font-weight: 700; color: var(--accent-gold);">24/7</div>
+                        <div style="font-size: 14px; opacity: 0.8;">Always available</div>
                     </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-check"></i>
-                        </div>
-                        <h3 class="feature-title">IP Protection System</h3>
-                        <p class="feature-description">
-                            Every idea gets a unique SF-ID for intellectual property protection. 
-                            Document your innovation journey with blockchain-backed timestamps.
-                        </p>
-                        <div class="feature-demo">
-                            SF-ID: SF-20250621-01 - Secure idea registration system
-                        </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 36px; font-weight: 700; color: var(--accent-gold);">AI</div>
+                        <div style="font-size: 14px; opacity: 0.8;">Powered insights</div>
                     </div>
                 </div>
             </section>
 
             <!-- Launch Timeline -->
-            <section class="feature-section scroll-animate">
-                <div class="section-header">
-                    <h2 class="section-title">Launch Timeline</h2>
-                    <p class="section-subtitle">
-                        We're building SociallyFounded in phases, with each release adding new capabilities
-                    </p>
-                </div>
-
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h4 class="timeline-title">Member Community</h4>
-                            <p class="timeline-description">
-                                Join the global network, discover venues, connect with entrepreneurs
-                            </p>
-                            <span class="timeline-status status-ready">Ready for Testing</span>
-                        </div>
+            <section class="timeline">
+                <h2 class="timeline-title">Your Journey Roadmap</h2>
+                <div class="timeline-grid">
+                    <div class="timeline-item active">
+                        <span class="timeline-status">Ready Now</span>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">Community Platform</h3>
+                        <p style="font-size: 14px; color: var(--dark-gray);">Join communities, discover venues, connect with members worldwide</p>
                     </div>
-
+                    
                     <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h4 class="timeline-title">AI Founder Platform</h4>
-                            <p class="timeline-description">
-                                DIANA AI co-founder, idea development, SF-ID protection system
-                            </p>
-                            <span class="timeline-status status-development">In Development</span>
-                        </div>
+                        <span class="timeline-status development">In Development</span>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">DIANA AI Launch</h3>
+                        <p style="font-size: 14px; color: var(--dark-gray);">AI co-founder for entrepreneurs, community matching for all</p>
                     </div>
-
+                    
                     <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fas fa-handshake"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h4 class="timeline-title">Mentor Matching</h4>
-                            <p class="timeline-description">
-                                LinkedIn-verified experts, AI-powered compatibility scoring
-                            </p>
-                            <span class="timeline-status status-development">In Development</span>
-                        </div>
+                        <span class="timeline-status development">Coming Soon</span>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">Mentor Network</h3>
+                        <p style="font-size: 14px; color: var(--dark-gray);">LinkedIn-verified experts across all community types</p>
                     </div>
-
+                    
                     <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h4 class="timeline-title">Investor Network</h4>
-                            <p class="timeline-description">
-                                AI-scored deal rooms, fundraising tools, investor matching
-                            </p>
-                            <span class="timeline-status status-planned">Q3 2025</span>
-                        </div>
+                        <span class="timeline-status upcoming">Q3 2025</span>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">Full Ecosystem</h3>
+                        <p style="font-size: 14px; color: var(--dark-gray);">Investor network, venue partnerships, global expansion</p>
                     </div>
                 </div>
             </section>
 
             <!-- Founding Member Benefits -->
-            <section class="feature-section scroll-animate">
-                <div class="section-header">
-                    <h2 class="section-title">Founding Member Benefits</h2>
-                    <p class="section-subtitle">
-                        As one of our first 100 members, you get exclusive access and lifetime perks
-                    </p>
-                </div>
-
-                <div class="benefits-grid">
-                    <div class="benefit-card">
-                        <div class="benefit-icon">
-                            <i class="fas fa-gift"></i>
-                        </div>
-                        <h4 class="benefit-title">3 Months Free Premium</h4>
-                        <p class="benefit-description">
-                            Full access to AI features, unlimited mentor sessions, priority support
-                        </p>
+            <section class="cta-section">
+                <h2 class="cta-title">Your Founding Member Benefits</h2>
+                <p class="cta-subtitle">As an early member, you get exclusive lifetime perks</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 800px; margin: 0 auto 40px;">
+                    <div>
+                        <div style="font-size: 24px; margin-bottom: 10px;"><i class="fas fa-gift" style="color: var(--accent-gold);"></i></div>
+                        <h3 style="font-size: 18px; margin-bottom: 5px;">Premium Access</h3>
+                        <p style="font-size: 14px; opacity: 0.8;">Full access to all features</p>
                     </div>
-
-                    <div class="benefit-card">
-                        <div class="benefit-icon">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <h4 class="benefit-title">Lifetime Founding Badge</h4>
-                        <p class="benefit-description">
-                            Special recognition across the platform as an original community member
-                        </p>
+                    <div>
+                        <div style="font-size: 24px; margin-bottom: 10px;"><i class="fas fa-medal" style="color: var(--accent-gold);"></i></div>
+                        <h3 style="font-size: 18px; margin-bottom: 5px;">Lifetime Badge</h3>
+                        <p style="font-size: 14px; opacity: 0.8;">Founding member recognition</p>
                     </div>
-
-                    <div class="benefit-card">
-                        <div class="benefit-icon">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <h4 class="benefit-title">Early Feature Access</h4>
-                        <p class="benefit-description">
-                            First access to new features, beta testing opportunities, direct feedback line
-                        </p>
-                    </div>
-
-                    <div class="benefit-card">
-                        <div class="benefit-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4 class="benefit-title">Priority Matching</h4>
-                        <p class="benefit-description">
-                            Higher priority in mentor matching, investor introductions, venue access
-                        </p>
+                    <div>
+                        <div style="font-size: 24px; margin-bottom: 10px;"><i class="fas fa-rocket" style="color: var(--accent-gold);"></i></div>
+                        <h3 style="font-size: 18px; margin-bottom: 5px;">Early Access</h3>
+                        <p style="font-size: 14px; opacity: 0.8;">First to try new features</p>
                     </div>
                 </div>
+                <a href="/member/dashboard.html" class="cta-button">Enter Your Dashboard</a>
             </section>
         </div>
     </main>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2 class="cta-title">Ready to Transform Your Entrepreneurial Journey?</h2>
-            <p class="cta-subtitle">
-                Join our community and be part of the future of AI-powered entrepreneurship
-            </p>
-            
-            <div class="cta-buttons">
-
-                <a href="/member/dashboard.html" class="cta-btn primary">
-    <i class="fas fa-rocket"></i>
-    Access Member Platform
-</a>
-                
-                </a>
-                <a href="https://linkedin.com/company/sociallyfounded" target="_blank" class="cta-btn secondary">
-                    <i class="fab fa-linkedin"></i>
-                    Follow Our Journey
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <div class="sf-logo">SF</div>
-                <div class="brand-name">SociallyFounded</div>
-            </div>
-            
-            <p class="footer-text">
-                Transforming entrepreneurship through AI innovation and verified professional networks
-            </p>
-            
-            <div class="footer-links">
-                <a href="#" class="footer-link">About</a>
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Contact</a>
-            </div>
-            
-            <div class="footer-bottom">
-                <span>© 2025 SociallyFounded. All rights reserved.</span>
-                <a href="/welcome/login.html" class="team-link">team</a>
-            </div>
-        </div>
+    <footer>
+        <p>© 2025 SociallyFounded. All rights reserved. | Community Acceleration Platform</p>
     </footer>
 
     <script>
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const passport = urlParams.get('passport');
+        const auth = urlParams.get('auth');
 
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.scroll-animate').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Dynamic counter animation
-        function animateCounter(elementId, targetValue, duration = 2000) {
-            const element = document.getElementById(elementId);
-            const start = parseInt(element.textContent) || 0;
-            const increment = (targetValue - start) / (duration / 16);
-            let current = start;
-
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= targetValue) {
-                    element.textContent = targetValue;
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current);
-                }
-            }, 16);
+        // Update user info if available
+        if (passport) {
+            document.getElementById('passportBadge').textContent = passport;
         }
 
-        // Simulate growing member count
-        setTimeout(() => {
-            const savedCount = localStorage.getItem('waitlistSignups');
-            let currentCount = 47;
-            
-            if (savedCount) {
-                try {
-                    const signups = JSON.parse(savedCount);
-                    currentCount = 47 + signups.length;
-                } catch (e) {
-                    currentCount = 47;
-                }
-            }
-            
-            animateCounter('memberCount', Math.min(currentCount, 100));
-        }, 1000);
-
-        // Days countdown (example)
-        function updateCountdown() {
-            const launchDate = new Date('2025-07-15'); // Example launch date
-            const now = new Date();
-            const diffTime = launchDate - now;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays > 0) {
-                document.getElementById('daysLeft').textContent = diffDays;
-            } else {
-                document.getElementById('daysLeft').textContent = 'Soon';
-            }
+        // Get user data from localStorage
+        const userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
+        if (userData.displayName) {
+            document.getElementById('userName').textContent = userData.displayName;
+            // Set initials
+            const initials = userData.displayName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            document.getElementById('userInitials').textContent = initials;
+        }
+        
+        if (userData.photoURL) {
+            document.getElementById('userAvatar').innerHTML = `<img src="${userData.photoURL}" alt="Avatar">`;
         }
 
-        updateCountdown();
+        // Remove member number generation
+        // Add subtle animations
+        document.querySelectorAll('.community-pill').forEach((pill, index) => {
+            pill.style.animationDelay = `${index * 0.1}s`;
+            pill.style.animation = 'fadeInUp 0.5s ease-out forwards';
+        });
 
-        // Coming soon modal
-        function showComingSoon() {
-            alert('🚀 Member platform is in final testing! You\'ll get access as soon as we launch. Follow us on LinkedIn for the latest updates!');
-        }
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+        // Add animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
                 }
-            });
-        });
-
-        // Add some interactive elements
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-10px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        console.log('🚀 SociallyFounded Welcome Page Loaded Successfully');
-        console.log('💡 Hidden team login available at /welcome/login.html');
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
