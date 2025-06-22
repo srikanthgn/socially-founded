@@ -452,79 +452,115 @@
                 this.showSuccess();
             }
 
-            async exchangeCodeForToken(code, state) {
-                // FIXED: Use correct redirect URI and state parameter
-                const redirectUri = window.location.href.split('?')[0]; // Remove query params
+           async exchangeCodeForToken(code, state) {
+                // FIXED: Use exact redirect URI that matches LinkedIn app config
+                const redirectUri = 'https://sociallyfounded.com/linkedin-callback.html';
                 
                 const payload = {
                     code: code,
-                    state: state, // FIXED: Use the state parameter, not this.state
+                    state: state,
                     redirectUri: redirectUri
                 };
                 
                 this.log('📤 API Request', payload);
 
-                const response = await fetch('/api/linkedin/exchange-token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Origin': window.location.origin
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                const responseText = await response.text();
-                this.log('📥 API Response', { 
-                    status: response.status, 
-                    body: responseText.substring(0, 500) 
-                });
-
-                if (!response.ok) {
-                    let errorData;
-                    try {
-                        errorData = JSON.parse(responseText);
-                    } catch (e) {
-                        errorData = { message: responseText };
-                    }
-                    throw new Error(errorData.message || errorData.error || 'Token exchange failed');
-                }
-
-                let data;
                 try {
-                    data = JSON.parse(responseText);
-                } catch (e) {
-                    throw new Error('Invalid JSON response from API');
-                }
+                    const response = await fetch('/api/linkedin/exchange-token', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Origin': window.location.origin
+                        },
+                        body: JSON.stringify(payload)
+                    });
 
-                this.log('✅ API Success', data);
-                return data;
-            }
-
-            showDataPreview(profileData) {
-                this.log('🎨 Showing profile preview', profileData);
-                
-                const preview = document.getElementById('dataPreview');
-                
-                // Handle both API response structures
-                const prof = profileData.professional || profileData;
-                
-                if (prof.fullName) {
-                    // Update avatar with initials
-                    const initials = prof.fullName.split(' ').map(n => n[0]).join('').substring(0, 2);
-                    document.getElementById('profileAvatar').textContent = initials;
+                    // Get response text first to handle both success and error cases
+                    const responseText = await response.text();
                     
-                    // Update profile info
-                    document.getElementById('profileName').textContent = prof.fullName;
-                    document.getElementById('profileHeadline').textContent = prof.headline || 'LinkedIn Professional';
-                    document.getElementById('credibilityScore').textContent = prof.credibilityScore || '85';
-                    document.getElementById('experienceLevel').textContent = prof.experienceLevel || 'Professional';
+                    this.log('📥 Raw API Response', { 
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: Object.fromEntries(response.headers.entries()),
+                        body: responseText.substring(0, 500)
+                    });
+
+                    // Parse JSON response
+                    let data;
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch (parseError) {
+                        this.log('❌ JSON Parse Error', parseError);
+                        throw new Error(`Invalid JSON response: ${responseText.substring(0, 100)}`);
+                    }
+
+                    // Handle HTTP error responses
+                    if (!response.ok) {
+                        this.log('❌ API Error Response', data);
+                        
+                        // Provide specific error messages based on API response
+                        let errorMessage = 'LinkedIn authentication failed';
+                        
+                        if (data.message) {
+                            errorMessage = data.message;
+                        } else if (data.error) {
+                            errorMessage = data.error;
+                        } else if (data.details) {
+                            errorMessage = data.details;
+                        }
+                        
+                        // Add specific handling for common LinkedIn errors
+                        if (data.error === 'invalid_grant') {
+                            errorMessage = 'LinkedIn authorization code expired. Please try again.';
+                        } else if (data.error === 'invalid_client') {
+                            errorMessage = 'LinkedIn app configuration error. Please contact support.';
+                        } else if (data.error === 'Invalid redirect URI') {
+                            errorMessage = 'Redirect URL mismatch. Please contact support.';
+                        }
+                        
+                        throw new Error(errorMessage);
+                    }
+
+                    // Validate successful response structure
+                    if (!data.success) {
+                        this.log('❌ API returned success=false', data);
+                        throw new Error(data.message || data.error || 'LinkedIn API returned unsuccessful response');
+                    }
+
+                    if (!data.profile) {
+                        this.log('❌ No profile data in response', data);
+                        throw new Error('LinkedIn profile data missing from API response');
+                    }
+
+                    this.log('✅ API Success', {
+                        hasProfile: !!data.profile,
+                        hasLinkedInData: !!data.profile.linkedin,
+                        hasProfessionalData: !!data.profile.professional,
+                        profileName: data.profile.professional?.fullName
+                    });
                     
-                    preview.classList.add('show');
-                } else {
-                    this.log('⚠️ No professional data found in profile');
+                    return data;
+
+                } catch (networkError) {
+                    this.log('❌ Network/Fetch Error', {
+                        message: networkError.message,
+                        name: networkError.name,
+                        stack: networkError.stack
+                    });
+
+                    // Provide user-friendly error messages for common network issues
+                    if (networkError.name === 'TypeError' && networkError.message.includes('fetch')) {
+                        throw new Error('Network connection failed. Please check your internet connection and try again.');
+                    } else if (networkError.message.includes('CORS')) {
+                        throw new Error('Cross-origin request blocked. Please contact support.');
+                    } else if (networkError.message.includes('404')) {
+                        throw new Error('LinkedIn API endpoint not found. Please contact support.');
+                    } else {
+                        // Re-throw the original error if it's already user-friendly
+                        throw networkError;
+                    }
                 }
             }
-
+            
             async updateSFProfile(profileData) {
                 this.log('💾 Updating SF profile with LinkedIn data');
                 
