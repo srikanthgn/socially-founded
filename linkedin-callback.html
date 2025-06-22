@@ -646,10 +646,9 @@
         }
 
         // Global functions
-        function continueToProfile() {
-            window.location.href = '/core/profile.html?linkedin_connected=true';
-        }
-
+      function continueToProfile() {
+    window.location.href = '/welcome/?auth=linkedin&linkedin_verified=true';
+}
         function retryAuth() {
             window.location.href = '/';
         }
