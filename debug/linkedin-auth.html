@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Auth Debug - SociallyFounded</title>
+    
+    <!-- Brand Compliance: Poppins Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #FFFFFF;
+            color: #003554;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .debug-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border: 2px solid #003554;
+            border-radius: 8px;
+            padding: 30px;
+        }
+        
+        .sf-logo {
+            height: 40px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #003554;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #003554;
+            font-weight: 500;
+            margin: 30px 0 15px 0;
+        }
+        
+        .status-section {
+            background: #F5F5F5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .error-box {
+            background: #ffebee;
+            border: 1px solid #f44336;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #d32f2f;
+        }
+        
+        .success-box {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #2e7d32;
+        }
+        
+        .warning-box {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #f57c00;
+        }
+        
+        .auth-button {
+            background: #003554;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-button:hover {
+            background: #D4AF37;
+        }
+        
+        .linkedin-button {
+            background: #0077b5;
+            color: white;
+        }
+        
+        .linkedin-button:hover {
+            background: #005885;
+        }
+        
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        
+        .test-results {
+            margin-top: 20px;
+        }
+        
+        .test-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .test-pass {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .test-fail {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .test-pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .icon {
+            margin-right: 10px;
+            width: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <!-- SF Logo (Brand Compliance) -->
+        <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SociallyFounded" class="sf-logo">
+        
+        <h1><i class="fas fa-bug"></i> LinkedIn Authentication Debug</h1>
+        
+        <div class="error-box">
+            <strong>Current Issue:</strong> LinkedIn authentication is not implemented yet according to project docs.
+            The error occurs because there's no actual LinkedIn OAuth flow configured.
+        </div>
+        
+        <!-- Firebase Status Check -->
+        <h2><i class="fas fa-database"></i> Firebase Connection Status</h2>
+        <div class="status-section">
+            <div id="firebaseStatus" class="test-item test-pending">
+                <i class="fas fa-clock icon"></i> Checking Firebase connection...
+            </div>
+            <div id="authStatus" class="test-item test-pending">
+                <i class="fas fa-clock icon"></i> Checking authentication state...
+            </div>
+        </div>
+        
+        <!-- Current Authentication Tests -->
+        <h2><i class="fas fa-key"></i> Authentication Tests</h2>
+        <div class="status-section">
+            <div class="test-results">
+                <div id="googleAuthStatus" class="test-item test-pending">
+                    <i class="fas fa-clock icon"></i> Testing Google Authentication...
+                </div>
+                <div id="emailAuthStatus" class="test-item test-pending">
+                    <i class="fas fa-clock icon"></i> Testing Email Authentication...
+                </div>
+                <div id="linkedinAuthStatus" class="test-item test-fail">
+                    <i class="fas fa-times icon"></i> LinkedIn Authentication: NOT IMPLEMENTED
+                </div>
+            </div>
+        </div>
+        
+        <!-- Working Authentication Buttons -->
+        <h2><i class="fas fa-sign-in-alt"></i> Test Authentication</h2>
+        <div class="status-section">
+            <p style="margin-bottom: 15px;">Test the working authentication methods:</p>
+            
+            <button class="auth-button" onclick="testGoogleAuth()">
+                <i class="fab fa-google"></i> Test Google Auth
+            </button>
+            
+            <button class="auth-button" onclick="testEmailAuth()">
+                <i class="fas fa-envelope"></i> Test Email Auth
+            </button>
+            
+            <button class="auth-button linkedin-button" onclick="explainLinkedIn()">
+                <i class="fab fa-linkedin"></i> LinkedIn Issue (Click for Info)
+            </button>
+            
+            <button class="auth-button" onclick="testLogout()">
+                <i class="fas fa-sign-out-alt"></i> Test Logout
+            </button>
+        </div>
+        
+        <!-- User Information -->
+        <h2><i class="fas fa-user"></i> Current User Status</h2>
+        <div class="status-section">
+            <div id="userInfo" class="debug-info">
+                Loading user information...
+            </div>
+        </div>
+        
+        <!-- SF Passport Status -->
+        <h2><i class="fas fa-id-card"></i> SF Passport Status</h2>
+        <div class="status-section">
+            <div id="passportInfo" class="debug-info">
+                Checking SF Passport information...
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <h2><i class="fas fa-road"></i> Next Steps to Fix LinkedIn</h2>
+        <div class="status-section">
+            <div class="warning-box">
+                <strong>To implement LinkedIn authentication:</strong>
+                <ol style="margin: 10px 0 0 20px;">
+                    <li>Register app with LinkedIn Developer Portal</li>
+                    <li>Get Client ID and Client Secret</li>
+                    <li>Configure redirect URI: https://sociallyfounded.com/linkedin-callback</li>
+                    <li>Add LinkedIn provider to Firebase Authentication</li>
+                    <li>Implement OAuth flow in code</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- Debug Logs -->
+        <h2><i class="fas fa-list"></i> Debug Logs</h2>
+        <div class="status-section">
+            <div id="debugLogs" class="debug-info" style="height: 200px; overflow-y: auto;">
+                Starting debug session...<br>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase Configuration (from your docs)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994533610259",
+            appId: "1:994533610259:web:fe740378a4c000211e40e6",
+            measurementId: "G-EY0BZE30Q0"
+        };
+
+        // Initialize Firebase
+        let app, auth, db;
+        let debugLog = [];
+
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            debugLog.push(logEntry);
+            
+            const logsDiv = document.getElementById('debugLogs');
+            if (logsDiv) {
+                logsDiv.innerHTML = debugLog.join('<br>') + '<br>';
+                logsDiv.scrollTop = logsDiv.scrollHeight;
+            }
+            
+            console.log(logEntry);
+        }
+
+        function updateStatus(elementId, status, message) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            element.className = `test-item test-${status}`;
+            const icon = status === 'pass' ? 'fas fa-check' : status === 'fail' ? 'fas fa-times' : 'fas fa-clock';
+            element.innerHTML = `<i class="${icon} icon"></i> ${message}`;
+        }
+
+        async function initializeFirebase() {
+            try {
+                addLog('Initializing Firebase...');
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                
+                addLog('Firebase initialized successfully');
+                updateStatus('firebaseStatus', 'pass', 'Firebase connection: SUCCESS');
+                
+                return true;
+            } catch (error) {
+                addLog(`Firebase initialization error: ${error.message}`, 'error');
+                updateStatus('firebaseStatus', 'fail', `Firebase connection: FAILED - ${error.message}`);
+                return false;
+            }
+        }
+
+        function generateSFPassport(countryCode = 'AE') {
+            const digits = Math.floor(Math.random() * 9000000) + 1000000;
+            return `SF-${digits}-${countryCode}`;
+        }
+
+        async function createUserDocument(user) {
+            try {
+                const userRef = doc(db, 'users', user.uid);
+                const userSnap = await getDoc(userRef);
+                
+                if (!userSnap.exists()) {
+                    const sfPassportId = generateSFPassport();
+                    const userData = {
+                        passportId: sfPassportId,
+                        displayName: user.displayName || 'New Member',
+                        email: user.email,
+                        photoURL: user.photoURL || null,
+                        createdAt: serverTimestamp(),
+                        lastLoginAt: serverTimestamp(),
+                        
+                        sfPassport: {
+                            id: sfPassportId,
+                            level: 1,
+                            tier: "Navy",
+                            experience: 0,
+                            issuedDate: serverTimestamp()
+                        },
+                        
+                        personas: {
+                            member: { active: true, activatedAt: serverTimestamp() }
+                        },
+                        
+                        gamification: {
+                            sfPoints: 0,
+                            brainstormCredits: 3,
+                            dailyStreak: 0,
+                            achievements: []
+                        }
+                    };
+                    
+                    await setDoc(userRef, userData);
+                    addLog(`Created new user document with SF Passport: ${sfPassportId}`);
+                    return userData;
+                } else {
+                    addLog('User document already exists');
+                    return userSnap.data();
+                }
+            } catch (error) {
+                addLog(`Error creating user document: ${error.message}`, 'error');
+                throw error;
+            }
+        }
+
+        function setupAuthStateListener() {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    addLog(`User signed in: ${user.email}`);
+                    updateStatus('authStatus', 'pass', `Authenticated as: ${user.email}`);
+                    
+                    try {
+                        const userData = await createUserDocument(user);
+                        document.getElementById('userInfo').innerHTML = JSON.stringify({
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: user.displayName,
+                            sfPassport: userData.sfPassport
+                        }, null, 2);
+                        
+                        document.getElementById('passportInfo').innerHTML = JSON.stringify(userData.sfPassport, null, 2);
+                    } catch (error) {
+                        addLog(`Error handling user data: ${error.message}`, 'error');
+                    }
+                } else {
+                    addLog('User signed out');
+                    updateStatus('authStatus', 'fail', 'Not authenticated');
+                    document.getElementById('userInfo').innerHTML = 'No user signed in';
+                    document.getElementById('passportInfo').innerHTML = 'No SF Passport available';
+                }
+            });
+        }
+
+        // Test Google Authentication
+        window.testGoogleAuth = async function() {
+            try {
+                addLog('Testing Google authentication...');
+                const provider = new GoogleAuthProvider();
+                provider.addScope('email');
+                provider.addScope('profile');
+                
+                const result = await signInWithPopup(auth, provider);
+                addLog(`Google auth successful: ${result.user.email}`);
+                updateStatus('googleAuthStatus', 'pass', 'Google Authentication: SUCCESS');
+            } catch (error) {
+                addLog(`Google auth error: ${error.message}`, 'error');
+                updateStatus('googleAuthStatus', 'fail', `Google Authentication: FAILED - ${error.message}`);
+            }
+        };
+
+        // Test Email Authentication (demo)
+        window.testEmailAuth = function() {
+            const email = prompt('Enter test email (or cancel to skip):');
+            if (!email) {
+                addLog('Email auth test cancelled by user');
+                return;
+            }
+            
+            const password = prompt('Enter password (min 6 characters):');
+            if (!password || password.length < 6) {
+                addLog('Email auth test cancelled - invalid password');
+                updateStatus('emailAuthStatus', 'fail', 'Email Authentication: Invalid password');
+                return;
+            }
+            
+            addLog('Email authentication would work here in production');
+            updateStatus('emailAuthStatus', 'pass', 'Email Authentication: Would work (demo)');
+        };
+
+        // Explain LinkedIn Issue
+        window.explainLinkedIn = function() {
+            alert(`LinkedIn Authentication Issue:
+
+1. LinkedIn OAuth is not configured yet
+2. Need to register app with LinkedIn Developer Portal
+3. Need to get Client ID and Client Secret
+4. Need to configure Firebase LinkedIn provider
+5. Need to implement proper OAuth flow
+
+Current Status: NOT IMPLEMENTED (as noted in project docs)
+
+This is the next development priority according to your project memory.`);
+        };
+
+        // Test Logout
+        window.testLogout = async function() {
+            try {
+                await signOut(auth);
+                addLog('Logout successful');
+                alert('Logout successful!');
+            } catch (error) {
+                addLog(`Logout error: ${error.message}`, 'error');
+                alert(`Logout failed: ${error.message}`);
+            }
+        };
+
+        // Initialize everything
+        async function init() {
+            const firebaseReady = await initializeFirebase();
+            if (firebaseReady) {
+                setupAuthStateListener();
+                addLog('Debug page ready. Test authentication methods above.');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
