@@ -572,6 +572,87 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+
+/* MOBILE OPTIMIZATION - ADD THIS AFTER SPINNER */
+@media (max-width: 968px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .signup-section {
+        order: -1; /* Move signup to top on mobile */
+    }
+
+    .passport-cards {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .passport-card {
+        aspect-ratio: 2.5;
+        padding: 15px 20px;
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .passport-icon {
+        width: 35px;
+        height: 35px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .passport-title {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .passport-desc {
+        font-size: 11px;
+        line-height: 1.2;
+    }
+
+    .smart-grid-btn {
+        min-height: 80px;
+    }
+
+    .smart-grid-btn svg {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .smart-grid-btn.primary::after {
+        content: "Scan to Join";
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 8px;
+        color: var(--deep-navy);
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2px 6px;
+        border-radius: 3px;
+    }
+
+    .smart-grid-btn {
+        min-height: 70px;
+    }
+
+    .smart-grid-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+        
+        
+        
     </style>
 </head>
 <body>
