@@ -1096,8 +1096,7 @@
                 <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 400px;">
                     <h3 style="color: #003554; margin-bottom: 20px;">Scan to Join on Mobile</h3>
                     <div id="qrcode" style="margin: 20px auto;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin)}" 
-                             alt="QR Code" style="border: 1px solid #ddd; border-radius: 8px;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('https://sociallyfounded.com/qr-welcome.html?source=qr_modal&ref=homepage')}"
                     </div>
                     <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
                         Scan this QR code with your phone to join SociallyFounded
@@ -1174,6 +1173,7 @@
         }
 
         // Enhanced QR Code Generation - WORKING IMMEDIATELY
+    // Enhanced QR Code Generation - WORKING IMMEDIATELY
         async function generateHomepageQR() {
             const qrContainer = document.getElementById('homepage-qr-code');
             if (!qrContainer) {
@@ -1185,11 +1185,11 @@
                 // Show loading
                 qrContainer.innerHTML = '<div style="color: #D4AF37; font-size: 10px;">Generating QR...</div>';
                 
-                // Simple QR using API service (works immediately)
+                // FIXED: Point to qr-welcome.html for mobile experience
                 const timestamp = Date.now();
-                const qrUrl = `https://sociallyfounded.com/?source=qr&t=${timestamp}`;
+                const qrUrl = `https://sociallyfounded.com/qr-welcome.html?source=qr&t=${timestamp}&ref=homepage`;
                 
-                console.log('Generating QR for:', qrUrl);
+                console.log('Generating QR for mobile experience:', qrUrl);
                 
                 // Create professional container with QR API
                 qrContainer.innerHTML = `
@@ -1206,6 +1206,23 @@
                     </div>
                 `;
                 
+                console.log('✅ QR Code with SF logo generated successfully (mobile target)');
+                
+            } catch (error) {
+                console.error('QR generation error:', error);
+                
+                // Show professional fallback that still points to mobile experience
+                qrContainer.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #D4AF37 0%, #E5C047 100%); padding: 6px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;" onclick="window.open('https://sociallyfounded.com/qr-welcome.html?source=qr_fallback&ref=homepage', '_blank')">
+                        <div style="background: white; border-radius: 4px; width: calc(100% - 12px); height: calc(100% - 12px); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #003554; font-size: 9px; text-align: center; padding: 4px; cursor: pointer;">
+                            <img src="https://sociallyfounded.com/assets/sf-logo.png" style="width: 40%; height: 40%; object-fit: contain; margin-bottom: 4px;" alt="SF">
+                            <div style="font-weight: 600;">Tap to Join</div>
+                            <div style="font-size: 8px; opacity: 0.7;">Mobile Experience</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
                 console.log('✅ QR Code with SF logo generated successfully');
                 
             } catch (error) {
@@ -1213,13 +1230,16 @@
                 
                 // Show professional fallback
                 qrContainer.innerHTML = `
-                    <div style="background: linear-gradient(135deg, #D4AF37 0%, #E5C047 100%); padding: 6px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <div style="background: white; border-radius: 4px; width: calc(100% - 12px); height: calc(100% - 12px); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #003554; font-size: 9px; text-align: center; padding: 4px;">
-                            <img src="https://sociallyfounded.com/assets/sf-logo.png" style="width: 40%; height: 40%; object-fit: contain; margin-bottom: 4px;" alt="SF">
-                            <div style="font-weight: 600;">Tap to Join</div>
-                        </div>
-                    </div>
-                `;
+                // Show professional fallback that also points to mobile experience
+qrContainer.innerHTML = `
+    <div style="background: linear-gradient(135deg, #D4AF37 0%, #E5C047 100%); padding: 6px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;" onclick="window.open('https://sociallyfounded.com/qr-welcome.html?source=qr_fallback&ref=homepage', '_blank')">
+        <div style="background: white; border-radius: 4px; width: calc(100% - 12px); height: calc(100% - 12px); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #003554; font-size: 9px; text-align: center; padding: 4px; cursor: pointer;">
+            <img src="https://sociallyfounded.com/assets/sf-logo.png" style="width: 40%; height: 40%; object-fit: contain; margin-bottom: 4px;" alt="SF">
+            <div style="font-weight: 600;">Tap to Join</div>
+            <div style="font-size: 8px; opacity: 0.7;">Mobile Experience</div>
+        </div>
+    </div>
+`;
             }
         }
 
