@@ -2008,6 +2008,7 @@
         // Initialize immediately
         initializeFirebaseAuth().then(() => {
             console.log('🎯 Firebase auth initialization complete');
+              setTimeout(generateHomepageQR, 1000);
         }).catch(error => {
             console.error('🔥 Firebase auth initialization failed:', error);
         });
