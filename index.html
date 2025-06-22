@@ -1503,9 +1503,61 @@
                         sfPassport: userData.sfPassport || { id: 'SF-PENDING' }
                     }));
                     
-                    emailModal.remove();
-                    hideLoadingState();
-                    showSuccessAndRedirect(userData);
+                  emailModal.remove();
+hideLoadingState();
+
+// Create the same success experience as Google/LinkedIn
+const passportId = userData?.sfPassport?.id || 'SF-PENDING';
+const displayName = userData?.displayName || email.split('@')[0];
+
+const modal = document.getElementById('successModal');
+const modalContent = modal.querySelector('.modal-content');
+modalContent.innerHTML = `
+    <div style="text-align: center;">
+        <div style="font-size: 64px; margin-bottom: 20px;">🎉</div>
+        <h3 style="font-size: 28px; margin-bottom: 15px; color: #D4AF37;">Welcome to SociallyFounded!</h3>
+        <p style="font-size: 18px; margin-bottom: 10px; font-weight: 600;">
+            ${displayName}
+        </p>
+        <p style="font-size: 16px; margin-bottom: 20px; opacity: 0.9;">
+            Your SF Passport: <strong style="color: #D4AF37;">${passportId}</strong>
+        </p>
+        <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="font-size: 14px; margin-bottom: 8px;">🎁 Founding Member Benefits:</p>
+            <p style="font-size: 13px; opacity: 0.8;">• 3 months free premium access</p>
+            <p style="font-size: 13px; opacity: 0.8;">• Early access to DIANA AI</p>
+            <p style="font-size: 13px; opacity: 0.8;">• Lifetime founding member badge</p>
+        </div>
+        <div style="font-size: 14px; opacity: 0.7;">
+            Redirecting to your exclusive member area in <span id="countdown">3</span> seconds...
+        </div>
+        <div class="progress-bar" style="width: 100%; height: 4px; background: #ddd; border-radius: 2px; margin-top: 15px; overflow: hidden;">
+            <div style="width: 0%; height: 100%; background: #D4AF37; transition: width 3s linear;"></div>
+        </div>
+    </div>
+`;
+modal.classList.add('show');
+
+// Start progress bar animation
+setTimeout(() => {
+    const progressBar = modal.querySelector('.progress-bar > div');
+    if (progressBar) progressBar.style.width = '100%';
+}, 100);
+
+// Countdown timer
+let countdown = 3;
+const countdownEl = document.getElementById('countdown');
+const countdownInterval = setInterval(() => {
+    countdown--;
+    if (countdownEl) countdownEl.textContent = countdown;
+    if (countdown <= 0) clearInterval(countdownInterval);
+}, 1000);
+
+// Redirect after 3 seconds
+setTimeout(() => {
+    clearInterval(countdownInterval);
+    window.location.href = `/welcome/?passport=${passportId}&auth=email`;
+}, 3000);
                     
                 } catch (error) {
                     if (error.code === 'auth/email-already-in-use') {
