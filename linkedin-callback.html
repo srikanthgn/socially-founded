@@ -349,7 +349,13 @@
                 this.profileData = null;
                 this.debugMode = true; // Enable debug mode
                 
-                this.init();
+                // Bind context to prevent 'this' issues in async functions
+this.processLinkedInCallback = this.processLinkedInCallback.bind(this);
+this.showDataPreview = this.showDataPreview.bind(this);
+this.updateSFProfile = this.updateSFProfile.bind(this);
+this.showSuccess = this.showSuccess.bind(this);
+
+this.init();
             }
 
             log(message, data = null) {
@@ -432,7 +438,10 @@
                     throw new Error('Invalid API response structure');
                 }
                 
+                // FIXED: Store the profile data properly
                 this.profileData = apiResponse.profile;
+                
+                // FIXED: Call showDataPreview with proper context binding
                 this.showDataPreview(this.profileData);
                 await this.updateStep(3, 'complete');
 
@@ -445,13 +454,13 @@
                 await this.updateStep(5, 'processing', 'Updating SociallyFounded profile...');
                 await this.delay(800);
                 
+                // FIXED: Call updateSFProfile with proper context
                 await this.updateSFProfile(this.profileData);
                 await this.updateStep(5, 'complete');
 
-                // Show success
+                // FIXED: Call showSuccess with proper context
                 this.showSuccess();
             }
-
            async exchangeCodeForToken(code, state) {
                 // FIXED: Use exact redirect URI that matches LinkedIn app config
                 const redirectUri = 'https://sociallyfounded.com/linkedin-callback.html';
