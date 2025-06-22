@@ -1072,6 +1072,9 @@
 
     <!-- Global Functions Script - MUST BE FIRST -->
     <script>
+        // Global variables to track loading state
+        window.authSystemReady = false;
+        
         // Define global functions that will be available to onclick handlers
         function showQRCode() {
             const qrOverlay = document.createElement('div');
@@ -1114,40 +1117,63 @@
             });
         }
 
-        // Placeholder functions that will be replaced by the module
+        // Placeholder functions that check if auth system is ready
         function authenticateWithGoogle() {
-            if (window.googleAuthReady) {
-                window.googleAuthReady();
+            console.log('Google auth clicked, system ready:', window.authSystemReady);
+            if (window.authSystemReady && window.realGoogleAuth) {
+                window.realGoogleAuth();
             } else {
-                console.log('Google auth loading...');
+                console.log('Google auth loading... Please wait');
+                // Show loading state
+                showAuthLoading('Google authentication initializing...');
             }
         }
 
         function authenticateWithLinkedIn() {
-            if (window.linkedinAuthReady) {
-                window.linkedinAuthReady();
+            console.log('LinkedIn auth clicked, system ready:', window.authSystemReady);
+            if (window.authSystemReady && window.realLinkedInAuth) {
+                window.realLinkedInAuth();
             } else {
-                console.log('LinkedIn auth loading...');
+                console.log('LinkedIn auth loading... Please wait');
+                showAuthLoading('LinkedIn authentication initializing...');
             }
         }
 
         function authenticateWithEmail() {
-            if (window.emailAuthReady) {
-                window.emailAuthReady();
+            console.log('Email auth clicked, system ready:', window.authSystemReady);
+            if (window.authSystemReady && window.realEmailAuth) {
+                window.realEmailAuth();
             } else {
-                console.log('Email auth loading...');
+                console.log('Email auth loading... Please wait');
+                showAuthLoading('Email authentication initializing...');
             }
         }
 
         function logout() {
-            if (window.logoutReady) {
-                window.logoutReady();
+            console.log('Logout clicked, system ready:', window.authSystemReady);
+            if (window.authSystemReady && window.realLogout) {
+                window.realLogout();
             } else {
-                console.log('Logout loading...');
+                console.log('Logout loading... Please wait');
             }
         }
 
-        console.log('✅ Global auth functions defined');
+        function showAuthLoading(message) {
+            // Show loading message to user
+            const authStatus = document.getElementById('authStatus');
+            const authMessage = document.getElementById('authMessage');
+            if (authStatus && authMessage) {
+                authStatus.classList.add('show');
+                authMessage.textContent = message;
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    authStatus.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        console.log('✅ Global auth functions defined with ready check');
     </script>
 
     <script type="module">
@@ -1475,16 +1501,15 @@
         }
 
         // MAKE AUTH FUNCTIONS GLOBALLY AVAILABLE IMMEDIATELY
-        window.googleAuthReady = authenticateWithGoogle;
-        window.linkedinAuthReady = authenticateWithLinkedIn;
-        window.emailAuthReady = authenticateWithEmail;
-        window.logoutReady = logout;
+        window.realGoogleAuth = authenticateWithGoogle;
+        window.realLinkedInAuth = authenticateWithLinkedIn;
+        window.realEmailAuth = authenticateWithEmail;
+        window.realLogout = logout;
 
-        // Replace the placeholder functions with real implementations
-        window.authenticateWithGoogle = authenticateWithGoogle;
-        window.authenticateWithLinkedIn = authenticateWithLinkedIn;
-        window.authenticateWithEmail = authenticateWithEmail;
-        window.logout = logout;
+        // Mark auth system as ready
+        window.authSystemReady = true;
+
+        console.log('✅ Firebase auth system ready - Real functions assigned');
 
         // FIXED: Enhanced SF Passport ID generation with proper format
         async function generateSFPassportId() {
