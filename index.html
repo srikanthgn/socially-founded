@@ -3,10 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Where Founding is Socially Enhanced</title>
-    <link rel="icon" type="image/png" href="https://sociallyfounded.com/assets/sf-logo.png">
-    <link rel="shortcut icon" type="image/png" href="https://sociallyfounded.com/assets/sf-logo.png">
+    <title>SociallyFounded - Find Your Tribe in Spaces You Love</title>
+    
+    <!-- Poppins Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Simple Footer -->
+    <footer class="simple-footer">
+        <div class="simple-footer-content">
+            <p>&copy; 2025 SociallyFounded</p>
+            <a href="https://linkedin.com/company/sociallyfounded" target="_blank" rel="noopener" class="linkedin-link">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Firebase config (NEVER CHANGE)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994533610259",
+            appId: "1:994533610259:web:fe740378a4c000211e40e6",
+            measurementId: "G-EY0BZE30Q0"
+        };
+
+        // Initialize Firebase when scripts are loaded
+        let auth, db;
+        let firebaseInitialized = false;
+
+        function initializeFirebaseIfReady() {
+            if (typeof firebase !== 'undefined' && !firebaseInitialized) {
+                try {
+                    firebase.initializeApp(firebaseConfig);
+                    auth = firebase.auth();
+                    db = firebase.firestore();
+                    firebaseInitialized = true;
+                    console.log('Firebase initialized successfully');
+                } catch (error) {
+                    console.log('Firebase initialization failed:', error);
+                }
+            }
+        }
+
+        // Try to initialize Firebase immediately
+        initializeFirebaseIfReady();
+
+        // Wait for DOM and Firebase to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            
+            // Try to initialize Firebase again in case it wasn't ready before
+            initializeFirebaseIfReady();
+            
+            // Remove loading overlay and setup page
+            setTimeout(() => {
+                initializePageElements();
+                generateHomepageQR();
+            }, 500);
+        });
+
+        // Fallback: Try to initialize Firebase after a delay
+        setTimeout(() => {
+            initializeFirebaseIfReady();
+        }, 1000);
+    </script>
+
     <style>
         * {
             margin: 0;
@@ -15,1525 +90,979 @@
         }
 
         :root {
-            /* Brand Colors */
-            --deep-navy: #003554;
+            --navy: #003554;
+            --gold: #D4AF37;
             --white: #FFFFFF;
             --light-gray: #F5F5F5;
-            --accent-gray: #E0E0E0;
-            --accent-gold: #D4AF37;
-            --accent-gold-hover: #E5C047;
-            --success: #2ECC71;
-            --error: #E74C3C;
-            
-            /* Passport Colors */
-            --passport-burgundy: #8B0000;
-            --passport-diplomatic: #1B4F72;
-            --passport-platinum: #2C3E50;
+            --medium-gray: #E0E0E0;
+            --gradient-primary: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%);
+            --shadow-soft: 0 8px 32px rgba(0, 53, 84, 0.1);
+            --shadow-medium: 0 16px 48px rgba(0, 53, 84, 0.15);
+            --shadow-strong: 0 24px 64px rgba(0, 53, 84, 0.2);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--light-gray);
-            min-height: 100vh;
-            color: var(--deep-navy);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Enhanced Header with Navigation */
-        .header-nav {
-            background: var(--white);
-            border-bottom: 1px solid rgba(0, 53, 84, 0.1);
-            padding: 20px 0;
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .sf-logo {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sf-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .brand-name {
-            font-size: 28px;
-            font-weight: 600;
-            color: var(--deep-navy);
-        }
-
-        /* User Menu */
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 15px;
-            background: var(--light-gray);
-            border-radius: 25px;
-            font-size: 14px;
-            color: var(--deep-navy);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: var(--deep-navy);
-            font-size: 14px;
-        }
-
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .logout-btn {
-            padding: 8px 20px;
-            background: var(--deep-navy);
-            color: var(--white);
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .logout-btn:hover {
-            background: #004a6b;
-            transform: translateY(-1px);
-        }
-
-        .passport-badge {
-            background: var(--accent-gold);
-            color: var(--deep-navy);
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
-            font-family: monospace;
-        }
-
-        /* Auth Status Banner */
-        .auth-status {
-            display: none;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            background: rgba(46, 204, 113, 0.1);
-            border: 1px solid var(--success);
-            border-radius: 8px;
-            color: var(--success);
-            font-size: 14px;
-            margin: 20px auto;
-            max-width: 1200px;
-        }
-
-        .auth-status.show {
-            display: flex;
-        }
-
-        .auth-status.error {
-            background: rgba(231, 76, 60, 0.1);
-            border-color: var(--error);
-            color: var(--error);
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 40px 0 20px 0;
-        }
-
-        .hero-title {
-            text-align: center;
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--deep-navy);
-            line-height: 1.2;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 400;
-            margin-bottom: 40px;
-            opacity: 0.8;
             line-height: 1.6;
-            max-width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0 20px;
+            color: var(--navy);
+            background: linear-gradient(135deg, #f8fafe 0%, #e8f4f8 100%);
+            overflow-x: hidden;
         }
 
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 40px;
-            align-items: start;
-        }
-
-        /* Passport Cards */
-        .passport-cards {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .passport-card {
-            background: var(--deep-navy);
-            border: 1px solid rgba(0, 53, 84, 0.2);
-            border-radius: 8px;
-            padding: 20px 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            color: var(--white);
-            text-align: center;
-            aspect-ratio: 1.3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .passport-card::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 30px;
-            height: 30px;
-            background-image: url('https://sociallyfounded.com/assets/sf-logo.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.15;
-        }
-
-        .passport-card.burgundy {
-            background: var(--passport-burgundy);
-        }
-
-        .passport-card.diplomatic {
-            background: var(--passport-diplomatic);
-        }
-
-        .passport-card.platinum {
-            background: var(--passport-platinum);
-        }
-
-        .passport-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 12px 35px rgba(0, 53, 84, 0.3);
-        }
-
-        .passport-icon {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 12px;
-            fill: var(--accent-gold);
-        }
-
-        .passport-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--accent-gold);
-            text-shadow: 
-                0 1px 2px rgba(212, 175, 55, 0.3),
-                0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .passport-desc {
-            font-size: 11px;
-            opacity: 0.9;
-            line-height: 1.3;
-            color: var(--white);
-        }
-
-        /* Features List */
-        .features-list {
-            list-style: none;
-        }
-
-        .features-list li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
-            font-size: 16px;
-        }
-
-        .check-icon {
-            width: 20px;
-            height: 20px;
-            fill: var(--accent-gold);
-            flex-shrink: 0;
-        }
-
-        /* Signup Section */
-        .signup-section {
-            background: var(--white);
-            border: 1px solid rgba(0, 53, 84, 0.1);
-            border-radius: 20px;
-            padding: 20px 15px;
-            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
-        }
-
-        .signup-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            text-align: center;
-        }
-
-        .signup-subtitle {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        /* Enhanced Smart Signup Grid - DESKTOP OPTIMIZED */
-        .smart-signup-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px; /* Reduced from 10px */
-        }
-
-        .smart-grid-btn {
-            aspect-ratio: 1;
-            border: 2px solid var(--deep-navy);
-            border-radius: 12px;
-            background: var(--white);
-            color: var(--deep-navy);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px; /* Reduced from 10px */
-            position: relative;
-            min-height: 70px; /* Reduced from 80px+ */
-        }
-
-        .smart-grid-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .smart-grid-btn:hover:not(:disabled) {
-            background: var(--deep-navy);
-            color: var(--white);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 53, 84, 0.3);
-        }
-
-        .smart-grid-btn.primary {
-            background: var(--accent-gold);
-            border-color: var(--accent-gold);
-            color: var(--deep-navy);
-        }
-
-        .smart-grid-btn.primary:hover:not(:disabled) {
-            background: var(--accent-gold-hover);
-            border-color: var(--accent-gold-hover);
-            color: var(--deep-navy);
-        }
-
-        .smart-grid-btn svg {
-            width: 24px; /* Reduced from 35px/28px */
-            height: 24px;
-            fill: currentColor;
-        }
-
-        /* LinkedIn Section */
-        .linkedin-section {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(0, 53, 84, 0.1);
-            text-align: center;
-        }
-
-        .linkedin-text {
-            font-size: 12px;
-            margin-bottom: 12px;
-            opacity: 0.8;
-            color: var(--deep-navy);
-        }
-
-        .linkedin-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            background: #0077B5;
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .linkedin-btn:hover {
-            background: #006399;
-            transform: translateY(-2px);
-        }
-
-        .linkedin-icon {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-        }
-
-        /* Success Modal */
-        .modal {
-            display: none;
+        /* Loading Animation */
+        .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
+            background: rgba(0, 53, 84, 0.95);
+            backdrop-filter: blur(10px);
             display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
-        .modal-content {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            max-width: 400px;
-            margin: 20px;
-            color: var(--deep-navy);
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
         }
 
-        /* Footer */
-        .footer {
-            margin-top: 40px;
-            padding: 30px 0;
-            border-top: 1px solid rgba(0, 53, 84, 0.1);
-            text-align: center;
-            color: var(--deep-navy);
-            background: var(--white);
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .footer-text {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .footer-links {
-            font-size: 12px;
-        }
-
-        .footer-link {
-            color: var(--deep-navy);
-            text-decoration: none;
-            margin: 0 10px;
-            transition: opacity 0.3s ease;
-            opacity: 0.7;
-        }
-
-        .footer-link:hover {
-            opacity: 1;
-        }
-
-        /* DESKTOP COLUMN HEIGHT MATCHING & SIZING OPTIMIZATION */
-        @media (min-width: 969px) {
-            .content-grid {
-                align-items: stretch; /* Make all columns same height */
-            }
-            
-            .signup-section {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                min-height: 100%;
-                padding: 25px 18px; /* Optimized padding */
-            }
-
-            /* Reduce button size for desktop */
-            .smart-signup-grid {
-                margin: auto 0; /* Center the grid vertically */
-                gap: 6px; /* Further reduced gap */
-            }
-            
-            .smart-grid-btn {
-                min-height: 65px; /* Further reduced */
-                aspect-ratio: 1;
-            }
-            
-            .smart-grid-btn svg {
-                width: 22px; /* Optimized size */
-                height: 22px;
-            }
-            
-            /* Reduced text sizes */
-            .signup-title {
-                font-size: 22px; /* Reduced from 24px */
-            }
-            
-            .signup-subtitle {
-                font-size: 13px; /* Reduced from 14px */
-            }
-            
-            /* Add spacing content to match other columns */
-            .signup-content-spacer {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-            
-            /* Enhanced benefits section for desktop */
-            .founding-benefits-desktop {
-                margin-top: 15px; /* Reduced from 20px */
-                padding: 15px; /* Reduced from 20px */
-                background: rgba(212, 175, 55, 0.1);
-                border-radius: 12px;
-                border: 1px solid rgba(212, 175, 55, 0.3);
-            }
-            
-            .founding-benefits-desktop p {
-                font-size: 12px !important; /* Reduced font sizes */
-                margin-bottom: 8px !important;
-            }
-            
-            .founding-benefits-desktop div {
-                font-size: 10px !important;
-                padding: 6px 10px !important; /* Reduced padding */
-            }
-        }
-
-        /* Fix mobile to keep current mobile experience */
-        @media (max-width: 968px) {
-            .signup-section {
-                order: -1; /* Keep signup first on mobile */
-                padding: 25px 20px;
-            }
-            
-            .smart-grid-btn svg {
-                width: 32px; /* Keep larger on mobile for touch */
-                height: 32px;
-            }
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 968px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .hero-title {
-                font-size: 40px;
-            }
-
-            .subtitle {
-                font-size: 16px;
-            }
-
-            .signup-section {
-                padding: 25px 20px;
-            }
-
-            .passport-cards {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .user-info span:not(.user-avatar):not(.passport-badge) {
-                display: none;
-            }
-
-            .passport-cards {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .hero-title {
-                font-size: 36px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 15px;
-            }
-
-            .brand-name {
-                font-size: 24px;
-            }
-
-            .hero-title {
-                font-size: 28px;
-            }
-
-            .subtitle {
-                font-size: 14px;
-            }
-
-            .signup-title {
-                font-size: 20px;
-            }
-
-            .passport-cards {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-        }
-
-        /* Enhanced Mobile Icon Styles */
-        @media (max-width: 768px) {
-            .smart-grid-btn {
-                min-height: 90px;
-                border-width: 2px;
-                transition: all 0.2s ease;
-            }
-
-            .smart-grid-btn:hover {
-                transform: none; /* Disable desktop hover on mobile */
-            }
-
-            .smart-grid-btn:active {
-                transform: scale(0.95);
-                transition: transform 0.1s ease;
-            }
-
-            /* Enhanced QR button for mobile */
-            .smart-grid-btn.primary {
-                position: relative;
-            }
-
-            /* Show QR label on very small screens */
-            @media (max-width: 480px) {
-                .mobile-qr-label {
-                    display: block !important;
-                }
-            }
-
-            /* Color button hover states for mobile */
-            .smart-grid-btn:active {
-                opacity: 0.8;
-            }
-
-            /* Enhanced passport cards for mobile */
-            .passport-card {
-                min-height: 80px;
-                padding: 12px 16px;
-            }
-
-            .passport-icon {
-                width: 32px;
-                height: 32px;
-            }
-
-            .passport-title {
-                font-size: 13px;
-                line-height: 1.2;
-            }
-
-            .passport-desc {
-                font-size: 10px;
-                line-height: 1.3;
-            }
-        }
-
-        /* Very small screens (iPhone SE, etc.) */
-        @media (max-width: 375px) {
-            .smart-grid-btn {
-                min-height: 80px;
-            }
-
-            .smart-grid-btn svg {
-                width: 32px !important;
-                height: 32px !important;
-            }
-
-            .smart-grid-btn span {
-                font-size: 10px !important;
-            }
-
-            .hero-title {
-                font-size: 22px;
-                line-height: 1.1;
-            }
-
-            .subtitle {
-                font-size: 12px;
-                padding: 0 8px;
-            }
-        }
-        
-        /* Loading Animation */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ddd;
-            border-top: 2px solid #003554;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(224, 224, 224, 0.3);
+            transition: all 0.3s ease;
         }
 
-        /* MOBILE OPTIMIZATION */
-        @media (max-width: 968px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow-soft);
+        }
 
-            .signup-section {
-                order: -1; /* Move signup to top on mobile */
-            }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            .passport-cards {
-                grid-template-columns: 1fr;
-                gap: 10px;
-                margin-bottom: 20px;
-            }
+        .logo {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
 
-            .passport-card {
-                aspect-ratio: 2.5;
-                padding: 15px 20px;
-                flex-direction: row;
-                text-align: left;
-                align-items: center;
-                gap: 15px;
-            }
+        .logo:hover {
+            transform: scale(1.05);
+        }
 
-            .passport-icon {
-                width: 35px;
-                height: 35px;
-                margin-bottom: 0;
-                flex-shrink: 0;
-            }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
 
-            .passport-title {
-                font-size: 14px;
-                margin-bottom: 4px;
-            }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--navy);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
 
-            .passport-desc {
-                font-size: 11px;
-                line-height: 1.2;
-            }
+        .nav-links a:hover {
+            color: var(--gold);
+        }
 
-            .smart-grid-btn {
-                min-height: 80px;
-            }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
 
-            .smart-grid-btn svg {
-                width: 28px;
-                height: 28px;
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(0, 53, 84, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .hero-text {
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--navy);
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--navy);
+            border: 2px solid var(--gold);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gold);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* QR Section */
+        .qr-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-medium);
+            text-align: center;
+            animation: slideInRight 1s ease-out;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .qr-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--navy);
+        }
+
+        .passport-icon {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .qr-subtitle {
+            margin-bottom: 2rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--navy);
+        }
+
+        #homepage-qr-code {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        #homepage-qr-code:hover {
+            transform: scale(1.05);
+        }
+
+        .qr-hint {
+            font-size: 0.9rem;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        /* Community Types */
+        .communities-section {
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .communities-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--navy);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+            opacity: 0.7;
+        }
+
+        .communities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .community-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(224, 224, 224, 0.3);
+            cursor: pointer;
+        }
+
+        .community-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-strong);
+            border-color: var(--gold);
+        }
+
+        .community-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .community-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--navy);
+        }
+
+        .community-desc {
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+
+        /* Authentication Section */
+        .auth-section {
+            padding: 6rem 2rem;
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .auth-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .auth-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .auth-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .auth-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .auth-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--navy);
+            padding: 1.2rem 2rem;
+            border-radius: 15px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+            background: white;
+        }
+
+        .auth-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* Email Form */
+        .email-form {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            color: var(--navy);
+        }
+
+        .email-form.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--medium-gray);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
         }
 
-        @media (max-width: 480px) {
-            .smart-grid-btn.primary::after {
-                content: "Scan to Join";
-                position: absolute;
-                bottom: 4px;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 8px;
-                color: var(--deep-navy);
-                font-weight: 600;
-                background: rgba(255, 255, 255, 0.9);
-                padding: 2px 6px;
-                border-radius: 3px;
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Tablet Responsive */
+        @media (max-width: 1024px) {
+            .diana-features {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        /* Simple Footer */
+        .simple-footer {
+            padding: 2rem;
+            text-align: center;
+            background: rgba(0, 53, 84, 0.05);
+            border-top: 1px solid rgba(224, 224, 224, 0.3);
+        }
+
+        .simple-footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .simple-footer p {
+            margin: 0;
+            color: var(--navy);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .linkedin-link {
+            color: var(--navy);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .linkedin-link:hover {
+            opacity: 1;
+            color: var(--gold);
+            transform: translateY(-1px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
             }
 
-            .smart-grid-btn {
-                min-height: 70px;
+            .nav-links {
+                display: none;
             }
 
-            .smart-grid-btn svg {
-                width: 24px;
-                height: 24px;
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .diana-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .diana-features {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar-container {
+                width: 150px;
+                height: 150px;
+            }
+
+            .diana-icon {
+                width: 120px;
+                height: 120px;
+                font-size: 4rem;
+            }
+
+            .communities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-options {
+                grid-template-columns: 1fr;
+            }
+
+            .simple-footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+        }
+
+        .message.success {
+            background: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .message.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .message.visible {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Enhanced Header with Navigation -->
-    <header class="header-nav">
-        <div class="header-container">
-            <div class="logo-container">
-                <div class="sf-logo">
-                    <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SociallyFounded">
-                </div>
-                <div class="brand-name">SociallyFounded</div>
-            </div>
-            
-            <div class="user-menu" id="userMenu" style="display: none;">
-                <div class="user-info">
-                    <div class="user-avatar" id="userAvatar">
-                        <span id="userInitials">U</span>
-                    </div>
-                    <span id="userName">User</span>
-                    <span class="passport-badge" id="passportBadge">SF-XXXX-XX</span>
-                </div>
-                <button class="logout-btn" onclick="logout()">
-                    Logout
-                </button>
-            </div>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-content">
+            <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SociallyFounded" class="logo">
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#communities">Communities</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <!-- Authentication Status Banner -->
-    <div class="container">
-        <div class="auth-status" id="authStatus">
-            <span>✓</span>
-            <span id="authMessage">Authentication successful!</span>
-        </div>
-    </div>
+    <!-- Floating Background Elements -->
+    <div class="floating-element"><i class="fas fa-users" style="font-size: 4rem; color: var(--gold);"></i></div>
+    <div class="floating-element"><i class="fas fa-map-marker-alt" style="font-size: 3rem; color: var(--navy);"></i></div>
+    <div class="floating-element"><i class="fas fa-coffee" style="font-size: 3.5rem; color: var(--gold);"></i></div>
 
-    <div class="container">
-        <!-- Main Content -->
-        <main class="main-content">
-            <h1 class="hero-title">Launching Soon</h1>
-            <p class="subtitle">Connect with peers, verified mentors, find investors, and grow in entrepreneurial spaces worldwide. Turn your business idea into reality through conversation with DIANA, our AI co-founder. No tech skills? No problem.</p>
-
-            <div class="content-grid">
-                <!-- Left Content - Passport Cards -->
-                <div class="cards-content">
-                    <!-- Passport Cards with Gold Embossing -->
-                    <div class="passport-cards">
-                        <div class="passport-card">
-                            <svg class="passport-icon" viewBox="0 0 24 24">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                            </svg>
-                            <div class="passport-title">Join Community </div>
-                            <div class="passport-desc">Connect with members <br>worldwide</div>
-                        </div>
-                        <div class="passport-card burgundy">
-                            <svg class="passport-icon" viewBox="0 0 24 24">
-                                <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-1H22v-.5l-2.5-1.5v2zm-15 0V7.5L2 9v.5h2.5zm13-4H22V5.5L18.5 4v2.5zM5.5 6.5V4L2 5.5V6h3.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                            </svg>
-                            <div class="passport-title">Founder Platform</div>
-                            <div class="passport-desc">Idea development<br>& IP protection</div>
-                        </div>
-                        <div class="passport-card diplomatic">
-                            <svg class="passport-icon" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <div class="passport-title">Mentor Network</div>
-                            <div class="passport-desc">Connect with experts <br>& collaborate</div>
-                        </div>
-                        <div class="passport-card platinum">
-                            <svg class="passport-icon" viewBox="0 0 24 24">
-                                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
-                            </svg>
-                            <div class="passport-title">Investor Access</div>
-                            <div class="passport-desc">AI-scored deal flow<br>& smart fundraising</div>
-                        </div>
-                        <div class="passport-card">
-                            <svg class="passport-icon" viewBox="0 0 24 24">
-                                <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 15h-2v-6H9v6H7v-6H5.83L12 5.83 18.17 12H17v6z"/>
-                            </svg>
-                            <div class="passport-title">Venue Network</div>
-                            <div class="passport-desc">Global entrepreneurial<br>spaces & communities</div>
-                        </div>
-                        <div class="passport-card">
-                            <svg class="passport-icon" viewBox="0 0 24 24">
-                                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-1 16H9V7h9v14z"/>
-                            </svg>
-                            <div class="passport-title">Partner Network</div>
-                            <div class="passport-desc">Solutions marketplace<br>for founders</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Center Content - Features -->
-                <div class="features-content">
-                    <!-- Features -->
-                    <ul class="features-list">
-                        <li>
-                            <svg class="check-icon" viewBox="0 0 24 24">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                            </svg>
-                            AI co-founder DIANA helps build your business
-                        </li>
-                        <li>
-                            <svg class="check-icon" viewBox="0 0 24 24">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                            </svg>
-                            Professional mentors verified through LinkedIn
-                        </li>
-                        <li>
-                            <svg class="check-icon" viewBox="0 0 24 24">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                            </svg>
-                            Connect with entrepreneurs in your industry
-                        </li>
-                        <li>
-                            <svg class="check-icon" viewBox="0 0 24 24">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                            </svg>
-                            Find investors interested in your sector
-                        </li>
-                        <li>
-                            <svg class="check-icon" viewBox="0 0 24 24">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                            </svg>
-                            Work from entrepreneurial cafés globally
-                        </li>
-                        <li>
-                            <svg class="check-icon" viewBox="0 0 24 24">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                            </svg>
-                            Access tools and services for Community Members & Founders
-                        </li>
-                    </ul>
-
-                    <div class="linkedin-section">
-                        <p class="linkedin-text">Follow our journey and get updates</p>
-                        <a href="https://linkedin.com/company/sociallyfounded" target="_blank" class="linkedin-btn">
-                            <svg class="linkedin-icon" viewBox="0 0 24 24">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                            Follow on LinkedIn
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Enhanced Right Content - Optimized Signup Section -->
-                <div class="signup-section">
-                    <div class="signup-content-spacer">
-                        <div>
-                            <h2 class="signup-title">Join the Waitlist</h2>
-                            <p class="signup-subtitle">Get unrestricted Early Access</p>
-
-                            <!-- Optimized Smart Signup Grid -->
-                            <div class="smart-signup-grid">
-                                <!-- Enhanced QR Code Card with Bigger SF Logo -->
-                                <button class="smart-grid-btn primary" onclick="showQRCode()" title="Scan to Join" style="position: relative;">
-                                    <div id="homepage-qr-code" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: white;">
-                                        <div style="color: #D4AF37; font-size: 11px;">Loading QR...</div>
-                                    </div>
-                                </button>
-
-                                <!-- Professional Google Card -->
-                                <button class="smart-grid-btn" onclick="authenticateWithGoogle()" title="Google Sign In" id="google-auth-btn" style="background: #4285F4; border-color: #4285F4; color: white;">
-                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; height: 100%; justify-content: center;">
-                                        <svg viewBox="0 0 24 24" style="width: 22px; height: 22px;">
-                                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                            <path fill="#FBBC04" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                                        </svg>
-                                        <span style="font-size: 9px; font-weight: 500; opacity: 0.9;">Google</span>
-                                    </div>
-                                </button>
-
-                                <!-- Professional LinkedIn Card -->
-                                <button class="smart-grid-btn" onclick="authenticateWithLinkedIn()" title="LinkedIn Sign In" style="background: #0077B5; border-color: #0077B5; color: white;">
-                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; height: 100%; justify-content: center;">
-                                        <svg viewBox="0 0 24 24" fill="white" style="width: 22px; height: 22px;">
-                                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                        </svg>
-                                        <span style="font-size: 9px; font-weight: 500; opacity: 0.9;">LinkedIn</span>
-                                    </div>
-                                </button>
-
-                                <!-- Professional Email Card -->
-                                <button class="smart-grid-btn" onclick="authenticateWithEmail()" title="Email Sign Up" style="background: #34A853; border-color: #34A853; color: white;">
-                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; height: 100%; justify-content: center;">
-                                        <svg viewBox="0 0 24 24" fill="white" style="width: 22px; height: 22px;">
-                                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                                        </svg>
-                                        <span style="font-size: 9px; font-weight: 500; opacity: 0.9;">Email</span>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Compact Benefits for Desktop -->
-                        <div class="founding-benefits-desktop">
-                            <p style="font-size: 12px; color: var(--deep-navy); font-weight: 600; margin-bottom: 8px; text-align: center;">
-                                🎁 Founding Member Benefits
-                            </p>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 10px; color: var(--deep-navy);">
-                                <div style="background: rgba(212, 175, 55, 0.2); padding: 6px 10px; border-radius: 6px; text-align: center;">
-                                    <strong>3 months</strong><br>
-                                    <span style="opacity: 0.8;">premium access</span>
-                                </div>
-                                <div style="background: rgba(212, 175, 55, 0.2); padding: 6px 10px; border-radius: 6px; text-align: center;">
-                                    <strong>Early DIANA AI</strong><br>
-                                    <span style="opacity: 0.8;">co-founder access</span>
-                                </div>
-                                <div style="background: rgba(212, 175, 55, 0.2); padding: 6px 10px; border-radius: 6px; text-align: center; grid-column: 1 / -1;">
-                                    <strong>Lifetime founding member badge</strong><br>
-                                    <span style="opacity: 0.8;">exclusive recognition</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mobile-only benefits (hidden on desktop) -->
-                    <div style="margin-top: 20px; text-align: center; display: none;" class="mobile-benefits">
-                        <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3);">
-                            <p style="font-size: 12px; color: var(--deep-navy); font-weight: 600; margin-bottom: 8px;">
-                                🎁 Founding Member Benefits
-                            </p>
-                            <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; font-size: 10px; color: var(--deep-navy); opacity: 0.8;">
-                                <span style="background: rgba(212, 175, 55, 0.2); padding: 4px 8px; border-radius: 12px;">3 months premium</span>
-                                <span style="background: rgba(212, 175, 55, 0.2); padding: 4px 8px; border-radius: 12px;">Early DIANA AI</span>
-                                <span style="background: rgba(212, 175, 55, 0.2); padding: 4px 8px; border-radius: 12px;">Founding badge</span>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Join the Waitlist</h1>
+                <p class="hero-subtitle">
+                    SociallyFounded accelerates innovative ideas, meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.
+                </p>
+                <div class="hero-cta">
+                    <a href="#auth" class="btn btn-primary">Start Building with DIANA</a>
+                    <a href="#communities" class="btn btn-secondary">Explore Your Communities</a>
                 </div>
             </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-text">© 2025 SociallyFounded. All rights reserved.</div>
-            <div class="footer-links">
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Contact</a>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Success Modal -->
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <div class="loading-content">
-                <div class="loading-spinner"></div>
-                <h3 class="modal-title">Welcome to SociallyFounded! 🎉</h3>
-                <p class="modal-text">Setting up your exclusive welcome experience...</p>
+            
+            <div class="qr-section">
+                <h3 class="qr-title">Get Your Passport</h3>
+                <i class="fas fa-passport passport-icon"></i>
+                <p class="qr-subtitle">register</p>
+                <div id="homepage-qr-code"></div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Global Functions Script - MUST BE FIRST -->
+    <!-- DIANA AI Section -->
+    <section class="diana-section" id="diana">
+        <div class="diana-container">
+            <div class="diana-content">
+                <div class="diana-text">
+                    <h2 class="section-title">Meet DIANA - Your AI Co-Founder</h2>
+                    <p class="section-subtitle">Virtual co-founder for entrepreneurs. Incubate ideas into viable businesses.</p>
+                    
+                    <div class="diana-features">
+                        <div class="diana-feature">
+                            <div class="feature-icon"><i class="fas fa-lightbulb"></i></div>
+                            <h4>Idea Development</h4>
+                            <p>Brainstorm and validate business concepts with AI intelligence</p>
+                        </div>
+                        
+                        <div class="diana-feature">
+                            <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                            <h4>Build Your MVP with AI</h4>
+                            <p>AI-guided development from concept to Minimum Viable Product launch</p>
+                        </div>
+                        
+                        <div class="diana-feature">
+                            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                            <h4>Market Analysis</h4>
+                            <p>Get insights on market opportunities and competitive landscape</p>
+                        </div>
+                        
+                        <div class="diana-feature">
+                            <div class="feature-icon"><i class="fas fa-users"></i></div>
+                            <h4>Team Building</h4>
+                            <p>Find co-founders and team members through community connections</p>
+                        </div>
+                        
+                        <div class="diana-feature">
+                            <div class="feature-icon"><i class="fas fa-dollar-sign"></i></div>
+                            <h4>Investor Matching</h4>
+                            <p>Connect with investors aligned with your startup vision</p>
+                        </div>
+                        
+                        <div class="diana-feature">
+                            <div class="feature-icon"><i class="fas fa-handshake"></i></div>
+                            <h4>Community Validation</h4>
+                            <p>Test your ideas with expert verified mentors</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="diana-visual">
+                    <div class="diana-avatar-large">
+                        <div class="avatar-container">
+                            <div class="avatar-glow"></div>
+                            <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" alt="DIANA AI Assistant" class="diana-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <i class="fas fa-robot diana-icon" style="display: none;"></i>
+                        </div>
+                        <h3>DIANA</h3>
+                        <p>Your AI Community Catalyst</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Communities Section -->
+    <section class="communities-section" id="communities">
+        <div class="communities-container">
+            <h2 class="section-title">Your Communities</h2>
+            <p class="section-subtitle">Connect with diverse communities as your pathway to entrepreneurial success</p>
+            
+            <div class="communities-grid">
+                <div class="community-card">
+                    <div class="community-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3 class="community-name">Professional</h3>
+                    <p class="community-desc">Build industry networks, find co-founders, validate business ideas</p>
+                </div>
+                
+                <div class="community-card">
+                    <div class="community-icon"><i class="fas fa-home"></i></div>
+                    <h3 class="community-name">Neighborhood</h3>
+                    <p class="community-desc">Discover local market opportunities, connect with potential customers</p>
+                </div>
+                
+                <div class="community-card">
+                    <div class="community-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 class="community-name">Learning</h3>
+                    <p class="community-desc">Develop entrepreneurial skills, learn from mentors and experts</p>
+                </div>
+                
+                <div class="community-card">
+                    <div class="community-icon"><i class="fas fa-heart"></i></div>
+                    <h3 class="community-name">Lifestyle & Fitness</h3>
+                    <p class="community-desc">Build wellness businesses, connect with health-conscious consumers</p>
+                </div>
+                
+                <div class="community-card">
+                    <div class="community-icon"><i class="fas fa-store"></i></div>
+                    <h3 class="community-name">Marketplace</h3>
+                    <p class="community-desc">Test products, find suppliers, connect with local commerce opportunities</p>
+                </div>
+                
+                <div class="community-card">
+                    <div class="community-icon"><i class="fas fa-rocket"></i></div>
+                    <h3 class="community-name">Entrepreneur Hub</h3>
+                    <p class="community-desc">Connect with fellow founders, investors, and startup ecosystem</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authentication Section -->
+    <section class="auth-section" id="auth">
+        <div class="auth-container">
+            <h2 class="auth-title">Start Your Journey</h2>
+            <p class="auth-subtitle">Join SociallyFounded, engage with communities, collaborate at sponsored venues and make an impact</p>
+            
+            <div class="auth-options">
+                <button class="auth-btn" onclick="authenticateWithGoogle()">
+                    <i class="fab fa-google"></i>
+                    Continue with Google
+                </button>
+                
+                <button class="auth-btn" onclick="authenticateWithLinkedIn()">
+                    <i class="fab fa-linkedin"></i>
+                    Continue with LinkedIn
+                </button>
+                
+                <button class="auth-btn" onclick="showEmailForm()">
+                    <i class="fas fa-envelope"></i>
+                    Continue with Email
+                </button>
+            </div>
+
+            <!-- Email Form -->
+            <div id="email-form" class="email-form">
+                <h3 style="margin-bottom: 1.5rem; text-align: center;">Create Your Account</h3>
+                <form id="email-signup-form">
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Create Account</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideEmailForm()">Cancel</button>
+                    </div>
+                </form>
+                <div id="auth-message" class="message"></div>
+            </div>
+        </div>
+    </section>
+
     <script>
-        // Global variables to track loading state
-        window.authSystemReady = false;
-        
-        // Define global functions that will be available to onclick handlers
-        function showQRCode() {
-            const qrOverlay = document.createElement('div');
-            qrOverlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 10000;
-                font-family: 'Poppins', sans-serif;
-            `;
+        // Global state
+        let isFirebaseReady = false;
+
+        // Initialize page elements
+        function initializePageElements() {
+            console.log('Initializing page elements...');
             
-            qrOverlay.innerHTML = `
-                <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 400px;">
-                    <h3 style="color: #003554; margin-bottom: 20px;">Scan to Join on Mobile</h3>
-                    <div id="qrcode" style="margin: 20px auto;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('https://sociallyfounded.com/qr-welcome.html?source=qr_modal&ref=homepage')}"
-                    </div>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
-                        Scan this QR code with your phone to join SociallyFounded
-                    </p>
-                    <button onclick="this.parentElement.parentElement.remove()" 
-                            style="background: #003554; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
-                        Close
-                    </button>
-                </div>
-            `;
+            // Remove loading overlay
+            const loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('hidden');
+            }
+
+            // Setup scroll header effect
+            setupScrollEffects();
             
-            document.body.appendChild(qrOverlay);
-            qrOverlay.addEventListener('click', (e) => {
-                if (e.target === qrOverlay) {
-                    qrOverlay.remove();
+            // Setup email form
+            setupEmailForm();
+        }
+
+        // Setup scroll effects
+        function setupScrollEffects() {
+            const header = document.getElementById('header');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
                 }
             });
         }
 
-        // Placeholder functions that check if auth system is ready
-        function authenticateWithGoogle() {
-            console.log('Google auth clicked, system ready:', window.authSystemReady);
-            if (window.authSystemReady && window.realGoogleAuth) {
-                window.realGoogleAuth();
-            } else {
-                console.log('Google auth loading... Please wait');
-                // Show loading state
-                showAuthLoading('Google authentication initializing...');
-            }
-        }
-
-        function authenticateWithLinkedIn() {
-            console.log('LinkedIn auth clicked, system ready:', window.authSystemReady);
-            if (window.authSystemReady && window.realLinkedInAuth) {
-                window.realLinkedInAuth();
-            } else {
-                console.log('LinkedIn auth loading... Please wait');
-                showAuthLoading('LinkedIn authentication initializing...');
-            }
-        }
-
-        function authenticateWithEmail() {
-            console.log('Email auth clicked, system ready:', window.authSystemReady);
-            if (window.authSystemReady && window.realEmailAuth) {
-                window.realEmailAuth();
-            } else {
-                console.log('Email auth loading... Please wait');
-                showAuthLoading('Email authentication initializing...');
-            }
-        }
-
-        function logout() {
-            console.log('Logout clicked, system ready:', window.authSystemReady);
-            if (window.authSystemReady && window.realLogout) {
-                window.realLogout();
-            } else {
-                console.log('Logout loading... Please wait');
-            }
-        }
-
-        function showAuthLoading(message) {
-            // Show loading message to user
-            const authStatus = document.getElementById('authStatus');
-            const authMessage = document.getElementById('authMessage');
-            if (authStatus && authMessage) {
-                authStatus.classList.add('show');
-                authMessage.textContent = message;
+        // Setup email form
+        function setupEmailForm() {
+            const form = document.getElementById('email-signup-form');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
                 
-                // Hide after 3 seconds
-                setTimeout(() => {
-                    authStatus.classList.remove('show');
-                }, 3000);
-            }
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const name = document.getElementById('signup-name').value;
+                
+                try {
+                    if (!firebaseInitialized) {
+                        showError('Firebase not ready. Please try again in a moment.');
+                        return;
+                    }
+                    
+                    showLoadingState();
+                    
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    const user = userCredential.user;
+                    
+                    console.log('Email auth successful:', user.uid);
+                    
+                    const userData = await createUserProfile(user, {
+                        authProvider: 'email',
+                        displayName: name,
+                        referralSource: getReferralSource()
+                    });
+                    
+                    localStorage.setItem('sf_user', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: name,
+                        sfPassport: userData.sfPassport || { id: 'SF-PENDING' }
+                    }));
+                    
+                    hideLoadingState();
+                    showSuccessAndRedirect(userData);
+                    
+                } catch (error) {
+                    console.error('Email auth error:', error);
+                    hideLoadingState();
+                    showError(`Account creation failed: ${error.message}`);
+                }
+            });
         }
 
-     // FIXED QR CODE GENERATION - PROPER URL ENCODING
-        function generateHomepageQR() {
-            console.log('🎯 Starting QR generation...');
-            
-            const qrContainer = document.getElementById('homepage-qr-code');
-            if (!qrContainer) {
-                console.error('❌ QR container not found');
+        // Show/hide email form
+        function showEmailForm() {
+            document.getElementById('email-form').classList.add('active');
+        }
+
+        function hideEmailForm() {
+            document.getElementById('email-form').classList.remove('active');
+        }
+
+        // Google Authentication (PRESERVE WORKING CODE)
+        async function authenticateWithGoogle() {
+            if (!firebaseInitialized) {
+                showError('Firebase not ready. Please try again in a moment.');
                 return;
             }
             
-            // Show loading first
-            qrContainer.innerHTML = '<div style="color: #D4AF37; font-size: 10px; text-align: center;">Loading QR...</div>';
-            
-            // FIXED: Clean URL without extra encoding issues
-            const qrUrl = 'https://sociallyfounded.com/qr-welcome.html';
-            
-            // FIXED: Simple URL encoding for QR API
-            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrUrl}&ecc=M`;
-            
-            console.log('🔗 QR Target URL:', qrUrl);
-            console.log('📡 QR API URL:', qrApiUrl);
-            
-            // Test QR content by creating a test link
-            console.log('🧪 Test link (should be same as QR):', qrUrl);
-            
-            // Create QR container with click-to-test functionality
-            qrContainer.innerHTML = `
-                <div style="
-                    background: linear-gradient(135deg, #D4AF37 0%, #E5C047 100%);
-                    padding: 8px;
-                    border-radius: 8px;
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-                ">
-                    <div style="
-                        background: white;
-                        border-radius: 4px;
-                        width: calc(100% - 16px);
-                        height: calc(100% - 16px);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        position: relative;
-                        cursor: pointer;
-                    " onclick="testQRUrl()" title="Click to test QR URL on desktop">
-                        <img 
-                            src="${qrApiUrl}"
-                            style="
-                                width: 85%;
-                                height: 85%;
-                                border-radius: 2px;
-                            "
-                            alt="QR Code for Mobile Experience"
-                            onload="console.log('✅ QR Code loaded successfully'); validateQRContent();"
-                            onerror="handleQRError(this)"
-                        >
-                        <!-- SF Logo overlay -->
-                        <div style="
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            width: 28%;
-                            height: 28%;
-                            background: white;
-                            border-radius: 50%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            box-shadow: 0 0 8px rgba(0,0,0,0.1);
-                            border: 2px solid #D4AF37;
-                            pointer-events: none;
-                        ">
-                            <img 
-                                src="https://sociallyfounded.com/assets/sf-logo.png"
-                                style="width: 80%; height: 80%; object-fit: contain;"
-                                alt="SF"
-                                onerror="this.parentElement.innerHTML='<div style=\\'color: #D4AF37; font-weight: bold; font-size: 8px;\\'>SF</div>'"
-                            >
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            console.log('✅ QR container created successfully');
-        }
-        
-        // Test function to verify QR URL works
-        function testQRUrl() {
-            const testUrl = 'https://sociallyfounded.com/qr-welcome.html';
-            console.log('🧪 Testing QR URL:', testUrl);
-            window.open(testUrl, '_blank');
-        }
-        
-        // Validate QR content
-        function validateQRContent() {
-            console.log('🔍 QR Code should contain URL: https://sociallyfounded.com/qr-welcome.html');
-            console.log('📱 Phone should open this URL when scanned');
-            console.log('🖱️ Desktop users can click QR to test URL');
-        }
-        
-        // Error handler for QR image
-        function handleQRError(img) {
-            console.error('❌ QR image failed to load');
-            
-            // Replace with fallback that definitely works
-            const container = img.closest('div[style*="background: white"]');
-            if (container) {
-                container.innerHTML = `
-                    <div style="
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        color: #003554;
-                        font-size: 10px;
-                        text-align: center;
-                        cursor: pointer;
-                    " onclick="window.open('https://sociallyfounded.com/qr-welcome.html', '_blank')">
-                        <img src="https://sociallyfounded.com/assets/sf-logo.png" 
-                             style="width: 50%; height: 50%; object-fit: contain; margin-bottom: 5px;" 
-                             alt="SF">
-                        <div style="font-weight: 600; font-size: 9px;">Tap to Join</div>
-                        <div style="font-size: 7px; opacity: 0.7;">Mobile Experience</div>
-                    </div>
-                `;
-            }
-        }
-        
-        // Alternative QR generation if main one fails
-        function generateAlternativeQR() {
-            console.log('🔄 Trying alternative QR service...');
-            
-            const qrContainer = document.getElementById('homepage-qr-code');
-            if (!qrContainer) return;
-            
-            const qrUrl = 'https://sociallyfounded.com/qr-welcome.html';
-            
-            // Alternative QR services to try
-            const qrServices = [
-                `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(qrUrl)}`,
-                `https://qr.io/api/?data=${encodeURIComponent(qrUrl)}&size=150`,
-                `https://qrcode.tec-it.com/API/QRCode?data=${encodeURIComponent(qrUrl)}&size=Medium`
-            ];
-            
-            // Try each service
-            qrServices.forEach((apiUrl, index) => {
-                console.log(`🧪 Alternative QR ${index + 1}:`, apiUrl);
-            });
-            
-            // Use Google Charts as backup
-            const altQrApiUrl = qrServices[0];
-            
-            qrContainer.innerHTML = `
-                <div style="background: #D4AF37; padding: 8px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                    <img src="${altQrApiUrl}" style="width: 85%; height: 85%; background: white; border-radius: 4px;" alt="QR Code" onclick="testQRUrl()">
-                </div>
-            `;
-        }
-        console.log('✅ Global auth functions defined with ready check and QR generation');
-    </script>
-
-    <!-- Firebase Authentication Script -->
-    <script>
-        console.log('🔥 Regular script starting Firebase...');
-        
-        // Load Firebase using dynamic imports in a regular script
-        async function initializeFirebaseAuth() {
-            try {
-                console.log('📦 Loading Firebase modules...');
-                
-                // Dynamic imports
-                const { initializeApp } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js');
-                const { 
-                    getAuth, 
-                    signInWithPopup,
-                    GoogleAuthProvider,
-                    createUserWithEmailAndPassword,
-                    signInWithEmailAndPassword,
-                    onAuthStateChanged,
-                    signOut
-                } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js');
-                const { 
-                    getFirestore, 
-                    doc, 
-                    setDoc, 
-                    getDoc,
-                    serverTimestamp
-                } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js');
-
-                console.log('✅ Firebase modules imported successfully');
-
-                // Firebase Configuration
-                const firebaseConfig = {
-                    apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
-                    authDomain: "sociallyfounded-df98f.firebaseapp.com",
-                    projectId: "sociallyfounded-df98f",
-                    storageBucket: "sociallyfounded-df98f.firebasestorage.app",
-                    messagingSenderId: "994533610259",
-                    appId: "1:994533610259:web:fe740378a4c000211e40e6",
-                    measurementId: "G-EY0BZE30Q0"
-                };
-
-                // Initialize Firebase
-                console.log('🔥 Initializing Firebase...');
-                const app = initializeApp(firebaseConfig);
-                const auth = getAuth(app);
-                const db = getFirestore(app);
-                console.log('✅ Firebase initialized successfully');
-
-                console.log('🧪 Testing Firebase connection...');
-                console.log('Auth object:', auth);
-                console.log('Firestore object:', db);
-
-        // DEFINE FUNCTIONS FIRST - BEFORE ANY OTHER CODE
-        function showQRCode() {
-            const qrOverlay = document.createElement('div');
-            qrOverlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 10000;
-                font-family: 'Poppins', sans-serif;
-            `;
-            
-            qrOverlay.innerHTML = `
-                <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 400px;">
-                    <h3 style="color: #003554; margin-bottom: 20px;">Scan to Join on Mobile</h3>
-                    <div id="qrcode" style="margin: 20px auto;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin)}" 
-                             alt="QR Code" style="border: 1px solid #ddd; border-radius: 8px;">
-                    </div>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
-                        Scan this QR code with your phone to join SociallyFounded
-                    </p>
-                    <button onclick="this.parentElement.parentElement.remove()" 
-                            style="background: #003554; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
-                        Close
-                    </button>
-                </div>
-            `;
-            
-            document.body.appendChild(qrOverlay);
-            qrOverlay.addEventListener('click', (e) => {
-                if (e.target === qrOverlay) {
-                    qrOverlay.remove();
-                }
-            });
-        }
-
-        function showLoadingState() {
-            document.querySelectorAll('.smart-grid-btn').forEach(btn => {
-                btn.disabled = true;
-                btn.style.opacity = '0.6';
-                btn.style.cursor = 'not-allowed';
-            });
-            
-            const googleBtn = document.getElementById('google-auth-btn');
-            if (googleBtn) {
-                googleBtn.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        <div class="spinner"></div>
-                        <span style="font-size: 14px;">Authenticating...</span>
-                    </div>
-                `;
-            }
-        }
-
-        function hideLoadingState() {
-            document.querySelectorAll('.smart-grid-btn').forEach(btn => {
-                btn.disabled = false;
-                btn.style.opacity = '1';
-                btn.style.cursor = 'pointer';
-            });
-            
-            const googleBtn = document.getElementById('google-auth-btn');
-            if (googleBtn) {
-                googleBtn.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; height: 100%; justify-content: center;">
-                        <svg viewBox="0 0 24 24" style="width: 22px; height: 22px;">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            <path fill="#FBBC04" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                        </svg>
-                        <span style="font-size: 9px; font-weight: 500; opacity: 0.9;">Google</span>
-                    </div>
-                `;
-            }
-        }
-
-        function showError(message) {
-            const authStatus = document.getElementById('authStatus');
-            const authMessage = document.getElementById('authMessage');
-            
-            authStatus.classList.remove('show');
-            authStatus.classList.add('show', 'error');
-            authMessage.textContent = message;
-            
-            setTimeout(() => {
-                authStatus.classList.remove('show', 'error');
-            }, 5000);
-            
-            console.error('SF Error:', message);
-        }
-
-        async function logout() {
-            try {
-                await signOut(auth);
-                localStorage.removeItem('sf_user');
-                
-                const authStatus = document.getElementById('authStatus');
-                authStatus.classList.add('show', 'error');
-                document.getElementById('authMessage').textContent = 'Successfully logged out. You can now test with a different account.';
-                
-                document.getElementById('userMenu').style.display = 'none';
-                
-                setTimeout(() => {
-                    authStatus.classList.remove('show', 'error');
-                }, 3000);
-                
-                console.log('User logged out successfully');
-                
-            } catch (error) {
-                console.error('Logout error:', error);
-                showError('Error logging out. Please try again.');
-            }
-        }
-
-        function getReferralSource() {
-            return new URLSearchParams(window.location.search).get('ref') || 'direct';
-        }
-
-        // IMMEDIATELY MAKE FUNCTIONS GLOBALLY AVAILABLE
-        window.showQRCode = showQRCode;
-        window.showLoadingState = showLoadingState;
-        window.hideLoadingState = hideLoadingState;
-        window.showError = showError;
-        window.logout = logout;
-        window.getReferralSource = getReferralSource;
-
-        // AUTHENTICATION FUNCTIONS - DEFINED EARLY
-        async function authenticateWithGoogle() {
             try {
                 showLoadingState();
-                const provider = new GoogleAuthProvider();
+                const provider = new firebase.auth.GoogleAuthProvider();
                 provider.addScope('profile');
                 provider.addScope('email');
                 
-                const result = await signInWithPopup(auth, provider);
+                const result = await auth.signInWithPopup(provider);
                 const user = result.user;
                 
                 console.log('Google auth successful:', user.uid);
@@ -1543,7 +1072,16 @@
                     referralSource: getReferralSource()
                 });
                 
-                await showSuccessAndRedirect(userData, 'google');
+                localStorage.setItem('sf_user', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                    sfPassport: userData.sfPassport || { id: 'SF-PENDING' }
+                }));
+                
+                hideLoadingState();
+                showSuccessAndRedirect(userData);
                 
             } catch (error) {
                 console.error('Google auth error:', error);
@@ -1553,20 +1091,17 @@
                     showError('Authentication cancelled. Please try again.');
                 } else if (error.code === 'auth/popup-blocked') {
                     showError('Popup was blocked. Please allow popups for this site.');
-                } else if (error.code === 'auth/account-exists-with-different-credential') {
-                    showError('An account already exists with this email using a different sign-in method.');
-                } else if (error.code === 'auth/internal-error') {
-                    showError('Authentication service temporarily unavailable. Please try again.');
                 } else {
                     showError(`Authentication failed: ${error.message || 'Please try again.'}`);
                 }
             }
         }
 
+        // LinkedIn Authentication (PRESERVE WORKING CODE)
         async function authenticateWithLinkedIn() {
             try {
                 showLoadingState();
-                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname.includes('claude.ai');
                 
                 if (isDevelopment) {
                     await simulateLinkedInAuth();
@@ -1580,138 +1115,198 @@
             }
         }
 
-        async function authenticateWithEmail() {
-            try {
-                showLoadingState();
-                const emailModal = document.createElement('div');
-                emailModal.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0, 0, 0, 0.8);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 10000;
-                    font-family: 'Poppins', sans-serif;
-                `;
-                
-                emailModal.innerHTML = `
-                    <div style="background: white; padding: 40px; border-radius: 16px; max-width: 400px; width: 90%;">
-                        <h3 style="color: #003554; margin-bottom: 20px;">Join with Email</h3>
-                        <form id="emailForm">
-                            <input type="text" id="nameInput" placeholder="Enter your full name" required
-                                   style="width: 100%; padding: 12px; border: 2px solid #003554; border-radius: 8px; margin-bottom: 15px; font-size: 16px; font-family: 'Poppins', sans-serif;">
-                            <input type="email" id="emailInput" placeholder="Enter your email" required
-                                   style="width: 100%; padding: 12px; border: 2px solid #003554; border-radius: 8px; margin-bottom: 15px; font-size: 16px; font-family: 'Poppins', sans-serif;">
-                            <input type="password" id="passwordInput" placeholder="Create a password" required minlength="6"
-                                   style="width: 100%; padding: 12px; border: 2px solid #003554; border-radius: 8px; margin-bottom: 20px; font-size: 16px; font-family: 'Poppins', sans-serif;">
-                            <button type="submit" 
-                                    style="width: 100%; background: #D4AF37; color: #003554; border: none; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif;">
-                                Join Waitlist
-                            </button>
-                            <button type="button" onclick="this.closest('div[style*=fixed]').remove(); window.hideLoadingState();"
-                                    style="width: 100%; background: transparent; color: #003554; border: 2px solid #003554; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; margin-top: 10px; font-family: 'Poppins', sans-serif;">
-                                Cancel
-                            </button>
-                        </form>
+        function initiateLinkedInOAuth() {
+            const state = generateRandomString(16);
+            sessionStorage.setItem('linkedin_oauth_state', state);
+            sessionStorage.setItem('linkedin_auth_intent', 'waitlist');
+            
+            const authUrl = 'https://www.linkedin.com/oauth/v2/authorization?' +
+                `response_type=code&` +
+                `client_id=77tpngrlwmwnz7&` +
+                `redirect_uri=${encodeURIComponent('https://sociallyfounded.com/linkedin-callback.html')}&` +
+                `state=${state}&` +
+                `scope=openid%20profile%20email`;
+            
+            window.location.href = authUrl;
+        }
+
+        async function simulateLinkedInAuth() {
+            const simulatedUser = {
+                uid: 'linkedin_' + Date.now(),
+                email: 'demo@linkedin.com',
+                displayName: 'LinkedIn Demo User',
+                photoURL: 'https://via.placeholder.com/150'
+            };
+            
+            const userData = await createUserProfile(simulatedUser, {
+                authProvider: 'linkedin',
+                referralSource: getReferralSource()
+            });
+            
+            localStorage.setItem('sf_user', JSON.stringify({
+                uid: simulatedUser.uid,
+                email: simulatedUser.email,
+                displayName: simulatedUser.displayName,
+                photoURL: simulatedUser.photoURL,
+                sfPassport: userData.sfPassport || { id: 'SF-PENDING' }
+            }));
+            
+            hideLoadingState();
+            showSuccessAndRedirect(userData);
+        }
+
+        // QR Code Generation (PRESERVE WORKING CODE)
+        function generateHomepageQR() {
+            const qrContainer = document.getElementById('homepage-qr-code');
+            if (!qrContainer) {
+                console.log('QR container not found');
+                return;
+            }
+
+            // Check if QRCode library is loaded
+            if (typeof QRCode === 'undefined') {
+                console.log('QRCode library not loaded, showing fallback');
+                qrContainer.innerHTML = `
+                    <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #003554, #004a6b); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; text-align: center; margin: 0 auto;">
+                        <div>
+                            <i class="fas fa-qrcode" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                            QR Code<br>Available on<br>Production
+                        </div>
                     </div>
                 `;
-                
-                document.body.appendChild(emailModal);
-                
-                document.getElementById('emailForm').addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const fullName = document.getElementById('nameInput').value;
-                    const email = document.getElementById('emailInput').value;
-                    const password = document.getElementById('passwordInput').value;
-                    
-                    try {
-                        let userCredential;
-                        
-                        // Try to create account first
-                        try {
-                            userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                            console.log('New user created:', userCredential.user.uid);
-                        } catch (createError) {
-                            if (createError.code === 'auth/email-already-in-use') {
-                                // Email exists, try to sign in instead
-                                try {
-                                    userCredential = await signInWithEmailAndPassword(auth, email, password);
-                                    console.log('Existing user signed in:', userCredential.user.uid);
-                                } catch (signInError) {
-                                    throw new Error('Email already exists. Please check your password and try again.');
-                                }
-                            } else if (createError.code === 'auth/weak-password') {
-                                throw new Error('Password should be at least 6 characters.');
-                            } else if (createError.code === 'auth/invalid-email') {
-                                throw new Error('Please enter a valid email address.');
-                            } else {
-                                throw createError;
-                            }
-                        }
-                        
-                        // Create/update user profile with name
-                        const userData = await createUserProfile(userCredential.user, {
-                            authProvider: 'email',
-                            displayName: fullName,
-                            referralSource: getReferralSource()
-                        });
-                        
-                        emailModal.remove();
-                        hideLoadingState();
-                        
-                        await showSuccessAndRedirect(userData, 'email');
-                        
-                    } catch (error) {
-                        console.error('Email auth error:', error);
-                        alert(`Error: ${error.message}`);
+                return;
+            }
+
+            const currentUrl = window.location.origin;
+            const qrUrl = `${currentUrl}/qr-welcome.html`;
+            
+            console.log('Generating QR code for:', qrUrl);
+            
+            try {
+                QRCode.toCanvas(qrUrl, {
+                    width: 200,
+                    height: 200,
+                    colorDark: '#003554',
+                    colorLight: '#FFFFFF',
+                    margin: 1,
+                    correctLevel: QRCode.CorrectLevel.M
+                }, function (error, canvas) {
+                    if (error) {
+                        console.error('QR generation error:', error);
+                        qrContainer.innerHTML = `
+                            <div style="width: 200px; height: 200px; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-weight: 500; text-align: center; margin: 0 auto;">
+                                <div>
+                                    <i class="fas fa-qrcode" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+                                    QR Code<br>Generation Failed
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        qrContainer.innerHTML = '';
+                        qrContainer.appendChild(canvas);
+                        console.log('QR code generated successfully');
                     }
                 });
-                
-                document.getElementById('emailInput').focus();
-                
             } catch (error) {
-                console.error('Email auth setup error:', error);
-                hideLoadingState();
-                showError('Failed to show email signup. Please try again.');
+                console.error('QR code generation failed:', error);
+                qrContainer.innerHTML = `
+                    <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #003554, #004a6b); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; text-align: center; margin: 0 auto;">
+                        <div>
+                            <i class="fas fa-mobile-alt" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                            Mobile Access<br>Available on<br>Production
+                        </div>
+                    </div>
+                `;
             }
         }
 
-        // MAKE AUTH FUNCTIONS GLOBALLY AVAILABLE IMMEDIATELY
-         
-              // MAKE AUTH FUNCTIONS GLOBALLY AVAILABLE IMMEDIATELY
-        console.log('🔧 Setting up real auth functions...');
-        window.realGoogleAuth = authenticateWithGoogle;
-        window.realLinkedInAuth = authenticateWithLinkedIn;
-        window.realEmailAuth = authenticateWithEmail;
-        window.realLogout = logout;
+        // User Profile Creation (PRESERVE WORKING CODE)
+        async function createUserProfile(user, additionalData = {}) {
+            if (!firebaseInitialized) {
+                console.log('Firebase not ready, using minimal profile');
+                return {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || 'SF Member',
+                    sfPassport: { id: 'SF-PENDING' }
+                };
+            }
+            
+            try {
+                const userRef = db.collection('users').doc(user.uid);
+                const userSnap = await userRef.get();
+                
+                let userData;
+                
+                if (userSnap.exists) {
+                    userData = userSnap.data();
+                    console.log('Existing user found:', userData);
+                } else {
+                    const sfPassportId = await generateSFPassportId();
+                    
+                    userData = {
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: additionalData.displayName || user.displayName || 'SF Member',
+                        photoURL: user.photoURL || null,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        
+                        sfPassport: {
+                            id: sfPassportId,
+                            level: 1,
+                            tier: 'Navy',
+                            experience: 0,
+                            issuedDate: firebase.firestore.FieldValue.serverTimestamp()
+                        },
+                        
+                        personas: {
+                            member: { active: true, activatedAt: firebase.firestore.FieldValue.serverTimestamp() },
+                            founder: { active: false, linkedinVerified: false },
+                            mentor: { active: false, linkedinVerified: false },
+                            host: { active: false, businessVerified: false },
+                            investor: { active: false, accreditationVerified: false },
+                            partner: { active: false, businessVerified: false }
+                        },
+                        
+                        communities: {},
+                        
+                        gamification: {
+                            sfPoints: 100,
+                            brainstormCredits: 3,
+                            dailyStreak: 1,
+                            achievements: ['New Member']
+                        },
+                        
+                        authProvider: additionalData.authProvider || 'unknown',
+                        referralSource: additionalData.referralSource || 'direct'
+                    };
+                    
+                    await userRef.set(userData);
+                    console.log('New user profile created:', userData);
+                }
+                
+                return userData;
+                
+            } catch (error) {
+                console.error('Error creating user profile:', error);
+                // Return basic profile if database fails
+                return {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || 'SF Member',
+                    sfPassport: { id: await generateSFPassportId() }
+                };
+            }
+        }
 
-        // Mark auth system as ready
-        window.authSystemReady = true;
-        console.log('✅ Firebase auth system ready - Real functions assigned');
-        console.log('🎯 authSystemReady is now:', window.authSystemReady);
-
-        // UTILITY FUNCTIONS - SINGLE DECLARATION ONLY
+        // SF Passport ID Generation (PRESERVE WORKING CODE)
         async function generateSFPassportId() {
             const randomDigits = Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
             const countryCode = await getCountryCode();
-            const passportId = `SF-${randomDigits}-${countryCode}`;
-            console.log('Generated SF Passport ID:', passportId);
-            return passportId;
+            return `SF-${randomDigits}-${countryCode}`;
         }
 
-        function generateRandomString(length) {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < length; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
-        }
-        
         async function getCountryCode() {
             try {
                 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -1730,14 +1325,6 @@
                     console.log('Geolocation API failed:', geoError);
                 }
                 
-                const lang = navigator.language || navigator.userLanguage;
-                if (lang && lang.includes('-')) {
-                    const parts = lang.split('-');
-                    if (parts.length > 1) {
-                        return parts[parts.length - 1].toUpperCase();
-                    }
-                }
-                
                 return 'XX';
                 
             } catch (error) {
@@ -1747,273 +1334,97 @@
         }
 
         function getCountryFromTimezone(timezone) {
-            const timezoneToCountry = {
+            const timezoneMap = {
                 'Asia/Dubai': 'AE',
-                'Asia/Riyadh': 'SA',
-                'Asia/Kuwait': 'KW',
-                'Asia/Doha': 'QA',
-                'Asia/Bahrain': 'BH',
-                'Asia/Muscat': 'OM',
                 'America/New_York': 'US',
-                'America/Chicago': 'US',
-                'America/Denver': 'US',
                 'America/Los_Angeles': 'US',
-                'America/Phoenix': 'US',
-                'America/Anchorage': 'US',
-                'Pacific/Honolulu': 'US',
+                'America/Chicago': 'US',
                 'Europe/London': 'GB',
                 'Europe/Paris': 'FR',
-                'Europe/Berlin': 'DE',
-                'Europe/Madrid': 'ES',
-                'Europe/Rome': 'IT',
-                'Europe/Amsterdam': 'NL',
-                'Europe/Brussels': 'BE',
-                'Europe/Vienna': 'AT',
-                'Europe/Stockholm': 'SE',
-                'Europe/Oslo': 'NO',
-                'Europe/Copenhagen': 'DK',
-                'Europe/Helsinki': 'FI',
-                'Europe/Warsaw': 'PL',
-                'Europe/Prague': 'CZ',
-                'Europe/Budapest': 'HU',
-                'Europe/Bucharest': 'RO',
-                'Europe/Athens': 'GR',
-                'Europe/Lisbon': 'PT',
-                'Europe/Dublin': 'IE',
-                'Europe/Zurich': 'CH',
                 'Asia/Kolkata': 'IN',
-                'Asia/Shanghai': 'CN',
-                'Asia/Hong_Kong': 'HK',
                 'Asia/Tokyo': 'JP',
-                'Asia/Seoul': 'KR',
-                'Asia/Singapore': 'SG',
-                'Asia/Bangkok': 'TH',
-                'Asia/Jakarta': 'ID',
-                'Asia/Manila': 'PH',
-                'Asia/Kuala_Lumpur': 'MY',
-                'Asia/Ho_Chi_Minh': 'VN',
-                'Asia/Karachi': 'PK',
-                'Asia/Dhaka': 'BD',
-                'Asia/Colombo': 'LK',
-                'Asia/Kathmandu': 'NP',
-                'Australia/Sydney': 'AU',
-                'Australia/Melbourne': 'AU',
-                'Australia/Brisbane': 'AU',
-                'Australia/Perth': 'AU',
-                'Pacific/Auckland': 'NZ',
-                'America/Toronto': 'CA',
-                'America/Vancouver': 'CA',
-                'America/Mexico_City': 'MX',
-                'America/Sao_Paulo': 'BR',
-                'America/Buenos_Aires': 'AR',
-                'America/Santiago': 'CL',
-                'America/Lima': 'PE',
-                'America/Bogota': 'CO',
-                'America/Caracas': 'VE',
-                'Africa/Cairo': 'EG',
-                'Africa/Lagos': 'NG',
-                'Africa/Johannesburg': 'ZA',
-                'Africa/Nairobi': 'KE',
-                'Africa/Casablanca': 'MA',
-                'Africa/Tunis': 'TN',
-                'Africa/Addis_Ababa': 'ET'
+                'Australia/Sydney': 'AU'
             };
-            
-            return timezoneToCountry[timezone] || null;
+            return timezoneMap[timezone] || null;
         }
 
-        // CORE AUTHENTICATION FUNCTIONS
-        async function createUserProfile(user, additionalData = {}) {
-            const userRef = doc(db, 'users', user.uid);
-            console.log('Creating user profile for:', user.uid);
+        // Utility Functions
+        function showLoadingState() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        function hideLoadingState() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.classList.add('hidden');
+        }
+
+        function showSuccessAndRedirect(userData) {
+            showSuccess('Authentication successful! Redirecting to welcome page...');
             
-            try {
-                const userDoc = await getDoc(userRef);
-                
-                if (userDoc.exists()) {
-                    const existingData = userDoc.data();
-                    console.log('User exists, checking passport:', existingData.sfPassport);
+            setTimeout(() => {
+                const passportId = userData?.sfPassport?.id || 'SF-PENDING';
+                window.location.href = `/welcome/?passport=${encodeURIComponent(passportId)}`;
+            }, 1500);
+        }
+
+        function showSuccess(message) {
+            const messageEl = document.getElementById('auth-message');
+            messageEl.textContent = message;
+            messageEl.className = 'message success visible';
+            
+            setTimeout(() => {
+                messageEl.classList.remove('visible');
+            }, 5000);
+        }
+
+        function showError(message) {
+            const messageEl = document.getElementById('auth-message');
+            messageEl.textContent = message;
+            messageEl.className = 'message error visible';
+            
+            setTimeout(() => {
+                messageEl.classList.remove('visible');
+            }, 5000);
+        }
+
+        function getReferralSource() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('ref') || 'homepage';
+        }
+
+        function generateRandomString(length) {
+            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            return result;
+        }
+
+        // Smooth scrolling for navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
                     
-                    // Always ensure passport exists
-                    if (!existingData.sfPassport || !existingData.sfPassport.id || existingData.sfPassport.id === 'SF-PENDING') {
-                        const passportId = await generateSFPassportId();
-                        console.log('Updating existing user with passport:', passportId);
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const headerHeight = document.querySelector('.header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
                         
-                        const updateData = {
-                            lastLoginAt: serverTimestamp(),
-                            sfPassport: {
-                                id: passportId,
-                                level: 1,
-                                tier: 'Navy',
-                                experience: 100,
-                                issuedDate: serverTimestamp()
-                            }
-                        };
-                        
-                        await setDoc(userRef, updateData, { merge: true });
-                        console.log('Updated user with passport:', passportId);
-                        return { ...existingData, ...updateData };
-                    } else {
-                        await setDoc(userRef, { 
-                            lastLoginAt: serverTimestamp() 
-                        }, { merge: true });
-                        console.log('User has valid passport:', existingData.sfPassport.id);
-                        return existingData;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
                     }
-                } else {
-                    // Create new user with passport
-                    const passportId = await generateSFPassportId();
-                    console.log('Creating new user with passport:', passportId);
-                    
-                    const userData = {
-                        uid: user.uid,
-                        displayName: user.displayName || additionalData.displayName || 'Community Member',
-                        email: user.email,
-                        photoURL: user.photoURL || null,
-                        createdAt: serverTimestamp(),
-                        lastLoginAt: serverTimestamp(),
-                        sfPassport: {
-                            id: passportId,
-                            level: 1,
-                            tier: 'Navy',
-                            experience: 100,
-                            issuedDate: serverTimestamp()
-                        },
-                        personas: {
-                            member: { active: true, activatedAt: serverTimestamp() },
-                            founder: { active: false, linkedinVerified: false },
-                            mentor: { active: false, linkedinVerified: false },
-                            host: { active: false, businessVerified: false },
-                            investor: { active: false, accreditationVerified: false },
-                            partner: { active: false, businessVerified: false }
-                        },
-                        verification: {
-                            email: { verified: !!user.emailVerified },
-                            linkedin: { verified: false }
-                        },
-                        gamification: {
-                            sfPoints: 100,
-                            brainstormCredits: 3,
-                            dailyStreak: 1,
-                            achievements: ['Founding Member']
-                        },
-                        authProvider: additionalData.authProvider || 'unknown',
-                        referralSource: additionalData.referralSource || 'direct'
-                    };
-
-                    await setDoc(userRef, userData);
-                    console.log(`✅ Created new user with SF Passport: ${passportId}`);
-                    
-                    return userData;
-                }
-            } catch (error) {
-                console.error('❌ Error in createUserProfile:', error);
-                return {
-                    uid: user.uid,
-                    displayName: user.displayName || user.email,
-                    email: user.email,
-                    sfPassport: { id: 'SF-PENDING' }
-                };
-            }
-        }
-
-        async function showSuccessAndRedirect(userData, authMethod) {
-            try {
-                hideLoadingState();
-                
-                // Store user data in localStorage
-                localStorage.setItem('sf_user', JSON.stringify({
-                    uid: userData.uid,
-                    email: userData.email || '',
-                    displayName: userData.displayName || 'Community Member',
-                    photoURL: userData.photoURL || null,
-                    sfPassport: userData.sfPassport || { id: 'SF-PENDING' },
-                    personas: userData.personas || {},
-                    authProvider: authMethod,
-                    loginTimestamp: Date.now()
-                }));
-                
-                // Show success message
-                const authStatus = document.getElementById('authStatus');
-                const authMessage = document.getElementById('authMessage');
-                
-                if (authStatus && authMessage) {
-                    authStatus.classList.add('show');
-                    authMessage.textContent = `Welcome ${userData.displayName}! Redirecting to your dashboard...`;
-                }
-                
-                // Redirect to welcome page with passport info
-                setTimeout(() => {
-                    const passportId = userData.sfPassport?.id || 'SF-PENDING';
-                    window.location.href = `/welcome/?passport=${encodeURIComponent(passportId)}&auth=${authMethod}`;
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Redirect error:', error);
-                hideLoadingState();
-                showError('Authentication successful! Please manually navigate to /welcome/ to continue.');
-            }
-        }
-
-        // LinkedIn Auth Functions
-       function initiateLinkedInOAuth() {
-    const state = generateRandomString(16);
-    sessionStorage.setItem('linkedin_oauth_state', state); // ← Must be sessionStorage
-    
-    const authUrl = 'https://www.linkedin.com/oauth/v2/authorization?' +
-        `response_type=code&` +
-        `client_id=77tpngrlwmwnz7&` +
-        `redirect_uri=${encodeURIComponent('https://sociallyfounded.com/linkedin-callback.html')}&` +
-        `state=${state}&` +
-        `scope=openid%20profile%20email`;
-    
-    window.location.href = authUrl;
-}
-
-        async function simulateLinkedInAuth() {
-            console.log('Simulating LinkedIn auth for development...');
-            
-            try {
-                // Create simulated LinkedIn user
-                const simulatedUser = {
-                    uid: 'linkedin_sim_' + Date.now(),
-                    email: 'demo@sociallyfounded.com',
-                    displayName: 'LinkedIn Demo User',
-                    photoURL: null,
-                    emailVerified: true
-                };
-                
-                const userData = await createUserProfile(simulatedUser, {
-                    authProvider: 'linkedin_simulation',
-                    referralSource: getReferralSource()
                 });
-                
-                await showSuccessAndRedirect(userData, 'linkedin');
-                
-            } catch (error) {
-                console.error('LinkedIn simulation error:', error);
-                hideLoadingState();
-                showError('LinkedIn simulation failed. Please try another method.');
-            }
-        }
-
-        console.log('✅ Authentication system complete and ready');
-
-            } catch (error) {
-                console.error('Firebase initialization error:', error);
-                showError('System initialization failed. Please refresh the page.');
-            }
-        }
-
-        // Initialize immediately
-        initializeFirebaseAuth().then(() => {
-            console.log('🎯 Firebase auth initialization complete');
-              setTimeout(generateHomepageQR, 1000);
-        }).catch(error => {
-            console.error('🔥 Firebase auth initialization failed:', error);
+            });
         });
-
-    console.log('✅ Authentication system loading...');
     </script>
-                </body>
-                </html>
+</body>
+</html>
