@@ -121,7 +121,7 @@
         
         <div class="current-config">
             <h3>Current LinkedIn App Configuration:</h3>
-            <div class="code-block">Client ID: 78p9m46n9ropqr
+            <div class="code-block">Client ID: 77tpngrlwmwnz7
 Status: ✅ Configured in LinkedIn Developer Portal
 Redirect URIs: Need to be verified</div>
         </div>
@@ -131,7 +131,7 @@ Redirect URIs: Need to be verified</div>
             <p><strong>Fix:</strong> Update the LinkedIn configuration in your index.html file.</p>
             <p>Find this section around line 1200 in index.html:</p>
             <div class="code-block">// LinkedIn Configuration
-const LINKEDIN_CLIENT_ID = '78p9m46n9ropqr';
+const LINKEDIN_CLIENT_ID = '77tpngrlwmwnz7';
 const LINKEDIN_REDIRECT_URI = window.location.origin + '/linkedin-callback.html';
 const LINKEDIN_SCOPE = 'openid profile email';</div>
             <p><strong>✅ This is already correct!</strong> Your Client ID is properly set.</p>
@@ -196,7 +196,7 @@ r_emailaddress - Email access (legacy)</div>
 
     <script>
         // Your existing LinkedIn configuration (this is correct!)
-        const LINKEDIN_CLIENT_ID = '78p9m46n9ropqr';
+        const LINKEDIN_CLIENT_ID = '77tpngrlwmwnz7';
         const LINKEDIN_REDIRECT_URI = window.location.origin + '/linkedin-callback.html';
         const LINKEDIN_SCOPE = 'openid profile email';
 
@@ -310,7 +310,7 @@ Environment: ${window.location.hostname === 'localhost' ? 'Development' : 'Produ
 Callback File: ${window.location.origin}/linkedin-callback.html
 
 LinkedIn App Settings Required:
-✅ Client ID: 78p9m46n9ropqr (configured)
+✅ Client ID: 77tpngrlwmwnz7 (configured)
 ⚠️ Redirect URIs: Must include ${LINKEDIN_REDIRECT_URI}
 ⚠️ Scopes: openid, profile, email (must be approved)
             `;
