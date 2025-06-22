@@ -1661,3 +1661,153 @@ onAuthStateChanged(auth, async (user) => {
             }
             
         } else {
+
+        // User authenticated but no Firestore document
+            userMenu.style.display = 'flex';
+            document.getElementById('userName').textContent = user.email;
+        }
+    } else {
+        // No user logged in
+        userMenu.style.display = 'none';
+        authStatus.classList.remove('show');
+    }
+});
+
+// Email authentication
+async function authenticateWithEmail() {
+    try {
+        showLoadingState();
+        
+        // Create email input modal
+        const emailModal = document.createElement('div');
+        emailModal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            font-family: 'Poppins', sans-serif;
+        `;
+        
+        emailModal.innerHTML = `
+            <div style="background: white; padding: 40px; border-radius: 16px; max-width: 400px; width: 90%;">
+                <h3 style="color: #003554; margin-bottom: 20px;">Join with Email</h3>
+                <form id="emailForm">
+                    <input type="email" id="emailInput" placeholder="Enter your email" required
+                           style="width: 100%; padding: 12px; border: 2px solid #003554; border-radius: 8px; margin-bottom: 15px; font-size: 16px; font-family: 'Poppins', sans-serif;">
+                    <input type="password" id="passwordInput" placeholder="Create a password" required minlength="6"
+                           style="width: 100%; padding: 12px; border: 2px solid #003554; border-radius: 8px; margin-bottom: 20px; font-size: 16px; font-family: 'Poppins', sans-serif;">
+                    <button type="submit" 
+                            style="width: 100%; background: #D4AF37; color: #003554; border: none; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif;">
+                        Join Waitlist
+                    </button>
+                    <button type="button" onclick="this.closest('div[style*=fixed]').remove(); window.hideLoadingState();"
+                            style="width: 100%; background: transparent; color: #003554; border: 2px solid #003554; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; margin-top: 10px; font-family: 'Poppins', sans-serif;">
+                        Cancel
+                    </button>
+                </form>
+            </div>
+        `;
+        
+        document.body.appendChild(emailModal);
+        
+        // Handle form submission
+        document.getElementById('emailForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            
+            try {
+                // Try to create account first
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Create user profile
+                const userData = await createUserProfile(userCredential.user, {
+                    authProvider: 'email',
+                    referralSource: getReferralSource()
+                });
+                
+                // Store user data
+                localStorage.setItem('sf_user', JSON.stringify({
+                    uid: userCredential.user.uid,
+                    email: userCredential.user.email,
+                    displayName: userCredential.user.displayName || email.split('@')[0],
+                    sfPassport: userData.sfPassport || { id: 'SF-PENDING' }
+                }));
+                
+                // Remove modal
+                emailModal.remove();
+                hideLoadingState();
+                
+                // Show success and redirect
+                showSuccessAndRedirect(userData);
+                
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    // Try to sign in instead
+                    try {
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        
+                        // Get user data
+                        const userRef = doc(db, 'users', userCredential.user.uid);
+                        const userDoc = await getDoc(userRef);
+                        const userData = userDoc.exists() ? userDoc.data() : null;
+                        
+                        // Remove modal
+                        emailModal.remove();
+                        hideLoadingState();
+                        
+                        // Show welcome back message
+                        const authStatus = document.getElementById('authStatus');
+                        authStatus.classList.add('show');
+                        document.getElementById('authMessage').textContent = 
+                            `Welcome back! You're already on the waitlist.`;
+                        
+                        setTimeout(() => {
+                            authStatus.classList.remove('show');
+                        }, 3000);
+                        
+                    } catch (signInError) {
+                        alert('Email already exists. Please check your password and try again.');
+                    }
+                } else if (error.code === 'auth/weak-password') {
+                    alert('Password should be at least 6 characters.');
+                } else if (error.code === 'auth/invalid-email') {
+                    alert('Please enter a valid email address.');
+                } else {
+                    alert(`Error: ${error.message}`);
+                }
+            }
+        });
+        
+        // Focus on email input
+        document.getElementById('emailInput').focus();
+        
+    } catch (error) {
+        console.error('Email auth setup error:', error);
+        hideLoadingState();
+        showError('Failed to show email signup. Please try again.');
+    }
+}
+
+// Make all functions globally available for onclick handlers
+window.authenticateWithGoogle = authenticateWithGoogle;
+window.authenticateWithLinkedIn = authenticateWithLinkedIn;
+window.authenticateWithEmail = authenticateWithEmail;
+window.showQRCode = showQRCode;
+window.logout = logout;
+window.hideLoadingState = hideLoadingState;
+
+// Initialize auth state check
+console.log('Firebase Auth initialized and monitoring auth state');
+
+</script>
+
+</body>
+</html>
