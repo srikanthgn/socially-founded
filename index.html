@@ -1856,20 +1856,19 @@
         }
 
         // LinkedIn Auth Functions
-        function initiateLinkedInOAuth() {
-            const state = generateRandomString(16);
-            sessionStorage.setItem('linkedin_oauth_state', state);
-            
-            const authUrl = 'https://www.linkedin.com/oauth/v2/authorization?' +
-                `response_type=code&` +
-                `client_id=77tpngrlwmwnz7&` +
-                `redirect_uri=${encodeURIComponent('https://sociallyfounded.com/linkedin-callback.html')}&` +
-                `state=${state}&` +
-                `scope=openid%20profile%20email`;
-            
-            console.log('Redirecting to LinkedIn:', authUrl);
-            window.location.href = authUrl;
-        }
+       function initiateLinkedInOAuth() {
+    const state = generateRandomString(16);
+    sessionStorage.setItem('linkedin_oauth_state', state); // ← Must be sessionStorage
+    
+    const authUrl = 'https://www.linkedin.com/oauth/v2/authorization?' +
+        `response_type=code&` +
+        `client_id=77tpngrlwmwnz7&` +
+        `redirect_uri=${encodeURIComponent('https://sociallyfounded.com/linkedin-callback.html')}&` +
+        `state=${state}&` +
+        `scope=openid%20profile%20email`;
+    
+    window.location.href = authUrl;
+}
 
         async function simulateLinkedInAuth() {
             console.log('Simulating LinkedIn auth for development...');
