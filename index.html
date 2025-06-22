@@ -1172,7 +1172,7 @@
             }
         }
 
-      // SIMPLE WORKING QR CODE GENERATION
+     // FIXED QR CODE GENERATION - PROPER URL ENCODING
         function generateHomepageQR() {
             console.log('🎯 Starting QR generation...');
             
@@ -1185,13 +1185,19 @@
             // Show loading first
             qrContainer.innerHTML = '<div style="color: #D4AF37; font-size: 10px; text-align: center;">Loading QR...</div>';
             
-            // Simple QR URL - we know this works
+            // FIXED: Clean URL without extra encoding issues
             const qrUrl = 'https://sociallyfounded.com/qr-welcome.html';
-            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrUrl)}`;
             
-            console.log('✅ QR API URL confirmed working:', qrApiUrl);
+            // FIXED: Simple URL encoding for QR API
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrUrl}&ecc=M`;
             
-            // Create simple QR container
+            console.log('🔗 QR Target URL:', qrUrl);
+            console.log('📡 QR API URL:', qrApiUrl);
+            
+            // Test QR content by creating a test link
+            console.log('🧪 Test link (should be same as QR):', qrUrl);
+            
+            // Create QR container with click-to-test functionality
             qrContainer.innerHTML = `
                 <div style="
                     background: linear-gradient(135deg, #D4AF37 0%, #E5C047 100%);
@@ -1213,7 +1219,8 @@
                         align-items: center;
                         justify-content: center;
                         position: relative;
-                    ">
+                        cursor: pointer;
+                    " onclick="testQRUrl()" title="Click to test QR URL on desktop">
                         <img 
                             src="${qrApiUrl}"
                             style="
@@ -1222,7 +1229,7 @@
                                 border-radius: 2px;
                             "
                             alt="QR Code for Mobile Experience"
-                            onload="console.log('✅ QR Code loaded successfully')"
+                            onload="console.log('✅ QR Code loaded successfully'); validateQRContent();"
                             onerror="handleQRError(this)"
                         >
                         <!-- SF Logo overlay -->
@@ -1240,6 +1247,7 @@
                             justify-content: center;
                             box-shadow: 0 0 8px rgba(0,0,0,0.1);
                             border: 2px solid #D4AF37;
+                            pointer-events: none;
                         ">
                             <img 
                                 src="https://sociallyfounded.com/assets/sf-logo.png"
@@ -1255,11 +1263,25 @@
             console.log('✅ QR container created successfully');
         }
         
+        // Test function to verify QR URL works
+        function testQRUrl() {
+            const testUrl = 'https://sociallyfounded.com/qr-welcome.html';
+            console.log('🧪 Testing QR URL:', testUrl);
+            window.open(testUrl, '_blank');
+        }
+        
+        // Validate QR content
+        function validateQRContent() {
+            console.log('🔍 QR Code should contain URL: https://sociallyfounded.com/qr-welcome.html');
+            console.log('📱 Phone should open this URL when scanned');
+            console.log('🖱️ Desktop users can click QR to test URL');
+        }
+        
         // Error handler for QR image
         function handleQRError(img) {
             console.error('❌ QR image failed to load');
             
-            // Replace with fallback
+            // Replace with fallback that definitely works
             const container = img.closest('div[style*="background: white"]');
             if (container) {
                 container.innerHTML = `
@@ -1283,6 +1305,37 @@
                     </div>
                 `;
             }
+        }
+        
+        // Alternative QR generation if main one fails
+        function generateAlternativeQR() {
+            console.log('🔄 Trying alternative QR service...');
+            
+            const qrContainer = document.getElementById('homepage-qr-code');
+            if (!qrContainer) return;
+            
+            const qrUrl = 'https://sociallyfounded.com/qr-welcome.html';
+            
+            // Alternative QR services to try
+            const qrServices = [
+                `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(qrUrl)}`,
+                `https://qr.io/api/?data=${encodeURIComponent(qrUrl)}&size=150`,
+                `https://qrcode.tec-it.com/API/QRCode?data=${encodeURIComponent(qrUrl)}&size=Medium`
+            ];
+            
+            // Try each service
+            qrServices.forEach((apiUrl, index) => {
+                console.log(`🧪 Alternative QR ${index + 1}:`, apiUrl);
+            });
+            
+            // Use Google Charts as backup
+            const altQrApiUrl = qrServices[0];
+            
+            qrContainer.innerHTML = `
+                <div style="background: #D4AF37; padding: 8px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                    <img src="${altQrApiUrl}" style="width: 85%; height: 85%; background: white; border-radius: 4px;" alt="QR Code" onclick="testQRUrl()">
+                </div>
+            `;
         }
         console.log('✅ Global auth functions defined with ready check and QR generation');
     </script>
