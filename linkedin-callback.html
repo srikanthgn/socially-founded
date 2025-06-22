@@ -592,17 +592,23 @@
                 this.currentStep = stepNumber;
             }
 
-            showSuccess() {
-                this.log('🎉 LinkedIn authentication completed successfully');
-                
-                const statusIndicator = document.getElementById('statusIndicator');
-                const actions = document.getElementById('actions');
-                
-                statusIndicator.className = 'status-indicator status-success';
-                statusIndicator.innerHTML = '<i class="fas fa-check-circle"></i><span>LinkedIn profile connected successfully!</span>';
-                
-                actions.style.display = 'block';
-            }
+        showSuccess() {
+    this.log('🎉 LinkedIn authentication completed successfully');
+    
+    const statusIndicator = document.getElementById('statusIndicator');
+    const actions = document.getElementById('actions');
+    
+    statusIndicator.className = 'status-indicator status-success';
+    statusIndicator.innerHTML = '<i class="fas fa-check-circle"></i><span>LinkedIn profile connected! Redirecting to welcome page...</span>';
+    
+    // Auto-redirect after 2 seconds (like Google auth does)
+    setTimeout(() => {
+        window.location.href = '/welcome/?auth=linkedin&linkedin_verified=true';
+    }, 2000);
+    
+    // Still show the continue button as backup
+    actions.style.display = 'block';
+}
 
             handleError(errorType, errorDescription) {
                 this.log('❌ Error occurred', { type: errorType, description: errorDescription });
