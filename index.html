@@ -1610,6 +1610,35 @@
         }
     }
 
+// ADD THESE MISSING FUNCTIONS HERE:
+    function getReferralSource() {
+        return new URLSearchParams(window.location.search).get('ref') || 'direct';
+    }
+
+    function showError(message) {
+        const authStatus = document.getElementById('authStatus');
+        const authMessage = document.getElementById('authMessage');
+        
+        authStatus.classList.remove('show');
+        authStatus.classList.add('show', 'error');
+        authMessage.textContent = message;
+        
+        setTimeout(() => {
+            authStatus.classList.remove('show', 'error');
+        }, 5000);
+        
+        console.error('SF Error:', message);
+    }
+
+    // Make functions globally available (EXISTING CODE)
+    window.authenticateWithGoogle = authenticateWithGoogle;
+    window.authenticateWithLinkedIn = authenticateWithLinkedIn;
+    // ... rest of existing window assignments
+
+    console.log('Firebase Auth initialized and monitoring auth state');
+
+
+    
     // Make functions globally available
     window.authenticateWithGoogle = authenticateWithGoogle;
     window.authenticateWithLinkedIn = authenticateWithLinkedIn;
