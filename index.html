@@ -558,6 +558,96 @@
             }
         }
 
+/* ADD THIS TO YOUR EXISTING MOBILE CSS SECTION */
+
+/* Enhanced Mobile Icon Styles */
+@media (max-width: 768px) {
+    .smart-grid-btn {
+        min-height: 90px;
+        border-width: 2px;
+        transition: all 0.2s ease;
+    }
+
+    .smart-grid-btn:hover {
+        transform: none; /* Disable desktop hover on mobile */
+    }
+
+    .smart-grid-btn:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+
+    /* Enhanced QR button for mobile */
+    .smart-grid-btn.primary {
+        position: relative;
+    }
+
+    /* Show QR label on very small screens */
+    @media (max-width: 480px) {
+        .mobile-qr-label {
+            display: block !important;
+        }
+    }
+
+    /* Color button hover states for mobile */
+    .smart-grid-btn:active {
+        opacity: 0.8;
+    }
+
+    /* Better spacing for mobile benefits */
+    .signup-section {
+        padding: 25px 20px 20px 20px;
+    }
+
+    /* Enhanced passport cards for mobile */
+    .passport-card {
+        min-height: 80px;
+        padding: 12px 16px;
+    }
+
+    .passport-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .passport-title {
+        font-size: 13px;
+        line-height: 1.2;
+    }
+
+    .passport-desc {
+        font-size: 10px;
+        line-height: 1.3;
+    }
+}
+
+/* Very small screens (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .smart-grid-btn {
+        min-height: 80px;
+    }
+
+    .smart-grid-btn svg {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .smart-grid-btn span {
+        font-size: 10px !important;
+    }
+
+    .hero-title {
+        font-size: 22px;
+        line-height: 1.1;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        padding: 0 8px;
+    }
+}
+
+        
         /* Loading Animation */
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -798,46 +888,77 @@
                     </div>
                 </div>
 
-                <!-- Right Content - Signup Form -->
-                <div class="signup-section">
-                    <h2 class="signup-title">Join the Waitlist</h2>
-                    <p class="signup-subtitle">Get unrestricted Early Access</p>
+             <!-- REPLACE YOUR SIGNUP SECTION WITH THIS ENHANCED VERSION -->
 
-                    <!-- Smart Signup Grid -->
-                    <div class="smart-signup-grid">
-                        <!-- QR Code Card -->
-                     <!-- QR Code Card -->
-<button class="smart-grid-btn primary" onclick="showQRCode()" title="Scan to Join">
-    <div id="homepage-qr-code" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: white;">
-        <div style="color: #D4AF37; font-size: 12px;">Loading QR...</div>
+<div class="signup-section">
+    <h2 class="signup-title">Join the Waitlist</h2>
+    <p class="signup-subtitle">Get unrestricted Early Access</p>
+
+    <!-- Enhanced Mobile-Optimized Smart Signup Grid -->
+    <div class="smart-signup-grid">
+        <!-- QR Code Card with Enhanced Mobile Design -->
+        <button class="smart-grid-btn primary" onclick="showQRCode()" title="Scan to Join" style="position: relative;">
+            <div id="homepage-qr-code" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: white;">
+                <div style="color: #D4AF37; font-size: 12px;">Loading QR...</div>
+            </div>
+            <!-- Mobile label -->
+            <div style="position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 8px; color: var(--deep-navy); font-weight: 600; background: rgba(255, 255, 255, 0.9); padding: 2px 6px; border-radius: 3px; display: none;" class="mobile-qr-label">
+                Scan to Join
+            </div>
+        </button>
+
+        <!-- Google Card with Enhanced Design -->
+        <button class="smart-grid-btn" onclick="authenticateWithGoogle()" title="Google Sign In" id="google-auth-btn" style="background: #4285F4; border-color: #4285F4; color: white;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; height: 100%; justify-content: center;">
+                <!-- Google Icon with Brand Colors -->
+                <svg viewBox="0 0 24 24" style="width: 36px; height: 36px;">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC04" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                <span style="font-size: 11px; font-weight: 500; opacity: 0.9;">Google</span>
+            </div>
+        </button>
+
+        <!-- LinkedIn Card with Enhanced Design -->
+        <button class="smart-grid-btn" onclick="authenticateWithLinkedIn()" title="LinkedIn Sign In" style="background: #0077B5; border-color: #0077B5; color: white;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; height: 100%; justify-content: center;">
+                <!-- LinkedIn Icon -->
+                <svg viewBox="0 0 24 24" fill="white" style="width: 36px; height: 36px;">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                <span style="font-size: 11px; font-weight: 500; opacity: 0.9;">LinkedIn</span>
+            </div>
+        </button>
+
+        <!-- Email Card with Enhanced Design -->
+        <button class="smart-grid-btn" onclick="authenticateWithEmail()" title="Email Sign Up" style="background: #34A853; border-color: #34A853; color: white;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; height: 100%; justify-content: center;">
+                <!-- Email Icon -->
+                <svg viewBox="0 0 24 24" fill="white" style="width: 36px; height: 36px;">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+                <span style="font-size: 11px; font-weight: 500; opacity: 0.9;">Email</span>
+            </div>
+        </button>
     </div>
-</button>
 
-                        <!-- Google Card -->
-                        <button class="smart-grid-btn" onclick="authenticateWithGoogle()" title="Google Sign In" id="google-auth-btn">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                            </svg>
-                        </button>
-
-                        <!-- LinkedIn Card -->
-                        <button class="smart-grid-btn" onclick="authenticateWithLinkedIn()" title="LinkedIn Sign In">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                        </button>
-
-                        <!-- Email Card -->
-                        <button class="smart-grid-btn" onclick="authenticateWithEmail()" title="Email Sign Up">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+    <!-- Enhanced Mobile Call-to-Action -->
+    <div style="margin-top: 20px; text-align: center;">
+        <div style="background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3);">
+            <p style="font-size: 12px; color: var(--deep-navy); font-weight: 600; margin-bottom: 8px;">
+                🎁 Founding Member Benefits
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; font-size: 10px; color: var(--deep-navy); opacity: 0.8;">
+                <span style="background: rgba(212, 175, 55, 0.2); padding: 4px 8px; border-radius: 12px;">3 months premium</span>
+                <span style="background: rgba(212, 175, 55, 0.2); padding: 4px 8px; border-radius: 12px;">Early DIANA AI</span>
+                <span style="background: rgba(212, 175, 55, 0.2); padding: 4px 8px; border-radius: 12px;">Founding badge</span>
+            </div>
+        </div>
+    </div>
+</div>  
+              
             </div>
         </main>
 
@@ -1753,45 +1874,113 @@
         }
     }
 
-    async function generateHomepageQR() {
-        const qrContainer = document.getElementById('homepage-qr-code');
-        if (!qrContainer) {
-            console.error('QR container not found');
-            return;
+   // REPLACE YOUR QR GENERATION FUNCTION WITH THIS ENHANCED VERSION
+
+async function generateHomepageQR() {
+    const qrContainer = document.getElementById('homepage-qr-code');
+    if (!qrContainer) {
+        console.error('QR container not found');
+        return;
+    }
+    
+    try {
+        // Show loading
+        qrContainer.innerHTML = '<div style="color: #D4AF37; font-size: 12px;">Generating QR...</div>';
+        
+        // Load library
+        const libraryLoaded = await loadQRLibrary();
+        if (!libraryLoaded) {
+            throw new Error('QR library failed to load');
         }
         
-        try {
-            // Show loading
-            qrContainer.innerHTML = '<div style="color: #D4AF37; font-size: 12px;">Generating QR...</div>';
-            
-            // Load library
-            const libraryLoaded = await loadQRLibrary();
-            if (!libraryLoaded) {
-                throw new Error('QR library failed to load');
+        // Generate QR URL pointing to your working qr-welcome.html
+        const timestamp = Date.now();
+        const qrUrl = `https://sociallyfounded.com/qr-welcome.html?source=homepage&t=${timestamp}`;
+        
+        console.log('Generating QR for:', qrUrl);
+        
+        // Create QR code with higher error correction for logo overlay
+        const qr = qrcode(0, 'H'); // High error correction allows for logo
+        qr.addData(qrUrl);
+        qr.make();
+        
+        // Create canvas for custom QR with logo
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const size = 200;
+        canvas.width = size;
+        canvas.height = size;
+        
+        // Draw QR code
+        const moduleCount = qr.getModuleCount();
+        const cellSize = Math.floor(size / moduleCount);
+        const offset = Math.floor((size - (cellSize * moduleCount)) / 2);
+        
+        // White background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, size, size);
+        
+        // Draw QR modules
+        ctx.fillStyle = 'black';
+        for (let row = 0; row < moduleCount; row++) {
+            for (let col = 0; col < moduleCount; col++) {
+                if (qr.isDark(row, col)) {
+                    const x = offset + col * cellSize;
+                    const y = offset + row * cellSize;
+                    
+                    // Skip center area for logo (20% of QR size)
+                    const centerX = size / 2;
+                    const centerY = size / 2;
+                    const logoSize = size * 0.2;
+                    
+                    if (Math.abs(x + cellSize/2 - centerX) < logoSize/2 && 
+                        Math.abs(y + cellSize/2 - centerY) < logoSize/2) {
+                        continue; // Skip this module for logo space
+                    }
+                    
+                    ctx.fillRect(x, y, cellSize, cellSize);
+                }
             }
+        }
+        
+        // Load and draw SF logo in center
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+        logoImg.onload = () => {
+            const logoSize = size * 0.18; // 18% of QR size
+            const logoX = (size - logoSize) / 2;
+            const logoY = (size - logoSize) / 2;
             
-            // Generate QR URL pointing to your working qr-welcome.html
-            const timestamp = Date.now();
-            const qrUrl = `https://sociallyfounded.com/qr-welcome.html?source=homepage&t=${timestamp}`;
+            // White circle background for logo
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, logoSize/2 + 4, 0, 2 * Math.PI);
+            ctx.fill();
             
-            console.log('Generating QR for:', qrUrl);
+            // Draw logo
+            ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
             
-            // Create QR code
-            const qr = qrcode(0, 'M');
-            qr.addData(qrUrl);
-            qr.make();
+            // Convert to data URL and display
+            const dataUrl = canvas.toDataURL('image/png');
             
-            // Generate image with gold background
+            qrContainer.innerHTML = `
+                <div style="background: #D4AF37; padding: 8px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                    <img src="${dataUrl}" style="width: calc(100% - 16px); height: calc(100% - 16px); display: block; border-radius: 4px;" alt="SF QR Code">
+                </div>
+            `;
+            
+            console.log('QR Code with SF logo generated successfully');
+        };
+        
+        logoImg.onerror = () => {
+            // Fallback to regular QR without logo
+            console.log('Logo failed to load, using regular QR');
             const qrImage = qr.createImgTag(3, 2);
-            
-            // Create wrapper with gold background
             qrContainer.innerHTML = `
                 <div style="background: #D4AF37; padding: 8px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
                     ${qrImage}
                 </div>
             `;
-            
-            // Style the QR image
             const img = qrContainer.querySelector('img');
             if (img) {
                 img.style.width = 'calc(100% - 16px)';
@@ -1799,22 +1988,23 @@
                 img.style.display = 'block';
                 img.style.borderRadius = '4px';
             }
-            
-            console.log('QR Code generated successfully');
-            console.log('QR URL:', qrUrl);
-            
-        } catch (error) {
-            console.error('QR generation error:', error);
-            
-            // Show fallback
-            qrContainer.innerHTML = `
-                <div style="color: #003554; font-size: 10px; text-align: center; padding: 5px;">
-                    <div style="margin-bottom: 5px;">QR Unavailable</div>
-                    <div style="font-size: 8px;">Tap to join</div>
-                </div>
-            `;
-        }
+        };
+        
+        // Try to load SF logo
+        logoImg.src = 'https://sociallyfounded.com/assets/sf-logo.png';
+        
+    } catch (error) {
+        console.error('QR generation error:', error);
+        
+        // Show fallback
+        qrContainer.innerHTML = `
+            <div style="color: #003554; font-size: 10px; text-align: center; padding: 5px;">
+                <div style="margin-bottom: 5px;">QR Unavailable</div>
+                <div style="font-size: 8px;">Tap to join</div>
+            </div>
+        `;
     }
+}
 
     // Auto-generate QR when page loads
     document.addEventListener('DOMContentLoaded', function() {
