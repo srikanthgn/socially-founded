@@ -1240,53 +1240,57 @@
         console.log('✅ Global auth functions defined with ready check and QR generation');
     </script>
 
-    <script type="module">
-        console.log('🔥 Module script starting...');
+    <!-- Firebase Authentication Script -->
+    <script>
+        console.log('🔥 Regular script starting Firebase...');
         
-        try {
-            // Import Firebase v9 SDK - EXACT SAME AS WORKING INTEGRATION
-            import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-            import { 
-                getAuth, 
-                signInWithPopup,
-                GoogleAuthProvider,
-                createUserWithEmailAndPassword,
-                signInWithEmailAndPassword,
-                onAuthStateChanged,
-                signOut
-            } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-            import { 
-                getFirestore, 
-                doc, 
-                setDoc, 
-                getDoc,
-                serverTimestamp
-            } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        // Load Firebase using dynamic imports in a regular script
+        async function initializeFirebaseAuth() {
+            try {
+                console.log('📦 Loading Firebase modules...');
+                
+                // Dynamic imports
+                const { initializeApp } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js');
+                const { 
+                    getAuth, 
+                    signInWithPopup,
+                    GoogleAuthProvider,
+                    createUserWithEmailAndPassword,
+                    signInWithEmailAndPassword,
+                    onAuthStateChanged,
+                    signOut
+                } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js');
+                const { 
+                    getFirestore, 
+                    doc, 
+                    setDoc, 
+                    getDoc,
+                    serverTimestamp
+                } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js');
 
-            console.log('✅ Firebase modules imported successfully');
+                console.log('✅ Firebase modules imported successfully');
 
-            // Firebase Configuration - EXACT SAME AS WORKING INTEGRATION
-            const firebaseConfig = {
-                apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
-                authDomain: "sociallyfounded-df98f.firebaseapp.com",
-                projectId: "sociallyfounded-df98f",
-                storageBucket: "sociallyfounded-df98f.firebasestorage.app",
-                messagingSenderId: "994533610259",
-                appId: "1:994533610259:web:fe740378a4c000211e40e6",
-                measurementId: "G-EY0BZE30Q0"
-            };
+                // Firebase Configuration
+                const firebaseConfig = {
+                    apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+                    authDomain: "sociallyfounded-df98f.firebaseapp.com",
+                    projectId: "sociallyfounded-df98f",
+                    storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+                    messagingSenderId: "994533610259",
+                    appId: "1:994533610259:web:fe740378a4c000211e40e6",
+                    measurementId: "G-EY0BZE30Q0"
+                };
 
-            // Initialize Firebase
-            console.log('🔥 Initializing Firebase...');
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
-            console.log('✅ Firebase initialized successfully');
+                // Initialize Firebase
+                console.log('🔥 Initializing Firebase...');
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+                console.log('✅ Firebase initialized successfully');
 
-            // Test Firebase connection
-            console.log('🧪 Testing Firebase connection...');
-            console.log('Auth object:', auth);
-            console.log('Firestore object:', db);
+                console.log('🧪 Testing Firebase connection...');
+                console.log('Auth object:', auth);
+                console.log('Firestore object:', db);
 
         // DEFINE FUNCTIONS FIRST - BEFORE ANY OTHER CODE
         function showQRCode() {
