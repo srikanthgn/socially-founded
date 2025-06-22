@@ -522,15 +522,60 @@
                 }
             }
 
-            async updateSFProfile(profileData) {
-                this.log('💾 Updating SF profile with LinkedIn data');
-                
-                let userData = {};
-                try {
-                    userData = JSON.parse(localStorage.getItem('sf_user') || '{}');
-                } catch (e) {
-                    this.log('⚠️ No existing SF user data, creating new');
-                }
+         async updateSFProfile(profileData) {
+    this.log('💾 Updating SF profile with LinkedIn data');
+    
+    // Generate proper SF Passport ID
+    const generateSFPassportId = async () => {
+        const randomDigits = Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
+        return `SF-${randomDigits}-AE`; // Default to AE
+    };
+    
+    const passportId = await generateSFPassportId();
+    
+    // Create complete user data structure (matching Google auth format)
+    const completeUserData = {
+        uid: `linkedin_${profileData.linkedin?.id || Date.now()}`,
+        email: profileData.professional?.email || 'linkedin@example.com',
+        displayName: profileData.professional?.fullName || 'LinkedIn Professional',
+        photoURL: profileData.professional?.picture || null,
+        
+        sfPassport: {
+            id: passportId,
+            level: 2,
+            tier: 'Navy',
+            experience: 500
+        },
+        
+        verification: {
+            linkedin: profileData.linkedin || {
+                verified: true,
+                connectedAt: new Date().toISOString()
+            }
+        },
+        
+        professionalProfile: profileData.professional || profileData,
+        
+        personas: {
+            member: { active: true },
+            founder: { active: true, linkedinVerified: true },
+            mentor: { active: true, linkedinVerified: true },
+            host: { active: false },
+            investor: { active: false },
+            partner: { active: false }
+        },
+        
+        authProvider: 'linkedin',
+        linkedinVerified: true,
+        onboardingCompleted: true
+    };
+    
+    localStorage.setItem('sf_user', JSON.stringify(completeUserData));
+    this.log('✅ Complete SF profile created with passport:', passportId);
+    
+    sessionStorage.removeItem('linkedin_oauth_state');
+    sessionStorage.removeItem('linkedin_auth_intent');
+}
                 
                 // Add LinkedIn verification
                 userData.verification = userData.verification || {};
