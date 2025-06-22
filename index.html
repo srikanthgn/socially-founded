@@ -1173,44 +1173,120 @@
             }
         }
 
-        console.log('✅ Global auth functions defined with ready check');
+        // Enhanced QR Code Generation - WORKING IMMEDIATELY
+        async function generateHomepageQR() {
+            const qrContainer = document.getElementById('homepage-qr-code');
+            if (!qrContainer) {
+                console.error('QR container not found');
+                return;
+            }
+            
+            try {
+                // Show loading
+                qrContainer.innerHTML = '<div style="color: #D4AF37; font-size: 10px;">Generating QR...</div>';
+                
+                // Simple QR using API service (works immediately)
+                const timestamp = Date.now();
+                const qrUrl = `https://sociallyfounded.com/?source=qr&t=${timestamp}`;
+                
+                console.log('Generating QR for:', qrUrl);
+                
+                // Create professional container with QR API
+                qrContainer.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #D4AF37 0%, #E5C047 100%); padding: 6px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);">
+                        <div style="position: relative; width: calc(100% - 12px); height: calc(100% - 12px); background: white; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            <div style="width: 90%; height: 90%; position: relative;">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrUrl)}&format=png&ecc=H" style="width: 100%; height: 100%; border-radius: 2px;" alt="QR Code">
+                                <!-- Bigger SF Logo Overlay -->
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30%; height: 30%; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(0,0,0,0.15); border: 2px solid #D4AF37;">
+                                    <img src="https://sociallyfounded.com/assets/sf-logo.png" style="width: 90%; height: 90%; object-fit: contain;" alt="SF" onerror="this.style.display='none';">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                console.log('✅ QR Code with SF logo generated successfully');
+                
+            } catch (error) {
+                console.error('QR generation error:', error);
+                
+                // Show professional fallback
+                qrContainer.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #D4AF37 0%, #E5C047 100%); padding: 6px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                        <div style="background: white; border-radius: 4px; width: calc(100% - 12px); height: calc(100% - 12px); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #003554; font-size: 9px; text-align: center; padding: 4px;">
+                            <img src="https://sociallyfounded.com/assets/sf-logo.png" style="width: 40%; height: 40%; object-fit: contain; margin-bottom: 4px;" alt="SF">
+                            <div style="font-weight: 600;">Tap to Join</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Generate QR code immediately when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 DOM loaded, generating QR code...');
+            setTimeout(generateHomepageQR, 500);
+        });
+
+        // Also try to generate it right now
+        if (document.readyState === 'loading') {
+            console.log('🎯 Document still loading, will generate QR on DOMContentLoaded');
+        } else {
+            console.log('🎯 Document ready, generating QR code now...');
+            setTimeout(generateHomepageQR, 100);
+        }
+
+        console.log('✅ Global auth functions defined with ready check and QR generation');
     </script>
 
     <script type="module">
-        // Import Firebase v9 SDK
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { 
-            getAuth, 
-            signInWithPopup,
-            GoogleAuthProvider,
-            createUserWithEmailAndPassword,
-            signInWithEmailAndPassword,
-            onAuthStateChanged,
-            signOut
-        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc,
-            serverTimestamp
-        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        console.log('🔥 Module script starting...');
+        
+        try {
+            // Import Firebase v9 SDK - EXACT SAME AS WORKING INTEGRATION
+            import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+            import { 
+                getAuth, 
+                signInWithPopup,
+                GoogleAuthProvider,
+                createUserWithEmailAndPassword,
+                signInWithEmailAndPassword,
+                onAuthStateChanged,
+                signOut
+            } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+            import { 
+                getFirestore, 
+                doc, 
+                setDoc, 
+                getDoc,
+                serverTimestamp
+            } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
 
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
-            authDomain: "sociallyfounded-df98f.firebaseapp.com",
-            projectId: "sociallyfounded-df98f",
-            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
-            messagingSenderId: "994533610259",
-            appId: "1:994533610259:web:fe740378a4c000211e40e6",
-            measurementId: "G-EY0BZE30Q0"
-        };
+            console.log('✅ Firebase modules imported successfully');
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+            // Firebase Configuration - EXACT SAME AS WORKING INTEGRATION
+            const firebaseConfig = {
+                apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+                authDomain: "sociallyfounded-df98f.firebaseapp.com",
+                projectId: "sociallyfounded-df98f",
+                storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+                messagingSenderId: "994533610259",
+                appId: "1:994533610259:web:fe740378a4c000211e40e6",
+                measurementId: "G-EY0BZE30Q0"
+            };
+
+            // Initialize Firebase
+            console.log('🔥 Initializing Firebase...');
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            console.log('✅ Firebase initialized successfully');
+
+            // Test Firebase connection
+            console.log('🧪 Testing Firebase connection...');
+            console.log('Auth object:', auth);
+            console.log('Firestore object:', db);
 
         // DEFINE FUNCTIONS FIRST - BEFORE ANY OTHER CODE
         function showQRCode() {
@@ -1501,6 +1577,7 @@
         }
 
         // MAKE AUTH FUNCTIONS GLOBALLY AVAILABLE IMMEDIATELY
+        console.log('🔧 Setting up real auth functions...');
         window.realGoogleAuth = authenticateWithGoogle;
         window.realLinkedInAuth = authenticateWithLinkedIn;
         window.realEmailAuth = authenticateWithEmail;
@@ -1508,8 +1585,8 @@
 
         // Mark auth system as ready
         window.authSystemReady = true;
-
         console.log('✅ Firebase auth system ready - Real functions assigned');
+        console.log('🎯 authSystemReady is now:', window.authSystemReady);
 
         // FIXED: Enhanced SF Passport ID generation with proper format
         async function generateSFPassportId() {
