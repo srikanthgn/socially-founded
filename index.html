@@ -725,9 +725,12 @@
                     <!-- Smart Signup Grid -->
                     <div class="smart-signup-grid">
                         <!-- QR Code Card -->
-                        <button class="smart-grid-btn primary" onclick="showQRCode()" title="Scan to Join">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://sociallyfounded.com/waitlist?ref=qr&color=003554&bgcolor=D4AF37" alt="Scan to Join" style="width: 100%; height: 100%; border-radius: 8px;">
-                        </button>
+                     <!-- QR Code Card -->
+<button class="smart-grid-btn primary" onclick="showQRCode()" title="Scan to Join">
+    <div id="homepage-qr-code" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: white;">
+        <div style="color: #D4AF37; font-size: 12px;">Loading QR...</div>
+    </div>
+</button>
 
                         <!-- Google Card -->
                         <button class="smart-grid-btn" onclick="authenticateWithGoogle()" title="Google Sign In" id="google-auth-btn">
@@ -1634,6 +1637,119 @@
     window.getReferralSource = getReferralSource;
 
     console.log('Firebase Auth initialized and monitoring auth state');
+// QR Code Generation for Homepage
+    let qrLibraryLoaded = false;
+
+    async function loadQRLibrary() {
+        if (typeof qrcode !== 'undefined') {
+            qrLibraryLoaded = true;
+            return true;
+        }
+        
+        try {
+            console.log('Loading QR library...');
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+            
+            await new Promise((resolve, reject) => {
+                script.onload = () => {
+                    if (typeof qrcode !== 'undefined') {
+                        console.log('QR library loaded successfully');
+                        qrLibraryLoaded = true;
+                        resolve();
+                    } else {
+                        reject(new Error('QR library failed to initialize'));
+                    }
+                };
+                script.onerror = () => reject(new Error('Failed to load QR library'));
+                document.head.appendChild(script);
+            });
+            
+            return true;
+        } catch (error) {
+            console.error('QR library loading error:', error);
+            return false;
+        }
+    }
+
+    async function generateHomepageQR() {
+        const qrContainer = document.getElementById('homepage-qr-code');
+        if (!qrContainer) {
+            console.error('QR container not found');
+            return;
+        }
+        
+        try {
+            // Show loading
+            qrContainer.innerHTML = '<div style="color: #D4AF37; font-size: 12px;">Generating QR...</div>';
+            
+            // Load library
+            const libraryLoaded = await loadQRLibrary();
+            if (!libraryLoaded) {
+                throw new Error('QR library failed to load');
+            }
+            
+            // Generate QR URL pointing to your working qr-welcome.html
+            const timestamp = Date.now();
+            const qrUrl = `https://sociallyfounded.com/qr-welcome.html?source=homepage&t=${timestamp}`;
+            
+            console.log('Generating QR for:', qrUrl);
+            
+            // Create QR code
+            const qr = qrcode(0, 'M');
+            qr.addData(qrUrl);
+            qr.make();
+            
+            // Generate image with gold background
+            const qrImage = qr.createImgTag(3, 2);
+            
+            // Create wrapper with gold background
+            qrContainer.innerHTML = `
+                <div style="background: #D4AF37; padding: 8px; border-radius: 8px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                    ${qrImage}
+                </div>
+            `;
+            
+            // Style the QR image
+            const img = qrContainer.querySelector('img');
+            if (img) {
+                img.style.width = 'calc(100% - 16px)';
+                img.style.height = 'calc(100% - 16px)';
+                img.style.display = 'block';
+                img.style.borderRadius = '4px';
+            }
+            
+            console.log('QR Code generated successfully');
+            console.log('QR URL:', qrUrl);
+            
+        } catch (error) {
+            console.error('QR generation error:', error);
+            
+            // Show fallback
+            qrContainer.innerHTML = `
+                <div style="color: #003554; font-size: 10px; text-align: center; padding: 5px;">
+                    <div style="margin-bottom: 5px;">QR Unavailable</div>
+                    <div style="font-size: 8px;">Tap to join</div>
+                </div>
+            `;
+        }
+    }
+
+    // Auto-generate QR when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(generateHomepageQR, 1000);
+    });
+
+    // Regenerate every 5 minutes
+    setInterval(() => {
+        if (qrLibraryLoaded) {
+            generateHomepageQR();
+        }
+    }, 5 * 60 * 1000);
+
+    console.log('Firebase Auth initialized and monitoring auth state');
+
+    
 </script>
 </body>
 </html>
