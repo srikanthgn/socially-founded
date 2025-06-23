@@ -149,6 +149,9 @@
             background: linear-gradient(135deg, var(--light-gray) 0%, rgba(212, 175, 55, 0.1) 100%);
             position: relative;
             padding: 80px 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
         }
         
         .hero::before {
@@ -164,17 +167,17 @@
             pointer-events: none;
         }
         
-        /* Hero Section - Equal 3-Column Layout */
+        /* Hero Section - Full Width 3-Column Layout */
         .hero-content {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 2rem;
+            gap: 4rem;
             align-items: center;
             position: relative;
             z-index: 2;
-            max-width: 1400px;
-            margin: 0 auto;
             width: 100%;
+            max-width: none;
+            padding: 0 3rem;
         }
         
         .hero-text {
@@ -184,7 +187,7 @@
         }
         
         .hero-text h1 {
-            font-size: 2.2rem;
+            font-size: 3rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1.5rem;
@@ -196,10 +199,10 @@
         }
         
         .hero-text p {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--dark-gray);
             margin-bottom: 2rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
         .hero-actions {
@@ -329,20 +332,20 @@
             background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
             backdrop-filter: blur(20px);
             border-radius: 25px;
-            padding: 2rem;
+            padding: 2.5rem;
             color: var(--white);
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 53, 84, 0.2);
         }
         
         .hero-auth h3 {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
         
         .hero-auth p {
-            font-size: 0.9rem;
+            font-size: 1rem;
             opacity: 0.9;
             margin-bottom: 2rem;
             line-height: 1.4;
@@ -750,11 +753,12 @@
         @media (max-width: 1200px) {
             .hero-content {
                 grid-template-columns: 1fr 1fr 1fr;
-                gap: 1.5rem;
+                gap: 2.5rem;
+                padding: 0 2rem;
             }
             
             .hero-text h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
         }
         
@@ -806,11 +810,11 @@
                 grid-template-columns: 1fr;
                 gap: 2rem;
                 text-align: center;
-                padding: 2rem 0;
+                padding: 2rem 1rem;
             }
             
             .hero-text h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .hero-text p {
@@ -891,53 +895,51 @@
 
     <!-- Hero Section -->
     <section class="section hero" id="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>Join the Waitlist</h1>
-                    <p>SociallyFounded accelerates innovative ideas, meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.</p>
-                    <div class="hero-actions">
-                        <a href="#diana" class="btn btn-primary">
-                            <i class="fas fa-rocket"></i>
-                            Start Building with DIANA
-                        </a>
-                        <a href="#communities" class="btn btn-secondary">
-                            <i class="fas fa-users"></i>
-                            Explore Your Communities
-                        </a>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Join the Waitlist</h1>
+                <p>SociallyFounded accelerates innovative ideas, meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.</p>
+                <div class="hero-actions">
+                    <a href="#diana" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        Start Building with DIANA
+                    </a>
+                    <a href="#communities" class="btn btn-secondary">
+                        <i class="fas fa-users"></i>
+                        Explore Your Communities
+                    </a>
+                </div>
+            </div>
+            <div class="qr-section">
+                <h3>
+                    <i class="fas fa-passport" style="color: var(--gold);"></i>
+                    Get Your Passport
+                </h3>
+                <p style="color: var(--navy); opacity: 0.7; margin-bottom: 1rem;">register</p>
+                <div class="qr-code" id="qrCode">
+                    <!-- QR Code will be generated here by JavaScript -->
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
+                        <span>Loading QR Code...</span>
                     </div>
                 </div>
-                <div class="qr-section">
-                    <h3>
-                        <i class="fas fa-passport" style="color: var(--gold);"></i>
-                        Get Your Passport
-                    </h3>
-                    <p style="color: var(--navy); opacity: 0.7; margin-bottom: 1rem;">register</p>
-                    <div class="qr-code" id="qrCode">
-                        <!-- QR Code will be generated here by JavaScript -->
-                        <div class="qr-placeholder">
-                            <i class="fas fa-qrcode"></i>
-                            <span>Loading QR Code...</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-auth">
-                    <h3>Start Your Journey</h3>
-                    <p>Join SociallyFounded, engage with communities, collaborate at sponsored venues</p>
-                    <div class="hero-auth-buttons">
-                        <button class="hero-auth-btn" id="googleAuthBtnHero">
-                            <i class="fab fa-google"></i>
-                            Google
-                        </button>
-                        <button class="hero-auth-btn" id="linkedinAuthBtnHero">
-                            <i class="fab fa-linkedin"></i>
-                            LinkedIn
-                        </button>
-                        <button class="hero-auth-btn" id="emailAuthBtnHero">
-                            <i class="fas fa-envelope"></i>
-                            Email
-                        </button>
-                    </div>
+            </div>
+            <div class="hero-auth">
+                <h3>Start Your Journey</h3>
+                <p>Join SociallyFounded, engage with communities, collaborate at sponsored venues</p>
+                <div class="hero-auth-buttons">
+                    <button class="hero-auth-btn" id="googleAuthBtnHero">
+                        <i class="fab fa-google"></i>
+                        Google
+                    </button>
+                    <button class="hero-auth-btn" id="linkedinAuthBtnHero">
+                        <i class="fab fa-linkedin"></i>
+                        LinkedIn
+                    </button>
+                    <button class="hero-auth-btn" id="emailAuthBtnHero">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </button>
                 </div>
             </div>
         </div>
