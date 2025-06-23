@@ -29,6 +29,8 @@
             line-height: 1.6;
             color: var(--navy);
             background: var(--white);
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
         }
         
         /* Header */
@@ -94,6 +96,29 @@
             background: linear-gradient(135deg, var(--light-gray) 0%, rgba(212, 175, 55, 0.1) 100%);
             padding: 80px 0 0 0;
             position: relative;
+            scroll-snap-align: start;
+        }
+
+        /* DIANA SECTION */
+        .diana {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            color: var(--white);
+            position: relative;
+            scroll-snap-align: start;
+        }
+        
+        .diana::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 70% 30%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            pointer-events: none;
         }
         
         /* HERO CONTAINER - BASIC TABLE LAYOUT */
@@ -105,9 +130,23 @@
             width: 100%;
             height: calc(100vh - 80px);
         }
+
+        /* DIANA CONTAINER - SAME TABLE LAYOUT */
+        .diana-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: table;
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
         
         .hero-left,
-        .hero-right {
+        .hero-right,
+        .diana-left,
+        .diana-right {
             display: table-cell;
             vertical-align: middle;
         }
@@ -116,6 +155,47 @@
         .hero-left {
             width: 65%;
             padding-right: 4rem;
+        }
+
+        /* DIANA LEFT SIDE - AVATAR */
+        .diana-left {
+            width: 40%;
+            text-align: center;
+            padding-right: 4rem;
+        }
+        
+        .diana-avatar-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .diana-avatar {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            object-fit: cover;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .diana-text h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+        
+        .diana-text p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: var(--gold);
+            font-weight: 500;
         }
         
         .hero-left h1 {
@@ -180,6 +260,76 @@
         .hero-right {
             width: 35%;
             text-align: center;
+        }
+
+        /* DIANA RIGHT SIDE - FEATURES */
+        .diana-right {
+            width: 60%;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gold);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--navy);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--white);
+        }
+        
+        .feature-card p {
+            opacity: 0.9;
+            line-height: 1.4;
+            font-size: 0.95rem;
+            color: var(--white);
         }
         
         /* QR SECTION */
@@ -279,18 +429,22 @@
 
         /* RESPONSIVE */
         @media (max-width: 968px) {
-            .hero-content {
+            .hero-content,
+            .diana-content {
                 display: block;
                 padding: 2rem 1rem;
             }
             
             .hero-left,
-            .hero-right {
+            .hero-right,
+            .diana-left,
+            .diana-right {
                 display: block;
                 width: 100%;
             }
             
-            .hero-left {
+            .hero-left,
+            .diana-left {
                 padding-right: 0;
                 margin-bottom: 3rem;
                 text-align: center;
@@ -302,6 +456,20 @@
             
             .hero-left p {
                 font-size: 1rem;
+            }
+            
+            .diana-text h2 {
+                font-size: 2rem;
+            }
+            
+            .diana-avatar {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
         }
     </style>
@@ -316,9 +484,9 @@
             </a>
             <nav>
                 <ul>
-                    <li><a href="#">Communities</a></li>
-                    <li><a href="#">DIANA AI</a></li>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="#communities">Communities</a></li>
+                    <li><a href="#diana">DIANA AI</a></li>
+                    <li><a href="#hero">Home</a></li>
                 </ul>
             </nav>
         </div>
@@ -332,11 +500,11 @@
                 <h1>Join the Waitlist</h1>
                 <p>SociallyFounded accelerates innovative ideas, meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.</p>
                 <div class="hero-buttons">
-                    <a href="#" class="btn btn-primary">
+                    <a href="#diana" class="btn btn-primary">
                         <i class="fas fa-rocket"></i>
                         Start Building with DIANA
                     </a>
-                    <a href="#" class="btn btn-secondary">
+                    <a href="#communities" class="btn btn-secondary">
                         <i class="fas fa-users"></i>
                         Explore Your Communities
                     </a>
@@ -376,6 +544,76 @@
                             <i class="fas fa-envelope"></i>
                             Email
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIANA SECTION -->
+    <section class="diana" id="diana">
+        <div class="diana-content">
+            <!-- LEFT SIDE - DIANA AVATAR -->
+            <div class="diana-left">
+                <div class="diana-avatar-container">
+                    <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" 
+                         alt="DIANA AI Avatar" 
+                         class="diana-avatar"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="diana-avatar" style="display: none; background: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%); align-items: center; justify-content: center; font-size: 4rem; color: var(--navy);">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                </div>
+                <div class="diana-text">
+                    <h2>Meet DIANA</h2>
+                    <p>Your AI Community Catalyst & Co-Founder</p>
+                </div>
+            </div>
+            
+            <!-- RIGHT SIDE - FEATURES GRID -->
+            <div class="diana-right">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Idea Development</h3>
+                        <p>Brainstorm and validate business concepts with AI intelligence</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-hammer"></i>
+                        </div>
+                        <h3>Build Your MVP</h3>
+                        <p>AI-guided development from concept to Minimum Viable Product launch</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Market Analysis</h3>
+                        <p>Get insights on market opportunities and competitive landscape</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Team Building</h3>
+                        <p>Connect with co-founders, advisors, and team members</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Investor Matching</h3>
+                        <p>Find and connect with relevant investors for your startup</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h3>Community Validation</h3>
+                        <p>Expert verified mentors and community feedback</p>
                     </div>
                 </div>
             </div>
