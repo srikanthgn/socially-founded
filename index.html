@@ -566,6 +566,7 @@
         .communities-section {
             background: var(--light-gray);
             position: relative;
+            padding: 40px 0;
         }
         
         .communities-section::before {
@@ -588,7 +589,7 @@
         
         .communities-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         
         .communities-header h2 {
@@ -610,6 +611,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
+            margin-bottom: 0;
         }
         
         .community-card {
@@ -667,7 +669,7 @@
         /* Footer */
         footer {
             background: var(--light-gray);
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             text-align: center;
             border-top: 1px solid rgba(0, 53, 84, 0.1);
         }
@@ -679,11 +681,33 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .footer-links a {
+            color: var(--navy);
+            opacity: 0.7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--gold);
         }
         
         .footer-content p {
             color: var(--navy);
             opacity: 0.6;
+            font-size: 0.9rem;
         }
         
         .social-link {
@@ -872,6 +896,12 @@
             .footer-content {
                 flex-direction: column;
                 gap: 1rem;
+                text-align: center;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
             }
         }
     </style>
@@ -893,7 +923,7 @@
                 <ul>
                     <li><a href="#communities">Communities</a></li>
                     <li><a href="#diana">DIANA AI</a></li>
-                    <li><a href="#about">About</a></li>
+                    <li><a href="#about" onclick="showAboutModal()">About</a></li>
                 </ul>
             </nav>
         </div>
@@ -1129,9 +1159,13 @@
     <footer>
         <div class="footer-content">
             <p>&copy; 2025 SociallyFounded</p>
-            <a href="https://www.linkedin.com/company/sociallyfounded" target="_blank" class="social-link">
-                <i class="fab fa-linkedin"></i>
-            </a>
+            <div class="footer-links">
+                <a href="#" onclick="showTermsModal()">Terms of Use</a>
+                <a href="#" onclick="showPrivacyModal()">Privacy Policy</a>
+                <a href="https://www.linkedin.com/company/sociallyfounded" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
         </div>
     </footer>
 
@@ -1700,6 +1734,19 @@
             createUserProfile,
             auth,
             db
+        };
+
+        // Modal Functions
+        window.showAboutModal = function() {
+            alert('About SociallyFounded:\n\nWe accelerate meaningful communities in the spaces you love. Connect with like-minded people across 6 community types, discover amazing spaces, and build lasting relationships with DIANA AI as your community catalyst.\n\nFor more information, visit our welcome page after signing up!');
+        };
+
+        window.showTermsModal = function() {
+            alert('Terms of Use:\n\nBy using SociallyFounded, you agree to our community guidelines and terms of service. We are committed to creating a safe, inclusive environment for all community members.\n\nDetailed terms available after account creation.');
+        };
+
+        window.showPrivacyModal = function() {
+            alert('Privacy Policy:\n\nYour privacy is important to us. We collect minimal data necessary to facilitate community connections and protect your personal information with industry-standard security measures.\n\nFull privacy policy available in your account dashboard.');
         };
     </script>
 </body>
