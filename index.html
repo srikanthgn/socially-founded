@@ -356,18 +356,23 @@
             width: 300px;
             height: 300px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%);
+            border: 4px solid var(--gold);
+            background: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 30px;
             position: relative;
             animation: float 3s ease-in-out infinite;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
         }
 
-        .diana-avatar i {
-            font-size: 120px;
-            color: var(--navy);
+        .diana-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
         .floating-icons {
@@ -582,9 +587,183 @@
             }
         }
 
-        @keyframes spin {
+        /* QR Scanner Floating Button */
+        .qr-scanner-btn {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%);
+            border: none;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .qr-scanner-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
+        }
+
+        .qr-scanner-btn i {
+            font-size: 28px;
+            color: var(--navy);
+        }
+
+        .qr-tooltip {
+            position: absolute;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--navy);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .qr-tooltip:after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 8px solid transparent;
+            border-left-color: var(--navy);
+        }
+
+        .qr-scanner-btn:hover .qr-tooltip {
+            opacity: 1;
+        }
+
+        /* QR Scanner Modal */
+        .qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .qr-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .qr-modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .qr-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--navy);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .qr-close:hover {
+            background: var(--light-gray);
+        }
+
+        .qr-scanner-area {
+            width: 300px;
+            height: 300px;
+            border: 3px solid var(--gold);
+            border-radius: 20px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-scanner-area video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 17px;
+        }
+
+        .qr-placeholder {
+            color: var(--navy);
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .qr-scanning-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            animation: scanning 2s linear infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+            }
+            50% {
+                box-shadow: 0 10px 30px rgba(212, 175, 55, 0.8);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
             to {
-                transform: rotate(360deg);
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes scanning {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(300px);
             }
         }
 
@@ -1198,56 +1377,63 @@
         }
 
         // Email Authentication
-        document.getElementById('emailForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('emailInput').value;
-            const password = document.getElementById('passwordInput').value;
-            
-            if (!email || !password) {
-                showMessage('Please fill in all fields.');
-                return;
-            }
-            
-            try {
-                showLoading('emailSubmitBtn');
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('emailForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
                 
-                let result;
-                if (isSignupMode) {
-                    result = await createUserWithEmailAndPassword(auth, email, password);
-                } else {
-                    result = await signInWithEmailAndPassword(auth, email, password);
+                if (!window.firebaseReady) {
+                    showMessage('Please wait for the page to fully load before signing in.');
+                    return;
                 }
                 
-                const user = result.user;
-                console.log('Email auth successful:', user.uid);
+                const email = document.getElementById('emailInput').value;
+                const password = document.getElementById('passwordInput').value;
                 
-                const userData = await createUserProfile(user, {
-                    authProvider: 'email',
-                    referralSource: getReferralSource()
-                });
-                
-                hideLoading('emailSubmitBtn', isSignupMode ? 'Sign Up' : 'Sign In');
-                redirectToWelcomePage(userData);
-                
-            } catch (error) {
-                console.error('Email auth error:', error);
-                hideLoading('emailSubmitBtn', isSignupMode ? 'Sign Up' : 'Sign In');
-                
-                if (error.code === 'auth/email-already-in-use') {
-                    showMessage('Email already in use. Try signing in instead.');
-                } else if (error.code === 'auth/weak-password') {
-                    showMessage('Password should be at least 6 characters.');
-                } else if (error.code === 'auth/user-not-found') {
-                    showMessage('No account found with this email. Try signing up instead.');
-                } else if (error.code === 'auth/wrong-password') {
-                    showMessage('Incorrect password. Please try again.');
-                } else if (error.code === 'auth/invalid-email') {
-                    showMessage('Please enter a valid email address.');
-                } else {
-                    showMessage(`Authentication failed: ${error.message || 'Please try again.'}`);
+                if (!email || !password) {
+                    showMessage('Please fill in all fields.');
+                    return;
                 }
-            }
+                
+                try {
+                    showLoading('emailSubmitBtn');
+                    
+                    let result;
+                    if (isSignupMode) {
+                        result = await window.createUserWithEmailAndPassword(window.auth, email, password);
+                    } else {
+                        result = await window.signInWithEmailAndPassword(window.auth, email, password);
+                    }
+                    
+                    const user = result.user;
+                    console.log('Email auth successful:', user.uid);
+                    
+                    const userData = await createUserProfile(user, {
+                        authProvider: 'email',
+                        referralSource: getReferralSource()
+                    });
+                    
+                    hideLoading('emailSubmitBtn', isSignupMode ? 'Sign Up' : 'Sign In');
+                    redirectToWelcomePage(userData);
+                    
+                } catch (error) {
+                    console.error('Email auth error:', error);
+                    hideLoading('emailSubmitBtn', isSignupMode ? 'Sign Up' : 'Sign In');
+                    
+                    if (error.code === 'auth/email-already-in-use') {
+                        showMessage('Email already in use. Try signing in instead.');
+                    } else if (error.code === 'auth/weak-password') {
+                        showMessage('Password should be at least 6 characters.');
+                    } else if (error.code === 'auth/user-not-found') {
+                        showMessage('No account found with this email. Try signing up instead.');
+                    } else if (error.code === 'auth/wrong-password') {
+                        showMessage('Incorrect password. Please try again.');
+                    } else if (error.code === 'auth/invalid-email') {
+                        showMessage('Please enter a valid email address.');
+                    } else {
+                        showMessage(`Authentication failed: ${error.message || 'Please try again.'}`);
+                    }
+                }
+            });
         });
 
         // Check authentication state on page load
