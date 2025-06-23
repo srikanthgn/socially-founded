@@ -3,24 +3,1080 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Join the Waitlist</title>
+    <title>SociallyFounded - Find Your Tribe, Build Your Future</title>
     
-    <!-- Poppins Font -->
+    <!-- Essential Meta Tags -->
+    <meta name="description" content="Join SociallyFounded and accelerate your entrepreneurial journey with DIANA AI, your virtual co-founder. Connect with communities, discover venues, and build lasting relationships.">
+    <meta name="keywords" content="entrepreneurship, AI co-founder, startup communities, business networking, DIANA AI">
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- QR Code Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
-    
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    
-    <script>
-        // Firebase config (NEVER CHANGE)
+    <style>
+        :root {
+            --navy: #003554;
+            --gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --section-height: 100vh;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--navy);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        /* Header - Fixed and Translucent */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 53, 84, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .logo {
+            height: 40px;
+        }
+        
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--navy);
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--navy);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--gold);
+        }
+        
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover:after {
+            width: 100%;
+        }
+        
+        /* Section Base Styles */
+        .section {
+            min-height: var(--section-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            padding: 0 2rem;
+            margin: 0 auto;
+        }
+        
+        /* Hero Section - Full Screen Impact */
+        .hero {
+            background: linear-gradient(135deg, var(--light-gray) 0%, rgba(212, 175, 55, 0.1) 100%);
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 53, 84, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--navy);
+            margin-bottom: 2.5rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: var(--navy);
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 53, 84, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--navy);
+            border: 2px solid var(--gold);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gold);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+        
+        /* QR Section - Floating Card */
+        .qr-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 53, 84, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qr-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--navy) 0%, var(--gold) 100%);
+        }
+        
+        .qr-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .qr-code {
+            width: 220px;
+            height: 220px;
+            background: var(--navy);
+            border-radius: 20px;
+            margin: 1.5rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        .qr-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+        }
+        
+        .qr-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+        }
+        
+        .qr-placeholder span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.8;
+            text-align: center;
+        }
+        
+        /* DIANA Section - Full Screen Focus */
+        .diana-section {
+            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            color: var(--white);
+            position: relative;
+        }
+        
+        .diana-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 70% 30%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            pointer-events: none;
+        }
+        
+        .diana-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .diana-text h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+        
+        .diana-text p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .diana-avatar-container {
+            text-align: center;
+            position: relative;
+        }
+        
+        .diana-avatar {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            object-fit: cover;
+            object-position: center;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+            position: relative;
+            z-index: 2;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .diana-avatar-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+            animation: glow 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .diana-title {
+            margin-top: 1.5rem;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        
+        .diana-subtitle {
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        /* DIANA Features Grid */
+        .diana-features {
+            margin-top: 4rem;
+            grid-column: 1 / -1;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gold);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--navy);
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+        
+        .feature-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        /* Communities Section - Full Screen Grid */
+        .communities-section {
+            background: var(--light-gray);
+            position: relative;
+        }
+        
+        .communities-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(0, 53, 84, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .communities-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .communities-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .communities-header h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+        }
+        
+        .communities-header p {
+            font-size: 1.25rem;
+            color: var(--navy);
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .communities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+        
+        .community-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 53, 84, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        .community-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--navy) 0%, var(--gold) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+        
+        .community-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .community-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 70px rgba(0, 53, 84, 0.15);
+        }
+        
+        .community-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--gold) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--white);
+            font-size: 2rem;
+        }
+        
+        .community-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+        
+        .community-card p {
+            color: var(--navy);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        /* Auth Section - Full Screen Call to Action */
+        .auth-section {
+            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
+            color: var(--white);
+            position: relative;
+        }
+        
+        .auth-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 60%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+            pointer-events: none;
+        }
+        
+        .auth-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .auth-content h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-content p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-btn {
+            background: var(--white);
+            color: var(--navy);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+            min-width: 250px;
+            justify-content: center;
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+            background: var(--gold);
+            color: var(--white);
+        }
+        
+        .auth-btn i {
+            font-size: 1.2rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--light-gray);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 53, 84, 0.1);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .footer-content p {
+            color: var(--navy);
+            opacity: 0.6;
+        }
+        
+        .social-link {
+            color: var(--navy);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-link:hover {
+            color: var(--gold);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            :root {
+                --section-height: 100vh;
+            }
+            
+            .header-content {
+                padding: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+                padding: 2rem 0;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-text p {
+                font-size: 1.1rem;
+            }
+            
+            .diana-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .diana-text h2 {
+                font-size: 2.5rem;
+            }
+            
+            .diana-avatar {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .diana-avatar-container::before {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .communities-header h2 {
+                font-size: 2.5rem;
+            }
+            
+            .communities-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .community-card {
+                padding: 2rem;
+            }
+            
+            .auth-content h2 {
+                font-size: 2.5rem;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .auth-btn {
+                min-width: 280px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* Loading States */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-top: 3px solid var(--gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Email Form (Hidden by default) */
+        .email-form {
+            display: none;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--navy);
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(0, 53, 84, 0.1);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        
+        /* Scroll Snap for Desktop */
+        @media (min-width: 769px) {
+            html {
+                scroll-snap-type: y mandatory;
+            }
+            
+            .section {
+                scroll-snap-align: start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header id="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SF Logo" class="logo">
+                <span class="brand-text">Socially Founded</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#communities">Communities</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="section hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Join the Waitlist</h1>
+                    <p>SociallyFounded accelerates innovative ideas, meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.</p>
+                    <div class="hero-actions">
+                        <a href="#diana" class="btn btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            Start Building with DIANA
+                        </a>
+                        <a href="#communities" class="btn btn-secondary">
+                            <i class="fas fa-users"></i>
+                            Explore Your Communities
+                        </a>
+                    </div>
+                </div>
+                <div class="qr-section">
+                    <h3>
+                        <i class="fas fa-passport" style="color: var(--gold);"></i>
+                        Get Your Passport
+                    </h3>
+                    <p style="color: var(--navy); opacity: 0.7; margin-bottom: 1rem;">register</p>
+                    <div class="qr-code" id="qrCode">
+                        <!-- QR Code will be generated here by JavaScript -->
+                        <div class="qr-placeholder">
+                            <i class="fas fa-qrcode"></i>
+                            <span>Loading QR Code...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIANA AI Section -->
+    <section class="section diana-section" id="diana">
+        <div class="container">
+            <div class="diana-content">
+                <div class="diana-text">
+                    <h2>Meet DIANA - Your AI Co-Founder</h2>
+                    <p>Virtual co-founder for entrepreneurs. Incubate ideas into viable businesses.</p>
+                </div>
+                <div class="diana-avatar-container">
+                    <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" 
+                         alt="DIANA AI Avatar" 
+                         class="diana-avatar"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="diana-avatar" style="display: none; background: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%); align-items: center; justify-content: center; font-size: 4rem; color: var(--navy);">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="diana-title">DIANA</div>
+                    <div class="diana-subtitle">Your AI Community Catalyst</div>
+                </div>
+                <div class="diana-features">
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h3>Idea Development</h3>
+                            <p>Brainstorm and validate business concepts with AI intelligence</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-hammer"></i>
+                            </div>
+                            <h3>Build Your MVP with AI</h3>
+                            <p>AI-guided development from concept to Minimum Viable Product launch</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Market Analysis</h3>
+                            <p>Get insights on market opportunities and competitive landscape</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>Team Building</h3>
+                            <p>Connect with co-founders, advisors, and team members</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <h3>Investor Matching</h3>
+                            <p>Find and connect with relevant investors for your startup</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                            <h3>Community Validation</h3>
+                            <p>Expert verified mentors and community feedback</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Communities Section -->
+    <section class="section communities-section" id="communities">
+        <div class="container">
+            <div class="communities-content">
+                <div class="communities-header">
+                    <h2>Your Communities</h2>
+                    <p>Connect with diverse communities as your pathway to entrepreneurial success</p>
+                </div>
+                <div class="communities-grid">
+                    <div class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Professional</h3>
+                        <p>Build industry networks, find co-founders, validate business ideas</p>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3>Neighborhood</h3>
+                        <p>Discover local market opportunities, connect with potential customers</p>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Learning</h3>
+                        <p>Develop entrepreneurial skills, learn from mentors and experts</p>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Lifestyle & Fitness</h3>
+                        <p>Explore wellness business opportunities and healthy living communities</p>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h3>Marketplace</h3>
+                        <p>Test your products and services, find suppliers and partners</p>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Entrepreneur Hub</h3>
+                        <p>Connect with founders, investors, and the startup ecosystem</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authentication Section -->
+    <section class="section auth-section" id="auth">
+        <div class="container">
+            <div class="auth-content">
+                <h2>Start Your Journey</h2>
+                <p>Join SociallyFounded, engage with communities, collaborate at sponsored venues and make an impact</p>
+                
+                <div class="auth-buttons">
+                    <a href="#" class="auth-btn" id="googleAuthBtn">
+                        <i class="fab fa-google"></i>
+                        Continue with Google
+                    </a>
+                    <a href="#" class="auth-btn" id="linkedinAuthBtn">
+                        <i class="fab fa-linkedin"></i>
+                        Continue with LinkedIn
+                    </a>
+                    <a href="#" class="auth-btn" id="emailAuthBtn">
+                        <i class="fas fa-envelope"></i>
+                        Continue with Email
+                    </a>
+                </div>
+
+                <!-- Email Form (Hidden by default) -->
+                <div class="email-form" id="emailForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="emailSubmitBtn">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Sign Up with Email
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>Creating your SF Passport...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 SociallyFounded</p>
+            <a href="#" class="social-link">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK v9 -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
+        import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js';
+
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
             authDomain: "sociallyfounded-df98f.firebaseapp.com",
@@ -31,1345 +1087,233 @@
             measurementId: "G-EY0BZE30Q0"
         };
 
-        // Initialize Firebase when scripts are loaded
-        let auth, db;
-        let firebaseInitialized = false;
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        function initializeFirebaseIfReady() {
-            if (typeof firebase !== 'undefined' && !firebaseInitialized) {
+        // Utility Functions
+        function generateRandomString(length) {
+            const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function getCountryFromTimezone(timezone) {
+            const timezoneMap = {
+                'Asia/Dubai': 'AE', 'Asia/Kolkata': 'IN', 'America/New_York': 'US',
+                'Europe/London': 'GB', 'Australia/Sydney': 'AU', 'Asia/Tokyo': 'JP',
+                'Europe/Berlin': 'DE', 'America/Los_Angeles': 'US', 'Asia/Singapore': 'SG'
+            };
+            return timezoneMap[timezone] || null;
+        }
+
+        async function getCountryCode() {
+            try {
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const countryFromTimezone = getCountryFromTimezone(timezone);
+                if (countryFromTimezone) return countryFromTimezone;
+                
                 try {
-                    firebase.initializeApp(firebaseConfig);
-                    auth = firebase.auth();
-                    db = firebase.firestore();
-                    firebaseInitialized = true;
-                    console.log('Firebase initialized successfully');
-                } catch (error) {
-                    console.log('Firebase initialization failed:', error);
+                    const response = await fetch('https://ipapi.co/json/');
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.country_code) {
+                            return data.country_code.toUpperCase();
+                        }
+                    }
+                } catch (geoError) {
+                    console.log('Geolocation API failed:', geoError);
                 }
+                
+                return 'XX';
+                
+            } catch (error) {
+                console.error('Error getting country code:', error);
+                return 'XX';
             }
         }
 
-        // Try to initialize Firebase immediately
-        initializeFirebaseIfReady();
+        async function generateSFPassportId() {
+            const randomDigits = Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
+            const countryCode = await getCountryCode();
+            return `SF-${randomDigits}-${countryCode}`;
+        }
 
-        // Wait for DOM and Firebase to be ready
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, initializing...');
+        function getReferralSource() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('ref') || 'direct';
+        }
+
+        // UI Helper Functions
+        function showLoadingState() {
+            document.getElementById('loadingState').style.display = 'block';
+            const authButtons = document.querySelectorAll('.auth-btn');
+            authButtons.forEach(btn => btn.style.opacity = '0.5');
+        }
+
+        function hideLoadingState() {
+            document.getElementById('loadingState').style.display = 'none';
+            const authButtons = document.querySelectorAll('.auth-btn');
+            authButtons.forEach(btn => btn.style.opacity = '1');
+        }
+
+        function showError(message) {
+            // Create error notification
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #e74c3c;
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                z-index: 10000;
+                max-width: 400px;
+                box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+            `;
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
             
-            // Try to initialize Firebase again
-            initializeFirebaseIfReady();
-            
-            // Remove loading overlay and setup page
             setTimeout(() => {
-                initializePageElements();
-                generateHomepageQR();
-            }, 500);
-        });
-
-        // Fallback: Try to initialize Firebase after a delay
-        setTimeout(() => {
-            initializeFirebaseIfReady();
-        }, 1000);
-    </script>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --navy: #003554;
-            --gold: #D4AF37;
-            --white: #FFFFFF;
-            --light-gray: #F5F5F5;
-            --medium-gray: #E0E0E0;
-            --gradient-primary: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
-            --gradient-secondary: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%);
-            --shadow-soft: 0 8px 32px rgba(0, 53, 84, 0.1);
-            --shadow-medium: 0 16px 48px rgba(0, 53, 84, 0.15);
-            --shadow-strong: 0 24px 64px rgba(0, 53, 84, 0.2);
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: var(--navy);
-            background: linear-gradient(135deg, #f8fafe 0%, #e8f4f8 100%);
-            overflow-x: hidden;
-        }
-
-        /* Loading Animation */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 53, 84, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .loading-overlay.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(212, 175, 55, 0.2);
-            border-top: 4px solid var(--gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(224, 224, 224, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .header.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: var(--shadow-soft);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            height: 40px;
-            width: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--navy);
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gold);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6rem 2rem 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 80%, rgba(0, 53, 84, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        /* Add floating background elements */
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(212,175,55,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(0,53,84,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(212,175,55,0.08)"/></svg>');
-            animation: float-bg 20s linear infinite;
-            pointer-events: none;
-            opacity: 0.5;
-        }
-
-        @keyframes float-bg {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-50px, -50px) rotate(360deg); }
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            z-index: 1;
-        }
-
-        .hero-text {
-            animation: slideInLeft 1s ease-out;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: var(--navy);
-            margin-bottom: 2rem;
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: none;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: var(--shadow-medium);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-strong);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--navy);
-            border: 2px solid var(--gold);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gold);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* QR Section */
-        .qr-section {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow-medium);
-            text-align: center;
-            animation: slideInRight 1s ease-out;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .qr-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--navy);
-        }
-
-        .passport-icon {
-            font-size: 1.5rem;
-            color: var(--gold);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .qr-subtitle {
-            margin-bottom: 2rem;
-            opacity: 0.7;
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: var(--navy);
-        }
-
-        #homepage-qr-code {
-            background: white;
-            padding: 1rem;
-            border-radius: 15px;
-            box-shadow: var(--shadow-soft);
-            margin: 0 auto 1.5rem;
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-        }
-
-        #homepage-qr-code:hover {
-            transform: scale(1.02);
-        }
-
-        /* DIANA AI Section */
-        .diana-section {
-            padding: 4rem 2rem;
-            background: var(--gradient-primary);
-            color: white;
-            position: relative;
-            overflow: hidden;
-            margin-top: -2rem;
-        }
-
-        .diana-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="0.5" fill="rgba(255,255,255,0.08)"/><circle cx="50" cy="10" r="0.8" fill="rgba(212,175,55,0.1)"/><circle cx="10" cy="60" r="0.6" fill="rgba(255,255,255,0.06)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.4;
-            pointer-events: none;
-            animation: float-bg 25s linear infinite reverse;
-        }
-
-        .diana-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .diana-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            margin-bottom: 4rem;
-        }
-
-        .diana-text .section-title {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 2.5rem;
-        }
-
-        .diana-text .section-subtitle {
-            opacity: 0.9;
-            margin-bottom: 3rem;
-            font-size: 1.3rem;
-        }
-
-        .diana-visual {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .diana-avatar-large {
-            text-align: center;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        .avatar-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 2rem;
-        }
-
-        .avatar-glow {
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .diana-avatar-img {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            border: 3px solid var(--gold);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            object-fit: cover;
-        }
-
-        .diana-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 6rem;
-            color: var(--gold);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid var(--gold);
-        }
-
-        .diana-avatar-large h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: white;
-        }
-
-        .diana-avatar-large p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            color: var(--gold);
-            font-weight: 500;
-        }
-
-        .diana-features {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-
-        .diana-feature {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .diana-feature:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient-secondary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            color: var(--navy);
-        }
-
-        .diana-feature h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: white;
-        }
-
-        .diana-feature p {
-            opacity: 0.9;
-            line-height: 1.5;
-            font-size: 0.9rem;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 0.3;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.6;
-                transform: scale(1.1);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        /* Communities Section */
-        .communities-section {
-            padding: 4rem 2rem;
-            background: rgba(255, 255, 255, 0.5);
-            position: relative;
-        }
-
-        .communities-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="community-pattern" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="rgba(0,53,84,0.03)"/><circle cx="5" cy="5" r="0.5" fill="rgba(212,175,55,0.05)"/></pattern></defs><rect width="200" height="200" fill="url(%23community-pattern)"/></svg>');
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .communities-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--navy);
-        }
-
-        .section-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 4rem;
-            opacity: 0.7;
-        }
-
-        .communities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .community-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2.5rem 2rem;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.4s ease;
-            border: 1px solid rgba(224, 224, 224, 0.3);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .community-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 0%, rgba(212, 175, 55, 0.05) 50%, transparent 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .community-card:hover::before {
-            opacity: 1;
-        }
-
-        .community-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: var(--shadow-strong);
-            border-color: var(--gold);
-        }
-
-        .community-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            background: var(--gradient-secondary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            display: inline-block;
-        }
-
-        .community-icon::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
-            transition: all 0.3s ease;
-        }
-
-        .community-card:hover .community-icon::after {
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
-        }
-
-        .community-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--navy);
-        }
-
-        .community-desc {
-            opacity: 0.7;
-            line-height: 1.5;
-        }
-
-        /* Authentication Section */
-        .auth-section {
-            padding: 4rem 2rem;
-            background: var(--gradient-primary);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .auth-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.08)"/><circle cx="90" cy="20" r="1.5" fill="rgba(212,175,55,0.1)"/><circle cx="30" cy="70" r="0.8" fill="rgba(255,255,255,0.06)"/><circle cx="70" cy="90" r="1.2" fill="rgba(255,255,255,0.05)"/></svg>');
-            animation: float-bg 30s linear infinite;
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .auth-container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .auth-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .auth-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 3rem;
-            opacity: 0.9;
-        }
-
-        .auth-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .auth-btn {
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--navy);
-            padding: 1.4rem 2rem;
-            border-radius: 15px;
-            border: none;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .auth-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .auth-btn:hover::before {
-            left: 100%;
-        }
-
-        .auth-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-strong);
-            background: white;
-        }
-
-        .auth-btn i {
-            font-size: 1.2rem;
-        }
-
-        /* Email Form */
-        .email-form {
-            display: none;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-top: 2rem;
-            color: var(--navy);
-        }
-
-        .email-form.active {
-            display: block;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid var(--medium-gray);
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--gold);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        /* Simple Footer */
-        .simple-footer {
-            padding: 2rem;
-            text-align: center;
-            background: rgba(0, 53, 84, 0.05);
-            border-top: 1px solid rgba(224, 224, 224, 0.3);
-        }
-
-        .simple-footer-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .simple-footer p {
-            margin: 0;
-            color: var(--navy);
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        .linkedin-link {
-            color: var(--navy);
-            opacity: 0.7;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-        }
-
-        .linkedin-link:hover {
-            opacity: 1;
-            color: var(--gold);
-            transform: translateY(-1px);
-        }
-
-        /* Add connecting elements between sections */
-        .section-connector {
-            height: 100px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.5), var(--gradient-primary));
-            position: relative;
-            overflow: hidden;
-        }
-
-        .section-connector::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><path d="M0,20 Q25,0 50,10 T100,5 L100,20 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-size: 200px 100px;
-            animation: wave 10s linear infinite;
-            opacity: 0.6;
-        }
-
-        @keyframes wave {
-            0% { background-position: 0 0; }
-            100% { background-position: 200px 0; }
-        }
-
-        .reverse-connector {
-            background: linear-gradient(to bottom, var(--gradient-primary), rgba(255,255,255,0.5));
-        }
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Success/Error Messages */
-        .message {
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            font-weight: 500;
-            text-align: center;
-            display: none;
-        }
-
-        .message.success {
-            background: rgba(46, 204, 113, 0.1);
-            color: #27ae60;
-            border: 1px solid rgba(46, 204, 113, 0.3);
-        }
-
-        .message.error {
-            background: rgba(231, 76, 60, 0.1);
-            color: #e74c3c;
-            border: 1px solid rgba(231, 76, 60, 0.3);
-        }
-
-        .message.visible {
-            display: block;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        /* Tablet Responsive */
-        @media (max-width: 1024px) {
-            .diana-features {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-            }
-
-            .diana-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-                text-align: center;
-            }
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .header {
-                padding: 1rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding: 6rem 1rem 4rem;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-                text-align: center;
-            }
-
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .hero-cta {
-                justify-content: center;
-            }
-
-            .qr-section {
-                margin: 0;
-                padding: 2rem;
-            }
-
-            .diana-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-                text-align: center;
-            }
-
-            .diana-features {
-                grid-template-columns: 1fr;
-            }
-
-            .avatar-container {
-                width: 150px;
-                height: 150px;
-            }
-
-            .diana-avatar-img {
-                width: 120px;
-                height: 120px;
-            }
-
-            .diana-icon {
-                width: 120px;
-                height: 120px;
-                font-size: 4rem;
-            }
-
-            .communities-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .auth-options {
-                grid-template-columns: 1fr;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .simple-footer-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-    </div>
-
-    <!-- Header -->
-    <header class="header" id="header">
-        <div class="header-content">
-            <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SociallyFounded" class="logo">
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#communities">Communities</a></li>
-                    <li><a href="#diana">Features</a></li>
-                    <li><a href="#auth">About</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">Join the Waitlist</h1>
-                <p class="hero-subtitle">
-                    SociallyFounded accelerates innovative ideas, meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.
-                </p>
-                <div class="hero-cta">
-                    <a href="#auth" class="btn btn-primary">Start Building with DIANA</a>
-                    <a href="#communities" class="btn btn-secondary">Explore Your Communities</a>
-                </div>
-            </div>
-            
-            <div class="qr-section">
-                <h3 class="qr-title">Get Your Passport</h3>
-                <i class="fas fa-passport passport-icon"></i>
-                <p class="qr-subtitle">register</p>
-                <div id="homepage-qr-code"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Connector -->
-    <div class="section-connector"></div>
-
-    <!-- DIANA AI Section -->
-    <section class="diana-section" id="diana">
-        <div class="diana-container">
-            <div class="diana-content">
-                <div class="diana-text">
-                    <h2 class="section-title">Meet DIANA - Your AI Co-Founder</h2>
-                    <p class="section-subtitle">Virtual co-founder for entrepreneurs. Incubate ideas into viable businesses.</p>
-                </div>
-                
-                <div class="diana-visual">
-                    <div class="diana-avatar-large">
-                        <div class="avatar-container">
-                            <div class="avatar-glow"></div>
-                            <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" alt="DIANA AI Assistant" class="diana-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <i class="fas fa-robot diana-icon"></i>
-                        </div>
-                        <h3>DIANA</h3>
-                        <p>Your AI Community Catalyst</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="diana-features">
-                <div class="diana-feature">
-                    <div class="feature-icon"><i class="fas fa-lightbulb"></i></div>
-                    <h4>Idea Development</h4>
-                    <p>Brainstorm and validate business concepts with AI intelligence</p>
-                </div>
-                
-                <div class="diana-feature">
-                    <div class="feature-icon"><i class="fas fa-rocket"></i></div>
-                    <h4>Build Your MVP with AI</h4>
-                    <p>AI-guided development from concept to Minimum Viable Product launch</p>
-                </div>
-                
-                <div class="diana-feature">
-                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-                    <h4>Market Analysis</h4>
-                    <p>Get insights on market opportunities and competitive landscape</p>
-                </div>
-                
-                <div class="diana-feature">
-                    <div class="feature-icon"><i class="fas fa-users"></i></div>
-                    <h4>Team Building</h4>
-                    <p>Find co-founders and team members through community connections</p>
-                </div>
-                
-                <div class="diana-feature">
-                    <div class="feature-icon"><i class="fas fa-dollar-sign"></i></div>
-                    <h4>Investor Matching</h4>
-                    <p>Connect with investors aligned with your startup vision</p>
-                </div>
-                
-                <div class="diana-feature">
-                    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
-                    <h4>Community Validation</h4>
-                    <p>Test your ideas with expert verified mentors</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Reverse Section Connector -->
-    <div class="section-connector reverse-connector"></div>
-
-    <!-- Communities Section -->
-    <section class="communities-section" id="communities">
-        <div class="communities-container">
-            <h2 class="section-title">Your Communities</h2>
-            <p class="section-subtitle">Connect with diverse communities as your pathway to entrepreneurial success</p>
-            
-            <div class="communities-grid">
-                <div class="community-card">
-                    <div class="community-icon"><i class="fas fa-briefcase"></i></div>
-                    <h3 class="community-name">Professional</h3>
-                    <p class="community-desc">Build industry networks, find co-founders, validate business ideas</p>
-                </div>
-                
-                <div class="community-card">
-                    <div class="community-icon"><i class="fas fa-home"></i></div>
-                    <h3 class="community-name">Neighborhood</h3>
-                    <p class="community-desc">Discover local market opportunities, connect with potential customers</p>
-                </div>
-                
-                <div class="community-card">
-                    <div class="community-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <h3 class="community-name">Learning</h3>
-                    <p class="community-desc">Develop entrepreneurial skills, learn from mentors and experts</p>
-                </div>
-                
-                <div class="community-card">
-                    <div class="community-icon"><i class="fas fa-heart"></i></div>
-                    <h3 class="community-name">Lifestyle & Fitness</h3>
-                    <p class="community-desc">Build wellness businesses, connect with health-conscious consumers</p>
-                </div>
-                
-                <div class="community-card">
-                    <div class="community-icon"><i class="fas fa-store"></i></div>
-                    <h3 class="community-name">Marketplace</h3>
-                    <p class="community-desc">Test products, find suppliers, connect with local commerce opportunities</p>
-                </div>
-                
-                <div class="community-card">
-                    <div class="community-icon"><i class="fas fa-rocket"></i></div>
-                    <h3 class="community-name">Entrepreneur Hub</h3>
-                    <p class="community-desc">Connect with fellow founders, investors, and startup ecosystem</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Connector -->
-    <div class="section-connector"></div>
-
-    <!-- Authentication Section -->
-    <section class="auth-section" id="auth">
-        <div class="auth-container">
-            <h2 class="auth-title">Start Your Journey</h2>
-            <p class="auth-subtitle">Join SociallyFounded, engage with communities, collaborate at sponsored venues and make an impact</p>
-            
-            <div class="auth-options">
-                <button class="auth-btn" onclick="authenticateWithGoogle()">
-                    <i class="fab fa-google"></i>
-                    Continue with Google
-                </button>
-                
-                <button class="auth-btn" onclick="authenticateWithLinkedIn()">
-                    <i class="fab fa-linkedin"></i>
-                    Continue with LinkedIn
-                </button>
-                
-                <button class="auth-btn" onclick="showEmailForm()">
-                    <i class="fas fa-envelope"></i>
-                    Continue with Email
-                </button>
-            </div>
-
-            <!-- Email Form -->
-            <div id="email-form" class="email-form">
-                <h3 style="margin-bottom: 1.5rem; text-align: center;">Create Your Account</h3>
-                <form id="email-signup-form">
-                    <div class="form-group">
-                        <label for="signup-email">Email Address</label>
-                        <input type="email" id="signup-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-password">Password</label>
-                        <input type="password" id="signup-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-name">Full Name</label>
-                        <input type="text" id="signup-name" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Create Account</button>
-                        <button type="button" class="btn btn-secondary" onclick="hideEmailForm()">Cancel</button>
-                    </div>
-                </form>
-                <div id="auth-message" class="message"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Simple Footer -->
-    <footer class="simple-footer">
-        <div class="simple-footer-content">
-            <p>&copy; 2025 SociallyFounded</p>
-            <a href="https://linkedin.com/company/sociallyfounded" target="_blank" rel="noopener" class="linkedin-link">
-                <i class="fab fa-linkedin"></i>
-            </a>
-        </div>
-    </footer>
-
-    <script>
-        // Initialize page elements
-        function initializePageElements() {
-            console.log('Initializing page elements...');
-            
-            // Remove loading overlay
-            const loadingOverlay = document.getElementById('loading-overlay');
-            if (loadingOverlay) {
-                loadingOverlay.classList.add('hidden');
-            }
-
-            // Setup scroll header effect
-            setupScrollEffects();
-            
-            // Setup email form
-            setupEmailForm();
-        }
-
-        // Setup scroll effects
-        function setupScrollEffects() {
-            const header = document.getElementById('header');
-            
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 100) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
+                if (errorDiv.parentNode) {
+                    errorDiv.parentNode.removeChild(errorDiv);
                 }
-            });
+            }, 5000);
         }
 
-        // Setup email form
-        function setupEmailForm() {
-            const form = document.getElementById('email-signup-form');
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
+        function showSuccessAndRedirect(userData) {
+            // Create success notification
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #2ecc71;
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                z-index: 10000;
+                max-width: 400px;
+                box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+            `;
+            successDiv.innerHTML = `
+                <strong>Welcome to SociallyFounded!</strong><br>
+                Your SF Passport: ${userData.sfPassport.id}<br>
+                Redirecting to your community dashboard...
+            `;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                const passportParam = encodeURIComponent(userData.sfPassport.id);
+                window.location.href = `/welcome/?passport=${passportParam}`;
+            }, 2000);
+        }
+
+        // User Profile Creation
+        async function createUserProfile(user, additionalData = {}) {
+            try {
+                console.log('Creating user profile for:', user.uid);
                 
-                const email = document.getElementById('signup-email').value;
-                const password = document.getElementById('signup-password').value;
-                const name = document.getElementById('signup-name').value;
+                const userRef = doc(db, 'users', user.uid);
+                const userSnap = await getDoc(userRef);
                 
-                try {
-                    if (!firebaseInitialized) {
-                        showError('Firebase not ready. Please try again in a moment.');
-                        return;
+                if (userSnap.exists()) {
+                    console.log('User already exists, updating...');
+                    const existingData = userSnap.data();
+                    
+                    // Generate SF Passport if missing
+                    if (!existingData.sfPassport || !existingData.sfPassport.id) {
+                        const passportId = await generateSFPassportId();
+                        existingData.sfPassport = {
+                            id: passportId,
+                            level: 1,
+                            tier: 'Navy',
+                            experience: 0,
+                            issuedDate: serverTimestamp()
+                        };
+                        
+                        await setDoc(userRef, existingData, { merge: true });
+                        console.log('Added SF Passport to existing user:', passportId);
                     }
                     
-                    showLoadingState();
+                    return existingData;
+                } else {
+                    console.log('Creating new user profile...');
+                    const passportId = await generateSFPassportId();
                     
-                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    const user = userCredential.user;
-                    
-                    console.log('Email auth successful:', user.uid);
-                    
-                    const userData = await createUserProfile(user, {
-                        authProvider: 'email',
-                        displayName: name,
-                        referralSource: getReferralSource()
-                    });
-                    
-                    localStorage.setItem('sf_user', JSON.stringify({
+                    const userData = {
                         uid: user.uid,
                         email: user.email,
-                        displayName: name,
-                        sfPassport: userData.sfPassport || { id: 'SF-PENDING' }
-                    }));
+                        displayName: user.displayName || user.email?.split('@')[0] || 'SF Member',
+                        photoURL: user.photoURL || null,
+                        createdAt: serverTimestamp(),
+                        lastLoginAt: serverTimestamp(),
+                        
+                        sfPassport: {
+                            id: passportId,
+                            level: 1,
+                            tier: 'Navy',
+                            experience: 0,
+                            issuedDate: serverTimestamp()
+                        },
+                        
+                        personas: {
+                            member: { active: true, activatedAt: serverTimestamp() },
+                            founder: { active: false, linkedinVerified: false },
+                            mentor: { active: false, linkedinVerified: false },
+                            host: { active: false, businessVerified: false },
+                            investor: { active: false, accreditationVerified: false },
+                            partner: { active: false, businessVerified: false }
+                        },
+                        
+                        communities: {},
+                        
+                        gamification: {
+                            sfPoints: 0,
+                            brainstormCredits: 3,
+                            dailyStreak: 0,
+                            achievements: []
+                        },
+                        
+                        verification: {
+                            email: user.emailVerified || false,
+                            linkedin: { verified: false },
+                            phone: { verified: false }
+                        },
+                        
+                        preferences: {
+                            notifications: true,
+                            emailUpdates: true,
+                            communityAlerts: true
+                        },
+                        
+                        ...additionalData
+                    };
                     
-                    hideLoadingState();
-                    showSuccessAndRedirect(userData);
-                    
-                } catch (error) {
-                    console.error('Email auth error:', error);
-                    hideLoadingState();
-                    showError(`Account creation failed: ${error.message}`);
+                    await setDoc(userRef, userData);
+                    console.log('New user profile created:', passportId);
+                    return userData;
                 }
-            });
-        }
-
-        // Show/hide email form
-        function showEmailForm() {
-            document.getElementById('email-form').classList.add('active');
-        }
-
-        function hideEmailForm() {
-            document.getElementById('email-form').classList.remove('active');
-        }
-
-        // Google Authentication (PRESERVE WORKING CODE)
-        async function authenticateWithGoogle() {
-            if (!firebaseInitialized) {
-                showError('Firebase not ready. Please try again in a moment.');
-                return;
+            } catch (error) {
+                console.error('Error creating user profile:', error);
+                throw error;
             }
-            
+        }
+
+        // Authentication Methods
+        async function authenticateWithGoogle() {
             try {
                 showLoadingState();
-                const provider = new firebase.auth.GoogleAuthProvider();
+                const provider = new GoogleAuthProvider();
                 provider.addScope('profile');
                 provider.addScope('email');
                 
-                const result = await auth.signInWithPopup(provider);
+                const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 
                 console.log('Google auth successful:', user.uid);
@@ -1404,11 +1348,10 @@
             }
         }
 
-        // LinkedIn Authentication (PRESERVE WORKING CODE)
         async function authenticateWithLinkedIn() {
             try {
                 showLoadingState();
-                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname.includes('claude.ai');
+                const isDevelopment = window.location.hostname === 'localhost';
                 
                 if (isDevelopment) {
                     await simulateLinkedInAuth();
@@ -1438,300 +1381,316 @@
         }
 
         async function simulateLinkedInAuth() {
-            const simulatedUser = {
-                uid: 'linkedin_' + Date.now(),
-                email: 'demo@linkedin.com',
-                displayName: 'LinkedIn Demo User',
-                photoURL: 'https://via.placeholder.com/150'
+            // Simulate LinkedIn authentication for development
+            const mockUser = {
+                uid: 'linkedin_' + generateRandomString(10),
+                email: 'test@linkedin.com',
+                displayName: 'LinkedIn Test User',
+                photoURL: 'https://via.placeholder.com/100',
+                emailVerified: true
             };
             
-            const userData = await createUserProfile(simulatedUser, {
+            const userData = await createUserProfile(mockUser, {
                 authProvider: 'linkedin',
-                referralSource: getReferralSource()
+                referralSource: getReferralSource(),
+                verification: {
+                    email: true,
+                    linkedin: { verified: true, connectedAt: new Date().toISOString() }
+                }
             });
             
             localStorage.setItem('sf_user', JSON.stringify({
-                uid: simulatedUser.uid,
-                email: simulatedUser.email,
-                displayName: simulatedUser.displayName,
-                photoURL: simulatedUser.photoURL,
-                sfPassport: userData.sfPassport || { id: 'SF-PENDING' }
+                uid: mockUser.uid,
+                email: mockUser.email,
+                displayName: mockUser.displayName,
+                photoURL: mockUser.photoURL,
+                sfPassport: userData.sfPassport
             }));
             
             hideLoadingState();
             showSuccessAndRedirect(userData);
         }
 
-        // QR Code Generation (PRESERVE WORKING CODE)
-        function generateHomepageQR() {
-            const qrContainer = document.getElementById('homepage-qr-code');
-            if (!qrContainer) {
-                console.log('QR container not found');
+        async function authenticateWithEmail() {
+            const emailForm = document.getElementById('emailForm');
+            if (emailForm.style.display === 'none' || !emailForm.style.display) {
+                emailForm.style.display = 'block';
                 return;
             }
-
-            // Check if QRCode library is loaded
-            if (typeof QRCode === 'undefined') {
-                console.log('QRCode library not loaded, showing fallback');
-                qrContainer.innerHTML = `
-                    <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #003554, #004a6b); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; text-align: center; margin: 0 auto;">
-                        <div>
-                            <i class="fas fa-qrcode" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
-                            QR Code<br>Available on<br>Production
-                        </div>
-                    </div>
-                `;
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                showError('Please fill in all fields.');
                 return;
             }
-
-            const currentUrl = window.location.origin;
-            const qrUrl = `${currentUrl}/qr-welcome.html`;
-            
-            console.log('Generating QR code for:', qrUrl);
             
             try {
-                QRCode.toCanvas(qrUrl, {
-                    width: 200,
-                    height: 200,
-                    colorDark: '#003554',
-                    colorLight: '#FFFFFF',
-                    margin: 1,
-                    correctLevel: QRCode.CorrectLevel.M
-                }, function (error, canvas) {
-                    if (error) {
-                        console.error('QR generation error:', error);
-                        qrContainer.innerHTML = `
-                            <div style="width: 200px; height: 200px; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-weight: 500; text-align: center; margin: 0 auto;">
-                                <div>
-                                    <i class="fas fa-qrcode" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
-                                    QR Code<br>Generation Failed
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        qrContainer.innerHTML = '';
-                        qrContainer.appendChild(canvas);
-                        console.log('QR code generated successfully');
-                    }
-                });
-            } catch (error) {
-                console.error('QR code generation failed:', error);
-                qrContainer.innerHTML = `
-                    <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #003554, #004a6b); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; text-align: center; margin: 0 auto;">
-                        <div>
-                            <i class="fas fa-mobile-alt" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
-                            Mobile Access<br>Available on<br>Production
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        // User Profile Creation (PRESERVE WORKING CODE)
-        async function createUserProfile(user, additionalData = {}) {
-            if (!firebaseInitialized) {
-                console.log('Firebase not ready, using minimal profile');
-                return {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName || 'SF Member',
-                    sfPassport: { id: 'SF-PENDING' }
-                };
-            }
-            
-            try {
-                const userRef = db.collection('users').doc(user.uid);
-                const userSnap = await userRef.get();
+                showLoadingState();
                 
-                let userData;
-                
-                if (userSnap.exists) {
-                    userData = userSnap.data();
-                    console.log('Existing user found:', userData);
-                } else {
-                    const sfPassportId = await generateSFPassportId();
-                    
-                    userData = {
-                        uid: user.uid,
-                        email: user.email,
-                        displayName: additionalData.displayName || user.displayName || 'SF Member',
-                        photoURL: user.photoURL || null,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        
-                        sfPassport: {
-                            id: sfPassportId,
-                            level: 1,
-                            tier: 'Navy',
-                            experience: 0,
-                            issuedDate: firebase.firestore.FieldValue.serverTimestamp()
-                        },
-                        
-                        personas: {
-                            member: { active: true, activatedAt: firebase.firestore.FieldValue.serverTimestamp() },
-                            founder: { active: false, linkedinVerified: false },
-                            mentor: { active: false, linkedinVerified: false },
-                            host: { active: false, businessVerified: false },
-                            investor: { active: false, accreditationVerified: false },
-                            partner: { active: false, businessVerified: false }
-                        },
-                        
-                        communities: {},
-                        
-                        gamification: {
-                            sfPoints: 100,
-                            brainstormCredits: 3,
-                            dailyStreak: 1,
-                            achievements: ['New Member']
-                        },
-                        
-                        authProvider: additionalData.authProvider || 'unknown',
-                        referralSource: additionalData.referralSource || 'direct'
-                    };
-                    
-                    await userRef.set(userData);
-                    console.log('New user profile created:', userData);
-                }
-                
-                return userData;
-                
-            } catch (error) {
-                console.error('Error creating user profile:', error);
-                // Return basic profile if database fails
-                return {
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName || 'SF Member',
-                    sfPassport: { id: await generateSFPassportId() }
-                };
-            }
-        }
-
-        // SF Passport ID Generation (PRESERVE WORKING CODE)
-        async function generateSFPassportId() {
-            const randomDigits = Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
-            const countryCode = await getCountryCode();
-            return `SF-${randomDigits}-${countryCode}`;
-        }
-
-        async function getCountryCode() {
-            try {
-                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const countryFromTimezone = getCountryFromTimezone(timezone);
-                if (countryFromTimezone) return countryFromTimezone;
-                
+                let userCredential;
                 try {
-                    const response = await fetch('https://ipapi.co/json/');
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.country_code) {
-                            return data.country_code.toUpperCase();
-                        }
+                    userCredential = await signInWithEmailAndPassword(auth, email, password);
+                } catch (signInError) {
+                    if (signInError.code === 'auth/user-not-found' || signInError.code === 'auth/wrong-password') {
+                        userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    } else {
+                        throw signInError;
                     }
-                } catch (geoError) {
-                    console.log('Geolocation API failed:', geoError);
                 }
                 
-                return 'XX';
+                const user = userCredential.user;
+                console.log('Email auth successful:', user.uid);
+                
+                const userData = await createUserProfile(user, {
+                    authProvider: 'email',
+                    referralSource: getReferralSource()
+                });
+                
+                localStorage.setItem('sf_user', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || user.email.split('@')[0],
+                    photoURL: user.photoURL,
+                    sfPassport: userData.sfPassport
+                }));
+                
+                hideLoadingState();
+                showSuccessAndRedirect(userData);
                 
             } catch (error) {
-                console.error('Error getting country code:', error);
-                return 'XX';
+                console.error('Email auth error:', error);
+                hideLoadingState();
+                
+                const errorMessages = {
+                    'auth/email-already-in-use': 'An account with this email already exists.',
+                    'auth/weak-password': 'Password should be at least 6 characters long.',
+                    'auth/invalid-email': 'Please enter a valid email address.',
+                    'auth/user-not-found': 'No account found with this email.',
+                    'auth/wrong-password': 'Incorrect password.',
+                    'auth/too-many-requests': 'Too many failed attempts. Please try again later.'
+                };
+                
+                showError(errorMessages[error.code] || `Authentication failed: ${error.message}`);
             }
         }
 
-        function getCountryFromTimezone(timezone) {
-            const timezoneMap = {
-                'Asia/Dubai': 'AE',
-                'America/New_York': 'US',
-                'America/Los_Angeles': 'US',
-                'America/Chicago': 'US',
-                'Europe/London': 'GB',
-                'Europe/Paris': 'FR',
-                'Asia/Kolkata': 'IN',
-                'Asia/Tokyo': 'JP',
-                'Australia/Sydney': 'AU'
+        // QR Code Generation with SF Logo
+        function generateHomepageQR() {
+            console.log('Generating branded QR code...');
+            const qrCodeElement = document.getElementById('qrCode');
+            
+            if (!qrCodeElement) {
+                console.error('QR code element not found');
+                return;
+            }
+            
+            // Smart QR Code that directs to qr-welcome.html for mobile registration
+            const qrTargetUrl = 'https://sociallyfounded.com/qr-welcome.html';
+            console.log('QR Target URL:', qrTargetUrl);
+            
+            // Generate QR Code using QR Server API with higher error correction for logo overlay
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrTargetUrl)}&format=png&bgcolor=FFFFFF&color=003554&qzone=1&margin=0&ecc=H`;
+            
+            console.log('QR API URL:', qrApiUrl);
+            
+            // Create container for QR code with logo overlay
+            const qrContainer = document.createElement('div');
+            qrContainer.style.cssText = `
+                position: relative;
+                width: 200px;
+                height: 200px;
+                border-radius: 15px;
+                overflow: hidden;
+                background: white;
+                box-shadow: 0 5px 20px rgba(0, 53, 84, 0.15);
+            `;
+            
+            // Create QR code image
+            const qrImg = document.createElement('img');
+            qrImg.src = qrApiUrl;
+            qrImg.alt = 'SociallyFounded QR Code - Scan to Register';
+            qrImg.style.cssText = `
+                width: 100%;
+                height: 100%;
+                display: block;
+            `;
+            
+            // Create SF logo overlay
+            const logoOverlay = document.createElement('div');
+            logoOverlay.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 50px;
+                height: 50px;
+                background: white;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 10px rgba(0, 53, 84, 0.2);
+                border: 2px solid var(--gold);
+            `;
+            
+            // Create SF logo image
+            const sfLogo = document.createElement('img');
+            sfLogo.src = 'https://sociallyfounded.com/assets/sf-logo.png';
+            sfLogo.alt = 'SF';
+            sfLogo.style.cssText = `
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+            `;
+            
+            // Handle SF logo load error
+            sfLogo.onerror = function() {
+                console.log('SF logo failed to load, using text fallback');
+                logoOverlay.innerHTML = `
+                    <div style="
+                        font-family: 'Poppins', sans-serif;
+                        font-weight: 700;
+                        font-size: 16px;
+                        color: var(--navy);
+                        text-align: center;
+                    ">SF</div>
+                `;
             };
-            return timezoneMap[timezone] || null;
-        }
-
-        // Utility Functions
-        function showLoadingState() {
-            const loadingOverlay = document.getElementById('loading-overlay');
-            loadingOverlay.classList.remove('hidden');
-        }
-
-        function hideLoadingState() {
-            const loadingOverlay = document.getElementById('loading-overlay');
-            loadingOverlay.classList.add('hidden');
-        }
-
-        function showSuccessAndRedirect(userData) {
-            showSuccess('Authentication successful! Redirecting to welcome page...');
             
-            setTimeout(() => {
-                const passportId = userData?.sfPassport?.id || 'SF-PENDING';
-                window.location.href = `/welcome/?passport=${encodeURIComponent(passportId)}`;
-            }, 1500);
-        }
-
-        function showSuccess(message) {
-            const messageEl = document.getElementById('auth-message');
-            messageEl.textContent = message;
-            messageEl.className = 'message success visible';
+            // Handle QR image load success
+            qrImg.onload = function() {
+                console.log('QR code image loaded successfully');
+                
+                // Clear existing content
+                qrCodeElement.innerHTML = '';
+                qrCodeElement.style.background = 'transparent';
+                qrCodeElement.style.padding = '10px';
+                
+                // Assemble the branded QR code
+                logoOverlay.appendChild(sfLogo);
+                qrContainer.appendChild(qrImg);
+                qrContainer.appendChild(logoOverlay);
+                qrCodeElement.appendChild(qrContainer);
+                
+                // Add instruction text below QR code
+                const instructionText = document.createElement('div');
+                instructionText.style.cssText = `
+                    margin-top: 15px;
+                    font-size: 0.8rem;
+                    color: var(--navy);
+                    text-align: center;
+                    font-weight: 500;
+                    line-height: 1.3;
+                `;
+                instructionText.innerHTML = '<strong>Scan to Register</strong><br>Get Your SF Passport';
+                qrCodeElement.appendChild(instructionText);
+                
+                // Add subtle animation to logo
+                logoOverlay.style.animation = 'logoFloat 3s ease-in-out infinite';
+                
+                // Add CSS animation for logo float
+                if (!document.getElementById('qr-animations')) {
+                    const style = document.createElement('style');
+                    style.id = 'qr-animations';
+                    style.textContent = `
+                        @keyframes logoFloat {
+                            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+                            50% { transform: translate(-50%, -50%) scale(1.05); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            };
             
-            setTimeout(() => {
-                messageEl.classList.remove('visible');
-            }, 5000);
-        }
-
-        function showError(message) {
-            const messageEl = document.getElementById('auth-message');
-            messageEl.textContent = message;
-            messageEl.className = 'message error visible';
+            // Handle QR image load error
+            qrImg.onerror = function() {
+                console.error('Failed to load QR code image');
+                // Show branded fallback
+                qrCodeElement.innerHTML = `
+                    <div style="text-align: center; color: var(--navy); background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 53, 84, 0.15);">
+                        <div style="width: 80px; height: 80px; margin: 0 auto 15px; background: var(--navy); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <img src="https://sociallyfounded.com/assets/sf-logo.png" style="width: 50px; height: 50px;" alt="SF" onerror="this.outerHTML='<div style=&quot;color: white; font-size: 24px; font-weight: bold;&quot;>SF</div>'">
+                        </div>
+                        <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 5px;">QR Code Loading...</div>
+                        <div style="font-size: 0.75rem; opacity: 0.8;">Click to open mobile registration</div>
+                    </div>
+                `;
+            };
             
-            setTimeout(() => {
-                messageEl.classList.remove('visible');
-            }, 5000);
+            // Add click handler for desktop users
+            qrCodeElement.style.cursor = 'pointer';
+            qrCodeElement.addEventListener('click', () => {
+                console.log('Branded QR code clicked - opening mobile registration');
+                window.open(qrTargetUrl, '_blank');
+            });
+            
+            // Add tooltip
+            qrCodeElement.title = 'Scan with phone camera to get your SF Passport instantly';
+            
+            console.log('Branded QR Code setup complete');
         }
 
-        function getReferralSource() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('ref') || 'homepage';
-        }
-
-        function generateRandomString(length) {
-            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < length; i++) {
-                result += charset.charAt(Math.floor(Math.random() * charset.length));
-            }
-            return result;
-        }
-
-        // Smooth scrolling for navigation links
+        // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+            // Authentication buttons
+            document.getElementById('googleAuthBtn').addEventListener('click', authenticateWithGoogle);
+            document.getElementById('linkedinAuthBtn').addEventListener('click', authenticateWithLinkedIn);
+            document.getElementById('emailAuthBtn').addEventListener('click', authenticateWithEmail);
             
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
+            // Email form submission
+            document.getElementById('emailSubmitBtn').addEventListener('click', authenticateWithEmail);
+            
+            // Generate QR code
+            generateHomepageQR();
+            
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    
-                    if (targetElement) {
-                        const headerHeight = document.querySelector('.header').offsetHeight;
-                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                        
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
                         });
                     }
                 });
             });
+            
+            // Header scroll effect
+            window.addEventListener('scroll', () => {
+                const header = document.getElementById('header');
+                if (window.scrollY > 100) {
+                    header.style.background = 'rgba(255, 255, 255, 0.98)';
+                    header.style.boxShadow = '0 2px 20px rgba(0, 53, 84, 0.1)';
+                } else {
+                    header.style.background = 'rgba(255, 255, 255, 0.95)';
+                    header.style.boxShadow = 'none';
+                }
+            });
         });
+
+        // Auth state observer
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('User is signed in:', user.uid);
+            } else {
+                console.log('User is signed out');
+            }
+        });
+
+        // Global access for debugging
+        window.SFAuth = {
+            authenticateWithGoogle,
+            authenticateWithLinkedIn,
+            authenticateWithEmail,
+            generateSFPassportId,
+            createUserProfile,
+            auth,
+            db
+        };
     </script>
 </body>
 </html>
