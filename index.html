@@ -182,12 +182,12 @@
             pointer-events: none;
         }
         
-        /* Hero Content - Flexbox 3-Column Layout (More Reliable) */
+        /* Hero Content - Flexbox 3-Column Layout (Fixed Proportions) */
         .hero-content {
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             position: relative;
             z-index: 2;
             width: 100%;
@@ -196,16 +196,17 @@
             box-sizing: border-box;
             max-width: 1400px;
             margin: 0 auto;
-            gap: 2rem;
+            gap: 3rem;
         }
         
         .hero-text {
-            flex: 1;
+            flex: 2;
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding-right: 2rem;
             min-width: 0;
+            max-width: 600px;
         }
         
         .hero-text h1 {
@@ -284,7 +285,7 @@
             border: 1px solid rgba(212, 175, 55, 0.2);
             position: relative;
             overflow: hidden;
-            width: 300px;
+            width: 280px;
             flex-shrink: 0;
         }
         
@@ -316,8 +317,8 @@
         }
         
         .qr-code {
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
             background: var(--navy);
             border-radius: 15px;
             margin: 0 auto 1rem;
@@ -360,7 +361,7 @@
             color: var(--white);
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 53, 84, 0.2);
-            width: 380px;
+            width: 350px;
             flex-shrink: 0;
         }
         
