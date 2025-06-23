@@ -39,6 +39,12 @@
             scroll-behavior: smooth;
         }
         
+        /* Scroll Snap Container */
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
         /* Header - Fixed and Professional */
         header {
             position: fixed;
@@ -116,15 +122,21 @@
             width: 100%;
         }
 
-        /* SECTION 1: HERO - Spectacular 3-Column Layout */
-        .hero {
+        /* Full Screen Sections */
+        .full-section {
             min-height: 100vh;
+            height: 100vh;
+            scroll-snap-align: start;
             display: flex;
             align-items: center;
+            justify-content: center;
+        }
+
+        /* SCROLL 1: HERO - Perfect Full Screen */
+        .hero {
             background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 50%, rgba(212, 175, 55, 0.05) 100%);
             position: relative;
             overflow: hidden;
-            padding-top: 80px;
         }
         
         .hero::before {
@@ -533,10 +545,9 @@
             line-height: 1.6;
         }
 
-        /* SECTION 3: COMMUNITIES - Already Good */
+        /* SCROLL 3: COMMUNITIES - Perfect Full Screen */
         .communities-section {
             background: var(--light-gray);
-            padding: 80px 0;
             position: relative;
         }
         
@@ -557,6 +568,10 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .communities-content {
@@ -570,14 +585,14 @@
         }
         
         .communities-header h2 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1rem;
         }
         
         .communities-header p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--dark-gray);
             max-width: 700px;
             margin: 0 auto;
@@ -587,12 +602,13 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
+            max-height: 450px;
         }
         
         .community-card {
             background: var(--white);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: 2rem;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
             transition: all 0.3s ease;
@@ -602,7 +618,7 @@
         }
         
         .community-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             box-shadow: 0 20px 50px rgba(0, 53, 84, 0.15);
         }
         
@@ -721,7 +737,7 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Responsive Design */
+        /* Responsive Design - Maintain 3 scroll concept */
         @media (max-width: 1200px) {
             .hero-content {
                 grid-template-columns: 1fr 300px 300px;
@@ -730,6 +746,15 @@
             
             .hero-text h1 {
                 font-size: 3rem;
+            }
+            
+            .diana-text h2 {
+                font-size: 3.5rem;
+            }
+            
+            .diana-avatar {
+                width: 300px;
+                height: 300px;
             }
         }
         
@@ -759,23 +784,27 @@
             }
             
             .diana-avatar {
-                width: 200px;
-                height: 200px;
-            }
-            
-            .diana-avatar-container::before {
                 width: 250px;
                 height: 250px;
             }
             
+            .diana-avatar-container::before {
+                width: 300px;
+                height: 300px;
+            }
+            
             .features-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
                 gap: 1.5rem;
             }
             
             .communities-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
                 gap: 1.5rem;
+            }
+            
+            .communities-header h2 {
+                font-size: 2.8rem;
             }
         }
         
@@ -792,13 +821,32 @@
                 font-size: 2rem;
             }
             
-            .communities-header h2 {
-                font-size: 2.5rem;
+            .diana-text h2 {
+                font-size: 2rem;
             }
             
-            .footer-content {
-                flex-direction: column;
+            .communities-header h2 {
+                font-size: 2.2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
                 gap: 1rem;
+            }
+            
+            .communities-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .diana-avatar {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .diana-avatar-container::before {
+                width: 250px;
+                height: 250px;
             }
         }
     </style>
@@ -827,7 +875,7 @@
             <div class="hero-content">
                 <!-- Left Column - Main Content -->
                 <div class="hero-text">
-                    <h2>Join the Waitlist</h2>
+                    <h1>Join the Waitlist</h1>
                     <p>SociallyFounded accelerates innovative ideas and meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.</p>
                     <div class="hero-actions">
                         <a href="#diana" class="btn btn-primary">
