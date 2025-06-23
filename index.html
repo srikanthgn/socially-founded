@@ -23,62 +23,8 @@
             --light-gray: #F5F5F5;
             --medium-gray: #E0E0E0;
             --dark-gray: #666666;
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 1rem;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            nav {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--white);
-                border-top: 1px solid var(--medium-gray);
-                box-shadow: 0 5px 15px rgba(0, 53, 84, 0.1);
-            }
-            
-            nav.open {
-                display: block;
-            }
-            
-            nav ul {
-                flex-direction: column;
-                gap: 0;
-                padding: 1rem 0;
-            }
-            
-            nav li {
-                border-bottom: 1px solid var(--light-gray);
-            }
-            
-            nav a {
-                display: block;
-                padding: 1rem 2rem;
-                color: var(--navy);
-            }
-            
-            nav a:after {
-                display: none;
-            }
-            
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                text-align: center;
-                padding: 2rem 0;
-            }
-            
-            .hero-text h1 {
-                font-size: 2rem;
-            }
         }
-        
+
         * {
             margin: 0;
             padding: 0;
@@ -238,7 +184,7 @@
         }
         
         .hero-text h1 {
-            font-size: 3.2rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1.5rem;
@@ -544,11 +490,12 @@
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             border-radius: 15px;
-            padding: 1.5rem;
+            padding: 1rem;
             border: 1px solid rgba(212, 175, 55, 0.2);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            height: auto;
         }
         
         .feature-card::before {
@@ -573,29 +520,37 @@
         }
         
         .feature-icon {
-            width: 50px;
-            height: 50px;
+            width: 25px;
+            height: 25px;
             background: var(--gold);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1rem;
             color: var(--navy);
-            font-size: 1.2rem;
+            font-size: 0.6rem;
+            flex-shrink: 0;
         }
         
         .feature-card h3 {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin: 0 0 0.5rem 0.75rem;
             color: var(--white);
+            flex: 1;
+        }
+        
+        .feature-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
         
         .feature-card p {
             opacity: 0.9;
-            line-height: 1.4;
-            font-size: 0.9rem;
+            line-height: 1.3;
+            font-size: 0.8rem;
+            margin: 0;
         }
 
         /* Communities Section - Compact */
@@ -628,7 +583,7 @@
         }
         
         .communities-header h2 {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1rem;
@@ -652,7 +607,7 @@
             background: var(--white);
             border-radius: 15px;
             padding: 1.5rem;
-            text-align: center;
+            text-align: left;
             box-shadow: 0 8px 25px rgba(0, 53, 84, 0.1);
             transition: all 0.3s ease;
             position: relative;
@@ -666,30 +621,38 @@
         }
         
         .community-icon {
-            width: 60px;
-            height: 60px;
+            width: 30px;
+            height: 30px;
             background: linear-gradient(135deg, var(--navy) 0%, var(--gold) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
             color: var(--white);
-            font-size: 1.5rem;
+            font-size: 0.8rem;
+            flex-shrink: 0;
         }
         
         .community-card h3 {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--navy);
-            margin-bottom: 0.7rem;
+            margin: 0 0 0.5rem 0.75rem;
+            flex: 1;
+        }
+        
+        .community-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
         
         .community-card p {
             color: var(--navy);
             opacity: 0.8;
-            line-height: 1.4;
-            font-size: 0.85rem;
+            line-height: 1.3;
+            font-size: 0.75rem;
+            margin: 0;
         }
 
         /* Footer */
@@ -791,11 +754,54 @@
             }
             
             .hero-text h1 {
-                font-size: 2.8rem;
+                font-size: 2rem;
             }
         }
         
         @media (max-width: 968px) {
+            .header-content {
+                padding: 1rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                border-top: 1px solid var(--medium-gray);
+                box-shadow: 0 5px 15px rgba(0, 53, 84, 0.1);
+            }
+            
+            nav.open {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 0;
+            }
+            
+            nav li {
+                border-bottom: 1px solid var(--light-gray);
+            }
+            
+            nav a {
+                display: block;
+                padding: 1rem 2rem;
+                color: var(--navy);
+            }
+            
+            nav a:after {
+                display: none;
+            }
+            
             .hero-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -804,7 +810,7 @@
             }
             
             .hero-text h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             
             .hero-text p {
@@ -841,7 +847,7 @@
             }
             
             .communities-header h2 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
             
             .communities-grid {
@@ -978,51 +984,63 @@
                     </div>
                     <div class="diana-text">
                         <h2>Meet DIANA</h2>
-                        <p>Your AI Community Catalyst</p>
+                        <p>Your AI Community Catalyst & Co-Founder</p>
                     </div>
                 </div>
                 <div class="diana-right">
                     <div class="features-grid">
                         <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-lightbulb"></i>
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h3>Idea Development</h3>
                             </div>
-                            <h3>Idea Development</h3>
                             <p>Brainstorm and validate business concepts with AI intelligence</p>
                         </div>
                         <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-hammer"></i>
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-hammer"></i>
+                                </div>
+                                <h3>Build Your MVP</h3>
                             </div>
-                            <h3>Build Your MVP</h3>
                             <p>AI-guided development from concept to Minimum Viable Product launch</p>
                         </div>
                         <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-chart-line"></i>
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3>Market Analysis</h3>
                             </div>
-                            <h3>Market Analysis</h3>
                             <p>Get insights on market opportunities and competitive landscape</p>
                         </div>
                         <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-users"></i>
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h3>Team Building</h3>
                             </div>
-                            <h3>Team Building</h3>
                             <p>Connect with co-founders, advisors, and team members</p>
                         </div>
                         <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-handshake"></i>
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                                <h3>Investor Matching</h3>
                             </div>
-                            <h3>Investor Matching</h3>
                             <p>Find and connect with relevant investors for your startup</p>
                         </div>
                         <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-certificate"></i>
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <h3>Community Validation</h3>
                             </div>
-                            <h3>Community Validation</h3>
                             <p>Expert verified mentors and community feedback</p>
                         </div>
                     </div>
@@ -1041,45 +1059,57 @@
                 </div>
                 <div class="communities-grid">
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-briefcase"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <h3>Professional</h3>
                         </div>
-                        <h3>Professional</h3>
                         <p>Build industry networks, find co-founders, validate business ideas</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-home"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h3>Neighborhood</h3>
                         </div>
-                        <h3>Neighborhood</h3>
                         <p>Discover local market opportunities, connect with potential customers</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-graduation-cap"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3>Learning</h3>
                         </div>
-                        <h3>Learning</h3>
                         <p>Develop entrepreneurial skills, learn from mentors and experts</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-heart"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3>Lifestyle & Fitness</h3>
                         </div>
-                        <h3>Lifestyle & Fitness</h3>
                         <p>Explore wellness business opportunities and healthy living communities</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-store"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <h3>Marketplace</h3>
                         </div>
-                        <h3>Marketplace</h3>
                         <p>Test your products and services, find suppliers and partners</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-rocket"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3>Entrepreneur Hub</h3>
                         </div>
-                        <h3>Entrepreneur Hub</h3>
                         <p>Connect with founders, investors, and the startup ecosystem</p>
                     </div>
                 </div>
