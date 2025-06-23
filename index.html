@@ -37,12 +37,17 @@
             box-sizing: border-box;
         }
         
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
             color: var(--navy);
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            background: var(--white);
         }
         
         /* Header - Fixed and Professional */
@@ -52,7 +57,7 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--medium-gray);
             transition: all 0.3s ease;
@@ -72,6 +77,8 @@
             align-items: center;
             gap: 0.75rem;
             transition: transform 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
         }
         
         .logo-container:hover {
@@ -112,6 +119,7 @@
             font-weight: 500;
             transition: color 0.3s ease;
             position: relative;
+            cursor: pointer;
         }
         
         nav a:hover {
@@ -133,14 +141,15 @@
             width: 100%;
         }
 
-        /* Section Base Styles */
+        /* Perfect Section Layout - Each takes exactly 100vh */
         .section {
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
+            scroll-snap-align: start;
         }
         
         .container {
@@ -148,18 +157,16 @@
             width: 100%;
             padding: 0 2rem;
             margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
 
-        /* Hero Section - Full Screen Impact */
+        /* Hero Section - Perfect Full Screen */
         .hero {
             background: linear-gradient(135deg, var(--light-gray) 0%, rgba(212, 175, 55, 0.1) 100%);
             position: relative;
-            padding: 80px 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            box-sizing: border-box;
+            padding: 0;
         }
         
         .hero::before {
@@ -175,28 +182,34 @@
             pointer-events: none;
         }
         
-        /* Hero Section - Full Width 3-Column Layout */
+        /* Hero Content - Flexbox 3-Column Layout (More Reliable) */
         .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 2rem;
+            display: flex;
+            flex-direction: row;
             align-items: center;
+            justify-content: space-between;
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 100vw;
-            padding: 0 2rem;
-            margin: 0;
+            height: 100vh;
+            padding: 80px 2rem 2rem 2rem;
+            box-sizing: border-box;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
         }
         
         .hero-text {
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            padding-right: 2rem;
+            min-width: 0;
         }
         
         .hero-text h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1.5rem;
@@ -210,18 +223,18 @@
         .hero-text p {
             font-size: 1.2rem;
             color: var(--dark-gray);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             line-height: 1.6;
         }
         
         .hero-actions {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 1rem;
         }
         
         .btn {
-            padding: 1rem 2rem;
+            padding: 1.2rem 2rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
@@ -260,17 +273,19 @@
             transform: translateY(-3px);
         }
         
-        /* QR Section */
+        /* QR Section - Fixed Width Column */
         .qr-section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 25px;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 53, 84, 0.1);
             border: 1px solid rgba(212, 175, 55, 0.2);
             position: relative;
             overflow: hidden;
+            width: 300px;
+            flex-shrink: 0;
         }
         
         .qr-section::before {
@@ -301,8 +316,8 @@
         }
         
         .qr-code {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             background: var(--navy);
             border-radius: 15px;
             margin: 0 auto 1rem;
@@ -336,15 +351,17 @@
             text-align: center;
         }
 
-        /* Auth Column in Hero */
+        /* Auth Column - Fixed Width Column */
         .hero-auth {
             background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
             backdrop-filter: blur(20px);
             border-radius: 25px;
-            padding: 2.5rem;
+            padding: 2rem;
             color: var(--white);
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 53, 84, 0.2);
+            width: 380px;
+            flex-shrink: 0;
         }
         
         .hero-auth h3 {
@@ -354,9 +371,9 @@
         }
         
         .hero-auth p {
-            font-size: 1rem;
+            font-size: 0.95rem;
             opacity: 0.9;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             line-height: 1.4;
         }
         
@@ -392,7 +409,7 @@
             color: var(--white);
         }
 
-        /* DIANA Section - Improved Layout */
+        /* DIANA Section - Perfect Full Screen */
         .diana-section {
             background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
             color: var(--white);
@@ -415,10 +432,12 @@
         .diana-content {
             display: grid;
             grid-template-columns: 400px 1fr;
-            gap: 3rem;
+            gap: 4rem;
             align-items: center;
             position: relative;
             z-index: 2;
+            width: 100%;
+            height: 100%;
         }
         
         /* Left Column - Avatar and Text */
@@ -427,11 +446,13 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            justify-content: center;
+            height: 100%;
         }
         
         .diana-avatar-container {
             position: relative;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .diana-avatar {
@@ -471,14 +492,14 @@
         }
         
         .diana-text h2 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             line-height: 1.1;
         }
         
         .diana-text p {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             opacity: 0.9;
             color: var(--gold);
             font-weight: 500;
@@ -486,28 +507,27 @@
         
         /* Right Column - Features Grid */
         .diana-right {
-            height: 400px;
             display: flex;
             align-items: center;
+            height: 100%;
         }
         
         .features-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
+            gap: 2rem;
             width: 100%;
         }
         
         .feature-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
-            border-radius: 15px;
-            padding: 1rem;
+            border-radius: 20px;
+            padding: 2rem;
             border: 1px solid rgba(212, 175, 55, 0.2);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            height: auto;
         }
         
         .feature-card::before {
@@ -532,44 +552,43 @@
         }
         
         .feature-icon {
-            width: 25px;
-            height: 25px;
+            width: 40px;
+            height: 40px;
             background: var(--gold);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--navy);
-            font-size: 0.6rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
         }
         
         .feature-card h3 {
-            font-size: 0.9rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin: 0 0 0.5rem 0.75rem;
+            margin: 1rem 0 0.5rem 0;
             color: var(--white);
-            flex: 1;
         }
         
         .feature-header {
             display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
+            align-items: flex-start;
+            flex-direction: column;
+            margin-bottom: 1rem;
         }
         
         .feature-card p {
             opacity: 0.9;
-            line-height: 1.3;
-            font-size: 0.8rem;
+            line-height: 1.4;
+            font-size: 0.95rem;
             margin: 0;
         }
 
-        /* Communities Section - Compact */
+        /* Communities Section - Perfect Full Screen */
         .communities-section {
             background: var(--light-gray);
             position: relative;
-            padding: 40px 0;
         }
         
         .communities-section::before {
@@ -588,22 +607,27 @@
         .communities-content {
             position: relative;
             z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .communities-header {
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 3rem;
         }
         
         .communities-header h2 {
-            font-size: 1.8rem;
+            font-size: 3rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1rem;
         }
         
         .communities-header p {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--navy);
             opacity: 0.8;
             max-width: 700px;
@@ -613,16 +637,15 @@
         .communities-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 0;
+            gap: 2rem;
         }
         
         .community-card {
             background: var(--white);
-            border-radius: 15px;
-            padding: 1.5rem;
+            border-radius: 20px;
+            padding: 2rem;
             text-align: left;
-            box-shadow: 0 8px 25px rgba(0, 53, 84, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -630,49 +653,42 @@
         }
         
         .community-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 53, 84, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 53, 84, 0.15);
         }
         
         .community-icon {
-            width: 30px;
-            height: 30px;
+            width: 50px;
+            height: 50px;
             background: linear-gradient(135deg, var(--navy) 0%, var(--gold) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--white);
-            font-size: 0.8rem;
+            font-size: 1.5rem;
             flex-shrink: 0;
+            margin-bottom: 1.5rem;
         }
         
         .community-card h3 {
-            font-size: 0.95rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: var(--navy);
-            margin: 0 0 0.5rem 0.75rem;
-            flex: 1;
-        }
-        
-        .community-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
         
         .community-card p {
             color: var(--navy);
             opacity: 0.8;
-            line-height: 1.3;
-            font-size: 0.75rem;
-            margin: 0;
+            line-height: 1.5;
+            font-size: 1rem;
         }
 
-        /* Footer */
+        /* Footer - Compact */
         footer {
             background: var(--light-gray);
-            padding: 1.5rem 0;
+            padding: 2rem 0;
             text-align: center;
             border-top: 1px solid rgba(0, 53, 84, 0.1);
         }
@@ -785,13 +801,34 @@
         /* Mobile Responsive Design */
         @media (max-width: 1200px) {
             .hero-content {
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 2.5rem;
-                padding: 0 2rem;
+                gap: 1.5rem;
+            }
+            
+            .qr-section {
+                width: 280px;
+            }
+            
+            .hero-auth {
+                width: 350px;
             }
             
             .hero-text h1 {
-                font-size: 2.5rem;
+                font-size: 3rem;
+            }
+            
+            .diana-content {
+                grid-template-columns: 350px 1fr;
+                gap: 3rem;
+            }
+            
+            .diana-avatar {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .diana-avatar-container::before {
+                width: 300px;
+                height: 300px;
             }
         }
         
@@ -840,28 +877,46 @@
             }
             
             .hero-content {
-                grid-template-columns: 1fr;
+                flex-direction: column;
                 gap: 2rem;
                 text-align: center;
-                padding: 2rem 1rem;
+                padding: 100px 1rem 2rem;
+                height: auto;
+                min-height: calc(100vh - 80px);
+                justify-content: center;
+            }
+            
+            .hero-text {
+                flex: none;
+                padding-right: 0;
             }
             
             .hero-text h1 {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
             }
             
             .hero-text p {
                 font-size: 1rem;
             }
             
+            .qr-section,
+            .hero-auth {
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            
             .diana-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
                 text-align: center;
+                padding: 100px 1rem 2rem;
+                height: auto;
+                min-height: calc(100vh - 80px);
             }
             
             .diana-text h2 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
             
             .diana-avatar {
@@ -874,17 +929,19 @@
                 height: 250px;
             }
             
-            .diana-right {
-                height: auto;
-            }
-            
             .features-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
+                gap: 1.5rem;
+            }
+            
+            .communities-content {
+                padding: 100px 1rem 2rem;
+                height: auto;
+                min-height: calc(100vh - 80px);
             }
             
             .communities-header h2 {
-                font-size: 1.5rem;
+                font-size: 2.5rem;
             }
             
             .communities-grid {
@@ -893,7 +950,7 @@
             }
             
             .community-card {
-                padding: 1.5rem;
+                padding: 2rem;
             }
             
             .footer-content {
@@ -913,10 +970,10 @@
     <!-- Fixed Header -->
     <header id="header">
         <div class="header-content">
-            <div class="logo-container">
+            <a href="#hero" class="logo-container" onclick="scrollToSection('hero')">
                 <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SF Logo" class="logo">
                 <span class="brand-text">Socially Founded</span>
-            </div>
+            </a>
             
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
@@ -924,9 +981,9 @@
             
             <nav id="mainNav">
                 <ul>
-                    <li><a href="#communities">Communities</a></li>
-                    <li><a href="#diana">DIANA AI</a></li>
-                    <li><a href="#about" onclick="showAboutModal()">About</a></li>
+                    <li><a onclick="scrollToSection('communities')">Communities</a></li>
+                    <li><a onclick="scrollToSection('diana')">DIANA AI</a></li>
+                    <li><a onclick="scrollToSection('hero')">Home</a></li>
                 </ul>
             </nav>
         </div>
@@ -939,11 +996,11 @@
                 <h1>Join the Waitlist</h1>
                 <p>SociallyFounded accelerates innovative ideas, meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.</p>
                 <div class="hero-actions">
-                    <a href="#diana" class="btn btn-primary">
+                    <a href="javascript:void(0)" onclick="scrollToSection('diana')" class="btn btn-primary">
                         <i class="fas fa-rocket"></i>
                         Start Building with DIANA
                     </a>
-                    <a href="#communities" class="btn btn-secondary">
+                    <a href="javascript:void(0)" onclick="scrollToSection('communities')" class="btn btn-secondary">
                         <i class="fas fa-users"></i>
                         Explore Your Communities
                     </a>
@@ -1100,57 +1157,45 @@
                 </div>
                 <div class="communities-grid">
                     <div class="community-card">
-                        <div class="community-header">
-                            <div class="community-icon">
-                                <i class="fas fa-briefcase"></i>
-                            </div>
-                            <h3>Professional</h3>
+                        <div class="community-icon">
+                            <i class="fas fa-briefcase"></i>
                         </div>
+                        <h3>Professional</h3>
                         <p>Build industry networks, find co-founders, validate business ideas</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-header">
-                            <div class="community-icon">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <h3>Neighborhood</h3>
+                        <div class="community-icon">
+                            <i class="fas fa-home"></i>
                         </div>
+                        <h3>Neighborhood</h3>
                         <p>Discover local market opportunities, connect with potential customers</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-header">
-                            <div class="community-icon">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                            <h3>Learning</h3>
+                        <div class="community-icon">
+                            <i class="fas fa-graduation-cap"></i>
                         </div>
+                        <h3>Learning</h3>
                         <p>Develop entrepreneurial skills, learn from mentors and experts</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-header">
-                            <div class="community-icon">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <h3>Lifestyle & Fitness</h3>
+                        <div class="community-icon">
+                            <i class="fas fa-heart"></i>
                         </div>
+                        <h3>Lifestyle & Fitness</h3>
                         <p>Explore wellness business opportunities and healthy living communities</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-header">
-                            <div class="community-icon">
-                                <i class="fas fa-store"></i>
-                            </div>
-                            <h3>Marketplace</h3>
+                        <div class="community-icon">
+                            <i class="fas fa-store"></i>
                         </div>
+                        <h3>Marketplace</h3>
                         <p>Test your products and services, find suppliers and partners</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-header">
-                            <div class="community-icon">
-                                <i class="fas fa-rocket"></i>
-                            </div>
-                            <h3>Entrepreneur Hub</h3>
+                        <div class="community-icon">
+                            <i class="fas fa-rocket"></i>
                         </div>
+                        <h3>Entrepreneur Hub</h3>
                         <p>Connect with founders, investors, and the startup ecosystem</p>
                     </div>
                 </div>
@@ -1195,7 +1240,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Utility Functions
+        // All Firebase functions (keeping same as original)
         function generateRandomString(length) {
             const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
             let result = '';
@@ -1686,26 +1731,6 @@
             
             generateHomepageQR();
             
-            // Smooth scrolling
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                    
-                    // Close mobile menu if open
-                    const nav = document.getElementById('mainNav');
-                    if (nav.classList.contains('open')) {
-                        toggleMobileMenu();
-                    }
-                });
-            });
-            
             // Header scroll effect
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
@@ -1713,7 +1738,7 @@
                     header.style.background = 'rgba(255, 255, 255, 0.98)';
                     header.style.boxShadow = '0 2px 20px rgba(0, 53, 84, 0.1)';
                 } else {
-                    header.style.background = 'rgba(255, 255, 255, 0.98)';
+                    header.style.background = 'rgba(255, 255, 255, 0.95)';
                     header.style.boxShadow = 'none';
                 }
             });
@@ -1751,6 +1776,164 @@
         window.showPrivacyModal = function() {
             alert('Privacy Policy:\n\nYour privacy is important to us. We collect minimal data necessary to facilitate community connections and protect your personal information with industry-standard security measures.\n\nFull privacy policy available in your account dashboard.');
         };
+
+        // Perfect Scroll Navigation Function
+        window.scrollToSection = function(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Close mobile menu if open
+                const nav = document.getElementById('mainNav');
+                const btn = document.getElementById('mobileMenuBtn');
+                if (nav.classList.contains('open')) {
+                    nav.classList.remove('open');
+                    btn.querySelector('i').className = 'fas fa-bars';
+                }
+            }
+        };
+
+        // Enhanced scroll behavior for glamorous transitions
+        let isScrolling = false;
+        let scrollTimeout;
+
+        window.addEventListener('wheel', function(e) {
+            if (isScrolling) return;
+            
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+            }, 100);
+            
+            if (!isScrolling) {
+                isScrolling = true;
+                
+                const sections = ['hero', 'diana', 'communities'];
+                const currentScroll = window.pageYOffset;
+                const windowHeight = window.innerHeight;
+                
+                let currentSection = 0;
+                
+                // Determine current section
+                sections.forEach((sectionId, index) => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        const sectionTop = section.offsetTop;
+                        if (currentScroll >= sectionTop - windowHeight / 2) {
+                            currentSection = index;
+                        }
+                    }
+                });
+                
+                // Handle scroll direction
+                if (e.deltaY > 0) {
+                    // Scrolling down
+                    if (currentSection < sections.length - 1) {
+                        scrollToSection(sections[currentSection + 1]);
+                    }
+                } else {
+                    // Scrolling up
+                    if (currentSection > 0) {
+                        scrollToSection(sections[currentSection - 1]);
+                    }
+                }
+            }
+        }, { passive: false });
+
+        // Touch/swipe support for mobile
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                const sections = ['hero', 'diana', 'communities'];
+                const currentScroll = window.pageYOffset;
+                const windowHeight = window.innerHeight;
+                
+                let currentSection = 0;
+                
+                sections.forEach((sectionId, index) => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        const sectionTop = section.offsetTop;
+                        if (currentScroll >= sectionTop - windowHeight / 2) {
+                            currentSection = index;
+                        }
+                    }
+                });
+                
+                if (diff > 0) {
+                    // Swiped up (scroll down)
+                    if (currentSection < sections.length - 1) {
+                        scrollToSection(sections[currentSection + 1]);
+                    }
+                } else {
+                    // Swiped down (scroll up)
+                    if (currentSection > 0) {
+                        scrollToSection(sections[currentSection - 1]);
+                    }
+                }
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const sections = ['hero', 'diana', 'communities'];
+            const currentScroll = window.pageYOffset;
+            const windowHeight = window.innerHeight;
+            
+            let currentSection = 0;
+            
+            sections.forEach((sectionId, index) => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    if (currentScroll >= sectionTop - windowHeight / 2) {
+                        currentSection = index;
+                    }
+                }
+            });
+            
+            switch(e.key) {
+                case 'ArrowDown':
+                case 'PageDown':
+                    e.preventDefault();
+                    if (currentSection < sections.length - 1) {
+                        scrollToSection(sections[currentSection + 1]);
+                    }
+                    break;
+                case 'ArrowUp':
+                case 'PageUp':
+                    e.preventDefault();
+                    if (currentSection > 0) {
+                        scrollToSection(sections[currentSection - 1]);
+                    }
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    scrollToSection('hero');
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    scrollToSection('communities');
+                    break;
+            }
+        });
     </script>
 </body>
 </html>
