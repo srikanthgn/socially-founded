@@ -151,10 +151,11 @@
             pointer-events: none;
         }
         
+        /* Hero Section - Compact 3-Column Layout */
         .hero-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            grid-template-columns: 2fr 1.5fr 1fr;
+            gap: 3rem;
             align-items: center;
             height: 100%;
             position: relative;
@@ -162,7 +163,7 @@
         }
         
         .hero-text h1 {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1.5rem;
@@ -174,17 +175,93 @@
         }
         
         .hero-text p {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: var(--navy);
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             opacity: 0.8;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
         .hero-actions {
             display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        /* QR Section - Compact */
+        .qr-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 53, 84, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qr-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        /* Auth Column in Hero */
+        .hero-auth {
+            background: rgba(0, 53, 84, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 2rem;
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .hero-auth h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-auth p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+        
+        .hero-auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .hero-auth-btn {
+            background: var(--white);
+            color: var(--navy);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero-auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+            background: var(--gold);
+            color: var(--white);
         }
         
         .btn {
@@ -505,147 +582,53 @@
             margin: 0 auto;
         }
         
+        /* Communities Section - Compact Grid */
         .communities-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
         
         .community-card {
             background: var(--white);
-            border-radius: 25px;
-            padding: 2.5rem;
+            border-radius: 20px;
+            padding: 2rem;
             text-align: center;
-            box-shadow: 0 15px 50px rgba(0, 53, 84, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(212, 175, 55, 0.1);
         }
         
-        .community-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--navy) 0%, var(--gold) 100%);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-            transform-origin: left;
-        }
-        
-        .community-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .community-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 25px 70px rgba(0, 53, 84, 0.15);
-        }
-        
         .community-icon {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, var(--navy) 0%, var(--gold) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1.25rem;
             color: var(--white);
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
         
         .community-card h3 {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: var(--navy);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         
         .community-card p {
             color: var(--navy);
             opacity: 0.8;
-            line-height: 1.6;
+            line-height: 1.5;
+            font-size: 0.95rem;
         }
         
-        /* Auth Section - Full Screen Call to Action */
-        .auth-section {
-            background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
-            color: var(--white);
-            position: relative;
-        }
-        
-        .auth-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 60%),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
-            pointer-events: none;
-        }
-        
-        .auth-content {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .auth-content h2 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-        
-        .auth-content p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .auth-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-        
-        .auth-btn {
-            background: var(--white);
-            color: var(--navy);
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-            min-width: 250px;
-            justify-content: center;
-        }
-        
-        .auth-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
-            background: var(--gold);
-            color: var(--white);
-        }
-        
-        .auth-btn i {
-            font-size: 1.2rem;
-        }
+        /* Remove Auth Section - moved to Hero */
         
         /* Footer */
         footer {
@@ -881,6 +864,24 @@
                         </div>
                     </div>
                 </div>
+                <div class="hero-auth">
+                    <h3>Start Your Journey</h3>
+                    <p>Join SociallyFounded, engage with communities, collaborate at sponsored venues</p>
+                    <div class="hero-auth-buttons">
+                        <a href="#" class="hero-auth-btn" id="googleAuthBtnHero">
+                            <i class="fab fa-google"></i>
+                            Google
+                        </a>
+                        <a href="#" class="hero-auth-btn" id="linkedinAuthBtnHero">
+                            <i class="fab fa-linkedin"></i>
+                            LinkedIn
+                        </a>
+                        <a href="#" class="hero-auth-btn" id="emailAuthBtnHero">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -889,22 +890,24 @@
     <section class="section diana-section" id="diana">
         <div class="container">
             <div class="diana-content">
-                <div class="diana-text">
-                    <h2>Meet DIANA - Your AI Co-Founder</h2>
-                    <p>Virtual co-founder for entrepreneurs. Incubate ideas into viable businesses.</p>
-                </div>
-                <div class="diana-avatar-container">
-                    <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" 
-                         alt="DIANA AI Avatar" 
-                         class="diana-avatar"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="diana-avatar" style="display: none; background: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%); align-items: center; justify-content: center; font-size: 4rem; color: var(--navy);">
-                        <i class="fas fa-robot"></i>
+                <div class="diana-left">
+                    <div class="diana-text">
+                        <h2>Meet DIANA - Your AI Co-Founder</h2>
+                        <p>Virtual co-founder for entrepreneurs. Incubate ideas into viable businesses.</p>
                     </div>
-                    <div class="diana-title">DIANA</div>
-                    <div class="diana-subtitle">Your AI Community Catalyst</div>
+                    <div class="diana-avatar-container">
+                        <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" 
+                             alt="DIANA AI Avatar" 
+                             class="diana-avatar"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="diana-avatar" style="display: none; background: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%); align-items: center; justify-content: center; font-size: 4rem; color: var(--navy);">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="diana-title">DIANA</div>
+                        <div class="diana-subtitle">Your AI Community Catalyst</div>
+                    </div>
                 </div>
-                <div class="diana-features">
+                <div class="diana-right">
                     <div class="features-grid">
                         <div class="feature-card">
                             <div class="feature-icon">
@@ -1005,55 +1008,6 @@
                         <h3>Entrepreneur Hub</h3>
                         <p>Connect with founders, investors, and the startup ecosystem</p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Authentication Section -->
-    <section class="section auth-section" id="auth">
-        <div class="container">
-            <div class="auth-content">
-                <h2>Start Your Journey</h2>
-                <p>Join SociallyFounded, engage with communities, collaborate at sponsored venues and make an impact</p>
-                
-                <div class="auth-buttons">
-                    <a href="#" class="auth-btn" id="googleAuthBtn">
-                        <i class="fab fa-google"></i>
-                        Continue with Google
-                    </a>
-                    <a href="#" class="auth-btn" id="linkedinAuthBtn">
-                        <i class="fab fa-linkedin"></i>
-                        Continue with LinkedIn
-                    </a>
-                    <a href="#" class="auth-btn" id="emailAuthBtn">
-                        <i class="fas fa-envelope"></i>
-                        Continue with Email
-                    </a>
-                </div>
-
-                <!-- Email Form (Hidden by default) -->
-                <div class="email-form" id="emailForm">
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary" id="emailSubmitBtn">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Sign Up with Email
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Loading State -->
-                <div class="loading" id="loadingState">
-                    <div class="spinner"></div>
-                    <p>Creating your SF Passport...</p>
                 </div>
             </div>
         </div>
@@ -1634,10 +1588,10 @@
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Authentication buttons
-            document.getElementById('googleAuthBtn').addEventListener('click', authenticateWithGoogle);
-            document.getElementById('linkedinAuthBtn').addEventListener('click', authenticateWithLinkedIn);
-            document.getElementById('emailAuthBtn').addEventListener('click', authenticateWithEmail);
+            // Authentication buttons - Hero section
+            document.getElementById('googleAuthBtnHero').addEventListener('click', authenticateWithGoogle);
+            document.getElementById('linkedinAuthBtnHero').addEventListener('click', authenticateWithLinkedIn);
+            document.getElementById('emailAuthBtnHero').addEventListener('click', authenticateWithEmail);
             
             // Email form submission
             document.getElementById('emailSubmitBtn').addEventListener('click', authenticateWithEmail);
