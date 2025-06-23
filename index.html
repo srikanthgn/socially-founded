@@ -24,7 +24,7 @@
             --medium-gray: #E0E0E0;
             --dark-gray: #666666;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
@@ -83,6 +83,17 @@
             text-decoration: none;
         }
         
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--navy);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
         nav ul {
             display: flex;
             list-style: none;
@@ -116,15 +127,28 @@
             width: 100%;
         }
 
-        /* SECTION 1: HERO - Spectacular 3-Column Layout */
-        .hero {
+        /* Section Base Styles */
+        .section {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 50%, rgba(212, 175, 55, 0.05) 100%);
+            justify-content: center;
             position: relative;
             overflow: hidden;
-            padding-top: 80px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            padding: 0 2rem;
+            margin: 0 auto;
+        }
+
+        /* Hero Section - Full Screen Impact */
+        .hero {
+            background: linear-gradient(135deg, var(--light-gray) 0%, rgba(212, 175, 55, 0.1) 100%);
+            position: relative;
+            padding: 80px 0;
         }
         
         .hero::before {
@@ -135,34 +159,32 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
-                radial-gradient(circle at 80% 20%, rgba(0, 53, 84, 0.05) 0%, transparent 60%);
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 53, 84, 0.05) 0%, transparent 50%);
             pointer-events: none;
         }
         
-        .hero-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            width: 100%;
-        }
-        
+        /* Hero Section - Equal 3-Column Layout */
         .hero-content {
             display: grid;
-            grid-template-columns: 1fr 350px 350px;
-            gap: 3rem;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
             align-items: center;
             position: relative;
             z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
         }
         
-        /* Left Column - Main Content */
         .hero-text {
-            padding-right: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .hero-text h1 {
-            font-size: 3.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1.5rem;
@@ -177,13 +199,13 @@
             font-size: 1.1rem;
             color: var(--dark-gray);
             margin-bottom: 2rem;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
         .hero-actions {
             display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
+            flex-direction: column;
+            gap: 0.75rem;
         }
         
         .btn {
@@ -198,6 +220,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
             font-family: 'Poppins', sans-serif;
         }
         
@@ -224,7 +248,7 @@
             transform: translateY(-3px);
         }
         
-        /* Center Column - QR Code */
+        /* QR Section */
         .qr-section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -235,7 +259,6 @@
             border: 1px solid rgba(212, 175, 55, 0.2);
             position: relative;
             overflow: hidden;
-            height: fit-content;
         }
         
         .qr-section::before {
@@ -268,18 +291,19 @@
         .qr-code {
             width: 200px;
             height: 200px;
-            margin: 0 auto 1rem;
+            background: var(--navy);
             border-radius: 15px;
-            overflow: hidden;
-            background: var(--white);
-            box-shadow: 0 5px 20px rgba(0, 53, 84, 0.1);
+            margin: 0 auto 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
             position: relative;
+            overflow: hidden;
         }
         
         .qr-placeholder {
-            width: 100%;
-            height: 100%;
-            background: var(--navy);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -297,9 +321,10 @@
             font-size: 0.9rem;
             font-weight: 500;
             opacity: 0.8;
+            text-align: center;
         }
-        
-        /* Right Column - Authentication */
+
+        /* Auth Column in Hero */
         .hero-auth {
             background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
             backdrop-filter: blur(20px);
@@ -308,7 +333,6 @@
             color: var(--white);
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 53, 84, 0.2);
-            height: fit-content;
         }
         
         .hero-auth h3 {
@@ -321,6 +345,7 @@
             font-size: 0.9rem;
             opacity: 0.9;
             margin-bottom: 2rem;
+            line-height: 1.4;
         }
         
         .hero-auth-buttons {
@@ -349,23 +374,17 @@
         }
         
         .hero-auth-btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
             background: var(--gold);
             color: var(--white);
         }
-        
-        .hero-auth-btn i {
-            font-size: 1.2rem;
-        }
 
-        /* SECTION 2: DIANA - Contained and Spectacular */
+        /* DIANA Section - Improved Layout */
         .diana-section {
             background: linear-gradient(135deg, var(--navy) 0%, #004a6b 100%);
             color: var(--white);
             position: relative;
-            padding: 80px 0;
-            margin: 0;
         }
         
         .diana-section::before {
@@ -381,38 +400,26 @@
             pointer-events: none;
         }
         
-        .diana-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
         .diana-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            grid-template-columns: 400px 1fr;
+            gap: 3rem;
             align-items: center;
             position: relative;
             z-index: 2;
         }
         
-        .diana-text h2 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-        }
-        
-        .diana-text p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+        /* Left Column - Avatar and Text */
+        .diana-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
         
         .diana-avatar-container {
-            text-align: center;
             position: relative;
+            margin-bottom: 1.5rem;
         }
         
         .diana-avatar {
@@ -426,7 +433,6 @@
             position: relative;
             z-index: 2;
             animation: float 6s ease-in-out infinite;
-            margin: 0 auto;
         }
         
         @keyframes float {
@@ -452,39 +458,44 @@
             100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
         }
         
-        .diana-title {
-            margin-top: 1.5rem;
-            font-size: 2rem;
-            font-weight: 600;
+        .diana-text h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
         }
         
-        .diana-subtitle {
-            color: var(--gold);
+        .diana-text p {
             font-size: 1.1rem;
+            opacity: 0.9;
+            color: var(--gold);
             font-weight: 500;
         }
         
-        /* DIANA Features Grid - Contained within section */
-        .diana-features {
-            margin-top: 4rem;
-            grid-column: 1 / -1;
+        /* Right Column - Features Grid */
+        .diana-right {
+            height: 400px;
+            display: flex;
+            align-items: center;
         }
         
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            width: 100%;
         }
         
         .feature-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
+            border-radius: 15px;
+            padding: 1rem;
             border: 1px solid rgba(212, 175, 55, 0.2);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            height: auto;
         }
         
         .feature-card::before {
@@ -504,39 +515,47 @@
         }
         
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
         }
         
         .feature-icon {
-            width: 60px;
-            height: 60px;
+            width: 25px;
+            height: 25px;
             background: var(--gold);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
             color: var(--navy);
-            font-size: 1.5rem;
+            font-size: 0.6rem;
+            flex-shrink: 0;
         }
         
         .feature-card h3 {
-            font-size: 1.3rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin: 0 0 0.5rem 0.75rem;
             color: var(--white);
+            flex: 1;
+        }
+        
+        .feature-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
         
         .feature-card p {
             opacity: 0.9;
-            line-height: 1.6;
+            line-height: 1.3;
+            font-size: 0.8rem;
+            margin: 0;
         }
 
-        /* SECTION 3: COMMUNITIES - Already Good */
+        /* Communities Section - Compact */
         .communities-section {
             background: var(--light-gray);
-            padding: 80px 0;
             position: relative;
         }
         
@@ -553,12 +572,6 @@
             pointer-events: none;
         }
         
-        .communities-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
         .communities-content {
             position: relative;
             z-index: 2;
@@ -566,19 +579,20 @@
         
         .communities-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
         
         .communities-header h2 {
-            font-size: 3rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--navy);
             margin-bottom: 1rem;
         }
         
         .communities-header p {
-            font-size: 1.2rem;
-            color: var(--dark-gray);
+            font-size: 1.1rem;
+            color: var(--navy);
+            opacity: 0.8;
             max-width: 700px;
             margin: 0 auto;
         }
@@ -586,15 +600,15 @@
         .communities-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+            gap: 1.5rem;
         }
         
         .community-card {
             background: var(--white);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: left;
+            box-shadow: 0 8px 25px rgba(0, 53, 84, 0.1);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -602,42 +616,51 @@
         }
         
         .community-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 53, 84, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 53, 84, 0.15);
         }
         
         .community-icon {
-            width: 70px;
-            height: 70px;
+            width: 30px;
+            height: 30px;
             background: linear-gradient(135deg, var(--navy) 0%, var(--gold) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
             color: var(--white);
-            font-size: 1.8rem;
+            font-size: 0.8rem;
+            flex-shrink: 0;
         }
         
         .community-card h3 {
-            font-size: 1.4rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--navy);
-            margin-bottom: 1rem;
+            margin: 0 0 0.5rem 0.75rem;
+            flex: 1;
+        }
+        
+        .community-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
         
         .community-card p {
-            color: var(--dark-gray);
-            line-height: 1.6;
-            font-size: 1rem;
+            color: var(--navy);
+            opacity: 0.8;
+            line-height: 1.3;
+            font-size: 0.75rem;
+            margin: 0;
         }
 
         /* Footer */
         footer {
-            background: var(--navy);
-            color: var(--white);
+            background: var(--light-gray);
             padding: 2rem 0;
             text-align: center;
+            border-top: 1px solid rgba(0, 53, 84, 0.1);
         }
         
         .footer-content {
@@ -650,13 +673,15 @@
         }
         
         .footer-content p {
-            opacity: 0.8;
+            color: var(--navy);
+            opacity: 0.6;
         }
         
         .social-link {
-            color: var(--white);
+            color: var(--navy);
             font-size: 1.5rem;
             transition: color 0.3s ease;
+            text-decoration: none;
         }
         
         .social-link:hover {
@@ -687,7 +712,7 @@
         .form-group input {
             width: 100%;
             padding: 1rem;
-            border: 2px solid var(--medium-gray);
+            border: 2px solid rgba(0, 53, 84, 0.1);
             border-radius: 10px;
             font-size: 1rem;
             font-family: 'Poppins', sans-serif;
@@ -721,31 +746,75 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Responsive Design */
+        /* Mobile Responsive Design */
         @media (max-width: 1200px) {
             .hero-content {
-                grid-template-columns: 1fr 300px 300px;
-                gap: 2rem;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 1.5rem;
             }
             
             .hero-text h1 {
-                font-size: 3rem;
+                font-size: 2rem;
             }
         }
         
         @media (max-width: 968px) {
+            .header-content {
+                padding: 1rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                border-top: 1px solid var(--medium-gray);
+                box-shadow: 0 5px 15px rgba(0, 53, 84, 0.1);
+            }
+            
+            nav.open {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 0;
+            }
+            
+            nav li {
+                border-bottom: 1px solid var(--light-gray);
+            }
+            
+            nav a {
+                display: block;
+                padding: 1rem 2rem;
+                color: var(--navy);
+            }
+            
+            nav a:after {
+                display: none;
+            }
+            
             .hero-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
                 text-align: center;
-            }
-            
-            .hero-text {
-                padding-right: 0;
+                padding: 2rem 0;
             }
             
             .hero-text h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
+            }
+            
+            .hero-text p {
+                font-size: 1rem;
             }
             
             .diana-content {
@@ -755,7 +824,7 @@
             }
             
             .diana-text h2 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             
             .diana-avatar {
@@ -768,32 +837,26 @@
                 height: 250px;
             }
             
+            .diana-right {
+                height: auto;
+            }
+            
             .features-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 1rem;
+            }
+            
+            .communities-header h2 {
+                font-size: 1.5rem;
             }
             
             .communities-grid {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
-        }
-        
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 1rem;
-            }
             
-            nav ul {
-                gap: 1rem;
-            }
-            
-            .hero-text h1 {
-                font-size: 2rem;
-            }
-            
-            .communities-header h2 {
-                font-size: 2.5rem;
+            .community-card {
+                padding: 1.5rem;
             }
             
             .footer-content {
@@ -811,7 +874,12 @@
                 <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SF Logo" class="logo">
                 <span class="brand-text">Socially Founded</span>
             </div>
-            <nav>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="mainNav">
                 <ul>
                     <li><a href="#communities">Communities</a></li>
                     <li><a href="#diana">DIANA AI</a></li>
@@ -821,14 +889,13 @@
         </div>
     </header>
 
-    <!-- SECTION 1: Hero Section - Spectacular 3-Column -->
-    <section class="hero" id="hero">
-        <div class="hero-container">
+    <!-- Hero Section -->
+    <section class="section hero" id="hero">
+        <div class="container">
             <div class="hero-content">
-                <!-- Left Column - Main Content -->
                 <div class="hero-text">
                     <h1>Join the Waitlist</h1>
-                    <p>SociallyFounded accelerates innovative ideas and meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.</p>
+                    <p>SociallyFounded accelerates innovative ideas, meaningful communities into a pathway for entrepreneurship with your own AI co-founder DIANA. Connect with like-minded people, discover amazing spaces, find lasting relationships, build a business, and find investors.</p>
                     <div class="hero-actions">
                         <a href="#diana" class="btn btn-primary">
                             <i class="fas fa-rocket"></i>
@@ -836,42 +903,39 @@
                         </a>
                         <a href="#communities" class="btn btn-secondary">
                             <i class="fas fa-users"></i>
-                            Explore Communities
+                            Explore Your Communities
                         </a>
                     </div>
                 </div>
-
-                <!-- Center Column - QR Code -->
                 <div class="qr-section">
                     <h3>
                         <i class="fas fa-passport" style="color: var(--gold);"></i>
                         Get Your Passport
                     </h3>
-                    <p>Scan to register instantly</p>
+                    <p style="color: var(--navy); opacity: 0.7; margin-bottom: 1rem;">register</p>
                     <div class="qr-code" id="qrCode">
+                        <!-- QR Code will be generated here by JavaScript -->
                         <div class="qr-placeholder">
                             <i class="fas fa-qrcode"></i>
                             <span>Loading QR Code...</span>
                         </div>
                     </div>
                 </div>
-
-                <!-- Right Column - Authentication -->
                 <div class="hero-auth">
                     <h3>Start Your Journey</h3>
-                    <p>Join SociallyFounded and engage with communities at sponsored venues</p>
+                    <p>Join SociallyFounded, engage with communities, collaborate at sponsored venues</p>
                     <div class="hero-auth-buttons">
                         <button class="hero-auth-btn" id="googleAuthBtnHero">
                             <i class="fab fa-google"></i>
-                            Continue with Google
+                            Google
                         </button>
                         <button class="hero-auth-btn" id="linkedinAuthBtnHero">
                             <i class="fab fa-linkedin"></i>
-                            Continue with LinkedIn
+                            LinkedIn
                         </button>
                         <button class="hero-auth-btn" id="emailAuthBtnHero">
                             <i class="fas fa-envelope"></i>
-                            Continue with Email
+                            Email
                         </button>
                     </div>
                 </div>
@@ -879,7 +943,7 @@
         </div>
 
         <!-- Hidden Email Form -->
-        <div class="hero-container">
+        <div class="container">
             <div class="email-form" id="emailForm">
                 <h3 style="margin-bottom: 1rem; color: var(--navy);">Sign Up with Email</h3>
                 <div class="form-group">
@@ -904,80 +968,90 @@
         </div>
     </section>
 
-    <!-- SECTION 2: DIANA AI Section - Contained and Spectacular -->
-    <section class="diana-section" id="diana">
-        <div class="diana-container">
+    <!-- DIANA AI Section -->
+    <section class="section diana-section" id="diana">
+        <div class="container">
             <div class="diana-content">
-                <div class="diana-text">
-                    <h2>Meet DIANA</h2>
-                    <p>Your AI Community Catalyst. Virtual co-founder for entrepreneurs. Incubate ideas into viable businesses.</p>
+                <div class="diana-left">
+                    <div class="diana-avatar-container">
+                        <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" 
+                             alt="DIANA AI Avatar" 
+                             class="diana-avatar"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="diana-avatar" style="display: none; background: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%); align-items: center; justify-content: center; font-size: 4rem; color: var(--navy);">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                    </div>
+                    <div class="diana-text">
+                        <h2>Meet DIANA</h2>
+                        <p>Your AI Community Catalyst & Co-Founder</p>
+                    </div>
                 </div>
-                <div class="diana-avatar-container">
-                    <img src="https://sociallyfounded.com/assets/diana-avatar-256.png" 
-                         alt="DIANA AI Avatar" 
-                         class="diana-avatar"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="diana-avatar" style="display: none; background: linear-gradient(135deg, var(--gold) 0%, #f4d03f 100%); align-items: center; justify-content: center; font-size: 4rem; color: var(--navy);">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="diana-title">DIANA</div>
-                    <div class="diana-subtitle">Your AI Community Catalyst</div>
-                </div>
-            </div>
-            
-            <!-- DIANA Features - Contained within section -->
-            <div class="diana-features">
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-lightbulb"></i>
+                <div class="diana-right">
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h3>Idea Development</h3>
+                            </div>
+                            <p>Brainstorm and validate business concepts with AI intelligence</p>
                         </div>
-                        <h3>Idea Development</h3>
-                        <p>Brainstorm and validate business concepts with AI intelligence</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-hammer"></i>
+                        <div class="feature-card">
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-hammer"></i>
+                                </div>
+                                <h3>Build Your MVP</h3>
+                            </div>
+                            <p>AI-guided development from concept to Minimum Viable Product launch</p>
                         </div>
-                        <h3>Build Your MVP</h3>
-                        <p>AI-guided development from concept to Minimum Viable Product</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
+                        <div class="feature-card">
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3>Market Analysis</h3>
+                            </div>
+                            <p>Get insights on market opportunities and competitive landscape</p>
                         </div>
-                        <h3>Market Analysis</h3>
-                        <p>Get insights on market opportunities and competitive landscape</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-users"></i>
+                        <div class="feature-card">
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h3>Team Building</h3>
+                            </div>
+                            <p>Connect with co-founders, advisors, and team members</p>
                         </div>
-                        <h3>Team Building</h3>
-                        <p>Connect with co-founders, advisors, and team members</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-handshake"></i>
+                        <div class="feature-card">
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                                <h3>Investor Matching</h3>
+                            </div>
+                            <p>Find and connect with relevant investors for your startup</p>
                         </div>
-                        <h3>Investor Matching</h3>
-                        <p>Find and connect with relevant investors for your startup</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-certificate"></i>
+                        <div class="feature-card">
+                            <div class="feature-header">
+                                <div class="feature-icon">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <h3>Community Validation</h3>
+                            </div>
+                            <p>Expert verified mentors and community feedback</p>
                         </div>
-                        <h3>Community Validation</h3>
-                        <p>Expert verified mentors and community feedback</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 3: Communities Section - Already Good -->
-    <section class="communities-section" id="communities">
-        <div class="communities-container">
+    <!-- Communities Section -->
+    <section class="section communities-section" id="communities">
+        <div class="container">
             <div class="communities-content">
                 <div class="communities-header">
                     <h2>Your Communities</h2>
@@ -985,46 +1059,58 @@
                 </div>
                 <div class="communities-grid">
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-briefcase"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <h3>Professional</h3>
                         </div>
-                        <h3>Professional</h3>
-                        <p>Build industry networks, find co-founders, validate business ideas with professional peers</p>
+                        <p>Build industry networks, find co-founders, validate business ideas</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-home"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h3>Neighborhood</h3>
                         </div>
-                        <h3>Neighborhood</h3>
-                        <p>Discover local market opportunities, connect with potential customers in your area</p>
+                        <p>Discover local market opportunities, connect with potential customers</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-graduation-cap"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3>Learning</h3>
                         </div>
-                        <h3>Learning</h3>
-                        <p>Develop entrepreneurial skills, learn from mentors and experts in your field</p>
+                        <p>Develop entrepreneurial skills, learn from mentors and experts</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-heart"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3>Lifestyle & Fitness</h3>
                         </div>
-                        <h3>Lifestyle & Fitness</h3>
-                        <p>Explore wellness business opportunities and connect with healthy living communities</p>
+                        <p>Explore wellness business opportunities and healthy living communities</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-store"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <h3>Marketplace</h3>
                         </div>
-                        <h3>Marketplace</h3>
-                        <p>Test your products and services, find suppliers and business partners</p>
+                        <p>Test your products and services, find suppliers and partners</p>
                     </div>
                     <div class="community-card">
-                        <div class="community-icon">
-                            <i class="fas fa-rocket"></i>
+                        <div class="community-header">
+                            <div class="community-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3>Entrepreneur Hub</h3>
                         </div>
-                        <h3>Entrepreneur Hub</h3>
-                        <p>Connect with founders, investors, and the entire startup ecosystem</p>
+                        <p>Connect with founders, investors, and the startup ecosystem</p>
                     </div>
                 </div>
             </div>
@@ -1034,8 +1120,8 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 SociallyFounded - Community Acceleration Platform</p>
-            <a href="#" class="social-link">
+            <p>&copy; 2025 SociallyFounded</p>
+            <a href="https://www.linkedin.com/company/sociallyfounded" target="_blank" class="social-link">
                 <i class="fab fa-linkedin"></i>
             </a>
         </div>
@@ -1460,8 +1546,8 @@
             const qrContainer = document.createElement('div');
             qrContainer.style.cssText = `
                 position: relative;
-                width: 200px;
-                height: 200px;
+                width: 160px;
+                height: 160px;
                 border-radius: 15px;
                 overflow: hidden;
                 background: white;
@@ -1479,8 +1565,8 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
                 background: white;
                 border-radius: 8px;
                 display: flex;
@@ -1493,10 +1579,10 @@
             const sfLogo = document.createElement('img');
             sfLogo.src = 'https://sociallyfounded.com/assets/sf-logo.png';
             sfLogo.alt = 'SF';
-            sfLogo.style.cssText = 'width: 32px; height: 32px; object-fit: contain;';
+            sfLogo.style.cssText = 'width: 24px; height: 24px; object-fit: contain;';
             
             sfLogo.onerror = function() {
-                logoOverlay.innerHTML = `<div style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; color: var(--navy);">SF</div>`;
+                logoOverlay.innerHTML = `<div style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy);">SF</div>`;
             };
             
             qrImg.onload = function() {
@@ -1513,11 +1599,11 @@
             qrImg.onerror = function() {
                 qrCodeElement.innerHTML = `
                     <div style="text-align: center; color: var(--navy); background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 53, 84, 0.15);">
-                        <div style="width: 80px; height: 80px; margin: 0 auto 15px; background: var(--navy); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <img src="https://sociallyfounded.com/assets/sf-logo.png" style="width: 50px; height: 50px;" alt="SF" onerror="this.outerHTML='<div style=color:white;font-size:24px;font-weight:bold>SF</div>'">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: var(--navy); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <img src="https://sociallyfounded.com/assets/sf-logo.png" style="width: 40px; height: 40px;" alt="SF" onerror="this.outerHTML='<div style=color:white;font-size:18px;font-weight:bold>SF</div>'">
                         </div>
-                        <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 5px;">QR Code Loading...</div>
-                        <div style="font-size: 0.75rem; opacity: 0.8;">Click to open mobile registration</div>
+                        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 5px;">QR Code Loading...</div>
+                        <div style="font-size: 0.7rem; opacity: 0.8;">Click to open registration</div>
                     </div>
                 `;
             };
@@ -1530,12 +1616,28 @@
             qrCodeElement.title = 'Scan with phone camera to get your SF Passport instantly';
         }
 
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const nav = document.getElementById('mainNav');
+            const btn = document.getElementById('mobileMenuBtn');
+            const icon = btn.querySelector('i');
+            
+            nav.classList.toggle('open');
+            
+            if (nav.classList.contains('open')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
+            }
+        }
+
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('googleAuthBtnHero').addEventListener('click', authenticateWithGoogle);
             document.getElementById('linkedinAuthBtnHero').addEventListener('click', authenticateWithLinkedIn);
             document.getElementById('emailAuthBtnHero').addEventListener('click', authenticateWithEmail);
             document.getElementById('emailSubmitBtn').addEventListener('click', authenticateWithEmail);
+            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
             
             generateHomepageQR();
             
@@ -1549,6 +1651,12 @@
                             behavior: 'smooth',
                             block: 'start'
                         });
+                    }
+                    
+                    // Close mobile menu if open
+                    const nav = document.getElementById('mainNav');
+                    if (nav.classList.contains('open')) {
+                        toggleMobileMenu();
                     }
                 });
             });
