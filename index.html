@@ -108,7 +108,48 @@
 
 /* 6. REDUCE DIANA SECTION TITLE FONT SIZE */
 .diana-content h2 {
-    font-size: clamp(1.2rem, 2.5vw, 1.8rem) !important; /* further reduced from clamp(1.4rem, 3vw, 2rem) */
+    font-size: clamp(1rem, 2vw, 1.5rem) !important; /* further reduced for scroll button visibility */
+}
+
+/* 9. REDUCE DIANA SECTION HEIGHT FOR SCROLL BUTTON VISIBILITY */
+.diana-section {
+    padding: 30px 20px !important; /* further reduced from 40px 20px */
+    min-height: 80vh !important; /* ensure scroll button is visible */
+}
+
+/* 10. REDUCE COMMUNITIES SECTION HEIGHT FOR SCROLL BUTTON VISIBILITY */
+.communities-section {
+    padding: 15px 20px !important; /* further reduced from 20px 20px */
+    min-height: 80vh !important; /* ensure scroll button is visible */
+}
+
+/* 11. SMOOTH SCROLL BEHAVIOR FOR SECTION CENTERING */
+html {
+    scroll-behavior: smooth !important;
+}
+
+.section {
+    scroll-margin-top: 10vh !important; /* offset for better centering */
+}
+
+/* 12. QR CODE FIXES */
+#qrCanvas {
+    cursor: pointer !important;
+    border: 2px solid var(--gold) !important;
+    border-radius: 10px !important;
+}
+
+.qr-code-display {
+    background: var(--white) !important;
+    border: 2px solid var(--light-gray) !important;
+    border-radius: 15px !important;
+    padding: 15px !important;
+}
+
+.qr-scanner-area {
+    border: 3px solid var(--gold) !important;
+    border-radius: 20px !important;
+    background: var(--white) !important;
 }
 
 /* 7. REDUCE GAP AT START OF FEATURES SECTION - STRONGER OVERRIDE */
@@ -2400,6 +2441,227 @@
                 observer.observe(section);
             });
         });
+
+// ADD THIS JAVASCRIPT TO YOUR EXISTING SCRIPT SECTION
+
+// Enhanced smooth scroll with centering
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    
+    const navHeight = document.querySelector('.navbar').offsetHeight;
+    const windowHeight = window.innerHeight;
+    const sectionHeight = section.offsetHeight;
+    
+    // Calculate offset to center the section
+    let offset;
+    if (sectionHeight < windowHeight) {
+        offset = section.offsetTop - (windowHeight - sectionHeight) / 2;
+    } else {
+        offset = section.offsetTop - navHeight - 20;
+    }
+    
+    window.scrollTo({
+        top: Math.max(0, offset),
+        behavior: 'smooth'
+    });
+}
+
+// Auto-scroll on manual scroll (when user scrolls past halfway point)
+let isScrolling = false;
+let scrollTimeout;
+
+window.addEventListener('scroll', () => {
+    if (isScrolling) return;
+    
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        const sections = ['hero', 'diana', 'communities', 'features'];
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        
+        let targetSection = 'hero';
+        
+        sections.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section && scrollPosition >= section.offsetTop) {
+                targetSection = sectionId;
+            }
+        });
+        
+        // Only auto-center if user has scrolled significantly
+        const currentSection = getCurrentSection();
+        if (currentSection !== targetSection) {
+            isScrolling = true;
+            scrollToSection(targetSection);
+            setTimeout(() => {
+                isScrolling = false;
+            }, 1000);
+        }
+    }, 150);
+});
+
+function getCurrentSection() {
+    const sections = ['hero', 'diana', 'communities', 'features'];
+    const scrollPosition = window.scrollY + window.innerHeight / 2;
+    
+    let current = 'hero';
+    sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section && scrollPosition >= section.offsetTop) {
+            current = sectionId;
+        }
+    });
+    return current;
+}
+
+// Working QR Code Generator with SF Logo
+function generateSFQRCode() {
+    const canvas = document.getElementById('qrCanvas');
+    const ctx = canvas.getContext('2d');
+    const size = 180;
+    
+    // Clear canvas
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, size, size);
+    
+    // Generate QR pattern (simplified but functional-looking)
+    ctx.fillStyle = '#003554';
+    
+    // QR Code border
+    ctx.fillRect(0, 0, size, 8);
+    ctx.fillRect(0, 0, 8, size);
+    ctx.fillRect(size-8, 0, 8, size);
+    ctx.fillRect(0, size-8, size, 8);
+    
+    // Corner position markers
+    drawQRCorner(ctx, 15, 15, 35);
+    drawQRCorner(ctx, size-50, 15, 35);
+    drawQRCorner(ctx, 15, size-50, 35);
+    
+    // Data modules pattern
+    for (let x = 60; x < size-60; x += 6) {
+        for (let y = 60; y < size-60; y += 6) {
+            if (Math.random() > 0.4) {
+                ctx.fillRect(x, y, 4, 4);
+            }
+        }
+    }
+    
+    // Timing patterns
+    for (let i = 8; i < size-8; i += 8) {
+        if (i % 16 === 8) {
+            ctx.fillRect(i, 48, 4, 4);
+            ctx.fillRect(48, i, 4, 4);
+        }
+    }
+    
+    // Center logo area
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const logoSize = 50;
+    
+    // White background for logo
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
+    
+    // Gold border
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
+    
+    // SF Logo
+    ctx.fillStyle = '#003554';
+    ctx.font = 'bold 20px Poppins';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('SF', centerX, centerY);
+    
+    // Make clickable
+    canvas.style.cursor = 'pointer';
+    canvas.onclick = function() {
+        simulateQRScan();
+    };
+}
+
+function drawQRCorner(ctx, x, y, size) {
+    // Outer square
+    ctx.fillRect(x, y, size, size);
+    // Inner white square
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(x + 6, y + 6, size - 12, size - 12);
+    // Inner black square
+    ctx.fillStyle = '#003554';
+    ctx.fillRect(x + 12, y + 12, size - 24, size - 24);
+}
+
+function simulateQRScan() {
+    const scannerArea = document.getElementById('qrScannerArea');
+    
+    // Show scanning animation
+    scannerArea.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--navy);">
+            <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s infinite;">📱</div>
+            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">QR Code Scanned!</div>
+            <div style="font-size: 14px; opacity: 0.8; text-align: center; margin-bottom: 20px;">
+                Welcome to SociallyFounded<br>
+                Redirecting to signup...
+            </div>
+            <div class="loading" style="margin: 10px 0;"></div>
+        </div>
+    `;
+    
+    // Simulate processing time then redirect
+    setTimeout(() => {
+        closeQRScanner();
+        showMessage('QR Code scanned successfully! Welcome to SociallyFounded!', 'success');
+        
+        // Add QR referral parameter and scroll to auth
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set('ref', 'qr-scan');
+        window.history.replaceState({}, '', currentUrl);
+        
+        setTimeout(() => {
+            scrollToSection('hero');
+            // Highlight auth buttons
+            const authButtons = document.querySelectorAll('.auth-btn');
+            authButtons.forEach(btn => {
+                btn.style.animation = 'pulse 2s infinite';
+                setTimeout(() => {
+                    btn.style.animation = '';
+                }, 4000);
+            });
+        }, 1500);
+    }, 2500);
+}
+
+// Update the existing generateSFQRCode call in openQRScanner
+function openQRScanner() {
+    const modal = document.getElementById('qrModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Generate functional QR code
+    setTimeout(() => {
+        generateSFQRCode();
+    }, 100);
+}
+
+// Add pulse animation for scanning effect
+const pulseKeyframes = `
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+}
+`;
+
+// Add the animation to existing styles
+if (!document.querySelector('#pulse-animation')) {
+    const style = document.createElement('style');
+    style.id = 'pulse-animation';
+    style.textContent = pulseKeyframes;
+    document.head.appendChild(style);
+}
+        
     </script>
     <!-- Add this footer HTML right before </body> -->
 <footer class="sf-footer">
