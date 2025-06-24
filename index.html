@@ -111,9 +111,20 @@
     font-size: clamp(1.4rem, 3vw, 2rem) !important; /* reduced from clamp(1.6rem, 3.5vw, 2.4rem) */
 }
 
-/* 7. REDUCE GAP AT START OF FEATURES SECTION */
+/* 7. REDUCE GAP AT START OF FEATURES SECTION - STRONGER OVERRIDE */
 .features-section {
     padding: 20px 20px !important; /* further reduced from 40px 20px */
+    margin-top: 0 !important; /* remove any top margin */
+}
+
+#features.section {
+    padding: 20px 20px !important; /* target by ID as well */
+    margin-top: 0 !important;
+}
+
+.section.features-section {
+    padding: 20px 20px !important; /* target by combined classes */
+    margin-top: 0 !important;
 }
 
 /* 8. INCREASE FONT SIZES OF COMMUNITY CARDS */
@@ -220,8 +231,7 @@
     }
 }
 
-        
-       /* end of sri changes */ 
+        /* end of sri changes */
         * {
             margin: 0;
             padding: 0;
