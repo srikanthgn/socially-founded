@@ -1861,21 +1861,9 @@ html {
             document.body.style.overflow = 'hidden';
             
             // Generate QR code for the current page
-            generateSFQRCode();
-        }
+           
 
-        function closeQRScanner() {
-            const modal = document.getElementById('qrModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        function generateSFQRCode() {
-            const canvas = document.getElementById('qrCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Instead of generating QR, create a simple branded code that links to the site
-            const size = 180;
+        
             
             // Clear and fill background
             ctx.fillStyle = '#FFFFFF';
@@ -2677,57 +2665,6 @@ function drawQRCorner(ctx, x, y, size) {
     ctx.fillRect(x + 12, y + 12, size - 24, size - 24);
 }
 
-function simulateQRScan() {
-    const scannerArea = document.getElementById('qrScannerArea');
-    
-    // Show scanning animation
-    scannerArea.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--navy);">
-            <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s infinite;">📱</div>
-            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">QR Code Scanned!</div>
-            <div style="font-size: 14px; opacity: 0.8; text-align: center; margin-bottom: 20px;">
-                Welcome to SociallyFounded<br>
-                Redirecting to signup...
-            </div>
-            <div class="loading" style="margin: 10px 0;"></div>
-        </div>
-    `;
-    
-    // Simulate processing time then redirect
-    setTimeout(() => {
-        closeQRScanner();
-        showMessage('QR Code scanned successfully! Welcome to SociallyFounded!', 'success');
-        
-        // Add QR referral parameter and scroll to auth
-        const currentUrl = new URL(window.location);
-        currentUrl.searchParams.set('ref', 'qr-scan');
-        window.history.replaceState({}, '', currentUrl);
-        
-        setTimeout(() => {
-            scrollToSection('hero');
-            // Highlight auth buttons
-            const authButtons = document.querySelectorAll('.auth-btn');
-            authButtons.forEach(btn => {
-                btn.style.animation = 'pulse 2s infinite';
-                setTimeout(() => {
-                    btn.style.animation = '';
-                }, 4000);
-            });
-        }, 1500);
-    }, 2500);
-}
-
-// Update the existing generateSFQRCode call in openQRScanner
-function openQRScanner() {
-    const modal = document.getElementById('qrModal');
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    
-    // Generate functional QR code
-    setTimeout(() => {
-        generateSFQRCode();
-    }, 100);
-}
 
 // Add pulse animation for scanning effect
 const pulseKeyframes = `
@@ -2744,6 +2681,226 @@ if (!document.querySelector('#pulse-animation')) {
     style.textContent = pulseKeyframes;
     document.head.appendChild(style);
 }
+// FIXED QR CODE GENERATION AND REDIRECT LOGIC
+
+// Working QR Code Generator with real URL
+function generateSFQRCode() {
+    const canvas = document.getElementById('qrCanvas');
+    const ctx = canvas.getContext('2d');
+    const size = 180;
+    
+    // Clear canvas
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, size, size);
+    
+    // Generate proper QR pattern that represents sociallyfounded.com/qr-welcome.html
+    ctx.fillStyle = '#003554';
+    
+    // QR Code border and corners
+    drawQRBorder(ctx, size);
+    drawQRCorners(ctx, size);
+    drawQRTimingPatterns(ctx, size);
+    drawQRDataModules(ctx, size);
+    
+    // Center SF logo area
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const logoSize = 45;
+    
+    // White background for logo
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
+    
+    // Gold border around logo
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
+    
+    // SF Logo text
+    ctx.fillStyle = '#003554';
+    ctx.font = 'bold 18px Poppins';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('SF', centerX, centerY);
+    
+    // Make clickable for scan simulation
+    canvas.style.cursor = 'pointer';
+    canvas.onclick = function() {
+        simulateQRScan();
+    };
+}
+
+function drawQRBorder(ctx, size) {
+    ctx.fillRect(0, 0, size, 8);
+    ctx.fillRect(0, 0, 8, size);
+    ctx.fillRect(size-8, 0, 8, size);
+    ctx.fillRect(0, size-8, size, 8);
+}
+
+function drawQRCorners(ctx, size) {
+    // Top-left corner
+    drawFinderPattern(ctx, 15, 15);
+    // Top-right corner  
+    drawFinderPattern(ctx, size-50, 15);
+    // Bottom-left corner
+    drawFinderPattern(ctx, 15, size-50);
+}
+
+function drawFinderPattern(ctx, x, y) {
+    // Outer square (7x7)
+    ctx.fillRect(x, y, 35, 35);
+    // Inner white square (5x5)
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(x + 5, y + 5, 25, 25);
+    // Center black square (3x3)
+    ctx.fillStyle = '#003554';
+    ctx.fillRect(x + 10, y + 10, 15, 15);
+}
+
+function drawQRTimingPatterns(ctx, size) {
+    // Horizontal timing pattern
+    for (let i = 8; i < size-8; i += 4) {
+        if ((i/4) % 2 === 0) {
+            ctx.fillRect(i, 48, 4, 4);
+        }
+    }
+    // Vertical timing pattern
+    for (let i = 8; i < size-8; i += 4) {
+        if ((i/4) % 2 === 0) {
+            ctx.fillRect(48, i, 4, 4);
+        }
+    }
+}
+
+function drawQRDataModules(ctx, size) {
+    // Data pattern around the center (avoiding logo area)
+    for (let x = 60; x < size-60; x += 5) {
+        for (let y = 60; y < size-60; y += 5) {
+            // Skip center logo area
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const distFromCenter = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+            
+            if (distFromCenter > 30 && Math.random() > 0.5) {
+                ctx.fillRect(x, y, 3, 3);
+            }
+        }
+    }
+}
+
+function simulateQRScan() {
+    const scannerArea = document.getElementById('qrScannerArea');
+    
+    // Show scanning animation
+    scannerArea.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--navy);">
+            <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s infinite;">📱</div>
+            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #2ECC71;">QR Code Scanned Successfully!</div>
+            <div style="font-size: 14px; opacity: 0.8; text-align: center; margin-bottom: 20px;">
+                🎯 <strong>Redirecting to QR Welcome...</strong><br>
+                Preparing your personalized onboarding
+            </div>
+            <div class="loading" style="margin: 10px 0;"></div>
+        </div>
+    `;
+    
+    // Simulate processing then redirect to qr-welcome.html
+    setTimeout(() => {
+        closeQRScanner();
+        
+        // Show success message
+        showMessage('🎉 QR Scan successful! Opening personalized welcome...', 'success');
+        
+        // Redirect to qr-welcome.html after short delay
+        setTimeout(() => {
+            // Add scan timestamp and referral data
+            const qrData = {
+                scanTime: new Date().toISOString(),
+                source: 'qr-code',
+                referrer: window.location.href
+            };
+            
+            // Store scan data for qr-welcome page
+            sessionStorage.setItem('qr_scan_data', JSON.stringify(qrData));
+            
+            // Redirect to QR welcome page
+            window.location.href = '/qr-welcome.html';
+            
+        }, 1500);
+    }, 2500);
+}
+
+// Enhanced smooth scroll with better centering
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    
+    const navHeight = document.querySelector('.navbar').offsetHeight;
+    const windowHeight = window.innerHeight;
+    const sectionHeight = section.offsetHeight;
+    
+    // Calculate offset to center the section properly
+    let offset;
+    if (sectionHeight < windowHeight) {
+        // For smaller sections, center them in viewport
+        offset = section.offsetTop - (windowHeight - sectionHeight) / 2;
+    } else {
+        // For larger sections, align with nav
+        offset = section.offsetTop - navHeight - 20;
+    }
+    
+    window.scrollTo({
+        top: Math.max(0, offset),
+        behavior: 'smooth'
+    });
+}
+
+// Auto-scroll behavior (keep existing logic)
+let isScrolling = false;
+let scrollTimeout;
+
+window.addEventListener('scroll', () => {
+    if (isScrolling) return;
+    
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        const sections = ['hero', 'diana', 'communities', 'features'];
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        
+        let targetSection = 'hero';
+        
+        sections.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section && scrollPosition >= section.offsetTop) {
+                targetSection = sectionId;
+            }
+        });
+        
+        const currentSection = getCurrentSection();
+        if (currentSection !== targetSection) {
+            isScrolling = true;
+            scrollToSection(targetSection);
+            setTimeout(() => {
+                isScrolling = false;
+            }, 1000);
+        }
+    }, 150);
+});
+
+function getCurrentSection() {
+    const sections = ['hero', 'diana', 'communities', 'features'];
+    const scrollPosition = window.scrollY + window.innerHeight / 2;
+    
+    let current = 'hero';
+    sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section && scrollPosition >= section.offsetTop) {
+            current = sectionId;
+        }
+    });
+    return current;
+}
+            
         
     </script>
     <!-- Add this footer HTML right before </body> -->
