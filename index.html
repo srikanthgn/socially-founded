@@ -57,43 +57,41 @@
     <style>
 
         /* start of sri changes */
-/* ADD ONLY THESE 3 SPECIFIC FIXES TO YOUR EXISTING CSS */
-
-/* 1. REDUCE HERO HEADER FONT SIZES */
-.hero h1 {
-    font-size: clamp(2rem, 5vw, 3rem) !important; /* reduced from clamp(2.5rem, 6vw, 4rem) */
+/* NUCLEAR OPTION - OVERRIDE EVERYTHING FOR DIANA SECTION */
+#diana {
+    padding-top: 80px !important;
+    padding-bottom: 40px !important;
+    min-height: 100vh !important;
 }
 
-.hero p {
-    font-size: clamp(0.9rem, 2vw, 1.2rem) !important; /* reduced from clamp(1.1rem, 2.5vw, 1.5rem) */
+#diana .diana-content {
+    margin-top: 40px !important;
+    padding-top: 40px !important;
 }
 
-/* 2. REDUCE DIANA SECTION EMPTY SPACE */
-.diana-section {
-    padding: 40px 20px !important; /* reduced from 60px 20px */
+#diana h2 {
+    font-size: 1.2rem !important;
+    margin-top: 20px !important;
 }
 
-/* 3. COMMUNITIES GRID - FORCE 3x2 LAYOUT WITH SMALLER FONTS */
-.communities-grid {
+#diana .scroll-indicator {
+    bottom: 30px !important;
+    position: absolute !important;
+}
+
+/* FORCE COMMUNITIES GRID TO 3x2 */
+#communities .communities-grid {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important; /* force 3 columns */
-    gap: 15px !important; /* reduced gap */
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 15px !important;
 }
 
-.community-card h3 {
-    font-size: 12px !important; /* reduced from 14px */
+#communities .community-card h3 {
+    font-size: 15px !important;
 }
 
-.community-card p {
-    font-size: 11px !important; /* reduced from 12px */
-}
-
-.community-card {
-    padding: 15px 12px !important; /* reduced from 20px 15px */
-}
-
-.community-card i {
-    font-size: 18px !important; /* reduced from 20px */
+#communities .community-card p {
+    font-size: 13px !important;
 }
 
 /* 4. REDUCE DIANA QUOTE TEXT SIZE */
@@ -310,7 +308,6 @@ html {
         grid-template-columns: repeat(2, 1fr) !important;
     }
 }
-
         /* end of sri changes */
         * {
             margin: 0;
