@@ -118,6 +118,98 @@
 .communities-section {
     padding: 60px 20px !important; /* reduced from 100px 20px */
 }
+
+/* 6. FOOTER STYLES */
+.sf-footer {
+    background: var(--navy) !important;
+    color: var(--white) !important;
+    padding: 30px 20px !important;
+    text-align: center !important;
+}
+
+.sf-footer-content {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 20px !important;
+}
+
+.sf-footer-links {
+    display: flex !important;
+    gap: 25px !important;
+    align-items: center !important;
+}
+
+.sf-footer-links a {
+    color: var(--white) !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    opacity: 0.8 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+.sf-footer-links a:hover {
+    opacity: 1 !important;
+}
+
+.sf-footer-center {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+}
+
+.sf-footer-logo {
+    height: 25px !important;
+    opacity: 0.7 !important;
+}
+
+.sf-footer-copyright {
+    font-size: 14px !important;
+    opacity: 0.7 !important;
+}
+
+.sf-footer-social {
+    display: flex !important;
+    gap: 25px !important;
+    align-items: center !important;
+}
+
+.sf-footer-social a {
+    color: var(--white) !important;
+    text-decoration: none !important;
+    font-size: 18px !important;
+    opacity: 0.8 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+.sf-footer-social a:hover {
+    opacity: 1 !important;
+}
+
+/* Mobile footer layout */
+@media (max-width: 768px) {
+    .sf-footer-content {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 15px !important;
+    }
+    
+    .sf-footer-links,
+    .sf-footer-social {
+        justify-content: center !important;
+    }
+}
+
+/* Keep mobile responsive */
+@media (max-width: 768px) {
+    .communities-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+        
         
        /* end of sri changes */ 
         * {
@@ -2290,5 +2382,28 @@
             });
         });
     </script>
+    <!-- Add this footer HTML right before </body> -->
+<footer class="sf-footer">
+    <div class="sf-footer-content">
+        <!-- Left: Legal Links -->
+        <div class="sf-footer-links">
+            <a href="/terms">Terms of Service</a>
+            <a href="/privacy">Privacy Policy</a>
+        </div>
+        
+        <!-- Center: Logo & Copyright -->
+        <div class="sf-footer-center">
+            <img src="/assets/sf-logo-white.png" alt="SociallyFounded" class="sf-footer-logo" onerror="this.src='/assets/sf-logo.png'">
+            <div class="sf-footer-copyright">© 2025 SociallyFounded</div>
+        </div>
+        
+        <!-- Right: LinkedIn -->
+        <div class="sf-footer-social">
+            <a href="https://linkedin.com/company/sociallyfounded" target="_blank">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
