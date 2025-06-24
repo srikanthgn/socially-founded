@@ -57,12 +57,43 @@
     <style>
 
         /* start of sri changes */
-/* PRECISE FIXES - SMALL ADJUSTMENTS ONLY */
+/* 1. REDUCE HERO TITLE FONT SIZE */
+.hero h1 {
+    font-size: clamp(2rem, 4.5vw, 2.8rem) !important; /* reduced from larger size */
+}
+
+/* 2. MEET DIANA - MOVE DOWN 1CM */
 #diana {
-    padding-top: 50px !important;
+    padding-top: 75px !important; /* increased from 50px - approximately 1cm more */
     padding-bottom: 20px !important;
 }
 
+/* 3. COMMUNITIES SCROLL BUTTON - MOVE DOWN 1 INCH */
+#communities .scroll-indicator {
+    bottom: 80px !important; /* moved down from cards area - approximately 1 inch */
+}
+
+/* 4. FIX MOBILE COMMUNITIES GRID */
+@media (max-width: 768px) {
+    #communities .communities-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 columns on mobile */
+        gap: 12px !important;
+    }
+    
+    #communities .community-card {
+        padding: 12px 10px !important; /* smaller padding on mobile */
+    }
+    
+    #communities .community-card h3 {
+        font-size: 13px !important; /* smaller font on mobile */
+    }
+    
+    #communities .community-card p {
+        font-size: 11px !important; /* smaller description on mobile */
+    }
+}
+
+/* KEEP OTHER WORKING FIXES */
 #diana .diana-content {
     margin-top: 0px !important;
     padding-top: 10px !important;
@@ -76,7 +107,6 @@
     bottom: 25px !important;
 }
 
-/* KEEP COMMUNITIES GRID 3x2 */
 #communities .communities-grid {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
@@ -304,8 +334,7 @@ html {
     .communities-grid {
         grid-template-columns: repeat(2, 1fr) !important;
     }
-}
-        
+}        
         /* end of sri changes */
         * {
             margin: 0;
