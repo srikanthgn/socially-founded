@@ -55,6 +55,54 @@
     </script>
 
     <style>
+
+        /* start of sri changes */
+/* ADD ONLY THESE 3 SPECIFIC FIXES TO YOUR EXISTING CSS */
+
+/* 1. REDUCE HERO HEADER FONT SIZES */
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem) !important; /* reduced from clamp(2.5rem, 6vw, 4rem) */
+}
+
+.hero p {
+    font-size: clamp(0.9rem, 2vw, 1.2rem) !important; /* reduced from clamp(1.1rem, 2.5vw, 1.5rem) */
+}
+
+/* 2. REDUCE DIANA SECTION EMPTY SPACE */
+.diana-section {
+    padding: 40px 20px !important; /* reduced from 60px 20px */
+}
+
+/* 3. COMMUNITIES GRID - FORCE 3x2 LAYOUT WITH SMALLER FONTS */
+.communities-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important; /* force 3 columns */
+    gap: 15px !important; /* reduced gap */
+}
+
+.community-card h3 {
+    font-size: 12px !important; /* reduced from 14px */
+}
+
+.community-card p {
+    font-size: 11px !important; /* reduced from 12px */
+}
+
+.community-card {
+    padding: 15px 12px !important; /* reduced from 20px 15px */
+}
+
+.community-card i {
+    font-size: 18px !important; /* reduced from 20px */
+}
+
+/* Keep mobile responsive */
+@media (max-width: 768px) {
+    .communities-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+       /* end of sri changes */ 
         * {
             margin: 0;
             padding: 0;
