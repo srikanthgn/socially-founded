@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Where Communities Accelerate</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/sf-logo.png">
+    <link rel="shortcut icon" href="/assets/sf-logo.png">
+    <meta name="theme-color" content="#003554">
     
     <!-- Brand Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1172,7 +1174,7 @@
         <div class="hero-content">
             <div class="hero-main">
                 <h1>Where Communities <span style="color: var(--gold);">Accelerate</span></h1>
-                <p>Connect with like-minded people, discover amazing spaces, and build your entrepreneurial journey with AI-powered support.</p>
+                <p>Connect with like-minded people, discover amazing spaces, and build your entrepreneurial journey.</p>
                 
                 <div class="auth-buttons">
                     <button class="auth-btn google-btn" onclick="authenticateWithGoogle()" id="googleBtn">
@@ -1206,10 +1208,8 @@
             </div>
 
             <div class="hero-stats">
-                <div style="text-align: center;">
-                    <h3 style="color: var(--gold); font-size: 24px; font-weight: 600; margin-bottom: 15px;">Join the Waitlist</h3>
-                    <p style="color: var(--white); font-size: 18px; opacity: 0.9; margin: 0;">Get Early Founder Access</p>
-                    <p style="color: var(--white); font-size: 16px; opacity: 0.8; margin: 10px 0 0 0;">Be among the first to experience community-powered entrepreneurship</p>
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <h3 style="color: var(--gold); font-size: 24px; font-weight: 600; margin-bottom: 10px;">Join the Waitlist, Get Early Founder Access</h3>
                 </div>
             </div>
         </div>
@@ -1220,44 +1220,61 @@
     </section>
 
     <!-- Footer -->
-    <footer style="background: var(--navy); color: var(--white); padding: 40px 20px; text-align: center;">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 25px;">
-            
-            <!-- Footer Links -->
-            <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap; justify-content: center;">
-                <a href="/terms" style="color: var(--white); text-decoration: none; font-size: 14px; opacity: 0.8; transition: all 0.3s ease; padding: 8px 16px; border-radius: 20px;" onmouseover="this.style.opacity='1'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.opacity='0.8'; this.style.background='transparent'">
-                    Terms of Service
-                </a>
-                <a href="/privacy" style="color: var(--white); text-decoration: none; font-size: 14px; opacity: 0.8; transition: all 0.3s ease; padding: 8px 16px; border-radius: 20px;" onmouseover="this.style.opacity='1'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.opacity='0.8'; this.style.background='transparent'">
-                    Privacy Policy
-                </a>
-                <a href="https://linkedin.com/company/sociallyfounded" target="_blank" style="color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 8px; font-size: 14px; opacity: 0.8; transition: all 0.3s ease; padding: 8px 16px; border-radius: 20px;" onmouseover="this.style.opacity='1'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.opacity='0.8'; this.style.background='transparent'">
-                    <i class="fab fa-linkedin"></i>
-                    Follow us on LinkedIn
-                </a>
-            </div>
-            
-            <!-- SF Logo -->
-            <div style="margin: 10px 0;">
-                <img src="/assets/sf-logo-white.png" alt="SociallyFounded" style="height: 30px; opacity: 0.7;" onerror="this.src='/assets/sf-logo.png'">
-            </div>
-            
-            <!-- Copyright -->
-            <div style="font-size: 14px; opacity: 0.7; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; width: 100%;">
-                © 2025 SociallyFounded. All rights reserved.
+    <footer style="background: var(--navy); color: var(--white); padding: 30px 20px; text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                
+                <!-- Left: Legal Links -->
+                <div style="display: flex; gap: 25px; align-items: center;">
+                    <a href="/terms" style="color: var(--white); text-decoration: none; font-size: 14px; opacity: 0.8; transition: opacity 0.3s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                        Terms of Service
+                    </a>
+                    <a href="/privacy" style="color: var(--white); text-decoration: none; font-size: 14px; opacity: 0.8; transition: opacity 0.3s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                        Privacy Policy
+                    </a>
+                </div>
+                
+                <!-- Center: SF Logo -->
+                <div>
+                    <img src="/assets/sf-logo-white.png" alt="SociallyFounded" style="height: 25px; opacity: 0.7;" onerror="this.src='/assets/sf-logo.png'">
+                </div>
+                
+                <!-- Right: Social & Copyright -->
+                <div style="display: flex; gap: 25px; align-items: center;">
+                    <a href="https://linkedin.com/company/sociallyfounded" target="_blank" style="color: var(--white); text-decoration: none; font-size: 18px; opacity: 0.8; transition: opacity 0.3s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <div style="font-size: 14px; opacity: 0.7;">
+                        © 2025 SociallyFounded
+                    </div>
+                </div>
             </div>
         </div>
+        
+        <!-- Mobile Layout -->
+        <style>
+            @media (max-width: 768px) {
+                footer > div > div {
+                    flex-direction: column !important;
+                    text-align: center !important;
+                    gap: 15px !important;
+                }
+                footer > div > div > div {
+                    justify-content: center !important;
+                }
+            }
+        </style>
     </footer>
 
     <!-- DIANA AI Section -->
     <section id="diana" class="section diana-section">
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
             <div style="text-align: center; margin-bottom: 60px;">
-                <h2 style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; margin-bottom: 20px; color: var(--navy);">
+                <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 20px; color: var(--navy); line-height: 1.1;">
                     Meet <span style="color: var(--gold);">DIANA</span> - Your AI Co-Founder & Community Catalyst
                 </h2>
-                <p style="font-size: clamp(1rem, 2vw, 1.25rem); color: var(--navy); opacity: 0.8; max-width: 800px; margin: 0 auto;">
-                    Virtual co-founder for entrepreneurs. Incubate ideas into viable businesses with intelligent guidance and community support.
+                <p style="font-size: clamp(1rem, 2vw, 1.25rem); color: var(--navy); opacity: 0.8; max-width: 700px; margin: 0 auto;">
+                    Incubate ideas into viable businesses with guidance and community support.
                 </p>
             </div>
 
@@ -1447,7 +1464,13 @@
             </div>
             
             <div style="margin-top: 15px; font-size: 12px; color: var(--navy); opacity: 0.6;">
-                This QR code contains: https://sociallyfounded.com?ref=qr
+                This QR code links to: https://sociallyfounded.com?ref=qr
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <button onclick="openDirectSignup()" style="background: var(--gold); color: var(--navy); border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 14px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    Sign Up Directly Instead
+                </button>
             </div>
         </div>
     </div>
@@ -1601,6 +1624,12 @@
             
             // Try to load the logo - use white version for better contrast
             logoImg.src = '/assets/sf-logo.png';
+        }
+
+        function openDirectSignup() {
+            closeQRScanner();
+            scrollToSection('hero');
+            showMessage('Choose your preferred signup method below!', 'success');
         }
 
         function showCelebrationModal(userData) {
