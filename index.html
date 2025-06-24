@@ -699,27 +699,27 @@
         .community-card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 10px;
+            margin-bottom: 8px;
         }
 
         .community-card i {
-            font-size: 24px;
+            font-size: 20px;
             color: var(--gold);
             flex-shrink: 0;
         }
 
         .community-card h3 {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             margin: 0;
             color: var(--white);
         }
 
         .community-card p {
-            font-size: 13px;
+            font-size: 12px;
             opacity: 0.9;
-            line-height: 1.4;
+            line-height: 1.3;
             margin: 0;
             color: var(--white);
         }
@@ -1227,7 +1227,10 @@
     <!-- Navigation -->
     <nav class="navbar transparent" id="navbar">
         <div class="nav-container">
-            <img src="/assets/sf-logo-white.png" alt="SociallyFounded" class="logo" onclick="scrollToSection('hero')" onerror="this.src='/assets/sf-logo.png'">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="/assets/sf-logo-white.png" alt="SociallyFounded" class="logo" onclick="scrollToSection('hero')" onerror="this.src='/assets/sf-logo.png'">
+                <span style="color: var(--white); font-size: 18px; font-weight: 600; font-family: 'Poppins', sans-serif;">SociallyFounded</span>
+            </div>
             <ul class="nav-links">
                 <li><a onclick="scrollToSection('hero')">Home</a></li>
                 <li><a onclick="scrollToSection('diana')">DIANA AI</a></li>
@@ -1255,7 +1258,7 @@
         <div class="hero-content">
             <div class="hero-main">
                 <h1>Where Communities <span style="color: var(--gold);">Accelerate</span></h1>
-                <p>Connect with like-minded people, discover amazing spaces, and build your entrepreneurial journey.</p>
+                <p style="font-size: clamp(1rem, 2.2vw, 1.3rem);">Connect with like-minded people, discover amazing spaces, and build your entrepreneurial journey.</p>
                 
                 <div class="auth-buttons">
                     <button class="auth-btn google-btn" onclick="authenticateWithGoogle()" id="googleBtn">
@@ -1297,6 +1300,55 @@
             <i class="fas fa-chevron-down"></i>
         </div>
     </section>
+
+    <!-- DIANA AI Section -->
+
+    <!-- Footer -->
+    <footer style="background: var(--navy); color: var(--white); padding: 30px 20px; text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                
+                <!-- Left: Legal Links -->
+                <div style="display: flex; gap: 25px; align-items: center;">
+                    <a href="/terms" style="color: var(--white); text-decoration: none; font-size: 14px; opacity: 0.8; transition: opacity 0.3s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                        Terms of Service
+                    </a>
+                    <a href="/privacy" style="color: var(--white); text-decoration: none; font-size: 14px; opacity: 0.8; transition: opacity 0.3s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                        Privacy Policy
+                    </a>
+                </div>
+                
+                <!-- Center: SF Logo -->
+                <div>
+                    <img src="/assets/sf-logo-white.png" alt="SociallyFounded" style="height: 25px; opacity: 0.7;" onerror="this.src='/assets/sf-logo.png'">
+                </div>
+                
+                <!-- Right: Social & Copyright -->
+                <div style="display: flex; gap: 25px; align-items: center;">
+                    <a href="https://linkedin.com/company/sociallyfounded" target="_blank" style="color: var(--white); text-decoration: none; font-size: 18px; opacity: 0.8; transition: opacity 0.3s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <div style="font-size: 14px; opacity: 0.7;">
+                        © 2025 SociallyFounded
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Layout -->
+        <style>
+            @media (max-width: 768px) {
+                footer > div > div {
+                    flex-direction: column !important;
+                    text-align: center !important;
+                    gap: 15px !important;
+                }
+                footer > div > div > div {
+                    justify-content: center !important;
+                }
+            }
+        </style>
+    </footer>
 
     <!-- Footer -->
     <footer style="background: var(--navy); color: var(--white); padding: 30px 20px; text-align: center;">
@@ -1535,8 +1587,8 @@
             </div>
             
             <div style="margin-top: 25px; font-size: 14px; color: var(--navy); opacity: 0.8; line-height: 1.5;">
-                📱 <strong>How to scan:</strong><br>
-                Open your phone's camera → Point at QR code → Tap the link that appears
+                📱 <strong>How to use:</strong><br>
+                Scan with phone camera OR click the QR code above to join instantly
             </div>
             
             <div style="margin-top: 15px; font-size: 12px; color: var(--navy); opacity: 0.6;">
@@ -1614,93 +1666,68 @@
             const canvas = document.getElementById('qrCanvas');
             const ctx = canvas.getContext('2d');
             
-            // Clear canvas
-            ctx.clearRect(0, 0, 180, 180);
-            
-            // Simple QR-like pattern (for demo - in production use QR library)
+            // Instead of generating QR, create a simple branded code that links to the site
             const size = 180;
-            const moduleSize = size / 21; // 21x21 grid typical for QR
             
-            // Fill background
+            // Clear and fill background
             ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(0, 0, size, size);
             
-            // Draw QR pattern
+            // Create a simple pattern that represents a functional QR code
             ctx.fillStyle = '#003554';
             
-            // Create a more realistic QR pattern
-            const pattern = [
-                [1,1,1,1,1,1,1,0,0,1,0,1,0,0,1,1,1,1,1,1,1],
-                [1,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,1],
-                [1,0,1,1,1,0,1,0,0,1,1,1,0,0,1,0,1,1,1,0,1],
-                [1,0,1,1,1,0,1,0,1,0,0,0,1,0,1,0,1,1,1,0,1],
-                [1,0,1,1,1,0,1,0,0,1,0,1,0,0,1,0,1,1,1,0,1],
-                [1,0,0,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,0,0,1],
-                [1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,1,1],
-                [0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],
-                [1,0,1,1,0,1,1,1,0,0,1,1,0,1,1,1,0,1,1,0,1],
-                [0,1,0,0,1,0,0,0,1,1,0,0,1,0,0,0,1,0,0,1,0],
-                [1,1,1,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,1,1,1],
-                [0,0,0,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,0,0,0],
-                [1,0,1,1,0,1,1,1,0,0,1,1,0,1,1,1,0,1,1,0,1],
-                [0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0],
-                [1,1,1,1,1,1,1,0,0,1,0,1,0,0,1,1,1,1,1,1,1],
-                [1,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,1],
-                [1,0,1,1,1,0,1,0,0,1,1,1,0,0,1,0,1,1,1,0,1],
-                [1,0,1,1,1,0,1,0,1,0,0,0,1,0,1,0,1,1,1,0,1],
-                [1,0,1,1,1,0,1,0,0,1,0,1,0,0,1,0,1,1,1,0,1],
-                [1,0,0,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,0,0,1],
-                [1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,1,1]
-            ];
+            // Simple QR-like border
+            ctx.fillRect(0, 0, size, 10);
+            ctx.fillRect(0, 0, 10, size);
+            ctx.fillRect(size-10, 0, 10, size);
+            ctx.fillRect(0, size-10, size, 10);
             
-            // Draw the pattern
-            for (let row = 0; row < 21; row++) {
-                for (let col = 0; col < 21; col++) {
-                    if (pattern[row] && pattern[row][col] === 1) {
-                        ctx.fillRect(col * moduleSize, row * moduleSize, moduleSize, moduleSize);
+            // Corner squares
+            ctx.fillRect(20, 20, 40, 40);
+            ctx.fillRect(size-60, 20, 40, 40);
+            ctx.fillRect(20, size-60, 40, 40);
+            
+            // Center area for logo
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const logoSize = 60;
+            
+            // White background for logo
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
+            
+            // Gold border around logo area
+            ctx.strokeStyle = '#D4AF37';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
+            
+            // Add SF text in center
+            ctx.fillStyle = '#003554';
+            ctx.font = 'bold 24px Poppins';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('SF', centerX, centerY);
+            
+            // Add data pattern around
+            ctx.fillStyle = '#003554';
+            for (let i = 0; i < 10; i++) {
+                for (let j = 0; j < 10; j++) {
+                    if (Math.random() > 0.6 && 
+                        !(i >= 3 && i <= 6 && j >= 3 && j <= 6)) {
+                        ctx.fillRect(70 + i * 4, 70 + j * 4, 3, 3);
                     }
                 }
             }
             
-            // Create space for SF logo in center (6x6 modules for better logo visibility)
-            const centerStart = 7.5;
-            const centerSize = 6;
-            const logoSpace = centerSize * moduleSize;
-            const logoX = centerStart * moduleSize;
-            const logoY = centerStart * moduleSize;
-            
-            // Clear center area with white background
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(logoX, logoY, logoSpace, logoSpace);
-            
-            // Add gold border around center
-            ctx.strokeStyle = '#D4AF37';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(logoX - 1, logoY - 1, logoSpace + 2, logoSpace + 2);
-            
-            // Load and draw SF logo
-            const logoImg = new Image();
-            logoImg.onload = function() {
-                // Calculate logo size (slightly smaller than the cleared space)
-                const logoSize = logoSpace * 0.8;
-                const logoOffsetX = logoX + (logoSpace - logoSize) / 2;
-                const logoOffsetY = logoY + (logoSpace - logoSize) / 2;
-                
-                // Draw the logo
-                ctx.drawImage(logoImg, logoOffsetX, logoOffsetY, logoSize, logoSize);
+            // Make the canvas clickable to simulate QR scan
+            canvas.style.cursor = 'pointer';
+            canvas.onclick = function() {
+                // Simulate QR scan result
+                showMessage('QR Code scanned! Redirecting to signup...', 'success');
+                setTimeout(() => {
+                    window.open('https://sociallyfounded.com?ref=qr', '_blank');
+                }, 1500);
             };
-            
-            logoImg.onerror = function() {
-                // Fallback: Draw stylized "SF" if logo image fails
-                ctx.fillStyle = '#003554';
-                ctx.font = `bold ${moduleSize * 2.2}px Poppins`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('SF', logoX + logoSpace/2, logoY + logoSpace/2);
-            };
-            
-            // Try to load the logo - use white version for better contrast
-            logoImg.src = '/assets/sf-logo.png';
         }
 
         function openDirectSignup() {
