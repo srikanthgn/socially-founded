@@ -57,7 +57,7 @@
     <style>
 
         /* start of sri changes */
-        /* ADD ONLY THESE 3 SPECIFIC FIXES TO YOUR EXISTING CSS */
+       /* ADD ONLY THESE 3 SPECIFIC FIXES TO YOUR EXISTING CSS */
 
 /* 1. REDUCE HERO HEADER FONT SIZES */
 .hero h1 {
@@ -113,8 +113,18 @@
 
 /* 9. REDUCE DIANA SECTION HEIGHT FOR SCROLL BUTTON VISIBILITY */
 .diana-section {
-    padding: 30px 20px !important; /* further reduced from 40px 20px */
-    min-height: 80vh !important; /* ensure scroll button is visible */
+    padding: 40px 20px !important; /* increased back from 30px to prevent truncation */
+    min-height: 85vh !important; /* slightly increased for better content fit */
+}
+
+/* 13. FIX DIANA SECTION TITLE TRUNCATION */
+.diana-content {
+    padding-top: 20px !important; /* add top padding to prevent truncation */
+}
+
+/* 14. ADJUST SCROLL BUTTON POSITION IN DIANA SECTION */
+.diana-section .scroll-indicator {
+    bottom: 40px !important; /* move scroll button down from bottom edge */
 }
 
 /* 10. REDUCE COMMUNITIES SECTION HEIGHT FOR SCROLL BUTTON VISIBILITY */
