@@ -106,9 +106,16 @@
     padding: 20px 20px !important; /* further reduced from 40px 20px */
 }
 
-/* 6. REDUCE DIANA SECTION TITLE FONT SIZE */
-.diana-content h2 {
-    font-size: clamp(1rem, 2vw, 1.4rem) !important; /* reduced significantly for better fit */
+/* 6. REDUCE DIANA SECTION TITLE FONT SIZE - STRONGER OVERRIDE */
+.diana-section h2,
+.diana-content h2,
+#diana h2 {
+    font-size: clamp(1rem, 2vw, 1.4rem) !important; /* multiple selectors for stronger override */
+}
+
+/* Additional specific override for the exact text */
+.diana-section .diana-content h2[style*="text-align: center"] {
+    font-size: clamp(1rem, 2vw, 1.4rem) !important;
 }
 
 /* 9. REDUCE DIANA SECTION HEIGHT FOR SCROLL BUTTON VISIBILITY */
