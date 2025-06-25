@@ -1033,13 +1033,11 @@
 
             redirectToWelcome() {
                 // Store success flag for welcome page
-                localStorage.setItem('sf_auth_success', 'true');
-                localStorage.setItem('sf_auth_method', 'qr_streamlined');
-                
-                // Redirect to welcome page (same as other auth methods)
-                window.location.href = '/welcome/';
-            }
-
+               redirectToWelcome() {
+    localStorage.setItem('sf_auth_success', 'true');
+    localStorage.setItem('sf_auth_method', 'qr_streamlined');
+    window.location.href = '/welcome/';
+}
             // Device fingerprinting and utility methods
             async collectDeviceFingerprint() {
                 const fingerprint = {
