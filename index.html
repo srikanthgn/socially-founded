@@ -73,58 +73,87 @@
     bottom: 60px !important; /* moved to perfect position between cards and bottom */
 }
 
-/* 4. FIX MOBILE COMMUNITIES GRID - NUCLEAR OVERRIDE */
-@media (max-width: 768px) {
+/* 4. MOBILE COMMUNITIES - NUCLEAR FORCE 2 COLUMNS */
+@media screen and (max-width: 768px) {
+    /* Target every possible selector for communities grid */
     .communities-grid,
     #communities .communities-grid,
-    .communities-content .communities-grid {
+    .communities-content .communities-grid,
+    .section .communities-grid,
+    .communities-section .communities-grid {
         display: grid !important;
-        grid-template-columns: 1fr 1fr !important; /* absolutely force 2 columns */
-        grid-template-rows: 1fr 1fr 1fr !important; /* 3 rows for 6 cards */
+        grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: repeat(3, 1fr) !important;
         gap: 8px !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow: hidden !important;
+        width: calc(100vw - 40px) !important;
+        max-width: calc(100vw - 40px) !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
         box-sizing: border-box !important;
-        padding: 0 10px !important;
+        overflow: hidden !important;
     }
     
+    /* Force card sizing */
     .community-card,
     #communities .community-card,
-    .communities-content .community-card {
-        padding: 12px 8px !important;
-        min-width: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
+    .communities-content .community-card,
+    .communities-grid .community-card {
+        width: calc(50% - 4px) !important;
+        max-width: calc(50% - 4px) !important;
+        min-width: calc(50% - 4px) !important;
+        padding: 10px 6px !important;
+        margin: 0 !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
         word-wrap: break-word !important;
+        text-overflow: ellipsis !important;
     }
     
+    /* Mobile text sizing */
     .community-card h3,
-    #communities .community-card h3 {
-        font-size: 13px !important;
+    #communities .community-card h3,
+    .communities-grid .community-card h3 {
+        font-size: 12px !important;
         line-height: 1.2 !important;
+        margin-bottom: 4px !important;
     }
     
     .community-card p,
-    #communities .community-card p {
-        font-size: 11px !important;
+    #communities .community-card p,
+    .communities-grid .community-card p {
+        font-size: 10px !important;
         line-height: 1.3 !important;
+        margin: 0 !important;
     }
     
     .community-card i,
-    #communities .community-card i {
-        font-size: 18px !important;
-        margin-bottom: 5px !important;
+    #communities .community-card i,
+    .communities-grid .community-card i {
+        font-size: 16px !important;
+        margin-bottom: 4px !important;
     }
     
-    /* Force mobile container width */
-    .communities-content {
+    /* Force container constraints */
+    .communities-content,
+    #communities .communities-content {
         width: 100% !important;
         max-width: 100% !important;
-        padding: 0 !important;
+        padding: 0 20px !important;
+        margin: 0 auto !important;
         overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Prevent any horizontal scrolling */
+    body {
+        overflow-x: hidden !important;
+    }
+    
+    .communities-section,
+    #communities {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
 }
 
@@ -143,18 +172,20 @@
 }
 
 /* DESKTOP COMMUNITIES GRID */
-#communities .communities-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 15px !important;
-}
+@media screen and (min-width: 769px) {
+    #communities .communities-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+    }
 
-#communities .community-card h3 {
-    font-size: 15px !important;
-}
+    #communities .community-card h3 {
+        font-size: 15px !important;
+    }
 
-#communities .community-card p {
-    font-size: 13px !important;
+    #communities .community-card p {
+        font-size: 13px !important;
+    }
 }
 
 /* 4. REDUCE DIANA QUOTE TEXT SIZE */
@@ -371,7 +402,6 @@ html {
         grid-template-columns: repeat(2, 1fr) !important;
     }
 }
-        
         /* end of sri changes */
         * {
             margin: 0;
