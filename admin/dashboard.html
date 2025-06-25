@@ -1219,30 +1219,13 @@
             event.target.closest('.nav-item').classList.add('active');
         }
 
-        function setTimeRange(range) {
-            // Update time range filters
-            const buttons = document.querySelectorAll('.filter-button');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            console.log('Time range set to:', range);
-            // Implement time range filtering logic here
-        }
-
-        function refreshAuthStats() {
-            console.log('Refreshing authentication statistics...');
-            // Implement auth stats refresh here
-        }
-
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
-                // Implement logout logic
                 window.location.href = '/';
             }
         }
 
         function showErrorMessage(message) {
-            // Create and show error notification
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
@@ -1264,28 +1247,173 @@
             }, 5000);
         }
 
-        // Auto-refresh dashboard every 5 minutes
-        setInterval(() => {
-            if (window.refreshMetrics) {
-                window.refreshMetrics();
+        // User Management Functions
+        function refreshUserTable() {
+            console.log('🔄 Refreshing user table...');
+            document.getElementById('loading-indicator').style.display = 'block';
+            document.getElementById('users-table-container').style.display = 'none';
+            if (window.loadUserMetrics) {
+                window.loadUserMetrics();
             }
-        }, 5 * 60 * 1000);
+        }
 
-        // Handle responsive sidebar
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.admin-sidebar');
-            sidebar.classList.toggle('open');
+        function exportUsers() {
+            console.log('📥 Exporting users to CSV...');
+            
+            try {
+                const tableContainer = document.getElementById('users-table-container');
+                const table = tableContainer.querySelector('table');
+                
+                if (!table || tableContainer.style.display === 'none') {
+                    alert('No user data loaded to export. Please wait for data to load first.');
+                    return;
+                }
+                
+                let csv = [];
+                
+                // Add header row
+                const headers = ['Name', 'SF Passport', 'Email', 'Country', 'Signed Up', 'Last Active', 'Auth Method'];
+                csv.push(headers.map(h => `"${h}"`).join(','));
+                
+                // Add data rows
+                const rows = table.querySelectorAll('tbody tr');
+                
+                if (rows.length === 0) {
+                    alert('No user data to export');
+                    return;
+                }
+                
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length >= 7) { // Skip the Actions column
+                        const rowData = [];
+                        for (let i = 0; i < 7; i++) {
+                            let cellText = cells[i].innerText.replace(/"/g, '""').trim();
+                            rowData.push(`"${cellText}"`);
+                        }
+                        csv.push(rowData.join(','));
+                    }
+                });
+                
+                // Create and download CSV file
+                const csvContent = csv.join('\n');
+                const csvFile = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const downloadLink = document.createElement('a');
+                
+                const fileName = `sociallyfounded-users-${new Date().toISOString().split('T')[0]}.csv`;
+                downloadLink.download = fileName;
+                downloadLink.href = window.URL.createObjectURL(csvFile);
+                downloadLink.style.display = 'none';
+                
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                console.log(`✅ Exported ${rows.length} users to ${fileName}`);
+                
+            } catch (error) {
+                console.error('❌ CSV export error:', error);
+                alert('Error exporting CSV: ' + error.message);
+            }
+        }
+
+        async function deleteUser(userId, userName) {
+            console.log('🗑️ Delete button clicked for:', userId, userName);
+            
+            if (!confirm(`Are you sure you want to DELETE user "${userName}"?\n\nThis action cannot be undone!`)) {
+                return;
+            }
+            
+            try {
+                console.log(`🗑️ Deleting user: ${userId} (${userName})`);
+                
+                if (!window.db) {
+                    throw new Error('Database not initialized');
+                }
+                
+                // Import deleteDoc function
+                const { deleteDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js');
+                
+                // Delete user document from Firestore
+                await deleteDoc(doc(window.db, 'users', userId));
+                
+                console.log('✅ User deleted successfully');
+                alert(`User "${userName}" has been deleted successfully.`);
+                
+                // Refresh the table
+                refreshUserTable();
+                
+            } catch (error) {
+                console.error('❌ Error deleting user:', error);
+                alert(`Failed to delete user: ${error.message}`);
+            }
+        }
+
+        async function editPassport(userId, userName, currentPassport) {
+            console.log('✏️ Edit button clicked for:', userId, userName, currentPassport);
+            
+            const newPassport = prompt(`Edit SF Passport for "${userName}"\n\nCurrent: ${currentPassport}\n\nEnter new passport ID (format: SF-XXXXXXX-XX):`, currentPassport);
+            
+            if (!newPassport || newPassport === currentPassport) {
+                return;
+            }
+            
+            // Validate passport format
+            const passportRegex = /^SF-\d{7}-[A-Z]{2}$/;
+            if (!passportRegex.test(newPassport)) {
+                alert('Invalid passport format. Please use: SF-XXXXXXX-XX\n(7 digits followed by 2 letters)');
+                return;
+            }
+            
+            try {
+                console.log(`✏️ Updating passport for user: ${userId} (${userName})`);
+                console.log(`Old: ${currentPassport} → New: ${newPassport}`);
+                
+                if (!window.db) {
+                    throw new Error('Database not initialized');
+                }
+                
+                // Import updateDoc function
+                const { updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js');
+                
+                // Update user document in Firestore
+                const userRef = doc(window.db, 'users', userId);
+                
+                // Extract country code from new passport
+                const countryCode = newPassport.split('-')[2];
+                
+                await updateDoc(userRef, {
+                    'sfPassport.id': newPassport,
+                    'passportId': newPassport,
+                    'sfPassport.countryCode': countryCode,
+                    'updatedAt': new Date()
+                });
+                
+                console.log('✅ Passport updated successfully');
+                alert(`Passport updated successfully!\nOld: ${currentPassport}\nNew: ${newPassport}`);
+                
+                // Refresh the table
+                refreshUserTable();
+                
+            } catch (error) {
+                console.error('❌ Error updating passport:', error);
+                alert(`Failed to update passport: ${error.message}`);
+            }
         }
 
         // Initialize dashboard on load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('SociallyFounded Admin Dashboard loaded');
+            console.log('🚀 SociallyFounded Admin Dashboard loading...');
             
             // Set fallback logo if main logo fails
             const logo = document.getElementById('logo');
-            logo.onerror = function() {
-                this.style.display = 'none';
-            };
+            if (logo) {
+                logo.onerror = function() {
+                    this.style.display = 'none';
+                };
+            }
+            
+            console.log('✅ Admin dashboard UI ready');
         });
     </script>
 </body>
