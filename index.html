@@ -45,21 +45,6 @@
         window.getDoc = getDoc;
         window.serverTimestamp = serverTimestamp;
 
-function showCelebrationModal(userData) {
-    console.log('🎉 Authentication successful!', userData);
-    
-    // Simple redirect to welcome page instead of modal
-    setTimeout(() => {
-        window.location.href = '/welcome/';
-    }, 1000);
-}
-
-// Alternative: Simple success redirect without modal
-function showSuccessAndRedirect(userData) {
-    console.log('✅ Redirecting to welcome page...');
-    window.location.href = '/welcome/';
-}
-        
 
         // Initialize Firebase and set ready flag
         window.firebaseReady = true;
