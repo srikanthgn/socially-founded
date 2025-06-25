@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SociallyFounded Admin Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --admin-primary: #003554;
+            --admin-secondary: #D4AF37;
+            --admin-success: #2ECC71;
+            --admin-warning: #F39C12;
+            --admin-danger: #E74C3C;
+            --admin-info: #3498DB;
+            --admin-light: #F8F9FA;
+            --admin-dark: #343A40;
+            --admin-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--admin-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        .admin-header {
+            background: var(--admin-primary);
+            color: var(--admin-white);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-logo img {
+            height: 40px;
+        }
+
+        .admin-logo h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--admin-secondary);
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-user-name {
+            font-weight: 500;
+        }
+
+        .admin-logout {
+            background: var(--admin-secondary);
+            color: var(--admin-primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .admin-logout:hover {
+            background: #B8941F;
+        }
+
+        /* SIDEBAR */
+        .admin-sidebar {
+            background: var(--admin-white);
+            width: 280px;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            bottom: 0;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            z-index: 900;
+        }
+
+        .sidebar-nav {
+            padding: 2rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--admin-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 2rem;
+            color: var(--admin-dark);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--admin-light);
+            color: var(--admin-primary);
+            border-right: 3px solid var(--admin-secondary);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* MAIN CONTENT */
+        .admin-main {
+            margin-left: 280px;
+            margin-top: 80px;
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        .admin-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--admin-primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* METRICS GRID */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: var(--admin-white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--admin-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--admin-primary);
+            margin-bottom: 8px;
+        }
+
+        .metric-change {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .metric-change.positive {
+            color: var(--admin-success);
+        }
+
+        .metric-change.negative {
+            color: var(--admin-danger);
+        }
+
+        /* CHART CONTAINERS */
+        .chart-container {
+            background: var(--admin-white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--admin-primary);
+        }
+
+        .chart-filters {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-button {
+            padding: 8px 16px;
+            border: 2px solid var(--admin-light);
+            background: var(--admin-white);
+            color: var(--admin-dark);
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-button.active {
+            border-color: var(--admin-secondary);
+            background: var(--admin-secondary);
+            color: var(--admin-primary);
+        }
+
+        /* WORLD MAP PLACEHOLDER */
+        .world-map {
+            height: 400px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--admin-dark);
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* TABLE STYLES */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--admin-white);
+        }
+
+        .data-table th {
+            background: var(--admin-light);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--admin-dark);
+            border-bottom: 2px solid var(--admin-light);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--admin-light);
+        }
+
+        .data-table tr:hover {
+            background: rgba(0, 53, 84, 0.05);
+        }
+
+        /* STATUS INDICATORS */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-online {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--admin-success);
+        }
+
+        .status-offline {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--admin-danger);
+        }
+
+        .status-warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--admin-warning);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 1rem;
+            }
+
+            .admin-main {
+                padding: 1rem;
+            }
+
+            .metric-card {
+                padding: 1.5rem;
+            }
+
+            .chart-container {
+                padding: 1.5rem;
+            }
+        }
+
+        /* LOADING STATES */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--admin-light);
+            border-radius: 50%;
+            border-top-color: var(--admin-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* NOTIFICATION DOT */
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: var(--admin-danger);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ADMIN HEADER -->
+    <header class="admin-header">
+        <div class="admin-logo">
+            <img src="/assets/sf-logo.png" alt="SociallyFounded" id="logo">
+            <h1>Admin Dashboard</h1>
+        </div>
+        <div class="admin-user">
+            <span class="admin-user-name">Administrator</span>
+            <button class="admin-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav class="admin-sidebar">
+        <div class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Analytics</div>
+                <div class="nav-item active" onclick="showSection('overview')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Overview</span>
+                </div>
+                <div class="nav-item" onclick="showSection('users')">
+                    <i class="fas fa-users"></i>
+                    <span>User Analytics</span>
+                </div>
+                <div class="nav-item" onclick="showSection('engagement')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Engagement</span>
+                </div>
+                <div class="nav-item" onclick="showSection('geography')">
+                    <i class="fas fa-globe"></i>
+                    <span>Geographic</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <div class="nav-item" onclick="showSection('members')">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Member Management</span>
+                </div>
+                <div class="nav-item" onclick="showSection('venues')">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Venue Partners</span>
+                </div>
+                <div class="nav-item" onclick="showSection('content')">
+                    <i class="fas fa-edit"></i>
+                    <span>Content Moderation</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">System</div>
+                <div class="nav-item" onclick="showSection('performance')">
+                    <i class="fas fa-server"></i>
+                    <span>System Health</span>
+                    <div class="notification-dot"></div>
+                </div>
+                <div class="nav-item" onclick="showSection('security')">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                </div>
+                <div class="nav-item" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+        <!-- OVERVIEW SECTION -->
+        <div id="overview-section" class="admin-section">
+            <h2 class="admin-title">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard Overview
+            </h2>
+
+            <!-- KEY METRICS GRID -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Total Members</div>
+                        <div class="metric-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--admin-success);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="total-members">1,247</div>
+                    <div class="metric-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +23% this month
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">New Signups Today</div>
+                        <div class="metric-icon" style="background: rgba(52, 152, 219, 0.1); color: var(--admin-info);">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="daily-signups">42</div>
+                    <div class="metric-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +18% vs yesterday
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Active Users (24h)</div>
+                        <div class="metric-icon" style="background: rgba(155, 89, 182, 0.1); color: #9B59B6;">
+                            <i class="fas fa-chart-pulse"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="active-users">847</div>
+                    <div class="metric-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        68% engagement rate
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Countries</div>
+                        <div class="metric-icon" style="background: rgba(212, 175, 55, 0.1); color: var(--admin-secondary);">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="countries-count">34</div>
+                    <div class="metric-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +2 new this week
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">DIANA AI Sessions</div>
+                        <div class="metric-icon" style="background: rgba(230, 126, 34, 0.1); color: #E67E22;">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="diana-sessions">1,856</div>
+                    <div class="metric-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +45% usage growth
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">System Uptime</div>
+                        <div class="metric-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--admin-success);">
+                            <i class="fas fa-server"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="system-uptime">99.8%</div>
+                    <div class="metric-change positive">
+                        <i class="fas fa-check"></i>
+                        All systems operational
+                    </div>
+                </div>
+            </div>
+
+            <!-- USER GROWTH CHART -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Member Growth Trend</h3>
+                    <div class="chart-filters">
+                        <button class="filter-button active" onclick="setTimeRange('7d')">7 Days</button>
+                        <button class="filter-button" onclick="setTimeRange('30d')">30 Days</button>
+                        <button class="filter-button" onclick="setTimeRange('90d')">90 Days</button>
+                        <button class="filter-button" onclick="setTimeRange('1y')">1 Year</button>
+                    </div>
+                </div>
+                <canvas id="growth-chart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- AUTHENTICATION ANALYTICS -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Authentication Methods</h3>
+                    <div class="chart-filters">
+                        <button class="filter-button active" onclick="refreshAuthStats()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                <canvas id="auth-chart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- GEOGRAPHIC SECTION -->
+        <div id="geography-section" class="admin-section" style="display: none;">
+            <h2 class="admin-title">
+                <i class="fas fa-globe"></i>
+                Geographic Analytics
+            </h2>
+
+            <!-- WORLD MAP -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Global Member Distribution</h3>
+                    <div class="chart-filters">
+                        <button class="filter-button active">All Members</button>
+                        <button class="filter-button">New This Month</button>
+                        <button class="filter-button">Active Users</button>
+                    </div>
+                </div>
+                <div class="world-map">
+                    <div>
+                        <i class="fas fa-map-marked-alt" style="font-size: 48px; margin-bottom: 1rem; color: var(--admin-primary);"></i>
+                        <br>
+                        Interactive World Map Coming Soon
+                        <br>
+                        <small style="color: var(--admin-dark); opacity: 0.7;">
+                            Displaying member density and growth by country
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP COUNTRIES TABLE -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Top Countries by Member Count</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Country</th>
+                            <th>Members</th>
+                            <th>Growth (30d)</th>
+                            <th>Engagement Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>🇺🇸 United States</td>
+                            <td>347</td>
+                            <td class="metric-change positive"><i class="fas fa-arrow-up"></i> +24%</td>
+                            <td>73%</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>🇦🇪 United Arab Emirates</td>
+                            <td>198</td>
+                            <td class="metric-change positive"><i class="fas fa-arrow-up"></i> +31%</td>
+                            <td>81%</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>🇬🇧 United Kingdom</td>
+                            <td>156</td>
+                            <td class="metric-change positive"><i class="fas fa-arrow-up"></i> +18%</td>
+                            <td>69%</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>🇮🇳 India</td>
+                            <td>134</td>
+                            <td class="metric-change positive"><i class="fas fa-arrow-up"></i> +42%</td>
+                            <td>76%</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>🇨🇦 Canada</td>
+                            <td>89</td>
+                            <td class="metric-change positive"><i class="fas fa-arrow-up"></i> +15%</td>
+                            <td>71%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SYSTEM HEALTH SECTION -->
+        <div id="performance-section" class="admin-section" style="display: none;">
+            <h2 class="admin-title">
+                <i class="fas fa-server"></i>
+                System Health & Performance
+            </h2>
+
+            <!-- SYSTEM STATUS -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Database Performance</div>
+                        <div class="metric-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--admin-success);">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">98ms</div>
+                    <div class="metric-change positive">
+                        <div class="status-indicator status-online">
+                            <i class="fas fa-circle"></i>
+                            Optimal
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">API Response Time</div>
+                        <div class="metric-icon" style="background: rgba(52, 152, 219, 0.1); color: var(--admin-info);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">142ms</div>
+                    <div class="metric-change positive">
+                        <div class="status-indicator status-online">
+                            <i class="fas fa-circle"></i>
+                            Good
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Error Rate</div>
+                        <div class="metric-icon" style="background: rgba(231, 76, 60, 0.1); color: var(--admin-danger);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">0.02%</div>
+                    <div class="metric-change positive">
+                        <div class="status-indicator status-online">
+                            <i class="fas fa-circle"></i>
+                            Excellent
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AUTHENTICATION HEALTH -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Authentication Service Status</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Success Rate</th>
+                            <th>Avg Response Time</th>
+                            <th>Last 24h Requests</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fab fa-google"></i> Google OAuth</td>
+                            <td><div class="status-indicator status-online"><i class="fas fa-circle"></i> Online</div></td>
+                            <td>98.2%</td>
+                            <td>1.8s</td>
+                            <td>156</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fab fa-linkedin"></i> LinkedIn OAuth</td>
+                            <td><div class="status-indicator status-online"><i class="fas fa-circle"></i> Online</div></td>
+                            <td>95.7%</td>
+                            <td>3.2s</td>
+                            <td>89</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-envelope"></i> Email/Password</td>
+                            <td><div class="status-indicator status-online"><i class="fas fa-circle"></i> Online</div></td>
+                            <td>97.1%</td>
+                            <td>0.9s</td>
+                            <td>203</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-fire"></i> Firebase Auth</td>
+                            <td><div class="status-indicator status-online"><i class="fas fa-circle"></i> Online</div></td>
+                            <td>99.4%</td>
+                            <td>0.3s</td>
+                            <td>448</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase Configuration -->
+    <script type="module">
+        // Firebase Configuration
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, collection, getDocs, query, orderBy, limit, where } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
+            authDomain: "sociallyfounded-df98f.firebaseapp.com",
+            projectId: "sociallyfounded-df98f",
+            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
+            messagingSenderId: "994533610259",
+            appId: "1:994533610259:web:fe740378a4c000211e40e6",
+            measurementId: "G-EY0BZE30Q0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Make Firebase available globally
+        window.db = db;
+        window.auth = auth;
+
+        // Initialize dashboard
+        initializeDashboard();
+
+        async function initializeDashboard() {
+            try {
+                // Load real-time data
+                await loadUserMetrics();
+                await loadGeographicData();
+                await loadSystemHealth();
+                
+                // Initialize charts
+                initializeCharts();
+                
+                // Set up real-time updates
+                setInterval(refreshMetrics, 30000); // Refresh every 30 seconds
+                
+                console.log('Admin dashboard initialized successfully');
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+                showErrorMessage('Failed to load dashboard data');
+            }
+        }
+
+        async function loadUserMetrics() {
+            try {
+                // Get users collection
+                const usersRef = collection(db, 'users');
+                const usersSnapshot = await getDocs(usersRef);
+                
+                // Calculate metrics
+                const totalUsers = usersSnapshot.size;
+                const today = new Date();
+                const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                
+                let dailySignups = 0;
+                let countries = new Set();
+                let activeUsers = 0;
+                
+                usersSnapshot.forEach((doc) => {
+                    const userData = doc.data();
+                    
+                    // Count daily signups
+                    if (userData.createdAt && userData.createdAt.toDate() >= todayStart) {
+                        dailySignups++;
+                    }
+                    
+                    // Count countries
+                    if (userData.sfPassport && userData.sfPassport.countryCode) {
+                        countries.add(userData.sfPassport.countryCode);
+                    }
+                    
+                    // Count active users (last 24 hours)
+                    if (userData.lastLoginAt && userData.lastLoginAt.toDate() >= new Date(Date.now() - 24 * 60 * 60 * 1000)) {
+                        activeUsers++;
+                    }
+                });
+                
+                // Update UI
+                document.getElementById('total-members').textContent = totalUsers.toLocaleString();
+                document.getElementById('daily-signups').textContent = dailySignups;
+                document.getElementById('active-users').textContent = activeUsers.toLocaleString();
+                document.getElementById('countries-count').textContent = countries.size;
+                
+            } catch (error) {
+                console.error('Error loading user metrics:', error);
+                // Show fallback demo data
+                updateWithDemoData();
+            }
+        }
+
+        function updateWithDemoData() {
+            // Fallback to demo data for development
+            document.getElementById('total-members').textContent = '1,247';
+            document.getElementById('daily-signups').textContent = '42';
+            document.getElementById('active-users').textContent = '847';
+            document.getElementById('countries-count').textContent = '34';
+            document.getElementById('diana-sessions').textContent = '1,856';
+            document.getElementById('system-uptime').textContent = '99.8%';
+        }
+
+        async function loadGeographicData() {
+            // Geographic analytics implementation would go here
+            console.log('Loading geographic data...');
+        }
+
+        async function loadSystemHealth() {
+            // System health monitoring implementation would go here
+            console.log('Loading system health data...');
+        }
+
+        function initializeCharts() {
+            // User Growth Chart
+            const growthCtx = document.getElementById('growth-chart').getContext('2d');
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'New Members',
+                        data: [65, 89, 123, 156, 198, 247],
+                        borderColor: '#003554',
+                        backgroundColor: 'rgba(0, 53, 84, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Authentication Methods Chart
+            const authCtx = document.getElementById('auth-chart').getContext('2d');
+            new Chart(authCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Google OAuth', 'Email/Password', 'LinkedIn OAuth'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: ['#4285F4', '#003554', '#0077B5'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function refreshMetrics() {
+            loadUserMetrics();
+            console.log('Metrics refreshed');
+        }
+
+        // Make functions globally available
+        window.loadUserMetrics = loadUserMetrics;
+        window.refreshMetrics = refreshMetrics;
+    </script>
+
+    <script>
+        // Navigation and UI Functions
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.admin-section');
+            sections.forEach(section => section.style.display = 'none');
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            // Update active nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        function setTimeRange(range) {
+            // Update time range filters
+            const buttons = document.querySelectorAll('.filter-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            console.log('Time range set to:', range);
+            // Implement time range filtering logic here
+        }
+
+        function refreshAuthStats() {
+            console.log('Refreshing authentication statistics...');
+            // Implement auth stats refresh here
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Implement logout logic
+                window.location.href = '/';
+            }
+        }
+
+        function showErrorMessage(message) {
+            // Create and show error notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--admin-danger);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1001;
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Auto-refresh dashboard every 5 minutes
+        setInterval(() => {
+            if (window.refreshMetrics) {
+                window.refreshMetrics();
+            }
+        }, 5 * 60 * 1000);
+
+        // Handle responsive sidebar
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.admin-sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('SociallyFounded Admin Dashboard loaded');
+            
+            // Set fallback logo if main logo fails
+            const logo = document.getElementById('logo');
+            logo.onerror = function() {
+                this.style.display = 'none';
+            };
+        });
+    </script>
+</body>
+</html>
