@@ -545,6 +545,7 @@
                                 <th>Signed Up</th>
                                 <th>Last Active</th>
                                 <th>Auth Method</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="users-table-body">
@@ -854,6 +855,7 @@
                     
                     // Build user object for table
                     users.push({
+                        userId: userId, // Store Firebase document ID
                         name: userData.displayName || 'No Name',
                         passport: userData.sfPassport?.id || userData.passportId || 'No Passport',
                         email: userData.email || 'No Email',
@@ -904,7 +906,7 @@
             
             tableBody.innerHTML = '';
             
-            users.forEach(user => {
+            users.forEach((user, index) => {
                 const row = document.createElement('tr');
                 
                 // Format dates
@@ -916,9 +918,16 @@
                 if (user.authMethod === 'Google') authColor = '#4285F4';
                 if (user.authMethod === 'LinkedIn') authColor = '#0077B5';
                 
+                // Generate user ID for Firebase operations (we'll need to store this)
+                const userId = user.userId || `user_${index}`;
+                
                 row.innerHTML = `
                     <td><strong>${user.name}</strong></td>
-                    <td><code style="background: var(--admin-light); padding: 2px 8px; border-radius: 4px;">${user.passport}</code></td>
+                    <td>
+                        <code style="background: var(--admin-light); padding: 2px 8px; border-radius: 4px;">
+                            ${user.passport}
+                        </code>
+                    </td>
                     <td>${user.email}</td>
                     <td>
                         <span style="display: inline-flex; align-items: center; gap: 8px;">
@@ -932,6 +941,20 @@
                             ${user.authMethod}
                         </span>
                     </td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="editPassport('${userId}', '${user.name.replace(/'/g, "\\'")}', '${user.passport}')" 
+                                    style="background: var(--admin-info); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;"
+                                    title="Edit Passport">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteUser('${userId}', '${user.name.replace(/'/g, "\\'")}', this)" 
+                                    style="background: var(--admin-danger); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;"
+                                    title="Delete User">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
                 `;
                 
                 tableBody.appendChild(row);
@@ -940,7 +963,7 @@
             loadingIndicator.style.display = 'none';
             tableContainer.style.display = 'block';
             
-            console.log(`📊 Loaded ${users.length} users in table`);
+            console.log(`📊 Loaded ${users.length} users in table with admin actions`);
         }
 
         function refreshUserTable() {
@@ -951,40 +974,135 @@
         }
 
         function exportUsers() {
-            // Simple CSV export functionality
             console.log('📥 Exporting users to CSV...');
             
-            const table = document.getElementById('users-table-container').querySelector('table');
-            if (!table) {
-                alert('No user data to export');
+            try {
+                const tableContainer = document.getElementById('users-table-container');
+                const table = tableContainer.querySelector('table');
+                
+                if (!table || tableContainer.style.display === 'none') {
+                    alert('No user data loaded to export. Please wait for data to load first.');
+                    return;
+                }
+                
+                let csv = [];
+                
+                // Add header row
+                const headers = ['Name', 'SF Passport', 'Email', 'Country', 'Signed Up', 'Last Active', 'Auth Method'];
+                csv.push(headers.map(h => `"${h}"`).join(','));
+                
+                // Add data rows
+                const rows = table.querySelectorAll('tbody tr');
+                
+                if (rows.length === 0) {
+                    alert('No user data to export');
+                    return;
+                }
+                
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length >= 7) { // Skip the Actions column
+                        const rowData = [];
+                        for (let i = 0; i < 7; i++) {
+                            let cellText = cells[i].innerText.replace(/"/g, '""').trim();
+                            rowData.push(`"${cellText}"`);
+                        }
+                        csv.push(rowData.join(','));
+                    }
+                });
+                
+                // Create and download CSV file
+                const csvContent = csv.join('\n');
+                const csvFile = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const downloadLink = document.createElement('a');
+                
+                const fileName = `sociallyfounded-users-${new Date().toISOString().split('T')[0]}.csv`;
+                downloadLink.download = fileName;
+                downloadLink.href = window.URL.createObjectURL(csvFile);
+                downloadLink.style.display = 'none';
+                
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                console.log(`✅ Exported ${rows.length} users to ${fileName}`);
+                
+            } catch (error) {
+                console.error('❌ CSV export error:', error);
+                alert('Error exporting CSV: ' + error.message);
+            }
+        }
+
+        async function deleteUser(userId, userName) {
+            if (!confirm(`Are you sure you want to DELETE user "${userName}"?\n\nThis action cannot be undone!`)) {
                 return;
             }
             
-            let csv = [];
-            const rows = table.querySelectorAll('tr');
+            try {
+                console.log(`🗑️ Deleting user: ${userId} (${userName})`);
+                
+                // Import deleteDoc function
+                const { deleteDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js');
+                
+                // Delete user document from Firestore
+                await deleteDoc(doc(db, 'users', userId));
+                
+                console.log('✅ User deleted successfully');
+                alert(`User "${userName}" has been deleted successfully.`);
+                
+                // Refresh the table
+                refreshUserTable();
+                
+            } catch (error) {
+                console.error('❌ Error deleting user:', error);
+                alert(`Failed to delete user: ${error.message}`);
+            }
+        }
+
+        async function editPassport(userId, userName, currentPassport) {
+            const newPassport = prompt(`Edit SF Passport for "${userName}"\n\nCurrent: ${currentPassport}\n\nEnter new passport ID (format: SF-XXXXXXX-XX):`, currentPassport);
             
-            for (let i = 0; i < rows.length; i++) {
-                const row = [];
-                const cols = rows[i].querySelectorAll('td, th');
-                
-                for (let j = 0; j < cols.length; j++) {
-                    let cellText = cols[j].innerText.replace(/"/g, '""');
-                    row.push('"' + cellText + '"');
-                }
-                
-                csv.push(row.join(','));
+            if (!newPassport || newPassport === currentPassport) {
+                return;
             }
             
-            const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
-            const downloadLink = document.createElement('a');
-            downloadLink.download = `sociallyfounded-users-${new Date().toISOString().split('T')[0]}.csv`;
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-            downloadLink.style.display = 'none';
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+            // Validate passport format
+            const passportRegex = /^SF-\d{7}-[A-Z]{2}$/;
+            if (!passportRegex.test(newPassport)) {
+                alert('Invalid passport format. Please use: SF-XXXXXXX-XX\n(7 digits followed by 2 letters)');
+                return;
+            }
             
-            console.log('✅ Users exported to CSV');
+            try {
+                console.log(`✏️ Updating passport for user: ${userId} (${userName})`);
+                console.log(`Old: ${currentPassport} → New: ${newPassport}`);
+                
+                // Import updateDoc function
+                const { updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js');
+                
+                // Update user document in Firestore
+                const userRef = doc(db, 'users', userId);
+                
+                // Extract country code from new passport
+                const countryCode = newPassport.split('-')[2];
+                
+                await updateDoc(userRef, {
+                    'sfPassport.id': newPassport,
+                    'passportId': newPassport,
+                    'sfPassport.countryCode': countryCode,
+                    'updatedAt': new Date()
+                });
+                
+                console.log('✅ Passport updated successfully');
+                alert(`Passport updated successfully!\nOld: ${currentPassport}\nNew: ${newPassport}`);
+                
+                // Refresh the table
+                refreshUserTable();
+                
+            } catch (error) {
+                console.error('❌ Error updating passport:', error);
+                alert(`Failed to update passport: ${error.message}`);
+            }
         }
 
         async function loadGeographicData() {
