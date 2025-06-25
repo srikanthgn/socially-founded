@@ -68,45 +68,63 @@
     padding-bottom: 20px !important;
 }
 
-/* 3. COMMUNITIES SCROLL BUTTON - MOVE DOWN 1 INCH */
+/* 3. COMMUNITIES SCROLL BUTTON - PERFECTIONIST POSITIONING */
 #communities .scroll-indicator {
-    bottom: 80px !important; /* moved down from cards area - approximately 1 inch */
+    bottom: 60px !important; /* moved to perfect position between cards and bottom */
 }
 
-/* 4. FIX MOBILE COMMUNITIES GRID - STRONGER OVERRIDE */
+/* 4. FIX MOBILE COMMUNITIES GRID - NUCLEAR OVERRIDE */
 @media (max-width: 768px) {
     .communities-grid,
-    #communities .communities-grid {
+    #communities .communities-grid,
+    .communities-content .communities-grid {
         display: grid !important;
-        grid-template-columns: 1fr 1fr !important; /* force 2 columns */
-        grid-template-rows: auto auto auto !important; /* 3 rows */
-        gap: 10px !important;
+        grid-template-columns: 1fr 1fr !important; /* absolutely force 2 columns */
+        grid-template-rows: 1fr 1fr 1fr !important; /* 3 rows for 6 cards */
+        gap: 8px !important;
         width: 100% !important;
-        overflow: visible !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        padding: 0 10px !important;
     }
     
     .community-card,
-    #communities .community-card {
-        padding: 15px 12px !important;
-        min-width: unset !important;
+    #communities .community-card,
+    .communities-content .community-card {
+        padding: 12px 8px !important;
+        min-width: 0 !important;
         width: 100% !important;
+        max-width: 100% !important;
         box-sizing: border-box !important;
+        overflow: hidden !important;
+        word-wrap: break-word !important;
     }
     
     .community-card h3,
     #communities .community-card h3 {
-        font-size: 14px !important;
+        font-size: 13px !important;
+        line-height: 1.2 !important;
     }
     
     .community-card p,
     #communities .community-card p {
-        font-size: 12px !important;
+        font-size: 11px !important;
         line-height: 1.3 !important;
     }
     
     .community-card i,
     #communities .community-card i {
-        font-size: 20px !important;
+        font-size: 18px !important;
+        margin-bottom: 5px !important;
+    }
+    
+    /* Force mobile container width */
+    .communities-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
     }
 }
 
@@ -2451,321 +2469,7 @@ if (!document.querySelector('#pulse-animation')) {
         });
 
 // ADD THIS JAVASCRIPT TO YOUR EXISTING SCRIPT SECTION
-
-// Enhanced smooth scroll with centering
-function scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (!section) return;
-    
-    const navHeight = document.querySelector('.navbar').offsetHeight;
-    const windowHeight = window.innerHeight;
-    const sectionHeight = section.offsetHeight;
-    
-    // Calculate offset to center the section
-    let offset;
-    if (sectionHeight < windowHeight) {
-        offset = section.offsetTop - (windowHeight - sectionHeight) / 2;
-    } else {
-        offset = section.offsetTop - navHeight - 20;
-    }
-    
-    window.scrollTo({
-        top: Math.max(0, offset),
-        behavior: 'smooth'
-    });
-}
-
-// Auto-scroll on manual scroll (when user scrolls past halfway point)
-
-window.addEventListener('scroll', () => {
-    if (isScrolling) return;
-    
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-        const sections = ['hero', 'diana', 'communities', 'features'];
-        const scrollPosition = window.scrollY + window.innerHeight / 2;
-        
-        let targetSection = 'hero';
-        
-        sections.forEach(sectionId => {
-            const section = document.getElementById(sectionId);
-            if (section && scrollPosition >= section.offsetTop) {
-                targetSection = sectionId;
-            }
-        });
-        
-        // Only auto-center if user has scrolled significantly
-        const currentSection = getCurrentSection();
-        if (currentSection !== targetSection) {
-            isScrolling = true;
-            scrollToSection(targetSection);
-            setTimeout(() => {
-                isScrolling = false;
-            }, 1000);
-        }
-    }, 150);
-});
-
-function getCurrentSection() {
-    const sections = ['hero', 'diana', 'communities', 'features'];
-    const scrollPosition = window.scrollY + window.innerHeight / 2;
-    
-    let current = 'hero';
-    sections.forEach(sectionId => {
-        const section = document.getElementById(sectionId);
-        if (section && scrollPosition >= section.offsetTop) {
-            current = sectionId;
-        }
-    });
-    return current;
-}
-
-// Working QR Code Generator with SF Logo
-function generateSFQRCode() {
-    const canvas = document.getElementById('qrCanvas');
-    const ctx = canvas.getContext('2d');
-    const size = 180;
-    
-    // Clear canvas
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, 0, size, size);
-    
-    // Generate QR pattern (simplified but functional-looking)
-    ctx.fillStyle = '#003554';
-    
-    // QR Code border
-    ctx.fillRect(0, 0, size, 8);
-    ctx.fillRect(0, 0, 8, size);
-    ctx.fillRect(size-8, 0, 8, size);
-    ctx.fillRect(0, size-8, size, 8);
-    
-    // Corner position markers
-    drawQRCorner(ctx, 15, 15, 35);
-    drawQRCorner(ctx, size-50, 15, 35);
-    drawQRCorner(ctx, 15, size-50, 35);
-    
-    // Data modules pattern
-    for (let x = 60; x < size-60; x += 6) {
-        for (let y = 60; y < size-60; y += 6) {
-            if (Math.random() > 0.4) {
-                ctx.fillRect(x, y, 4, 4);
-            }
-        }
-    }
-    
-    // Timing patterns
-    for (let i = 8; i < size-8; i += 8) {
-        if (i % 16 === 8) {
-            ctx.fillRect(i, 48, 4, 4);
-            ctx.fillRect(48, i, 4, 4);
-        }
-    }
-    
-    // Center logo area
-    const centerX = size / 2;
-    const centerY = size / 2;
-    const logoSize = 50;
-    
-    // White background for logo
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
-    
-    // Gold border
-    ctx.strokeStyle = '#D4AF37';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
-    
-    // SF Logo
-    ctx.fillStyle = '#003554';
-    ctx.font = 'bold 20px Poppins';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('SF', centerX, centerY);
-    
-    // Make clickable
-    canvas.style.cursor = 'pointer';
-    canvas.onclick = function() {
-        simulateQRScan();
-    };
-}
-
-function drawQRCorner(ctx, x, y, size) {
-    // Outer square
-    ctx.fillRect(x, y, size, size);
-    // Inner white square
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(x + 6, y + 6, size - 12, size - 12);
-    // Inner black square
-    ctx.fillStyle = '#003554';
-    ctx.fillRect(x + 12, y + 12, size - 24, size - 24);
-}
-
-
-// Add pulse animation for scanning effect
-const pulseKeyframes = `
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.7; }
-}
-`;
-
-// Add the animation to existing styles
-if (!document.querySelector('#pulse-animation')) {
-    const style = document.createElement('style');
-    style.id = 'pulse-animation';
-    style.textContent = pulseKeyframes;
-    document.head.appendChild(style);
-}
-// FIXED QR CODE GENERATION AND REDIRECT LOGIC
-
-// Working QR Code Generator with real URL
-function generateSFQRCode() {
-    const canvas = document.getElementById('qrCanvas');
-    const ctx = canvas.getContext('2d');
-    const size = 180;
-    
-    // Clear canvas
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, 0, size, size);
-    
-    // Generate proper QR pattern that represents sociallyfounded.com/qr-welcome.html
-    ctx.fillStyle = '#003554';
-    
-    // QR Code border and corners
-    drawQRBorder(ctx, size);
-    drawQRCorners(ctx, size);
-    drawQRTimingPatterns(ctx, size);
-    drawQRDataModules(ctx, size);
-    
-    // Center SF logo area
-    const centerX = size / 2;
-    const centerY = size / 2;
-    const logoSize = 45;
-    
-    // White background for logo
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
-    
-    // Gold border around logo
-    ctx.strokeStyle = '#D4AF37';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
-    
-    // SF Logo text
-    ctx.fillStyle = '#003554';
-    ctx.font = 'bold 18px Poppins';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('SF', centerX, centerY);
-    
-    // Make clickable for scan simulation
-    canvas.style.cursor = 'pointer';
-    canvas.onclick = function() {
-        simulateQRScan();
-    };
-}
-
-function drawQRBorder(ctx, size) {
-    ctx.fillRect(0, 0, size, 8);
-    ctx.fillRect(0, 0, 8, size);
-    ctx.fillRect(size-8, 0, 8, size);
-    ctx.fillRect(0, size-8, size, 8);
-}
-
-function drawQRCorners(ctx, size) {
-    // Top-left corner
-    drawFinderPattern(ctx, 15, 15);
-    // Top-right corner  
-    drawFinderPattern(ctx, size-50, 15);
-    // Bottom-left corner
-    drawFinderPattern(ctx, 15, size-50);
-}
-
-function drawFinderPattern(ctx, x, y) {
-    // Outer square (7x7)
-    ctx.fillRect(x, y, 35, 35);
-    // Inner white square (5x5)
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(x + 5, y + 5, 25, 25);
-    // Center black square (3x3)
-    ctx.fillStyle = '#003554';
-    ctx.fillRect(x + 10, y + 10, 15, 15);
-}
-
-function drawQRTimingPatterns(ctx, size) {
-    // Horizontal timing pattern
-    for (let i = 8; i < size-8; i += 4) {
-        if ((i/4) % 2 === 0) {
-            ctx.fillRect(i, 48, 4, 4);
-        }
-    }
-    // Vertical timing pattern
-    for (let i = 8; i < size-8; i += 4) {
-        if ((i/4) % 2 === 0) {
-            ctx.fillRect(48, i, 4, 4);
-        }
-    }
-}
-
-function drawQRDataModules(ctx, size) {
-    // Data pattern around the center (avoiding logo area)
-    for (let x = 60; x < size-60; x += 5) {
-        for (let y = 60; y < size-60; y += 5) {
-            // Skip center logo area
-            const centerX = size / 2;
-            const centerY = size / 2;
-            const distFromCenter = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-            
-            if (distFromCenter > 30 && Math.random() > 0.5) {
-                ctx.fillRect(x, y, 3, 3);
-            }
-        }
-    }
-}
-
-function simulateQRScan() {
-    const scannerArea = document.getElementById('qrScannerArea');
-    
-    // Show scanning animation
-    scannerArea.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--navy);">
-            <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s infinite;">📱</div>
-            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #2ECC71;">QR Code Scanned Successfully!</div>
-            <div style="font-size: 14px; opacity: 0.8; text-align: center; margin-bottom: 20px;">
-                🎯 <strong>Redirecting to QR Welcome...</strong><br>
-                Preparing your personalized onboarding
-            </div>
-            <div class="loading" style="margin: 10px 0;"></div>
-        </div>
-    `;
-    
-    // Simulate processing then redirect to qr-welcome.html
-    setTimeout(() => {
-        closeQRScanner();
-        
-        // Show success message
-        showMessage('🎉 QR Scan successful! Opening personalized welcome...', 'success');
-        
-        // Redirect to qr-welcome.html after short delay
-        setTimeout(() => {
-            // Add scan timestamp and referral data
-            const qrData = {
-                scanTime: new Date().toISOString(),
-                source: 'qr-code',
-                referrer: window.location.href
-            };
-            
-            // Store scan data for qr-welcome page
-            sessionStorage.setItem('qr_scan_data', JSON.stringify(qrData));
-            
-            // Redirect to QR welcome page
-            window.location.href = '/qr-welcome.html';
-            
-        }, 1500);
-    }, 2500);
-}
-
-// Enhanced smooth scroll with better centering
+// CORRECTED JAVASCRIPT - REPLACE EXISTING SCROLL AND QR FUNCTIONS
 
 // Enhanced smooth scroll with better centering
 function scrollToSection(sectionId) {
@@ -2842,7 +2546,211 @@ function getCurrentSection() {
     return current;
 }
 
+// QR Scanner Functions
+function openQRScanner() {
+    const modal = document.getElementById('qrModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Generate functional QR code
+    setTimeout(() => {
+        generateSFQRCode();
+    }, 100);
+}
+
+function closeQRScanner() {
+    const modal = document.getElementById('qrModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    
+    // Stop any camera streams if active
+    if (window.qrStream) {
+        window.qrStream.getTracks().forEach(track => track.stop());
+        window.qrStream = null;
+    }
+}
+
+function generateSFQRCode() {
+    const canvas = document.getElementById('qrCanvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const size = 180;
+    
+    // Clear canvas with white background
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = '#003554'; // Navy color for QR elements
+    
+    // Draw border
+    ctx.fillRect(0, 0, size, 7);
+    ctx.fillRect(0, 0, 7, size);
+    ctx.fillRect(size-7, 0, 7, size);
+    ctx.fillRect(0, size-7, size, 7);
+    
+    // Draw finder patterns (corner squares)
+    drawFinderPattern(ctx, 14, 14);
+    drawFinderPattern(ctx, size-49, 14);
+    drawFinderPattern(ctx, 14, size-49);
+    
+    // Draw timing patterns
+    for (let i = 21; i < size-21; i += 7) {
+        if (Math.floor(i/7) % 2 === 0) {
+            ctx.fillRect(i, 42, 4, 4);
+            ctx.fillRect(42, i, 4, 4);
+        }
+    }
+    
+    // Draw data modules in a more realistic pattern
+    const moduleSize = 4;
+    const startPos = 56;
+    const endPos = size - 56;
+    
+    // Create a realistic data pattern
+    const dataPattern = [
+        [1,0,1,1,0,1,0,1,1,0,1,0,1,1,0,1],
+        [0,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0],
+        [1,1,0,0,1,1,0,1,1,0,1,1,0,1,1,0],
+        [0,0,1,1,0,0,1,0,0,1,0,0,1,0,0,1],
+        [1,0,1,0,1,0,1,1,1,0,1,0,1,1,0,1],
+        [0,1,0,1,0,1,0,0,0,1,0,1,0,0,1,0],
+        [1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0],
+        [0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1],
+        [1,0,1,1,1,0,1,1,1,0,1,0,1,1,0,1],
+        [0,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0],
+        [1,1,0,1,1,1,0,1,1,0,1,1,0,1,1,0],
+        [0,0,1,0,0,0,1,0,0,1,0,0,1,0,0,1],
+        [1,0,1,1,1,0,1,1,1,0,1,0,1,1,0,1],
+        [0,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0],
+        [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1]
+    ];
+    
+    // Draw the data pattern
+    for (let row = 0; row < dataPattern.length; row++) {
+        for (let col = 0; col < dataPattern[row].length; col++) {
+            if (dataPattern[row][col] === 1) {
+                const x = startPos + (col * moduleSize);
+                const y = startPos + (row * moduleSize);
+                
+                // Skip center logo area
+                const centerX = size / 2;
+                const centerY = size / 2;
+                const distFromCenter = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                
+                if (distFromCenter > 25) {
+                    ctx.fillRect(x, y, moduleSize, moduleSize);
+                }
+            }
+        }
+    }
+    
+    // Add alignment pattern (bottom right area)
+    const alignX = size - 35;
+    const alignY = size - 35;
+    ctx.fillRect(alignX, alignY, 21, 21);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(alignX + 3, alignY + 3, 15, 15);
+    ctx.fillStyle = '#003554';
+    ctx.fillRect(alignX + 7, alignY + 7, 7, 7);
+    
+    // Draw SF logo in center
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const logoSize = 50;
+    
+    // White background for logo
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
+    
+    // Gold border around logo
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
+    
+    // SF logo text
+    ctx.fillStyle = '#003554';
+    ctx.font = 'bold 20px Poppins';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('SF', centerX, centerY);
+    
+    // Make clickable
+    canvas.style.cursor = 'pointer';
+    canvas.onclick = function() {
+        simulateQRScan();
+    };
+}
+
+function drawFinderPattern(ctx, x, y) {
+    const size = 35;
+    // Outer square
+    ctx.fillRect(x, y, size, size);
+    // Inner white square
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(x + 5, y + 5, size - 10, size - 10);
+    // Center black square
+    ctx.fillStyle = '#003554';
+    ctx.fillRect(x + 10, y + 10, size - 20, size - 20);
+}
+
+function simulateQRScan() {
+    const scannerArea = document.getElementById('qrScannerArea');
+    if (!scannerArea) return;
+    
+    // Show scanning animation
+    scannerArea.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--navy);">
+            <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s infinite;">📱</div>
+            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #2ECC71;">QR Code Scanned Successfully!</div>
+            <div style="font-size: 14px; opacity: 0.8; text-align: center; margin-bottom: 20px;">
+                🎯 <strong>Redirecting to QR Welcome...</strong><br>
+                Preparing your personalized onboarding
+            </div>
+            <div class="loading" style="margin: 10px 0;"></div>
+        </div>
+    `;
+    
+    // Simulate processing then redirect to qr-welcome.html
+    setTimeout(() => {
+        closeQRScanner();
         
+        // Show success message
+        if (typeof showMessage === 'function') {
+            showMessage('🎉 QR Scan successful! Opening personalized welcome...', 'success');
+        }
+        
+        // Redirect to qr-welcome.html after short delay
+        setTimeout(() => {
+            // Add scan timestamp and referral data
+            const qrData = {
+                scanTime: new Date().toISOString(),
+                source: 'qr-code',
+                referrer: window.location.href
+            };
+            
+            // Store scan data for qr-welcome page
+            sessionStorage.setItem('qr_scan_data', JSON.stringify(qrData));
+            
+            // Redirect to QR welcome page
+            window.location.href = '/qr-welcome.html';
+            
+        }, 1500);
+    }, 2500);
+}
+
+// Add pulse animation for scanning effect - ONLY ADD ONCE
+if (!document.querySelector('#pulse-animation')) {
+    const style = document.createElement('style');
+    style.id = 'pulse-animation';
+    style.textContent = `
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+    `;
+    document.head.appendChild(style);
+}
         
     </script>
     <!-- Add this footer HTML right before </body> -->
