@@ -495,122 +495,68 @@
         <!-- OVERVIEW SECTION -->
         <div id="overview-section" class="admin-section">
             <h2 class="admin-title">
-                <i class="fas fa-tachometer-alt"></i>
-                Dashboard Overview
+                <i class="fas fa-users"></i>
+                SociallyFounded Members
             </h2>
 
-            <!-- KEY METRICS GRID -->
-            <div class="metrics-grid">
+            <!-- SIMPLE STATS -->
+            <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 2rem;">
                 <div class="metric-card">
-                    <div class="metric-header">
-                        <div class="metric-title">Total Members</div>
-                        <div class="metric-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--admin-success);">
-                            <i class="fas fa-users"></i>
-                        </div>
-                    </div>
-                    <div class="metric-value" id="total-members">1,247</div>
-                    <div class="metric-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        +23% this month
-                    </div>
+                    <div class="metric-title">Total Members</div>
+                    <div class="metric-value" id="total-members">Loading...</div>
                 </div>
-
                 <div class="metric-card">
-                    <div class="metric-header">
-                        <div class="metric-title">New Signups Today</div>
-                        <div class="metric-icon" style="background: rgba(52, 152, 219, 0.1); color: var(--admin-info);">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                    </div>
-                    <div class="metric-value" id="daily-signups">42</div>
-                    <div class="metric-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        +18% vs yesterday
-                    </div>
+                    <div class="metric-title">Today's Signups</div>
+                    <div class="metric-value" id="daily-signups">Loading...</div>
                 </div>
-
                 <div class="metric-card">
-                    <div class="metric-header">
-                        <div class="metric-title">Active Users (24h)</div>
-                        <div class="metric-icon" style="background: rgba(155, 89, 182, 0.1); color: #9B59B6;">
-                            <i class="fas fa-chart-pulse"></i>
-                        </div>
-                    </div>
-                    <div class="metric-value" id="active-users">847</div>
-                    <div class="metric-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        68% engagement rate
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <div class="metric-title">Countries</div>
-                        <div class="metric-icon" style="background: rgba(212, 175, 55, 0.1); color: var(--admin-secondary);">
-                            <i class="fas fa-globe"></i>
-                        </div>
-                    </div>
-                    <div class="metric-value" id="countries-count">34</div>
-                    <div class="metric-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        +2 new this week
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <div class="metric-title">DIANA AI Sessions</div>
-                        <div class="metric-icon" style="background: rgba(230, 126, 34, 0.1); color: #E67E22;">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                    </div>
-                    <div class="metric-value" id="diana-sessions">1,856</div>
-                    <div class="metric-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        +45% usage growth
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <div class="metric-title">System Uptime</div>
-                        <div class="metric-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--admin-success);">
-                            <i class="fas fa-server"></i>
-                        </div>
-                    </div>
-                    <div class="metric-value" id="system-uptime">99.8%</div>
-                    <div class="metric-change positive">
-                        <i class="fas fa-check"></i>
-                        All systems operational
-                    </div>
+                    <div class="metric-title">Countries</div>
+                    <div class="metric-value" id="countries-count">Loading...</div>
                 </div>
             </div>
 
-            <!-- USER GROWTH CHART -->
+            <!-- USERS TABLE -->
             <div class="chart-container">
                 <div class="chart-header">
-                    <h3 class="chart-title">Member Growth Trend</h3>
+                    <h3 class="chart-title">All Members</h3>
                     <div class="chart-filters">
-                        <button class="filter-button active" onclick="setTimeRange('7d')">7 Days</button>
-                        <button class="filter-button" onclick="setTimeRange('30d')">30 Days</button>
-                        <button class="filter-button" onclick="setTimeRange('90d')">90 Days</button>
-                        <button class="filter-button" onclick="setTimeRange('1y')">1 Year</button>
-                    </div>
-                </div>
-                <canvas id="growth-chart" width="400" height="200"></canvas>
-            </div>
-
-            <!-- AUTHENTICATION ANALYTICS -->
-            <div class="chart-container">
-                <div class="chart-header">
-                    <h3 class="chart-title">Authentication Methods</h3>
-                    <div class="chart-filters">
-                        <button class="filter-button active" onclick="refreshAuthStats()">
+                        <button class="filter-button active" onclick="refreshUserTable()">
                             <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="filter-button" onclick="exportUsers()">
+                            <i class="fas fa-download"></i> Export CSV
                         </button>
                     </div>
                 </div>
-                <canvas id="auth-chart" width="400" height="200"></canvas>
+                
+                <div id="loading-indicator" style="text-align: center; padding: 2rem; color: var(--admin-dark);">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 1rem;"></i>
+                    <br>Loading member data...
+                </div>
+                
+                <div id="users-table-container" style="display: none; overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>SF Passport</th>
+                                <th>Email</th>
+                                <th>Country</th>
+                                <th>Signed Up</th>
+                                <th>Last Active</th>
+                                <th>Auth Method</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="no-users-message" style="display: none; text-align: center; padding: 2rem; color: var(--admin-dark);">
+                    <i class="fas fa-users-slash" style="font-size: 48px; margin-bottom: 1rem; opacity: 0.3;"></i>
+                    <br>No users found in database
+                </div>
             </div>
         </div>
 
@@ -858,59 +804,187 @@
 
         async function loadUserMetrics() {
             try {
-                // Get users collection
+                console.log('🔥 Loading SociallyFounded users...');
+                
                 const usersRef = collection(db, 'users');
                 const usersSnapshot = await getDocs(usersRef);
                 
-                // Calculate metrics
+                console.log(`✅ Found ${usersSnapshot.size} users in database`);
+                
                 const totalUsers = usersSnapshot.size;
                 const today = new Date();
                 const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
                 
                 let dailySignups = 0;
                 let countries = new Set();
-                let activeUsers = 0;
+                let users = [];
                 
                 usersSnapshot.forEach((doc) => {
                     const userData = doc.data();
+                    const userId = doc.id;
                     
                     // Count daily signups
-                    if (userData.createdAt && userData.createdAt.toDate() >= todayStart) {
-                        dailySignups++;
+                    if (userData.createdAt) {
+                        const createdDate = userData.createdAt.toDate ? userData.createdAt.toDate() : new Date(userData.createdAt);
+                        if (createdDate >= todayStart) {
+                            dailySignups++;
+                        }
                     }
                     
                     // Count countries
+                    let country = 'Unknown';
                     if (userData.sfPassport && userData.sfPassport.countryCode) {
-                        countries.add(userData.sfPassport.countryCode);
+                        country = userData.sfPassport.countryCode;
+                        countries.add(country);
+                    } else if (userData.passportId && userData.passportId.includes('-')) {
+                        const parts = userData.passportId.split('-');
+                        if (parts.length === 3) {
+                            country = parts[2];
+                            countries.add(country);
+                        }
                     }
                     
-                    // Count active users (last 24 hours)
-                    if (userData.lastLoginAt && userData.lastLoginAt.toDate() >= new Date(Date.now() - 24 * 60 * 60 * 1000)) {
-                        activeUsers++;
+                    // Determine auth method
+                    let authMethod = 'Email';
+                    if (userData.email && userData.email.includes('gmail')) {
+                        authMethod = 'Google';
+                    } else if (userData.linkedinVerified || (userData.professional && userData.professional.linkedin)) {
+                        authMethod = 'LinkedIn';
                     }
+                    
+                    // Build user object for table
+                    users.push({
+                        name: userData.displayName || 'No Name',
+                        passport: userData.sfPassport?.id || userData.passportId || 'No Passport',
+                        email: userData.email || 'No Email',
+                        country: country,
+                        signedUp: userData.createdAt ? (userData.createdAt.toDate ? userData.createdAt.toDate() : new Date(userData.createdAt)) : new Date(),
+                        lastActive: userData.lastLoginAt ? (userData.lastLoginAt.toDate ? userData.lastLoginAt.toDate() : new Date(userData.lastLoginAt)) : new Date(),
+                        authMethod: authMethod
+                    });
                 });
                 
-                // Update UI
-                document.getElementById('total-members').textContent = totalUsers.toLocaleString();
+                // Update simple stats
+                document.getElementById('total-members').textContent = totalUsers;
                 document.getElementById('daily-signups').textContent = dailySignups;
-                document.getElementById('active-users').textContent = activeUsers.toLocaleString();
                 document.getElementById('countries-count').textContent = countries.size;
                 
+                // Load users table
+                loadUsersTable(users);
+                
+                console.log('✅ Dashboard loaded with real SF data!');
+                
             } catch (error) {
-                console.error('Error loading user metrics:', error);
-                // Show fallback demo data
-                updateWithDemoData();
+                console.error('❌ Error loading users:', error);
+                document.getElementById('total-members').textContent = 'Error';
+                document.getElementById('daily-signups').textContent = 'Error';
+                document.getElementById('countries-count').textContent = 'Error';
+                
+                document.getElementById('loading-indicator').innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="color: var(--admin-danger); font-size: 24px; margin-bottom: 1rem;"></i>
+                    <br>Error loading data: ${error.message}
+                `;
             }
         }
 
-        function updateWithDemoData() {
-            // Fallback to demo data for development
-            document.getElementById('total-members').textContent = '1,247';
-            document.getElementById('daily-signups').textContent = '42';
-            document.getElementById('active-users').textContent = '847';
-            document.getElementById('countries-count').textContent = '34';
-            document.getElementById('diana-sessions').textContent = '1,856';
-            document.getElementById('system-uptime').textContent = '99.8%';
+        function loadUsersTable(users) {
+            const tableBody = document.getElementById('users-table-body');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const tableContainer = document.getElementById('users-table-container');
+            const noUsersMessage = document.getElementById('no-users-message');
+            
+            if (users.length === 0) {
+                loadingIndicator.style.display = 'none';
+                noUsersMessage.style.display = 'block';
+                return;
+            }
+            
+            // Sort users by signup date (newest first)
+            users.sort((a, b) => b.signedUp - a.signedUp);
+            
+            tableBody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                
+                // Format dates
+                const signupDate = user.signedUp.toLocaleDateString() + ' ' + user.signedUp.toLocaleTimeString();
+                const lastActiveDate = user.lastActive.toLocaleDateString() + ' ' + user.lastActive.toLocaleTimeString();
+                
+                // Auth method color coding
+                let authColor = 'var(--admin-dark)';
+                if (user.authMethod === 'Google') authColor = '#4285F4';
+                if (user.authMethod === 'LinkedIn') authColor = '#0077B5';
+                
+                row.innerHTML = `
+                    <td><strong>${user.name}</strong></td>
+                    <td><code style="background: var(--admin-light); padding: 2px 8px; border-radius: 4px;">${user.passport}</code></td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span style="display: inline-flex; align-items: center; gap: 8px;">
+                            🌍 ${user.country}
+                        </span>
+                    </td>
+                    <td style="font-size: 12px; color: var(--admin-dark);">${signupDate}</td>
+                    <td style="font-size: 12px; color: var(--admin-dark);">${lastActiveDate}</td>
+                    <td>
+                        <span style="color: ${authColor}; font-weight: 500;">
+                            ${user.authMethod}
+                        </span>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            loadingIndicator.style.display = 'none';
+            tableContainer.style.display = 'block';
+            
+            console.log(`📊 Loaded ${users.length} users in table`);
+        }
+
+        function refreshUserTable() {
+            console.log('🔄 Refreshing user table...');
+            document.getElementById('loading-indicator').style.display = 'block';
+            document.getElementById('users-table-container').style.display = 'none';
+            loadUserMetrics();
+        }
+
+        function exportUsers() {
+            // Simple CSV export functionality
+            console.log('📥 Exporting users to CSV...');
+            
+            const table = document.getElementById('users-table-container').querySelector('table');
+            if (!table) {
+                alert('No user data to export');
+                return;
+            }
+            
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = [];
+                const cols = rows[i].querySelectorAll('td, th');
+                
+                for (let j = 0; j < cols.length; j++) {
+                    let cellText = cols[j].innerText.replace(/"/g, '""');
+                    row.push('"' + cellText + '"');
+                }
+                
+                csv.push(row.join(','));
+            }
+            
+            const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+            const downloadLink = document.createElement('a');
+            downloadLink.download = `sociallyfounded-users-${new Date().toISOString().split('T')[0]}.csv`;
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            console.log('✅ Users exported to CSV');
         }
 
         async function loadGeographicData() {
@@ -950,14 +1024,27 @@
                 }
             });
 
-            // Authentication Methods Chart
+        function updateAuthChart(authMethods) {
             const authCtx = document.getElementById('auth-chart').getContext('2d');
+            
+            // Calculate totals and percentages
+            const total = authMethods.google + authMethods.linkedin + authMethods.email;
+            const googlePercent = total > 0 ? Math.round((authMethods.google / total) * 100) : 0;
+            const linkedinPercent = total > 0 ? Math.round((authMethods.linkedin / total) * 100) : 0;
+            const emailPercent = total > 0 ? Math.round((authMethods.email / total) * 100) : 0;
+            
+            console.log(`📊 Auth Methods: Google: ${authMethods.google} (${googlePercent}%), LinkedIn: ${authMethods.linkedin} (${linkedinPercent}%), Email: ${authMethods.email} (${emailPercent}%)`);
+            
             new Chart(authCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Google OAuth', 'Email/Password', 'LinkedIn OAuth'],
+                    labels: [
+                        `Google OAuth (${googlePercent}%)`, 
+                        `Email/Password (${emailPercent}%)`, 
+                        `LinkedIn OAuth (${linkedinPercent}%)`
+                    ],
                     datasets: [{
-                        data: [45, 35, 20],
+                        data: [authMethods.google, authMethods.email, authMethods.linkedin],
                         backgroundColor: ['#4285F4', '#003554', '#0077B5'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
@@ -969,10 +1056,20 @@
                     plugins: {
                         legend: {
                             position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    return `${label}: ${value} users`;
+                                }
+                            }
                         }
                     }
                 }
             });
+        }
         }
 
         function refreshMetrics() {
