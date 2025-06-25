@@ -2610,127 +2610,68 @@ function generateSFQRCode() {
     const canvas = document.getElementById('qrCanvas');
     if (!canvas) return;
     
-    const ctx = canvas.getContext('2d');
-    const size = 180;
+    // Clear existing content and show loading
+    const container = canvas.parentElement;
+    container.innerHTML = '<div style="width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; color: #003554;"><i class="fas fa-spinner fa-spin"></i> Generating...</div>';
     
-    // Clear canvas with white background
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, 0, size, size);
-    ctx.fillStyle = '#003554'; // Navy color for QR elements
+    // QR Target URL - links to your existing qr-welcome.html
+    const qrTarget = 'https://sociallyfounded.com/qr-welcome.html';
+    const timestamp = Date.now();
+    const fullURL = `${qrTarget}?source=floating_qr&t=${timestamp}`;
     
-    // Draw border
-    ctx.fillRect(0, 0, size, 7);
-    ctx.fillRect(0, 0, 7, size);
-    ctx.fillRect(size-7, 0, 7, size);
-    ctx.fillRect(0, size-7, size, 7);
-    
-    // Draw finder patterns (corner squares)
-    drawFinderPattern(ctx, 14, 14);
-    drawFinderPattern(ctx, size-49, 14);
-    drawFinderPattern(ctx, 14, size-49);
-    
-    // Draw timing patterns
-    for (let i = 21; i < size-21; i += 7) {
-        if (Math.floor(i/7) % 2 === 0) {
-            ctx.fillRect(i, 42, 4, 4);
-            ctx.fillRect(42, i, 4, 4);
-        }
-    }
-    
-    // Draw data modules in a more realistic pattern
-    const moduleSize = 4;
-    const startPos = 56;
-    const endPos = size - 56;
-    
-    // Create a realistic data pattern
-    const dataPattern = [
-        [1,0,1,1,0,1,0,1,1,0,1,0,1,1,0,1],
-        [0,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0],
-        [1,1,0,0,1,1,0,1,1,0,1,1,0,1,1,0],
-        [0,0,1,1,0,0,1,0,0,1,0,0,1,0,0,1],
-        [1,0,1,0,1,0,1,1,1,0,1,0,1,1,0,1],
-        [0,1,0,1,0,1,0,0,0,1,0,1,0,0,1,0],
-        [1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0],
-        [0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1],
-        [1,0,1,1,1,0,1,1,1,0,1,0,1,1,0,1],
-        [0,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0],
-        [1,1,0,1,1,1,0,1,1,0,1,1,0,1,1,0],
-        [0,0,1,0,0,0,1,0,0,1,0,0,1,0,0,1],
-        [1,0,1,1,1,0,1,1,1,0,1,0,1,1,0,1],
-        [0,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0],
-        [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0],
-        [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1]
+    // Multiple QR APIs with SF Logo (fallback system)
+    const qrAPIs = [
+        // Primary: QuickChart with SF logo embedded
+        `https://quickchart.io/qr?text=${encodeURIComponent(fullURL)}&size=180&centerImageUrl=https://sociallyfounded.com/assets/sf-logo.png&centerImageWidth=40&centerImageHeight=40&margin=1&format=png&darkColor=003554&lightColor=ffffff`,
+        
+        // Secondary: QR Server with logo
+        `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(fullURL)}&format=png&ecc=H&color=003554&bgcolor=ffffff&logo=https://sociallyfounded.com/assets/sf-logo.png`,
+        
+        // Fallback: Google Charts (no logo but reliable)
+        `https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=${encodeURIComponent(fullURL)}&choe=UTF-8&chld=H|2`
     ];
     
-    // Draw the data pattern
-    for (let row = 0; row < dataPattern.length; row++) {
-        for (let col = 0; col < dataPattern[row].length; col++) {
-            if (dataPattern[row][col] === 1) {
-                const x = startPos + (col * moduleSize);
-                const y = startPos + (row * moduleSize);
-                
-                // Skip center logo area
-                const centerX = size / 2;
-                const centerY = size / 2;
-                const distFromCenter = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-                
-                if (distFromCenter > 25) {
-                    ctx.fillRect(x, y, moduleSize, moduleSize);
-                }
-            }
+    function tryQRAPI(index) {
+        if (index >= qrAPIs.length) {
+            container.innerHTML = '<div style="width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; color: #e74c3c; border: 2px dashed #e74c3c; border-radius: 10px; text-align: center; font-size: 12px;">QR temporarily unavailable</div>';
+            return;
         }
+        
+        const img = document.createElement('img');
+        img.src = qrAPIs[index];
+        img.alt = 'SociallyFounded QR Code';
+        img.style.cssText = 'width: 180px; height: 180px; display: block; border-radius: 8px; cursor: pointer;';
+        
+        img.onload = function() {
+            container.innerHTML = '';
+            container.appendChild(this);
+            
+            // Add click handler for scan simulation
+            this.onclick = function() {
+                simulateQRScan();
+            };
+            
+            // Add QR text below
+            const qrText = document.createElement('div');
+            qrText.className = 'qr-text';
+            qrText.textContent = 'sociallyfounded.com';
+            qrText.style.cssText = 'font-size: 12px; color: #003554; text-align: center; font-weight: 500; margin-top: 5px;';
+            container.appendChild(qrText);
+            
+            console.log(`QR Code generated successfully using API ${index + 1}`);
+        };
+        
+        img.onerror = function() {
+            console.log(`QR API ${index + 1} failed, trying next...`);
+            tryQRAPI(index + 1);
+        };
     }
     
-    // Add alignment pattern (bottom right area)
-    const alignX = size - 35;
-    const alignY = size - 35;
-    ctx.fillRect(alignX, alignY, 21, 21);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(alignX + 3, alignY + 3, 15, 15);
-    ctx.fillStyle = '#003554';
-    ctx.fillRect(alignX + 7, alignY + 7, 7, 7);
-    
-    // Draw SF logo in center
-    const centerX = size / 2;
-    const centerY = size / 2;
-    const logoSize = 50;
-    
-    // White background for logo
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
-    
-    // Gold border around logo
-    ctx.strokeStyle = '#D4AF37';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(centerX - logoSize/2, centerY - logoSize/2, logoSize, logoSize);
-    
-    // SF logo text
-    ctx.fillStyle = '#003554';
-    ctx.font = 'bold 20px Poppins';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('SF', centerX, centerY);
-    
-    // Make clickable
-    canvas.style.cursor = 'pointer';
-    canvas.onclick = function() {
-        simulateQRScan();
-    };
+    // Start trying APIs
+    tryQRAPI(0);
 }
 
-function drawFinderPattern(ctx, x, y) {
-    const size = 35;
-    // Outer square
-    ctx.fillRect(x, y, size, size);
-    // Inner white square
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(x + 5, y + 5, size - 10, size - 10);
-    // Center black square
-    ctx.fillStyle = '#003554';
-    ctx.fillRect(x + 10, y + 10, size - 20, size - 20);
-}
-
-function simulateQRScan() {
+        function simulateQRScan() {
     const scannerArea = document.getElementById('qrScannerArea');
     if (!scannerArea) return;
     
