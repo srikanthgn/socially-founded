@@ -57,7 +57,7 @@
     <style>
 
         /* start of sri changes */
-/* 1. REDUCE HERO TITLE FONT SIZE */
+        /* 1. REDUCE HERO TITLE FONT SIZE */
 .hero h1 {
     font-size: clamp(2rem, 4.5vw, 2.8rem) !important; /* reduced from larger size */
 }
@@ -73,7 +73,7 @@
     bottom: 60px !important; /* moved to perfect position between cards and bottom */
 }
 
-/* 4. MOBILE COMMUNITIES - NUCLEAR FORCE 2 COLUMNS */
+/* 4. MOBILE COMMUNITIES - FIX UGLY GAPS */
 @media screen and (max-width: 768px) {
     /* Target every possible selector for communities grid */
     .communities-grid,
@@ -83,45 +83,48 @@
     .communities-section .communities-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        grid-template-rows: repeat(3, 1fr) !important;
-        gap: 8px !important;
+        grid-template-rows: auto auto auto !important; /* auto instead of 1fr to remove gaps */
+        gap: 12px !important; /* increased gap for better spacing */
         width: calc(100vw - 40px) !important;
         max-width: calc(100vw - 40px) !important;
         margin: 0 auto !important;
         padding: 0 !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
+        align-items: start !important; /* align cards to top */
     }
     
-    /* Force card sizing */
+    /* Force card sizing - COMPACT */
     .community-card,
     #communities .community-card,
     .communities-content .community-card,
     .communities-grid .community-card {
-        width: calc(50% - 4px) !important;
-        max-width: calc(50% - 4px) !important;
-        min-width: calc(50% - 4px) !important;
-        padding: 10px 6px !important;
+        width: calc(50% - 6px) !important;
+        max-width: calc(50% - 6px) !important;
+        min-width: calc(50% - 6px) !important;
+        padding: 15px 8px !important; /* increased padding for better look */
         margin: 0 !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
         word-wrap: break-word !important;
         text-overflow: ellipsis !important;
+        height: auto !important; /* auto height to fit content */
+        min-height: 120px !important; /* minimum height for consistency */
     }
     
-    /* Mobile text sizing */
+    /* Mobile text sizing - READABLE */
     .community-card h3,
     #communities .community-card h3,
     .communities-grid .community-card h3 {
-        font-size: 12px !important;
+        font-size: 14px !important; /* increased from 12px */
         line-height: 1.2 !important;
-        margin-bottom: 4px !important;
+        margin-bottom: 6px !important;
     }
     
     .community-card p,
     #communities .community-card p,
     .communities-grid .community-card p {
-        font-size: 10px !important;
+        font-size: 11px !important; /* increased from 10px */
         line-height: 1.3 !important;
         margin: 0 !important;
     }
@@ -129,8 +132,8 @@
     .community-card i,
     #communities .community-card i,
     .communities-grid .community-card i {
-        font-size: 16px !important;
-        margin-bottom: 4px !important;
+        font-size: 18px !important; /* increased from 16px */
+        margin-bottom: 6px !important;
     }
     
     /* Force container constraints */
