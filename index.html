@@ -2260,11 +2260,11 @@ const fixLogoCSS = `
 `;
 
 // Apply logo fix if needed
-if (document.querySelector('img[src*="sf-logo-white.png"]')) {
+if (document.querySelector('img[src*="sf-logo.png"]')) {
     document.head.insertAdjacentHTML('beforeend', fixLogoCSS);
     
     // Update all white logo references
-    document.querySelectorAll('img[src*="sf-logo-white.png"]').forEach(img => {
+    document.querySelectorAll('img[src*="sf-logo.png"]').forEach(img => {
         img.src = 'https://sociallyfounded.com/assets/sf-logo.png';
         img.className += ' logo-white';
     });
@@ -3109,7 +3109,7 @@ if (!document.querySelector('#pulse-animation')) {
         
         <!-- Center: Logo & Copyright -->
         <div class="sf-footer-center">
-            <img src="/assets/sf-logo-white.png" alt="SociallyFounded" class="sf-footer-logo" onerror="this.src='/assets/sf-logo.png'">
+            <img src="/assets/sf-logo.png" alt="SociallyFounded" class="sf-footer-logo" onerror="this.src='/assets/sf-logo.png'">
             <div class="sf-footer-copyright">© 2025 SociallyFounded</div>
         </div>
         
