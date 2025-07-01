@@ -279,11 +279,35 @@ class GoogleAuthService {
     }
 }
 
-// Initialize Google Auth Service when DOM is ready
+// Initialize Google Auth Service - Multiple approaches for reliability
+function initializeGoogleAuthService() {
+    if (!window.googleAuthService && window.GoogleAuthService) {
+        console.log('🔵 Google Auth: Creating global service instance...');
+        window.googleAuthService = new GoogleAuthService();
+        console.log('✅ Google Auth: Global service created');
+    }
+}
+
+// Try multiple initialization approaches
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🔵 Google Auth: DOM ready, initializing service...');
-    window.googleAuthService = new GoogleAuthService();
+    initializeGoogleAuthService();
 });
+
+// Fallback initialization if DOM is already loaded
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    console.log('🔵 Google Auth: DOM already ready, initializing immediately...');
+    setTimeout(initializeGoogleAuthService, 100);
+}
+
+// Additional fallback after a delay
+setTimeout(() => {
+    if (!window.googleAuthService) {
+        console.log('🔵 Google Auth: Fallback initialization...');
+        initializeGoogleAuthService();
+    }
+}, 1000);
 
 // Export for testing
 window.GoogleAuthService = GoogleAuthService;
+window.initializeGoogleAuthService = initializeGoogleAuthService;
