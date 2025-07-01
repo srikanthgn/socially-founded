@@ -1,1 +1,385 @@
+/* 🎨 ATOMIC STYLES: SF Brand Standards Only */
+/* File: shared/brand-styles.css */
+/* Purpose: Single-responsibility brand styling */
+/* Dependencies: Google Fonts (Poppins) */
 
+/* ===== GOOGLE FONTS IMPORT ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ===== CSS VARIABLES: SF Brand Standards ===== */
+:root {
+    /* PRIMARY BRAND COLORS (NEVER CHANGE) */
+    --sf-navy: #003554;
+    --sf-gold: #D4AF37;
+    --sf-white: #FFFFFF;
+    
+    /* NAVY VARIATIONS */
+    --sf-navy-light: #004a6b;
+    --sf-navy-dark: #002240;
+    
+    /* GOLD VARIATIONS */
+    --sf-gold-light: #E8C547;
+    --sf-gold-dark: #B8941F;
+    
+    /* GRADIENTS */
+    --sf-navy-gradient: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+    --sf-gold-gradient: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+    
+    /* GLASS EFFECTS */
+    --sf-glass: rgba(255, 255, 255, 0.1);
+    --sf-glass-border: rgba(255, 255, 255, 0.2);
+    
+    /* TYPOGRAPHY */
+    --sf-font-primary: 'Poppins', sans-serif;
+    --sf-font-fallback: sans-serif;
+    
+    /* FONT WEIGHTS */
+    --sf-weight-light: 300;
+    --sf-weight-regular: 400;
+    --sf-weight-medium: 500;
+    --sf-weight-semibold: 600;
+    --sf-weight-bold: 700;
+    
+    /* SPACING */
+    --sf-spacing-xs: 0.25rem;   /* 4px */
+    --sf-spacing-sm: 0.5rem;    /* 8px */
+    --sf-spacing-md: 1rem;      /* 16px */
+    --sf-spacing-lg: 1.5rem;    /* 24px */
+    --sf-spacing-xl: 2rem;      /* 32px */
+    --sf-spacing-2xl: 3rem;     /* 48px */
+    
+    /* BORDER RADIUS */
+    --sf-radius-sm: 8px;
+    --sf-radius-md: 12px;
+    --sf-radius-lg: 16px;
+    --sf-radius-xl: 20px;
+    
+    /* SHADOWS */
+    --sf-shadow-sm: 0 2px 8px rgba(0, 53, 84, 0.1);
+    --sf-shadow-md: 0 4px 12px rgba(0, 53, 84, 0.15);
+    --sf-shadow-lg: 0 8px 24px rgba(0, 53, 84, 0.2);
+    
+    /* TRANSITIONS */
+    --sf-transition-fast: 0.15s ease;
+    --sf-transition-normal: 0.2s ease;
+    --sf-transition-slow: 0.3s ease;
+}
+
+/* ===== GLOBAL RESETS ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== BODY & HTML ===== */
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--sf-font-primary);
+    font-weight: var(--sf-weight-regular);
+    line-height: 1.6;
+    color: var(--sf-white);
+    background: var(--sf-navy-gradient);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== SF LOGO STANDARDS ===== */
+.sf-logo {
+    height: 40px; /* EXACT HEIGHT - NEVER CHANGE */
+    width: auto; /* MAINTAIN ASPECT RATIO */
+    display: block;
+}
+
+.sf-logo-container {
+    position: fixed;
+    top: var(--sf-spacing-lg);
+    left: var(--sf-spacing-lg);
+    z-index: 1000;
+}
+
+/* ===== TYPOGRAPHY CLASSES ===== */
+.sf-heading-1 {
+    font-size: 2.5rem;
+    font-weight: var(--sf-weight-bold);
+    line-height: 1.2;
+    color: var(--sf-white);
+}
+
+.sf-heading-2 {
+    font-size: 2rem;
+    font-weight: var(--sf-weight-semibold);
+    line-height: 1.3;
+    color: var(--sf-white);
+}
+
+.sf-heading-3 {
+    font-size: 1.5rem;
+    font-weight: var(--sf-weight-medium);
+    line-height: 1.4;
+    color: var(--sf-white);
+}
+
+.sf-text-body {
+    font-size: 1rem;
+    font-weight: var(--sf-weight-regular);
+    line-height: 1.6;
+    color: var(--sf-white);
+}
+
+.sf-text-small {
+    font-size: 0.875rem;
+    font-weight: var(--sf-weight-regular);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.sf-text-gold {
+    color: var(--sf-gold);
+}
+
+.sf-text-center {
+    text-align: center;
+}
+
+/* ===== BUTTON STYLES ===== */
+.sf-button {
+    font-family: var(--sf-font-primary);
+    font-weight: var(--sf-weight-semibold);
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--sf-radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all var(--sf-transition-normal);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sf-spacing-sm);
+}
+
+.sf-button-primary {
+    background: var(--sf-gold-gradient);
+    color: var(--sf-navy);
+}
+
+.sf-button-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--sf-shadow-md);
+}
+
+.sf-button-secondary {
+    background: var(--sf-glass);
+    color: var(--sf-white);
+    border: 1px solid var(--sf-glass-border);
+    backdrop-filter: blur(15px);
+}
+
+.sf-button-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+/* ===== CARD STYLES ===== */
+.sf-card {
+    background: var(--sf-glass);
+    backdrop-filter: blur(15px);
+    border-radius: var(--sf-radius-xl);
+    border: 1px solid var(--sf-glass-border);
+    padding: var(--sf-spacing-xl);
+    margin-bottom: var(--sf-spacing-lg);
+}
+
+.sf-card-compact {
+    padding: var(--sf-spacing-lg);
+}
+
+/* ===== CONTAINER STYLES ===== */
+.sf-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--sf-spacing-lg);
+}
+
+.sf-container-narrow {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--sf-spacing-lg);
+}
+
+/* ===== LAYOUT UTILITIES ===== */
+.sf-flex {
+    display: flex;
+}
+
+.sf-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sf-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sf-flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.sf-grid {
+    display: grid;
+}
+
+.sf-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sf-spacing-lg);
+}
+
+.sf-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sf-spacing-lg);
+}
+
+/* ===== SPACING UTILITIES ===== */
+.sf-margin-top {
+    margin-top: var(--sf-spacing-lg);
+}
+
+.sf-margin-bottom {
+    margin-bottom: var(--sf-spacing-lg);
+}
+
+.sf-padding {
+    padding: var(--sf-spacing-lg);
+}
+
+.sf-padding-small {
+    padding: var(--sf-spacing-md);
+}
+
+/* ===== COMPONENT-SPECIFIC BASE STYLES ===== */
+.sf-auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sf-spacing-xl);
+}
+
+.sf-passport-display {
+    background: var(--sf-gold-gradient);
+    color: var(--sf-navy);
+    border-radius: var(--sf-radius-lg);
+    padding: var(--sf-spacing-lg);
+    text-align: center;
+}
+
+/* ===== STATUS INDICATORS ===== */
+.sf-status {
+    display: inline-block;
+    padding: var(--sf-spacing-sm) var(--sf-spacing-md);
+    border-radius: var(--sf-radius-sm);
+    font-weight: var(--sf-weight-semibold);
+    font-size: 0.875rem;
+}
+
+.sf-status-success {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+}
+
+.sf-status-error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+.sf-status-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.sf-status-info {
+    background: var(--sf-glass);
+    color: var(--sf-white);
+    border: 1px solid var(--sf-glass-border);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .sf-container {
+        padding: 0 var(--sf-spacing-md);
+    }
+    
+    .sf-heading-1 {
+        font-size: 2rem;
+    }
+    
+    .sf-heading-2 {
+        font-size: 1.5rem;
+    }
+    
+    .sf-grid-2,
+    .sf-grid-3 {
+        grid-template-columns: 1fr;
+    }
+    
+    .sf-card {
+        padding: var(--sf-spacing-lg);
+    }
+    
+    .sf-logo-container {
+        top: var(--sf-spacing-md);
+        left: var(--sf-spacing-md);
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+.sf-button:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--sf-gold);
+    outline-offset: 2px;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.sf-hidden {
+    display: none !important;
+}
+
+.sf-visible {
+    display: block !important;
+}
+
+.sf-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
