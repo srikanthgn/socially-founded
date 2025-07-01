@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to SociallyFounded</title>
+    
+    <!-- Brand Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Brand Styles -->
+    <link rel="stylesheet" href="/shared/brand-styles.css">
+    
+    <style>
+        /* Welcome Page - Brand Compliant */
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #F5F5F5;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: #FFFFFF;
+            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
+            padding: 15px 20px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        /* Welcome Container */
+        .welcome-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Welcome Card */
+        .welcome-card {
+            background: #FFFFFF;
+            border: 2px solid #D4AF37;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 53, 84, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #003554;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #003554;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* User Info Display */
+        .user-info {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            display: none; /* Hidden until user data loads */
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #D4AF37;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        .user-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #003554;
+            margin-bottom: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .user-email {
+            font-size: 1rem;
+            color: #003554;
+            opacity: 0.7;
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .sf-passport {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #D4AF37;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Loading State */
+        .loading-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #003554;
+            font-size: 1rem;
+            margin: 20px 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .loading-state i {
+            color: #D4AF37;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Next Steps */
+        .next-steps {
+            margin-top: 30px;
+        }
+
+        .next-steps h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #003554;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .step-card {
+            background: #F5F5F5;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: #D4AF37;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 53, 84, 0.1);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #D4AF37;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: 600;
+            margin-right: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #003554;
+            margin-bottom: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .step-description {
+            font-size: 0.95rem;
+            color: #003554;
+            opacity: 0.8;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Error State */
+        .error-state {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            color: #dc2626;
+            margin: 20px 0;
+            display: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .welcome-card {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .step-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <img src="/assets/sf-logo.png" alt="SociallyFounded" class="logo">
+    </header>
+
+    <!-- Welcome Container -->
+    <div class="welcome-container">
+        <div class="welcome-card">
+            <h1 class="welcome-title">🎉 Welcome to SociallyFounded!</h1>
+            <p class="welcome-subtitle">
+                Your entrepreneurial journey starts here. Let's get you set up with your Digital SF Passport.
+            </p>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-state">
+                <i class="fas fa-spinner"></i>
+                <span>Setting up your profile...</span>
+            </div>
+
+            <!-- User Info (Hidden initially) -->
+            <div id="user-info" class="user-info">
+                <img id="user-avatar" src="" alt="Profile" class="user-avatar">
+                <div id="user-name" class="user-name">Loading...</div>
+                <div id="user-email" class="user-email">Loading...</div>
+                <div id="sf-passport" class="sf-passport">SF Passport: Loading...</div>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="error-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Unable to load your profile. Please try refreshing the page.</span>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h3>Your Next Steps:</h3>
+                
+                <div class="step-card">
+                    <span class="step-number">1</span>
+                    <div style="display: inline-block; vertical-align: top; width: calc(100% - 50px);">
+                        <div class="step-title">Explore Venues</div>
+                        <div class="step-description">Discover entrepreneur-friendly venues worldwide and start checking in.</div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">2</span>
+                    <div style="display: inline-block; vertical-align: top; width: calc(100% - 50px);">
+                        <div class="step-title">Document Your Ideas</div>
+                        <div class="step-description">Track your business ideas with unique SF-IDs and get AI assistance from DIANA.</div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">3</span>
+                    <div style="display: inline-block; vertical-align: top; width: calc(100% - 50px);">
+                        <div class="step-title">Connect with Founders</div>
+                        <div class="step-description">Join the global community of entrepreneurs and build meaningful connections.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/shared/firebase-config.js"></script>
+    
+    <script>
+        class WelcomePageManager {
+            constructor() {
+                this.initialize();
+            }
+
+            async initialize() {
+                console.log('👋 Welcome Page: Initializing...');
+                
+                try {
+                    // Wait for Firebase
+                    await this.waitForFirebase();
+                    
+                    // Wait for authentication state
+                    firebase.auth().onAuthStateChanged((user) => {
+                        if (user) {
+                            this.loadUserProfile(user);
+                        } else {
+                            // Not authenticated, redirect to homepage
+                            console.log('❌ No authenticated user, redirecting...');
+                            window.location.href = '/';
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.error('❌ Welcome Page initialization failed:', error);
+                    this.showError();
+                }
+            }
+
+            async waitForFirebase() {
+                return new Promise((resolve) => {
+                    const checkFirebase = () => {
+                        if (window.firebase && window.firebase.auth && window.db) {
+                            resolve();
+                        } else {
+                            setTimeout(checkFirebase, 100);
+                        }
+                    };
+                    checkFirebase();
+                });
+            }
+
+            async loadUserProfile(user) {
+                try {
+                    console.log('👋 Loading user profile:', user.uid);
+                    
+                    // Get user document from Firestore
+                    const userDoc = await window.db.collection('users').doc(user.uid).get();
+                    
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        this.displayUserInfo(userData);
+                    } else {
+                        // User document doesn't exist, show basic info
+                        this.displayBasicUserInfo(user);
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Failed to load user profile:', error);
+                    this.displayBasicUserInfo(user);
+                }
+            }
+
+            displayUserInfo(userData) {
+                // Hide loading state
+                document.getElementById('loading-state').style.display = 'none';
+                
+                // Show user info
+                const userInfoEl = document.getElementById('user-info');
+                userInfoEl.style.display = 'block';
+                
+                // Update user details
+                document.getElementById('user-name').textContent = userData.displayName || 'Entrepreneur';
+                document.getElementById('user-email').textContent = userData.email || '';
+                
+                // Update avatar
+                const avatarEl = document.getElementById('user-avatar');
+                if (userData.photoURL) {
+                    avatarEl.src = userData.photoURL;
+                    avatarEl.style.display = 'block';
+                } else {
+                    avatarEl.style.display = 'none';
+                }
+                
+                // Update SF Passport
+                const passportId = userData.sfPassport?.id || 'Generating...';
+                document.getElementById('sf-passport').textContent = `SF Passport: ${passportId}`;
+                
+                console.log('✅ User profile displayed successfully');
+            }
+
+            displayBasicUserInfo(user) {
+                // Hide loading state
+                document.getElementById('loading-state').style.display = 'none';
+                
+                // Show user info
+                const userInfoEl = document.getElementById('user-info');
+                userInfoEl.style.display = 'block';
+                
+                // Update basic details
+                document.getElementById('user-name').textContent = user.displayName || 'Entrepreneur';
+                document.getElementById('user-email').textContent = user.email || '';
+                
+                // Update avatar
+                const avatarEl = document.getElementById('user-avatar');
+                if (user.photoURL) {
+                    avatarEl.src = user.photoURL;
+                    avatarEl.style.display = 'block';
+                } else {
+                    avatarEl.style.display = 'none';
+                }
+                
+                document.getElementById('sf-passport').textContent = 'SF Passport: Generating...';
+                
+                console.log('✅ Basic user info displayed');
+            }
+
+            showError() {
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('error-state').style.display = 'block';
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.welcomeManager = new WelcomePageManager();
+        });
+    </script>
+</body>
+</html>
