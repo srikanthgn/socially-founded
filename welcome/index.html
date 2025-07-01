@@ -1,453 +1,313 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Where Entrepreneurs Build Together</title>
-    
-    <!-- Brand Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* SF Brand Compliant Styles */
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
+// 🔬 ATOMIC SERVICE: Google Authentication Only
+// File: /components/authentication/google-auth/google-auth.js
+// Purpose: Single-responsibility Google OAuth logic
+// Dependencies: Firebase Auth, Google Auth Provider
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-            background: #F5F5F5;
-        }
+class GoogleAuthService {
+    constructor() {
+        this.provider = null;
+        this.isInitialized = false;
+        this.isLoading = false;
+        this.initialize();
+    }
 
-        /* Header */
-        .header {
-            background: #FFFFFF;
-            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
-            padding: 15px 20px;
-            border-bottom: 1px solid #E0E0E0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            height: 40px;
-            width: auto;
-        }
-
-        /* Main Container */
-        .homepage-container {
-            min-height: 100vh;
-            background: #F5F5F5;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            padding-top: 80px;
-        }
-
-        /* Hero Section */
-        .hero-section {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .hero-content {
-            max-width: 600px;
-            color: #003554;
-        }
-
-        .hero-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-            color: #003554;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            font-weight: 400;
-            margin-bottom: 40px;
-            color: #003554;
-            opacity: 0.8;
-            line-height: 1.5;
-        }
-
-        /* Authentication Section */
-        .auth-section {
-            background: #FFFFFF;
-            border: 2px solid #D4AF37;
-            border-radius: 16px;
-            padding: 40px;
-            margin: 20px 0;
-            box-shadow: 0 8px 32px rgba(0, 53, 84, 0.1);
-        }
-
-        .auth-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #003554;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        /* Component Containers */
-        .auth-component {
-            margin-bottom: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-
-        .auth-component.loaded {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .component-loader {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            color: #003554;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        .component-loader i {
-            margin-right: 10px;
-            animation: spin 1s linear infinite;
-            color: #D4AF37;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Features Section */
-        .features-section {
-            background: #E0E0E0;
-            padding: 60px 20px;
-            border-top: 1px solid #D4AF37;
-        }
-
-        .features-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            background: #FFFFFF;
-            border: 1px solid #E0E0E0;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            color: #003554;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 53, 84, 0.15);
-            border-color: #D4AF37;
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: #D4AF37;
-            margin-bottom: 20px;
-        }
-
-        .feature-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #003554;
-        }
-
-        .feature-description {
-            font-size: 0.95rem;
-            color: #003554;
-            opacity: 0.8;
-            line-height: 1.5;
-            font-weight: 400;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.25rem;
-            }
+    // ONLY Google Auth initialization
+    async initialize() {
+        try {
+            console.log('🔵 Google Auth: Initializing...');
             
-            .auth-section {
-                margin: 20px;
-                padding: 30px 20px;
-            }
+            // Wait for Firebase to be ready
+            await this.waitForFirebase();
             
-            .features-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
+            // Set up Google Auth Provider
+            this.provider = new firebase.auth.GoogleAuthProvider();
+            this.provider.addScope('email');
+            this.provider.addScope('profile');
+            
+            // Set up button event listener
+            this.setupButtonListener();
+            
+            this.isInitialized = true;
+            console.log('✅ Google Auth: Initialized successfully');
+            
+        } catch (error) {
+            console.error('❌ Google Auth: Initialization failed', error);
+            this.showError('Google authentication setup failed');
         }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <img src="/assets/sf-logo.png" alt="SociallyFounded" class="logo">
-    </header>
+    }
 
-    <!-- Main Container -->
-    <div class="homepage-container">
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1 class="hero-title">Where Entrepreneurs Build Together</h1>
-                <p class="hero-subtitle">
-                    Get your Digital Passport, check in at venues worldwide, 
-                    track your ideas, and join a global community of founders.
-                </p>
-
-                <!-- Authentication Section -->
-                <div class="auth-section">
-                    <h2 class="auth-title">Join the Global Entrepreneurial Community</h2>
-                    
-                    <!-- Google Auth Component -->
-                    <div id="google-auth-component" class="auth-component">
-                        <div class="component-loader">
-                            <i class="fas fa-spinner"></i>
-                            Loading Google Authentication...
-                        </div>
-                    </div>
-
-                    <!-- LinkedIn Auth Component -->
-                    <div id="linkedin-auth-component" class="auth-component">
-                        <div class="component-loader">
-                            <i class="fas fa-spinner"></i>
-                            Loading LinkedIn Authentication...
-                        </div>
-                    </div>
-
-                    <!-- Email Auth Component -->
-                    <div id="email-auth-component" class="auth-component">
-                        <div class="component-loader">
-                            <i class="fas fa-spinner"></i>
-                            Loading Email Authentication...
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="features-section">
-            <div class="features-container">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-passport"></i>
-                    </div>
-                    <h3 class="feature-title">Digital SF Passport</h3>
-                    <p class="feature-description">
-                        Get your unique SF-ID and build your entrepreneurial identity with achievements and milestones.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <h3 class="feature-title">Global Venue Network</h3>
-                    <p class="feature-description">
-                        Check in at entrepreneur-friendly venues worldwide and unlock exclusive benefits and connections.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h3 class="feature-title">AI-Powered Ideas</h3>
-                    <p class="feature-description">
-                        Track your ideas with unique SF-IDs and get AI assistance from DIANA to develop your concepts.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3 class="feature-title">Founder Community</h3>
-                    <p class="feature-description">
-                        Connect with like-minded entrepreneurs, share experiences, and build lasting business relationships.
-                    </p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Firebase CDN Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
-
-    <!-- Core Scripts -->
-    <script src="/shared/firebase-config.js"></script>
-    <script src="/shared/component-loader.js"></script>
-
-    <!-- Homepage Script -->
-    <script>
-        class HomepageManager {
-            constructor() {
-                this.loadedComponents = new Set();
-                this.initialize();
-            }
-
-            async initialize() {
-                console.log('🏠 Homepage: Starting initialization...');
-                
-                try {
-                    // Wait for dependencies
-                    await this.waitForDependencies();
-                    
-                    // Load authentication components
-                    await this.loadAuthenticationComponents();
-                    
-                    console.log('✅ Homepage: Initialization complete');
-                } catch (error) {
-                    console.error('❌ Homepage: Initialization failed', error);
+    // ONLY wait for Firebase
+    async waitForFirebase() {
+        return new Promise((resolve) => {
+            const checkFirebase = () => {
+                if (window.firebase && window.firebase.auth && window.db) {
+                    resolve();
+                } else {
+                    setTimeout(checkFirebase, 100);
                 }
-            }
-
-            async waitForDependencies() {
-                // Wait for Firebase with fallback
-                await this.waitForFirebase();
-                console.log('✅ Firebase ready');
-                
-                // Wait for Component Loader
-                return new Promise((resolve) => {
-                    const check = () => {
-                        if (window.SFComponentLoader && window.loadComponent) {
-                            console.log('✅ Component Loader ready');
-                            resolve();
-                        } else {
-                            setTimeout(check, 100);
-                        }
-                    };
-                    check();
-                });
-            }
-
-            async waitForFirebase() {
-                return new Promise((resolve) => {
-                    const checkFirebase = () => {
-                        // Check if Firebase is ready
-                        if (window.firebase && window.db && window.auth) {
-                            resolve();
-                        } else if (window.waitForFirebase) {
-                            // Use the global function if available
-                            window.waitForFirebase().then(resolve);
-                        } else {
-                            // Check again in 100ms
-                            setTimeout(checkFirebase, 100);
-                        }
-                    };
-                    checkFirebase();
-                });
-            }
-
-            async loadAuthenticationComponents() {
-                console.log('🔐 Loading authentication components...');
-                
-                const components = [
-                    { id: 'google-auth-component', path: '/components/authentication/google-auth/google-auth.html', name: 'Google Auth' },
-                    { id: 'linkedin-auth-component', path: '/components/authentication/linkedin-auth/linkedin-auth.html', name: 'LinkedIn Auth' },
-                    { id: 'email-auth-component', path: '/components/authentication/email-auth/email-auth.html', name: 'Email Auth' }
-                ];
-
-                const promises = components.map(comp => this.loadSingleComponent(comp));
-                const results = await Promise.allSettled(promises);
-
-                results.forEach((result, index) => {
-                    if (result.status === 'fulfilled') {
-                        console.log(`✅ ${components[index].name} loaded successfully`);
-                    } else {
-                        console.log(`⚠️ ${components[index].name} not available yet`);
-                        this.showComponentNotReady(components[index].id, components[index].name);
-                    }
-                });
-            }
-
-            async loadSingleComponent({ id, path, name }) {
-                try {
-                    await window.loadComponent(id, path);
-                    this.markComponentLoaded(id);
-                    this.loadedComponents.add(name);
-                } catch (error) {
-                    throw new Error(`Failed to load ${name}: ${error.message}`);
-                }
-            }
-
-            markComponentLoaded(componentId) {
-                const element = document.getElementById(componentId);
-                if (element) {
-                    element.classList.add('loaded');
-                }
-            }
-
-            showComponentNotReady(componentId, componentName) {
-                const container = document.getElementById(componentId);
-                if (container) {
-                    container.innerHTML = `
-                        <div style="
-                            background: rgba(255, 193, 7, 0.1);
-                            border: 2px solid rgba(255, 193, 7, 0.3);
-                            border-radius: 8px;
-                            padding: 20px;
-                            color: #856404;
-                            text-align: center;
-                            font-family: 'Poppins', sans-serif;
-                        ">
-                            <i class="fas fa-tools" style="margin-bottom: 10px; font-size: 1.5rem; color: #D4AF37;"></i>
-                            <div style="font-weight: 600; margin-bottom: 5px;">${componentName} Coming Soon</div>
-                            <div style="font-size: 0.9rem; opacity: 0.8;">This authentication method is being set up.</div>
-                        </div>
-                    `;
-                    this.markComponentLoaded(componentId);
-                }
-            }
-        }
-
-        // Global authentication handlers
-        window.onAuthSuccess = function(authData) {
-            console.log('🎉 Authentication successful:', authData);
-            window.location.href = '/welcome/';
-        };
-
-        window.onAuthError = function(error) {
-            console.error('❌ Authentication failed:', error);
-        };
-
-        // Initialize when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            window.homepageManager = new HomepageManager();
+            };
+            checkFirebase();
         });
-    </script>
-</body>
-</html>
+    }
+
+    // ONLY set up button click listener
+    setupButtonListener() {
+        const button = document.getElementById('google-sign-in-btn');
+        if (button) {
+            button.addEventListener('click', () => this.handleSignIn());
+            console.log('🔵 Google Auth: Button listener attached');
+        } else {
+            console.error('❌ Google Auth: Button not found');
+        }
+    }
+
+    // ONLY handle Google sign-in
+    async handleSignIn() {
+        if (!this.isInitialized || this.isLoading) {
+            console.warn('⚠️ Google Auth: Not ready or already loading');
+            return;
+        }
+
+        try {
+            console.log('🔵 Google Auth: Starting sign-in process...');
+            
+            this.setLoadingState(true);
+            this.hideError();
+            this.showStatus('Signing in with Google...');
+
+            // Perform Google OAuth
+            const result = await firebase.auth().signInWithPopup(this.provider);
+            const user = result.user;
+            
+            console.log('✅ Google Auth: Sign-in successful', user.uid);
+            
+            // Create user profile
+            await this.createUserProfile(user);
+            
+            // Show success state
+            this.setSuccessState();
+            
+            // Notify success
+            this.notifyAuthSuccess(user);
+            
+        } catch (error) {
+            console.error('❌ Google Auth: Sign-in failed', error);
+            this.handleAuthError(error);
+        } finally {
+            this.setLoadingState(false);
+        }
+    }
+
+    // ONLY create user profile in database
+    async createUserProfile(user) {
+        try {
+            const userRef = window.db.collection('users').doc(user.uid);
+            const userDoc = await userRef.get();
+            
+            if (!userDoc.exists) {
+                console.log('🔵 Google Auth: Creating new user profile...');
+                
+                // Generate SF Passport ID
+                const passportId = this.generateSFPassportId();
+                
+                const userData = {
+                    uid: user.uid,
+                    displayName: user.displayName || 'Entrepreneur',
+                    email: user.email,
+                    photoURL: user.photoURL || '',
+                    authProvider: 'google',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    
+                    // SF Passport
+                    sfPassport: {
+                        id: passportId,
+                        level: 1,
+                        tier: 'Navy',
+                        experience: 0,
+                        issuedDate: firebase.firestore.FieldValue.serverTimestamp()
+                    },
+                    
+                    // Entrepreneur Profile
+                    entrepreneur: {
+                        active: true,
+                        linkedinVerified: false,
+                        ideas: [],
+                        achievements: ['Digital Passport'],
+                        venueCheckIns: []
+                    },
+                    
+                    // Gamification
+                    gamification: {
+                        sfPoints: 50, // Welcome bonus
+                        dailyStreak: 1,
+                        achievements: ['Digital Passport', 'Google Sign-in'],
+                        level: 1,
+                        experiencePoints: 50
+                    }
+                };
+                
+                await userRef.set(userData);
+                console.log('✅ Google Auth: User profile created');
+            } else {
+                // Update last login
+                await userRef.update({
+                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                console.log('✅ Google Auth: User login updated');
+            }
+        } catch (error) {
+            console.error('❌ Google Auth: Profile creation failed', error);
+            throw error;
+        }
+    }
+
+    // ONLY generate SF Passport ID
+    generateSFPassportId() {
+        const randomNum = Math.floor(Math.random() * 9000000) + 1000000;
+        const countryCode = this.detectCountryCode();
+        return `SF-${randomNum}-${countryCode}`;
+    }
+
+    // ONLY detect country code
+    detectCountryCode() {
+        try {
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const countryMap = {
+                'Asia/Dubai': 'AE',
+                'America/New_York': 'US',
+                'Europe/London': 'GB',
+                'Asia/Kolkata': 'IN',
+                'Australia/Sydney': 'AU'
+            };
+            return countryMap[timezone] || 'US';
+        } catch (error) {
+            return 'US';
+        }
+    }
+
+    // ONLY handle authentication errors
+    handleAuthError(error) {
+        let errorMessage = 'Google sign-in failed. Please try again.';
+        
+        switch (error.code) {
+            case 'auth/popup-closed-by-user':
+                errorMessage = 'Sign-in cancelled. Please try again.';
+                break;
+            case 'auth/popup-blocked':
+                errorMessage = 'Popup blocked. Please allow popups and try again.';
+                break;
+            case 'auth/network-request-failed':
+                errorMessage = 'Network error. Please check your connection.';
+                break;
+        }
+        
+        this.showError(errorMessage);
+    }
+
+    // ONLY notify authentication success
+    notifyAuthSuccess(user) {
+        // Call global success handler
+        if (window.onAuthSuccess) {
+            window.onAuthSuccess({
+                provider: 'google',
+                user: user,
+                method: 'popup'
+            });
+        }
+        
+        // Redirect to welcome page after short delay
+        setTimeout(() => {
+            window.location.href = '/welcome/';
+        }, 1000);
+    }
+
+    // ONLY set loading state
+    setLoadingState(loading) {
+        this.isLoading = loading;
+        const button = document.getElementById('google-sign-in-btn');
+        
+        if (button) {
+            button.disabled = loading;
+            if (loading) {
+                button.classList.add('loading');
+            } else {
+                button.classList.remove('loading');
+            }
+        }
+    }
+
+    // ONLY set success state
+    setSuccessState() {
+        const button = document.getElementById('google-sign-in-btn');
+        if (button) {
+            button.classList.add('success');
+            button.querySelector('.google-text').textContent = 'Signed in successfully!';
+        }
+        
+        this.showStatus('Welcome to SociallyFounded!');
+    }
+
+    // ONLY show status message
+    showStatus(message) {
+        const statusEl = document.getElementById('google-auth-status');
+        const textEl = statusEl?.querySelector('.status-text');
+        
+        if (statusEl && textEl) {
+            textEl.textContent = message;
+            statusEl.classList.remove('hidden');
+        }
+    }
+
+    // ONLY show error message
+    showError(message) {
+        const errorEl = document.getElementById('google-auth-error');
+        const textEl = errorEl?.querySelector('.error-text');
+        
+        if (errorEl && textEl) {
+            textEl.textContent = message;
+            errorEl.classList.remove('hidden');
+        }
+    }
+
+    // ONLY hide error message
+    hideError() {
+        const errorEl = document.getElementById('google-auth-error');
+        if (errorEl) {
+            errorEl.classList.add('hidden');
+        }
+    }
+}
+
+// Initialize Google Auth Service - Multiple approaches for reliability
+function initializeGoogleAuthService() {
+    if (!window.googleAuthService && window.GoogleAuthService) {
+        console.log('🔵 Google Auth: Creating global service instance...');
+        window.googleAuthService = new GoogleAuthService();
+        console.log('✅ Google Auth: Global service created');
+    }
+}
+
+// Try multiple initialization approaches
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔵 Google Auth: DOM ready, initializing service...');
+    initializeGoogleAuthService();
+});
+
+// Fallback initialization if DOM is already loaded
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    console.log('🔵 Google Auth: DOM already ready, initializing immediately...');
+    setTimeout(initializeGoogleAuthService, 100);
+}
+
+// Additional fallback after a delay
+setTimeout(() => {
+    if (!window.googleAuthService) {
+        console.log('🔵 Google Auth: Fallback initialization...');
+        initializeGoogleAuthService();
+    }
+}, 1000);
+
+// Export for testing
+window.GoogleAuthService = GoogleAuthService;
+window.initializeGoogleAuthService = initializeGoogleAuthService;
