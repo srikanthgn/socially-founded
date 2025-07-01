@@ -333,6 +333,12 @@
         </section>
     </div>
 
+    <!-- Firebase CDN Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+
     <!-- Shared Core Scripts -->
     <script src="/shared/firebase-config.js"></script>
     <script src="/shared/component-loader.js"></script>
@@ -404,15 +410,40 @@
                 // Wait for all auth components to load
                 const results = await Promise.allSettled(authPromises);
                 
-                // Log results
+                // Log detailed results
                 results.forEach((result, index) => {
                     const componentNames = ['Google Auth', 'LinkedIn Auth', 'Email Auth'];
                     if (result.status === 'fulfilled') {
                         console.log(`✅ ${componentNames[index]} component loaded successfully`);
                     } else {
                         console.error(`❌ ${componentNames[index]} component failed to load:`, result.reason);
+                        // Show user-friendly error for missing components
+                        const componentIds = ['google-auth-component', 'linkedin-auth-component', 'email-auth-component'];
+                        this.showComponentNotReady(componentIds[index], componentNames[index]);
                     }
                 });
+            }
+
+            showComponentNotReady(componentId, componentName) {
+                const container = document.getElementById(componentId);
+                if (container) {
+                    container.innerHTML = `
+                        <div style="
+                            background: rgba(255, 193, 7, 0.1);
+                            border: 2px solid rgba(255, 193, 7, 0.3);
+                            border-radius: 8px;
+                            padding: 20px;
+                            color: #856404;
+                            text-align: center;
+                            font-family: 'Poppins', sans-serif;
+                        ">
+                            <i class="fas fa-tools" style="margin-bottom: 10px; font-size: 1.5rem; color: #D4AF37;"></i>
+                            <div style="font-weight: 600; margin-bottom: 5px;">${componentName} Coming Soon</div>
+                            <div style="font-size: 0.9rem; opacity: 0.8;">This authentication method is being set up.</div>
+                        </div>
+                    `;
+                    this.markComponentLoaded(componentId);
+                }
             }
 
             async loadGoogleAuth() {
