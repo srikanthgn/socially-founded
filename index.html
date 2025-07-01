@@ -1,1 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SociallyFounded - Where Entrepreneurs Build Together</title>
+    
+    <!-- Brand Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Brand Styles -->
+    <link rel="stylesheet" href="/shared/styling/brand-styles.css">
+    <link rel="stylesheet" href="/shared/styling/component-base.css">
+    
+    <!-- Homepage Specific Styles -->
+    <style>
+        /* SF Brand Font Application - Poppins Throughout */
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
 
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+
+        /* Homepage Layout - Brand Compliant */
+        .homepage-container {
+            min-height: 100vh;
+            background: #F5F5F5; /* Off-white background for logo compatibility */
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Header with Logo */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: #FFFFFF; /* Pure white header */
+            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
+            padding: 15px 20px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 50px;
+            text-align: center;
+            background: #F5F5F5; /* Light gray background */
+        }
+
+        .hero-content {
+            max-width: 600px;
+            color: #003554; /* Navy text on light background */
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700; /* Poppins Bold */
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: #003554; /* Navy text */
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            font-weight: 400; /* Poppins Regular */
+            margin-bottom: 40px;
+            color: #003554; /* Navy text */
+            opacity: 0.8;
+            line-height: 1.5;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Authentication Section - Brand Compliant */
+        .auth-section {
+            background: #FFFFFF; /* Pure white card */
+            border: 2px solid #D4AF37; /* Gold border accent */
+            border-radius: 16px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0, 53, 84, 0.1);
+        }
+
+        .auth-title {
+            font-size: 1.5rem;
+            font-weight: 600; /* Poppins SemiBold */
+            color: #003554; /* Navy text */
+            margin-bottom: 30px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Atomic Component Containers */
+        .auth-component {
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .auth-component.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .component-loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            color: #003554; /* Navy text */
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400; /* Poppins Regular */
+        }
+
+        .component-loader i {
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+            color: #D4AF37; /* Gold spinner */
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Features Section - Brand Compliant */
+        .features-section {
+            background: #E0E0E0; /* Light gray section */
+            padding: 60px 20px;
+            border-top: 1px solid #D4AF37; /* Gold accent border */
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #FFFFFF; /* White cards */
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            color: #003554; /* Navy text */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 53, 84, 0.15);
+            border-color: #D4AF37; /* Gold border on hover */
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #D4AF37; /* Gold icons */
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600; /* Poppins SemiBold */
+            margin-bottom: 15px;
+            color: #003554; /* Navy text */
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .feature-description {
+            font-size: 0.95rem;
+            color: #003554; /* Navy text */
+            opacity: 0.8;
+            line-height: 1.5;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400; /* Poppins Regular */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.25rem;
+            }
+
+            .auth-section {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+
+            .features-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Component Loading States - Brand Compliant */
+        .component-error {
+            background: rgba(239, 68, 68, 0.1); /* Light red background */
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            color: #dc2626; /* Red text */
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .component-error i {
+            margin-right: 8px;
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with SF Logo -->
+    <header class="header">
+        <img src="/assets/sf-logo.png" alt="SociallyFounded" class="logo">
+    </header>
+
+    <!-- Homepage Container -->
+    <div class="homepage-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Where Entrepreneurs Build Together</h1>
+                <p class="hero-subtitle">
+                    Get your Digital Passport, check in at venues worldwide, 
+                    track your ideas, and join a global community of founders.
+                </p>
+
+                <!-- Authentication Section - Atomic Component Container -->
+                <div class="auth-section">
+                    <h2 class="auth-title">Join the Global Entrepreneurial Community</h2>
+                    
+                    <!-- Google Auth Atomic Component -->
+                    <div id="google-auth-component" class="auth-component">
+                        <div class="component-loader">
+                            <i class="fas fa-spinner"></i>
+                            Loading Google Authentication...
+                        </div>
+                    </div>
+
+                    <!-- LinkedIn Auth Atomic Component -->
+                    <div id="linkedin-auth-component" class="auth-component">
+                        <div class="component-loader">
+                            <i class="fas fa-spinner"></i>
+                            Loading LinkedIn Authentication...
+                        </div>
+                    </div>
+
+                    <!-- Email Auth Atomic Component -->
+                    <div id="email-auth-component" class="auth-component">
+                        <div class="component-loader">
+                            <i class="fas fa-spinner"></i>
+                            Loading Email Authentication...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="features-container">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-passport"></i>
+                    </div>
+                    <h3 class="feature-title">Digital SF Passport</h3>
+                    <p class="feature-description">
+                        Get your unique SF-ID and build your entrepreneurial identity with achievements and milestones.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Global Venue Network</h3>
+                    <p class="feature-description">
+                        Check in at entrepreneur-friendly venues worldwide and unlock exclusive benefits and connections.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="feature-title">AI-Powered Ideas</h3>
+                    <p class="feature-description">
+                        Track your ideas with unique SF-IDs and get AI assistance from DIANA to develop your concepts.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Founder Community</h3>
+                    <p class="feature-description">
+                        Connect with like-minded entrepreneurs, share experiences, and build lasting business relationships.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Shared Core Scripts -->
+    <script src="/shared/firebase-config.js"></script>
+    <script src="/shared/component-loader.js"></script>
+
+    <!-- Homepage Component Loader Script -->
+    <script>
+        class HomepageComponentLoader {
+            constructor() {
+                this.componentLoader = null;
+                this.loadedComponents = new Set();
+                this.initialize();
+            }
+
+            async initialize() {
+                console.log('🏠 Homepage: Initializing atomic component loader...');
+                
+                // Wait for ComponentLoader to be available
+                await this.waitForComponentLoader();
+                
+                // Wait for Firebase to be ready
+                await this.waitForFirebase();
+                
+                // Load authentication atomic components in parallel
+                await this.loadAuthenticationComponents();
+                
+                console.log('✅ Homepage: All atomic components loaded successfully');
+            }
+
+            async waitForComponentLoader() {
+                return new Promise((resolve) => {
+                    const checkLoader = () => {
+                        if (window.SFComponentLoader && window.loadComponent) {
+                            console.log('✅ SFComponentLoader ready');
+                            resolve();
+                        } else {
+                            // Check again in 100ms
+                            setTimeout(checkLoader, 100);
+                        }
+                    };
+                    checkLoader();
+                });
+            }
+
+            async waitForFirebase() {
+                return new Promise((resolve) => {
+                    if (window.firebase && window.db) {
+                        resolve();
+                    } else {
+                        const checkFirebase = setInterval(() => {
+                            if (window.firebase && window.db) {
+                                clearInterval(checkFirebase);
+                                resolve();
+                            }
+                        }, 100);
+                    }
+                });
+            }
+
+            async loadAuthenticationComponents() {
+                console.log('🔐 Homepage: Loading authentication atomic components...');
+
+                // Load authentication components in parallel
+                const authPromises = [
+                    this.loadGoogleAuth(),
+                    this.loadLinkedInAuth(),
+                    this.loadEmailAuth()
+                ];
+
+                // Wait for all auth components to load
+                const results = await Promise.allSettled(authPromises);
+                
+                // Log results
+                results.forEach((result, index) => {
+                    const componentNames = ['Google Auth', 'LinkedIn Auth', 'Email Auth'];
+                    if (result.status === 'fulfilled') {
+                        console.log(`✅ ${componentNames[index]} component loaded successfully`);
+                    } else {
+                        console.error(`❌ ${componentNames[index]} component failed to load:`, result.reason);
+                    }
+                });
+            }
+
+            async loadGoogleAuth() {
+                try {
+                    await window.loadComponent(
+                        'google-auth-component',
+                        '/components/authentication/google-auth/google-auth.html'
+                    );
+                    
+                    this.markComponentLoaded('google-auth-component');
+                    this.loadedComponents.add('google-auth');
+                } catch (error) {
+                    this.handleComponentError('google-auth-component', 'Google Authentication', error);
+                }
+            }
+
+            async loadLinkedInAuth() {
+                try {
+                    await window.loadComponent(
+                        'linkedin-auth-component',
+                        '/components/authentication/linkedin-auth/linkedin-auth.html'
+                    );
+                    
+                    this.markComponentLoaded('linkedin-auth-component');
+                    this.loadedComponents.add('linkedin-auth');
+                } catch (error) {
+                    this.handleComponentError('linkedin-auth-component', 'LinkedIn Authentication', error);
+                }
+            }
+
+            async loadEmailAuth() {
+                try {
+                    await window.loadComponent(
+                        'email-auth-component',
+                        '/components/authentication/email-auth/email-auth.html'
+                    );
+                    
+                    this.markComponentLoaded('email-auth-component');
+                    this.loadedComponents.add('email-auth');
+                } catch (error) {
+                    this.handleComponentError('email-auth-component', 'Email Authentication', error);
+                }
+            }
+
+            markComponentLoaded(componentId) {
+                const element = document.getElementById(componentId);
+                if (element) {
+                    element.classList.add('loaded');
+                }
+            }
+
+            handleComponentError(componentId, componentName, error) {
+                console.error(`❌ Failed to load ${componentName}:`, error);
+                
+                const errorHtml = `
+                    <div class="component-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        ${componentName} temporarily unavailable
+                    </div>
+                `;
+                
+                document.getElementById(componentId).innerHTML = errorHtml;
+                this.markComponentLoaded(componentId);
+            }
+
+            // Public method to check if components are loaded
+            isComponentLoaded(componentName) {
+                return this.loadedComponents.has(componentName);
+            }
+
+            // Public method to get loaded components
+            getLoadedComponents() {
+                return Array.from(this.loadedComponents);
+            }
+        }
+
+        // Initialize Homepage Component Loader when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.homepageLoader = new HomepageComponentLoader();
+        });
+
+        // Global authentication success handler
+        window.onAuthSuccess = function(authData) {
+            console.log('🎉 Authentication successful:', authData);
+            
+            // Redirect to welcome page with SF Passport
+            window.location.href = '/welcome/';
+        };
+
+        // Global authentication error handler
+        window.onAuthError = function(error) {
+            console.error('❌ Authentication failed:', error);
+            
+            // Show user-friendly error message
+            if (window.errorHandler) {
+                window.errorHandler.showError('Authentication failed. Please try again.');
+            }
+        };
+    </script>
+</body>
+</html>
