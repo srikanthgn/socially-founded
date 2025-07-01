@@ -1,14 +1,9 @@
 // 🔥 ATOMIC SERVICE: Firebase Configuration Only
 // File: shared/firebase-config.js
-// Purpose: Single-responsibility Firebase initialization
-// Dependencies: None (standalone atomic service)
+// Purpose: Single-responsibility Firebase setup
+// Dependencies: Firebase CDN scripts
 
-// Import Firebase v9 SDK
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-
-// PRODUCTION Firebase Configuration
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
     authDomain: "sociallyfounded-df98f.firebaseapp.com",
@@ -19,97 +14,50 @@ const firebaseConfig = {
     measurementId: "G-EY0BZE30Q0"
 };
 
-// Atomic Firebase Service Class
-class FirebaseConfigService {
-    constructor() {
-        this.app = null;
-        this.db = null;
-        this.auth = null;
-        this.initialized = false;
-        this.initializeFirebase();
+// Initialize Firebase when script loads
+(function initializeFirebase() {
+    console.log('🔥 Firebase: Initializing configuration...');
+    
+    // Check if Firebase is loaded from CDN
+    if (typeof firebase === 'undefined') {
+        console.error('❌ Firebase: Firebase SDK not loaded. Please include Firebase CDN scripts.');
+        return;
     }
-
-    // ONLY Firebase initialization - nothing else
-    initializeFirebase() {
-        try {
-            console.log('🔥 Initializing Firebase...');
-            
-            // Initialize Firebase app
-            this.app = initializeApp(firebaseConfig);
-            this.db = getFirestore(this.app);
-            this.auth = getAuth(this.app);
-            
-            this.initialized = true;
-            console.log('✅ Firebase initialized successfully');
-            
-            // Debug configuration (safe logging)
-            console.log('🔧 Firebase Config Loaded:', {
-                authDomain: firebaseConfig.authDomain,
-                projectId: firebaseConfig.projectId,
-                messagingSenderId: firebaseConfig.messagingSenderId
-            });
-            
-        } catch (error) {
-            console.error('❌ Firebase initialization failed:', error);
-            this.initialized = false;
-            throw new Error(`Firebase initialization failed: ${error.message}`);
-        }
-    }
-
-    // ONLY getter methods for Firebase instances
-    getApp() {
-        if (!this.initialized) {
-            throw new Error('Firebase not initialized');
-        }
-        return this.app;
-    }
-
-    getDatabase() {
-        if (!this.initialized) {
-            throw new Error('Firebase not initialized');
-        }
-        return this.db;
-    }
-
-    getAuth() {
-        if (!this.initialized) {
-            throw new Error('Firebase not initialized');
-        }
-        return this.auth;
-    }
-
-    // ONLY status check
-    isInitialized() {
-        return this.initialized;
-    }
-}
-
-// Create global Firebase service instance
-let firebaseService = null;
-
-// ONLY Firebase service initialization
-function initializeFirebaseService() {
-    if (!firebaseService) {
-        firebaseService = new FirebaseConfigService();
-    }
-    return firebaseService;
-}
-
-// Export for atomic services
-window.SFFirebaseConfig = {
-    initialize: initializeFirebaseService,
-    getService: () => firebaseService,
-    isReady: () => firebaseService?.isInitialized() || false
-};
-
-// Auto-initialize on load
-document.addEventListener('DOMContentLoaded', () => {
+    
     try {
-        initializeFirebaseService();
-        console.log('🚀 Firebase Config Service ready');
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // Initialize Firestore
+        window.db = firebase.firestore();
+        
+        // Initialize Auth
+        window.auth = firebase.auth();
+        
+        // Initialize Analytics (optional)
+        if (firebase.analytics) {
+            window.analytics = firebase.analytics();
+        }
+        
+        console.log('✅ Firebase: Initialized successfully');
+        console.log('✅ Firestore: Database ready');
+        console.log('✅ Auth: Authentication ready');
+        
+        // Dispatch event for other scripts
+        window.dispatchEvent(new Event('firebaseReady'));
+        
     } catch (error) {
-        console.error('🔥 Firebase Config Service failed:', error);
+        console.error('❌ Firebase: Initialization failed', error);
     }
-});
+})();
 
-export { initializeFirebaseService, firebaseService };
+// Global Firebase ready check function
+window.waitForFirebase = function() {
+    return new Promise((resolve) => {
+        if (window.db && window.auth) {
+            resolve();
+        } else {
+            window.addEventListener('firebaseReady', resolve, { once: true });
+        }
+    });
+};
