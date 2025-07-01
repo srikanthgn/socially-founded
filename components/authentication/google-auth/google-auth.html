@@ -1,1 +1,178 @@
+<!-- 🔬 ATOMIC COMPONENT: Google Authentication UI Only -->
+<!-- File: /components/authentication/google-auth/google-auth.html -->
+<!-- Purpose: Single-responsibility Google sign-in button -->
+<!-- Dependencies: None (standalone UI component) -->
 
+<div class="google-auth-container">
+    <button id="google-sign-in-btn" class="google-auth-button" type="button">
+        <div class="google-auth-content">
+            <div class="google-icon">
+                <i class="fab fa-google"></i>
+            </div>
+            <span class="google-text">Continue with Google</span>
+        </div>
+    </button>
+    
+    <div id="google-auth-status" class="auth-status hidden">
+        <div class="status-content">
+            <i class="fas fa-spinner fa-spin status-icon"></i>
+            <span class="status-text">Signing in with Google...</span>
+        </div>
+    </div>
+    
+    <div id="google-auth-error" class="auth-error hidden">
+        <div class="error-content">
+            <i class="fas fa-exclamation-triangle error-icon"></i>
+            <span class="error-text">Google sign-in failed. Please try again.</span>
+        </div>
+    </div>
+</div>
+
+<style>
+/* 🎨 ATOMIC STYLES: Google Auth Component Only */
+.google-auth-container {
+    width: 100%;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.google-auth-button {
+    width: 100%;
+    height: 50px;
+    background: #FFFFFF;
+    border: 2px solid #E0E0E0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.google-auth-button:hover {
+    border-color: #4285f4;
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.15);
+    transform: translateY(-1px);
+}
+
+.google-auth-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
+}
+
+.google-auth-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}
+
+.google-auth-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 12px;
+}
+
+.google-icon {
+    font-size: 18px;
+    color: #4285f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.google-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #003554;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Status and Error States */
+.auth-status, .auth-error {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.auth-status {
+    background: rgba(66, 133, 244, 0.1);
+    border: 1px solid rgba(66, 133, 244, 0.3);
+    color: #1565c0;
+}
+
+.auth-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #dc2626;
+}
+
+.status-content, .error-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.status-icon, .error-icon {
+    font-size: 14px;
+}
+
+.status-text, .error-text {
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Loading State Animation */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.google-auth-button.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.google-auth-button.loading .google-text {
+    opacity: 0.7;
+}
+
+/* Success State */
+.google-auth-button.success {
+    background: #e8f5e8;
+    border-color: #4caf50;
+}
+
+.google-auth-button.success .google-icon {
+    color: #4caf50;
+}
+
+.google-auth-button.success .google-text {
+    color: #2e7d32;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .google-auth-button {
+        height: 48px;
+    }
+    
+    .google-text {
+        font-size: 15px;
+    }
+    
+    .google-icon {
+        font-size: 16px;
+    }
+}
+</style>
