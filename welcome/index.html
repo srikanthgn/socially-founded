@@ -1,313 +1,517 @@
-// 🔬 ATOMIC SERVICE: Google Authentication Only
-// File: /components/authentication/google-auth/google-auth.js
-// Purpose: Single-responsibility Google OAuth logic
-// Dependencies: Firebase Auth, Google Auth Provider
-
-class GoogleAuthService {
-    constructor() {
-        this.provider = null;
-        this.isInitialized = false;
-        this.isLoading = false;
-        this.initialize();
-    }
-
-    // ONLY Google Auth initialization
-    async initialize() {
-        try {
-            console.log('🔵 Google Auth: Initializing...');
-            
-            // Wait for Firebase to be ready
-            await this.waitForFirebase();
-            
-            // Set up Google Auth Provider
-            this.provider = new firebase.auth.GoogleAuthProvider();
-            this.provider.addScope('email');
-            this.provider.addScope('profile');
-            
-            // Set up button event listener
-            this.setupButtonListener();
-            
-            this.isInitialized = true;
-            console.log('✅ Google Auth: Initialized successfully');
-            
-        } catch (error) {
-            console.error('❌ Google Auth: Initialization failed', error);
-            this.showError('Google authentication setup failed');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to SociallyFounded</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    }
 
-    // ONLY wait for Firebase
-    async waitForFirebase() {
-        return new Promise((resolve) => {
-            const checkFirebase = () => {
-                if (window.firebase && window.firebase.auth && window.db) {
-                    resolve();
-                } else {
-                    setTimeout(checkFirebase, 100);
+        body {
+            background: #F5F5F5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #FFFFFF;
+            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
+            padding: 15px 20px;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #003554;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #D4AF37;
+        }
+
+        .logout-btn {
+            background: #003554;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #004a6b;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .welcome-hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #003554;
+            margin-bottom: 15px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.25rem;
+            color: #003554;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .passport-card {
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 53, 84, 0.3);
+            border: 3px solid #D4AF37;
+        }
+
+        .passport-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #D4AF37;
+        }
+
+        .passport-id {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .passport-details {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .passport-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D4AF37;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .next-steps {
+            margin-top: 50px;
+        }
+
+        .next-steps-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #003554;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .step-card {
+            background: #FFFFFF;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: #D4AF37;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 53, 84, 0.15);
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #003554;
+            margin-bottom: 10px;
+        }
+
+        .step-description {
+            font-size: 1rem;
+            color: #003554;
+            opacity: 0.8;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .step-action {
+            background: #D4AF37;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .step-action:hover {
+            background: #b8941f;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #003554;
+        }
+
+        .loading i {
+            color: #D4AF37;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            color: #dc2626;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="/assets/sf-logo.png" alt="SociallyFounded" class="logo">
+        <div id="user-header" class="user-header hidden">
+            <img id="user-avatar" src="" alt="Profile" class="user-avatar">
+            <span id="user-name">Loading...</span>
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-hero">
+            <h1 class="welcome-title">🎉 Welcome to SociallyFounded!</h1>
+            <p class="welcome-subtitle">
+                Your entrepreneurial journey starts here. You're now part of a global community of founders.
+            </p>
+        </div>
+
+        <div id="loading-state" class="loading">
+            <i class="fas fa-spinner"></i>
+            <span>Setting up your Digital SF Passport...</span>
+        </div>
+
+        <div id="passport-card" class="passport-card hidden">
+            <div class="passport-title">
+                <i class="fas fa-passport"></i> Digital SF Passport
+            </div>
+            <div id="passport-id" class="passport-id">SF-XXXXXXX-XX</div>
+            <div class="passport-details">
+                <div><strong>Member Since:</strong> <span id="member-since">Today</span></div>
+                <div><strong>Status:</strong> <span style="color: #D4AF37;">Active Entrepreneur</span></div>
+            </div>
+            <div class="passport-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="sf-points">50</div>
+                    <div class="stat-label">SF Points</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="level">1</div>
+                    <div class="stat-label">Level</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="check-ins">0</div>
+                    <div class="stat-label">Check-ins</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-state" class="error hidden">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Unable to load your profile</h3>
+            <p>Please try refreshing the page or contact support if the issue persists.</p>
+            <button onclick="location.reload()" class="step-action">Refresh Page</button>
+        </div>
+
+        <div class="next-steps">
+            <h2 class="next-steps-title">Start Your Entrepreneurial Journey</h2>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="step-title">Find Venues</h3>
+                    <p class="step-description">
+                        Discover entrepreneur-friendly venues worldwide and start checking in to earn SF Points.
+                    </p>
+                    <button class="step-action" onclick="alert('Venue discovery coming soon!')">
+                        Explore Venues
+                    </button>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="step-title">Document Ideas</h3>
+                    <p class="step-description">
+                        Track your business ideas with unique SF-IDs and get AI assistance from DIANA.
+                    </p>
+                    <button class="step-action" onclick="alert('Idea tracker coming soon!')">
+                        Add Your First Idea
+                    </button>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="step-title">Connect with Founders</h3>
+                    <p class="step-description">
+                        Join the global community of entrepreneurs and build meaningful connections.
+                    </p>
+                    <button class="step-action" onclick="alert('Community features coming soon!')">
+                        Join Community
+                    </button>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="step-title">Meet DIANA AI</h3>
+                    <p class="step-description">
+                        Get personalized business advice and brainstorming assistance from our AI co-founder.
+                    </p>
+                    <button class="step-action" onclick="alert('DIANA AI coming soon!')">
+                        Chat with DIANA
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/shared/firebase-config.js"></script>
+    
+    <script>
+        class WelcomeManager {
+            constructor() {
+                this.user = null;
+                this.userData = null;
+                this.init();
+            }
+
+            async init() {
+                console.log('👋 Welcome: Starting...');
+                
+                try {
+                    await this.waitForFirebase();
+                    firebase.auth().onAuthStateChanged((user) => {
+                        if (user) {
+                            this.user = user;
+                            this.loadProfile();
+                        } else {
+                            window.location.href = '/';
+                        }
+                    });
+                } catch (error) {
+                    console.error('❌ Welcome failed:', error);
+                    this.showError();
                 }
-            };
-            checkFirebase();
-        });
-    }
+            }
 
-    // ONLY set up button click listener
-    setupButtonListener() {
-        const button = document.getElementById('google-sign-in-btn');
-        if (button) {
-            button.addEventListener('click', () => this.handleSignIn());
-            console.log('🔵 Google Auth: Button listener attached');
-        } else {
-            console.error('❌ Google Auth: Button not found');
-        }
-    }
-
-    // ONLY handle Google sign-in
-    async handleSignIn() {
-        if (!this.isInitialized || this.isLoading) {
-            console.warn('⚠️ Google Auth: Not ready or already loading');
-            return;
-        }
-
-        try {
-            console.log('🔵 Google Auth: Starting sign-in process...');
-            
-            this.setLoadingState(true);
-            this.hideError();
-            this.showStatus('Signing in with Google...');
-
-            // Perform Google OAuth
-            const result = await firebase.auth().signInWithPopup(this.provider);
-            const user = result.user;
-            
-            console.log('✅ Google Auth: Sign-in successful', user.uid);
-            
-            // Create user profile
-            await this.createUserProfile(user);
-            
-            // Show success state
-            this.setSuccessState();
-            
-            // Notify success
-            this.notifyAuthSuccess(user);
-            
-        } catch (error) {
-            console.error('❌ Google Auth: Sign-in failed', error);
-            this.handleAuthError(error);
-        } finally {
-            this.setLoadingState(false);
-        }
-    }
-
-    // ONLY create user profile in database
-    async createUserProfile(user) {
-        try {
-            const userRef = window.db.collection('users').doc(user.uid);
-            const userDoc = await userRef.get();
-            
-            if (!userDoc.exists) {
-                console.log('🔵 Google Auth: Creating new user profile...');
-                
-                // Generate SF Passport ID
-                const passportId = this.generateSFPassportId();
-                
-                const userData = {
-                    uid: user.uid,
-                    displayName: user.displayName || 'Entrepreneur',
-                    email: user.email,
-                    photoURL: user.photoURL || '',
-                    authProvider: 'google',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    
-                    // SF Passport
-                    sfPassport: {
-                        id: passportId,
-                        level: 1,
-                        tier: 'Navy',
-                        experience: 0,
-                        issuedDate: firebase.firestore.FieldValue.serverTimestamp()
-                    },
-                    
-                    // Entrepreneur Profile
-                    entrepreneur: {
-                        active: true,
-                        linkedinVerified: false,
-                        ideas: [],
-                        achievements: ['Digital Passport'],
-                        venueCheckIns: []
-                    },
-                    
-                    // Gamification
-                    gamification: {
-                        sfPoints: 50, // Welcome bonus
-                        dailyStreak: 1,
-                        achievements: ['Digital Passport', 'Google Sign-in'],
-                        level: 1,
-                        experiencePoints: 50
-                    }
-                };
-                
-                await userRef.set(userData);
-                console.log('✅ Google Auth: User profile created');
-            } else {
-                // Update last login
-                await userRef.update({
-                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+            async waitForFirebase() {
+                return new Promise((resolve) => {
+                    const check = () => {
+                        if (window.firebase && window.db) {
+                            resolve();
+                        } else {
+                            setTimeout(check, 100);
+                        }
+                    };
+                    check();
                 });
-                console.log('✅ Google Auth: User login updated');
             }
-        } catch (error) {
-            console.error('❌ Google Auth: Profile creation failed', error);
-            throw error;
-        }
-    }
 
-    // ONLY generate SF Passport ID
-    generateSFPassportId() {
-        const randomNum = Math.floor(Math.random() * 9000000) + 1000000;
-        const countryCode = this.detectCountryCode();
-        return `SF-${randomNum}-${countryCode}`;
-    }
+            async loadProfile() {
+                try {
+                    this.updateHeader();
+                    
+                    const userDoc = await window.db.collection('users').doc(this.user.uid).get();
+                    
+                    if (userDoc.exists) {
+                        this.userData = userDoc.data();
+                        this.showProfile();
+                    } else {
+                        this.showBasicProfile();
+                    }
+                } catch (error) {
+                    console.error('❌ Profile load failed:', error);
+                    this.showBasicProfile();
+                }
+            }
 
-    // ONLY detect country code
-    detectCountryCode() {
-        try {
-            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const countryMap = {
-                'Asia/Dubai': 'AE',
-                'America/New_York': 'US',
-                'Europe/London': 'GB',
-                'Asia/Kolkata': 'IN',
-                'Australia/Sydney': 'AU'
-            };
-            return countryMap[timezone] || 'US';
-        } catch (error) {
-            return 'US';
-        }
-    }
+            updateHeader() {
+                const userHeader = document.getElementById('user-header');
+                const userName = document.getElementById('user-name');
+                const userAvatar = document.getElementById('user-avatar');
+                
+                userName.textContent = this.user.displayName || 'Entrepreneur';
+                
+                if (this.user.photoURL) {
+                    userAvatar.src = this.user.photoURL;
+                } else {
+                    userAvatar.style.display = 'none';
+                }
+                
+                userHeader.classList.remove('hidden');
+            }
 
-    // ONLY handle authentication errors
-    handleAuthError(error) {
-        let errorMessage = 'Google sign-in failed. Please try again.';
-        
-        switch (error.code) {
-            case 'auth/popup-closed-by-user':
-                errorMessage = 'Sign-in cancelled. Please try again.';
-                break;
-            case 'auth/popup-blocked':
-                errorMessage = 'Popup blocked. Please allow popups and try again.';
-                break;
-            case 'auth/network-request-failed':
-                errorMessage = 'Network error. Please check your connection.';
-                break;
-        }
-        
-        this.showError(errorMessage);
-    }
+            showProfile() {
+                this.hideLoading();
+                this.showPassport();
+                
+                const passportId = this.userData.sfPassport?.id || this.generateId();
+                document.getElementById('passport-id').textContent = passportId;
+                
+                const memberSince = this.userData.createdAt ? 
+                    this.userData.createdAt.toDate().toLocaleDateString() : 'Today';
+                document.getElementById('member-since').textContent = memberSince;
+                
+                document.getElementById('sf-points').textContent = 
+                    this.userData.gamification?.sfPoints || 50;
+                document.getElementById('level').textContent = 
+                    this.userData.gamification?.level || 1;
+                document.getElementById('check-ins').textContent = 
+                    this.userData.entrepreneur?.venueCheckIns?.length || 0;
+            }
 
-    // ONLY notify authentication success
-    notifyAuthSuccess(user) {
-        // Call global success handler
-        if (window.onAuthSuccess) {
-            window.onAuthSuccess({
-                provider: 'google',
-                user: user,
-                method: 'popup'
-            });
-        }
-        
-        // Redirect to welcome page after short delay
-        setTimeout(() => {
-            window.location.href = '/welcome/';
-        }, 1000);
-    }
+            showBasicProfile() {
+                this.hideLoading();
+                this.showPassport();
+                
+                document.getElementById('passport-id').textContent = this.generateId();
+                document.getElementById('member-since').textContent = 'Today';
+            }
 
-    // ONLY set loading state
-    setLoadingState(loading) {
-        this.isLoading = loading;
-        const button = document.getElementById('google-sign-in-btn');
-        
-        if (button) {
-            button.disabled = loading;
-            if (loading) {
-                button.classList.add('loading');
-            } else {
-                button.classList.remove('loading');
+            generateId() {
+                const num = Math.floor(Math.random() * 9000000) + 1000000;
+                return `SF-${num}-US`;
+            }
+
+            hideLoading() {
+                document.getElementById('loading-state').classList.add('hidden');
+            }
+
+            showPassport() {
+                document.getElementById('passport-card').classList.remove('hidden');
+            }
+
+            showError() {
+                this.hideLoading();
+                document.getElementById('error-state').classList.remove('hidden');
             }
         }
-    }
 
-    // ONLY set success state
-    setSuccessState() {
-        const button = document.getElementById('google-sign-in-btn');
-        if (button) {
-            button.classList.add('success');
-            button.querySelector('.google-text').textContent = 'Signed in successfully!';
+        async function handleLogout() {
+            try {
+                console.log('🚪 Logging out...');
+                await firebase.auth().signOut();
+                window.location.href = '/';
+            } catch (error) {
+                console.error('❌ Logout failed:', error);
+                alert('Logout failed. Please try again.');
+            }
         }
-        
-        this.showStatus('Welcome to SociallyFounded!');
-    }
 
-    // ONLY show status message
-    showStatus(message) {
-        const statusEl = document.getElementById('google-auth-status');
-        const textEl = statusEl?.querySelector('.status-text');
-        
-        if (statusEl && textEl) {
-            textEl.textContent = message;
-            statusEl.classList.remove('hidden');
-        }
-    }
-
-    // ONLY show error message
-    showError(message) {
-        const errorEl = document.getElementById('google-auth-error');
-        const textEl = errorEl?.querySelector('.error-text');
-        
-        if (errorEl && textEl) {
-            textEl.textContent = message;
-            errorEl.classList.remove('hidden');
-        }
-    }
-
-    // ONLY hide error message
-    hideError() {
-        const errorEl = document.getElementById('google-auth-error');
-        if (errorEl) {
-            errorEl.classList.add('hidden');
-        }
-    }
-}
-
-// Initialize Google Auth Service - Multiple approaches for reliability
-function initializeGoogleAuthService() {
-    if (!window.googleAuthService && window.GoogleAuthService) {
-        console.log('🔵 Google Auth: Creating global service instance...');
-        window.googleAuthService = new GoogleAuthService();
-        console.log('✅ Google Auth: Global service created');
-    }
-}
-
-// Try multiple initialization approaches
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🔵 Google Auth: DOM ready, initializing service...');
-    initializeGoogleAuthService();
-});
-
-// Fallback initialization if DOM is already loaded
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    console.log('🔵 Google Auth: DOM already ready, initializing immediately...');
-    setTimeout(initializeGoogleAuthService, 100);
-}
-
-// Additional fallback after a delay
-setTimeout(() => {
-    if (!window.googleAuthService) {
-        console.log('🔵 Google Auth: Fallback initialization...');
-        initializeGoogleAuthService();
-    }
-}, 1000);
-
-// Export for testing
-window.GoogleAuthService = GoogleAuthService;
-window.initializeGoogleAuthService = initializeGoogleAuthService;
+        document.addEventListener('DOMContentLoaded', () => {
+            new WelcomeManager();
+        });
+    </script>
+</body>
+</html>
