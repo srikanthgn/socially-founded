@@ -154,8 +154,8 @@
                     const tempEmail = `linkedin-${Date.now()}@sociallyfounded.temp`;
                     const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!' + Math.random().toString(36).slice(-8);
 
-                    // Create user in Firebase Auth
-                    const userCredential = await window.createUserWithEmailAndPassword(window.firebaseAuth, tempEmail, tempPassword);
+                    // Create user in Firebase Auth using wrapper function
+                    const userCredential = await window.fbCreateUser(tempEmail, tempPassword);
                     const user = userCredential.user;
 
                     // Generate SF Passport ID
@@ -165,31 +165,31 @@
                     const userDoc = {
                         passportId: passportId,
                         uid: user.uid,
-                        displayName: 'LinkedIn Professional', // Will be updated when they complete profile
-                        email: tempEmail, // Temporary - will be updated when they complete profile
+                        displayName: 'LinkedIn Professional',
+                        email: tempEmail,
                         photoURL: '',
-                        createdAt: window.serverTimestamp(),
-                        lastLoginAt: window.serverTimestamp(),
+                        createdAt: window.fbServerTimestamp(),
+                        lastLoginAt: window.fbServerTimestamp(),
                         authProvider: 'linkedin',
-                        linkedinAuthCode: authCode, // Store for future server-side processing
-                        accountType: 'linkedin-verified', // Special account type
+                        linkedinAuthCode: authCode,
+                        accountType: 'linkedin-verified',
                         
                         // SF Passport
                         sfPassport: {
                             id: passportId,
-                            level: 2, // Start at level 2 for LinkedIn professionals
-                            tier: 'Silver', // Upgrade to Silver for LinkedIn verification
-                            experience: 250, // Bonus for LinkedIn verification
-                            issuedDate: window.serverTimestamp(),
+                            level: 2,
+                            tier: 'Silver',
+                            experience: 250,
+                            issuedDate: window.fbServerTimestamp(),
                             countryCode: this.getCountryCode()
                         },
 
                         // LinkedIn Professional Status
                         linkedinProfile: {
                             verified: true,
-                            connectedAt: window.serverTimestamp(),
+                            connectedAt: window.fbServerTimestamp(),
                             authorizationCode: authCode,
-                            profileCompleted: false // Flag to prompt for profile completion
+                            profileCompleted: false
                         },
 
                         // Entrepreneur Profile
@@ -203,10 +203,10 @@
 
                         // Enhanced Gamification for LinkedIn users
                         gamification: {
-                            sfPoints: 750, // Extra bonus for LinkedIn verification
+                            sfPoints: 750,
                             dailyStreak: 1,
                             achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter', 'Silver Member'],
-                            level: 2, // Start at level 2 for verified professionals
+                            level: 2,
                             experiencePoints: 250
                         },
 
@@ -219,10 +219,12 @@
                         }
                     };
 
-                    await window.setDoc(window.doc(window.firebaseDb, 'users', user.uid), userDoc);
+                    // Save user document using wrapper function
+                    const docRef = window.fbDoc(window.firebaseDb, 'users', user.uid);
+                    await window.fbSetDoc(docRef, userDoc);
 
-                    // Update Firebase Auth profile
-                    await window.updateProfile(user, {
+                    // Update Firebase Auth profile using wrapper function
+                    await window.fbUpdateProfile(user, {
                         displayName: 'LinkedIn Professional'
                     });
 
@@ -287,9 +289,13 @@
         // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             // Wait for Firebase to be ready
-            setTimeout(() => {
+            if (window.firebaseReady) {
                 new LinkedInCallbackHandler();
-            }, 1000);
+            } else {
+                window.addEventListener('firebaseReady', () => {
+                    new LinkedInCallbackHandler();
+                });
+            }
         });
     </script>
 </body>
