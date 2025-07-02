@@ -119,15 +119,19 @@
     <script>
         class LinkedInCallbackHandler {
             constructor() {
+                console.log('🔗 LinkedIn Callback Handler: Starting...');
                 this.initialize();
             }
 
             async initialize() {
                 try {
+                    console.log('🔗 LinkedIn Callback: Checking URL parameters...');
                     const urlParams = new URLSearchParams(window.location.search);
                     const code = urlParams.get('code');
                     const state = urlParams.get('state');
                     const error = urlParams.get('error');
+
+                    console.log('🔗 LinkedIn Callback: URL params:', { code: !!code, state: !!state, error });
 
                     if (error) {
                         throw new Error(`LinkedIn OAuth error: ${error}`);
@@ -138,28 +142,40 @@
                     }
 
                     this.updateStatus('Creating your SociallyFounded account...');
+                    console.log('🔗 LinkedIn Callback: Creating account with auth code...');
                     
-                    // Instead of trying to fetch LinkedIn profile via CORS-blocked API,
-                    // create account with available information and prompt for details
+                    // Check if Firebase is ready
+                    if (!window.fbCreateUser) {
+                        throw new Error('Firebase functions not ready');
+                    }
+
                     await this.createLinkedInVerifiedAccount(code);
 
                 } catch (error) {
+                    console.error('❌ LinkedIn Callback Error:', error);
                     this.handleError(error.message);
                 }
             }
 
             async createLinkedInVerifiedAccount(authCode) {
                 try {
+                    console.log('🔥 Firebase: Creating LinkedIn-verified account...');
+                    
                     // Create a temporary email for the LinkedIn account
                     const tempEmail = `linkedin-${Date.now()}@sociallyfounded.temp`;
                     const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!' + Math.random().toString(36).slice(-8);
 
+                    console.log('🔥 Firebase: Creating user with temp email:', tempEmail);
+
                     // Create user in Firebase Auth using wrapper function
                     const userCredential = await window.fbCreateUser(tempEmail, tempPassword);
                     const user = userCredential.user;
+                    
+                    console.log('✅ Firebase: User created successfully:', user.uid);
 
                     // Generate SF Passport ID
                     const passportId = this.generateSFPassportId();
+                    console.log('🎯 Generated SF Passport ID:', passportId);
 
                     // Create user document with LinkedIn verification
                     const userDoc = {
@@ -219,19 +235,25 @@
                         }
                     };
 
+                    console.log('🔥 Firebase: Saving user document...');
+
                     // Save user document using wrapper function
                     const docRef = window.fbDoc(window.firebaseDb, 'users', user.uid);
                     await window.fbSetDoc(docRef, userDoc);
+                    
+                    console.log('✅ Firebase: User document saved successfully');
 
                     // Update Firebase Auth profile using wrapper function
                     await window.fbUpdateProfile(user, {
                         displayName: 'LinkedIn Professional'
                     });
+                    
+                    console.log('✅ Firebase: Profile updated successfully');
 
                     this.handleSuccess();
 
                 } catch (error) {
-                    console.error('Firebase Error:', error);
+                    console.error('❌ Firebase Error:', error);
                     throw new Error(`Account creation failed: ${error.message}`);
                 }
             }
@@ -288,11 +310,31 @@
 
         // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('📄 DOM: Content loaded, checking Firebase...');
+            
+            // Add timeout to prevent endless waiting
+            let timeoutId = setTimeout(() => {
+                console.error('⏰ Timeout: Firebase took too long to initialize');
+                document.querySelector('.loading-spinner').style.display = 'none';
+                document.querySelector('.status-message').textContent = 'Initialization timeout';
+                document.getElementById('messageContainer').className = 'error-message';
+                document.getElementById('messageContainer').textContent = 'Firebase initialization timeout. Redirecting...';
+                
+                setTimeout(() => {
+                    window.location.href = 'https://sociallyfounded.com/';
+                }, 3000);
+            }, 10000); // 10 second timeout
+            
             // Wait for Firebase to be ready
             if (window.firebaseReady) {
+                console.log('✅ Firebase: Already ready, starting handler...');
+                clearTimeout(timeoutId);
                 new LinkedInCallbackHandler();
             } else {
+                console.log('⏳ Firebase: Waiting for ready event...');
                 window.addEventListener('firebaseReady', () => {
+                    console.log('✅ Firebase: Ready event received, starting handler...');
+                    clearTimeout(timeoutId);
                     new LinkedInCallbackHandler();
                 });
             }
