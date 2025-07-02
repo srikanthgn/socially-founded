@@ -209,10 +209,23 @@
                 this.updateStatus('');
                 this.showMessage('🎉 LinkedIn verification successful! Welcome to SociallyFounded Premium. Redirecting to your dashboard...', 'success');
                 
-                console.log('✅ LinkedIn authentication complete, redirecting to welcome page...');
+                console.log('✅ LinkedIn authentication complete, trying multiple redirect paths...');
+                
+                // Try multiple possible welcome page paths
+                const possiblePaths = [
+                    'https://sociallyfounded.com/welcome/',
+                    'https://sociallyfounded.com/welcome/index.html',
+                    'https://sociallyfounded.com/welcome.html'
+                ];
+                
+                // First, set a flag that we're authenticated
+                localStorage.setItem('sf_authenticated', 'true');
+                localStorage.setItem('sf_auth_method', 'linkedin');
                 
                 setTimeout(() => {
-                    window.location.href = 'https://sociallyfounded.com/welcome/index.html';
+                    // Try the main welcome path first
+                    console.log('🚀 Redirecting to welcome page...');
+                    window.location.href = 'https://sociallyfounded.com/welcome/';
                 }, 3000);
             }
 
