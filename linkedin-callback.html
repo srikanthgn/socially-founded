@@ -167,8 +167,8 @@
 
                     console.log('🔥 Firebase: Creating user with temp email:', tempEmail);
 
-                    // Create user in Firebase Auth using wrapper function
-                    const userCredential = await window.fbCreateUser(tempEmail, tempPassword);
+                    // Create user in Firebase Auth using compat SDK
+                    const userCredential = await window.firebaseAuth.createUserWithEmailAndPassword(tempEmail, tempPassword);
                     const user = userCredential.user;
                     
                     console.log('✅ Firebase: User created successfully:', user.uid);
@@ -184,8 +184,8 @@
                         displayName: 'LinkedIn Professional',
                         email: tempEmail,
                         photoURL: '',
-                        createdAt: window.fbServerTimestamp(),
-                        lastLoginAt: window.fbServerTimestamp(),
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
                         authProvider: 'linkedin',
                         linkedinAuthCode: authCode,
                         accountType: 'linkedin-verified',
@@ -196,14 +196,14 @@
                             level: 2,
                             tier: 'Silver',
                             experience: 250,
-                            issuedDate: window.fbServerTimestamp(),
+                            issuedDate: firebase.firestore.FieldValue.serverTimestamp(),
                             countryCode: this.getCountryCode()
                         },
 
                         // LinkedIn Professional Status
                         linkedinProfile: {
                             verified: true,
-                            connectedAt: window.fbServerTimestamp(),
+                            connectedAt: firebase.firestore.FieldValue.serverTimestamp(),
                             authorizationCode: authCode,
                             profileCompleted: false
                         },
@@ -237,14 +237,13 @@
 
                     console.log('🔥 Firebase: Saving user document...');
 
-                    // Save user document using wrapper function
-                    const docRef = window.fbDoc(window.firebaseDb, 'users', user.uid);
-                    await window.fbSetDoc(docRef, userDoc);
+                    // Save user document using compat SDK
+                    await window.firebaseDb.collection('users').doc(user.uid).set(userDoc);
                     
                     console.log('✅ Firebase: User document saved successfully');
 
-                    // Update Firebase Auth profile using wrapper function
-                    await window.fbUpdateProfile(user, {
+                    // Update Firebase Auth profile using compat SDK
+                    await user.updateProfile({
                         displayName: 'LinkedIn Professional'
                     });
                     
@@ -310,33 +309,47 @@
 
         // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('📄 DOM: Content loaded, checking Firebase...');
+            console.log('📄 DOM: Content loaded, Firebase should be ready...');
             
             // Add timeout to prevent endless waiting
             let timeoutId = setTimeout(() => {
-                console.error('⏰ Timeout: Firebase took too long to initialize');
+                console.error('⏰ Timeout: Process took too long');
                 document.querySelector('.loading-spinner').style.display = 'none';
-                document.querySelector('.status-message').textContent = 'Initialization timeout';
+                document.querySelector('.status-message').textContent = 'Process timeout';
                 document.getElementById('messageContainer').className = 'error-message';
-                document.getElementById('messageContainer').textContent = 'Firebase initialization timeout. Redirecting...';
+                document.getElementById('messageContainer').textContent = 'LinkedIn authentication timeout. Redirecting...';
                 
                 setTimeout(() => {
                     window.location.href = 'https://sociallyfounded.com/';
                 }, 3000);
-            }, 10000); // 10 second timeout
+            }, 15000); // 15 second timeout
             
-            // Wait for Firebase to be ready
-            if (window.firebaseReady) {
-                console.log('✅ Firebase: Already ready, starting handler...');
+            // Check if Firebase is ready (compat SDK loads synchronously)
+            if (window.firebaseReady && window.firebaseAuth) {
+                console.log('✅ Firebase: Ready, starting LinkedIn handler...');
                 clearTimeout(timeoutId);
                 new LinkedInCallbackHandler();
             } else {
-                console.log('⏳ Firebase: Waiting for ready event...');
-                window.addEventListener('firebaseReady', () => {
-                    console.log('✅ Firebase: Ready event received, starting handler...');
-                    clearTimeout(timeoutId);
-                    new LinkedInCallbackHandler();
-                });
+                console.log('❌ Firebase: Not ready, waiting...');
+                // Wait a bit more for Firebase to load
+                setTimeout(() => {
+                    if (window.firebaseReady && window.firebaseAuth) {
+                        console.log('✅ Firebase: Ready after wait, starting LinkedIn handler...');
+                        clearTimeout(timeoutId);
+                        new LinkedInCallbackHandler();
+                    } else {
+                        console.error('❌ Firebase: Still not ready after wait');
+                        clearTimeout(timeoutId);
+                        document.querySelector('.loading-spinner').style.display = 'none';
+                        document.querySelector('.status-message').textContent = 'Firebase initialization failed';
+                        document.getElementById('messageContainer').className = 'error-message';
+                        document.getElementById('messageContainer').textContent = 'Firebase failed to initialize. Redirecting...';
+                        
+                        setTimeout(() => {
+                            window.location.href = 'https://sociallyfounded.com/';
+                        }, 3000);
+                    }
+                }, 2000);
             }
         });
     </script>
