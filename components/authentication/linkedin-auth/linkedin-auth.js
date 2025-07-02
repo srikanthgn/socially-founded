@@ -3,7 +3,7 @@ class LinkedInAuthService {
     constructor() {
         this.clientId = '77tpngrlwmwnz7'; // SF Production LinkedIn App
         this.redirectUri = 'https://sociallyfounded.com/linkedin-callback.html';
-        this.scope = 'r_liteprofile r_emailaddress';
+        this.scope = 'openid profile email'; // Updated modern LinkedIn scopes
         this.state = this.generateState();
         this.button = null;
         this.messageDiv = null;
