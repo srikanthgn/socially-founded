@@ -181,31 +181,25 @@
             }
 
             async fetchLinkedInProfile(accessToken) {
-                const profileResponse = await fetch('https://api.linkedin.com/v2/me', {
+                // Use modern LinkedIn OpenID Connect userinfo endpoint
+                const userInfoResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
                     }
                 });
 
-                const emailResponse = await fetch('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                    }
-                });
-
-                if (!profileResponse.ok || !emailResponse.ok) {
+                if (!userInfoResponse.ok) {
                     throw new Error('Failed to fetch LinkedIn profile data');
                 }
 
-                const profile = await profileResponse.json();
-                const emailData = await emailResponse.json();
+                const userInfo = await userInfoResponse.json();
                 
                 return {
-                    id: profile.id,
-                    firstName: profile.localizedFirstName,
-                    lastName: profile.localizedLastName,
-                    email: emailData.elements[0]['handle~'].emailAddress,
-                    profilePicture: profile.profilePicture?.['displayImage~']?.elements?.[0]?.identifiers?.[0]?.identifier
+                    id: userInfo.sub,
+                    firstName: userInfo.given_name,
+                    lastName: userInfo.family_name,
+                    email: userInfo.email,
+                    profilePicture: userInfo.picture
                 };
             }
 
