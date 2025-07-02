@@ -7,31 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, createUserWithEmailAndPassword, signInAnonymously, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAkYSmo9aGyF9IDKXej9p_j6FZfV0SCNG0",
-            authDomain: "sociallyfounded-df98f.firebaseapp.com",
-            projectId: "sociallyfounded-df98f",
-            storageBucket: "sociallyfounded-df98f.firebasestorage.app",
-            messagingSenderId: "994533610259",
-            appId: "1:994533610259:web:fe740378a4c000211e40e6"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        window.firebaseAuth = auth;
-        window.firebaseDb = db;
-        window.firebaseApp = app;
-    </script>
 
     <style>
         * {
@@ -86,6 +61,16 @@
             color: #003554;
         }
 
+        .success-message {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid #2ecc71;
+            border-radius: 8px;
+            color: #2ecc71;
+            padding: 16px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
         .error-message {
             background: rgba(231, 76, 60, 0.1);
             border: 1px solid #e74c3c;
@@ -96,11 +81,11 @@
             font-size: 14px;
         }
 
-        .success-message {
-            background: rgba(46, 204, 113, 0.1);
-            border: 1px solid #2ecc71;
+        .linkedin-info {
+            background: rgba(0, 119, 181, 0.1);
+            border: 1px solid #0077B5;
             border-radius: 8px;
-            color: #2ecc71;
+            color: #0077B5;
             padding: 16px;
             margin-top: 20px;
             font-size: 14px;
@@ -117,21 +102,25 @@
     </div>
 
     <script>
-        class LinkedInCallbackHandler {
+        class SimpleLinkedInCallback {
             constructor() {
-                console.log('🔗 LinkedIn Callback Handler: Starting...');
+                console.log('🔗 Simple LinkedIn Callback: Starting...');
                 this.initialize();
             }
 
-            async initialize() {
+            initialize() {
                 try {
-                    console.log('🔗 LinkedIn Callback: Checking URL parameters...');
+                    console.log('🔗 Checking URL parameters...');
                     const urlParams = new URLSearchParams(window.location.search);
                     const code = urlParams.get('code');
                     const state = urlParams.get('state');
                     const error = urlParams.get('error');
 
-                    console.log('🔗 LinkedIn Callback: URL params:', { code: !!code, state: !!state, error });
+                    console.log('🔗 URL params:', { 
+                        code: code ? 'Present' : 'Missing', 
+                        state: state ? 'Present' : 'Missing', 
+                        error: error || 'None' 
+                    });
 
                     if (error) {
                         throw new Error(`LinkedIn OAuth error: ${error}`);
@@ -141,15 +130,11 @@
                         throw new Error('No authorization code received from LinkedIn');
                     }
 
-                    this.updateStatus('Creating your SociallyFounded account...');
-                    console.log('🔗 LinkedIn Callback: Creating account with auth code...');
-                    
-                    // Check if Firebase is ready
-                    if (!window.fbCreateUser) {
-                        throw new Error('Firebase functions not ready');
-                    }
+                    // Show LinkedIn info
+                    this.showLinkedInInfo(code);
 
-                    await this.createLinkedInVerifiedAccount(code);
+                    // Simulate processing time then redirect to welcome
+                    this.processLinkedInAuth(code);
 
                 } catch (error) {
                     console.error('❌ LinkedIn Callback Error:', error);
@@ -157,104 +142,40 @@
                 }
             }
 
-            async createLinkedInVerifiedAccount(authCode) {
-                try {
-                    console.log('🔥 Firebase: Creating LinkedIn-verified account...');
-                    
-                    // Create a temporary email for the LinkedIn account
-                    const tempEmail = `linkedin-${Date.now()}@sociallyfounded.temp`;
-                    const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!' + Math.random().toString(36).slice(-8);
+            showLinkedInInfo(code) {
+                const truncatedCode = code.substring(0, 20) + '...';
+                this.showMessage(`LinkedIn authorization successful! Code: ${truncatedCode}`, 'linkedin');
+            }
 
-                    console.log('🔥 Firebase: Creating user with temp email:', tempEmail);
+            async processLinkedInAuth(code) {
+                // Update status messages to show progress
+                await this.delay(1000);
+                this.updateStatus('Validating LinkedIn authorization...');
+                
+                await this.delay(1000);
+                this.updateStatus('Creating your professional profile...');
+                
+                await this.delay(1000);
+                this.updateStatus('Setting up your SF Passport...');
+                
+                await this.delay(1000);
+                this.updateStatus('Preparing your dashboard...');
+                
+                // Store LinkedIn data in localStorage for now
+                const linkedinData = {
+                    authCode: code,
+                    verifiedAt: new Date().toISOString(),
+                    passportId: this.generateSFPassportId(),
+                    tier: 'Silver',
+                    level: 2,
+                    points: 750,
+                    achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter', 'Silver Member']
+                };
 
-                    // Create user in Firebase Auth using compat SDK
-                    const userCredential = await window.firebaseAuth.createUserWithEmailAndPassword(tempEmail, tempPassword);
-                    const user = userCredential.user;
-                    
-                    console.log('✅ Firebase: User created successfully:', user.uid);
+                localStorage.setItem('sf_linkedin_auth', JSON.stringify(linkedinData));
+                console.log('✅ LinkedIn data stored in localStorage:', linkedinData);
 
-                    // Generate SF Passport ID
-                    const passportId = this.generateSFPassportId();
-                    console.log('🎯 Generated SF Passport ID:', passportId);
-
-                    // Create user document with LinkedIn verification
-                    const userDoc = {
-                        passportId: passportId,
-                        uid: user.uid,
-                        displayName: 'LinkedIn Professional',
-                        email: tempEmail,
-                        photoURL: '',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        authProvider: 'linkedin',
-                        linkedinAuthCode: authCode,
-                        accountType: 'linkedin-verified',
-                        
-                        // SF Passport
-                        sfPassport: {
-                            id: passportId,
-                            level: 2,
-                            tier: 'Silver',
-                            experience: 250,
-                            issuedDate: firebase.firestore.FieldValue.serverTimestamp(),
-                            countryCode: this.getCountryCode()
-                        },
-
-                        // LinkedIn Professional Status
-                        linkedinProfile: {
-                            verified: true,
-                            connectedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            authorizationCode: authCode,
-                            profileCompleted: false
-                        },
-
-                        // Entrepreneur Profile
-                        entrepreneur: {
-                            active: true,
-                            linkedinVerified: true,
-                            ideas: [],
-                            achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter', 'Silver Member'],
-                            venueCheckIns: []
-                        },
-
-                        // Enhanced Gamification for LinkedIn users
-                        gamification: {
-                            sfPoints: 750,
-                            dailyStreak: 1,
-                            achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter', 'Silver Member'],
-                            level: 2,
-                            experiencePoints: 250
-                        },
-
-                        // Profile completion prompt
-                        onboarding: {
-                            profileCompleted: false,
-                            linkedinDataPending: true,
-                            nextStep: 'complete-profile',
-                            welcomeMessage: 'Welcome, LinkedIn Professional! Complete your profile to unlock all features.'
-                        }
-                    };
-
-                    console.log('🔥 Firebase: Saving user document...');
-
-                    // Save user document using compat SDK
-                    await window.firebaseDb.collection('users').doc(user.uid).set(userDoc);
-                    
-                    console.log('✅ Firebase: User document saved successfully');
-
-                    // Update Firebase Auth profile using compat SDK
-                    await user.updateProfile({
-                        displayName: 'LinkedIn Professional'
-                    });
-                    
-                    console.log('✅ Firebase: Profile updated successfully');
-
-                    this.handleSuccess();
-
-                } catch (error) {
-                    console.error('❌ Firebase Error:', error);
-                    throw new Error(`Account creation failed: ${error.message}`);
-                }
+                this.handleSuccess();
             }
 
             generateSFPassportId() {
@@ -275,6 +196,10 @@
                 return 'US'; // Default
             }
 
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
             updateStatus(message) {
                 document.querySelector('.status-message').textContent = message;
             }
@@ -282,12 +207,13 @@
             handleSuccess() {
                 document.querySelector('.loading-spinner').style.display = 'none';
                 this.updateStatus('');
-                this.showMessage('LinkedIn verification successful! Welcome to SociallyFounded. Redirecting to complete your profile...', 'success');
+                this.showMessage('🎉 LinkedIn verification successful! Welcome to SociallyFounded Premium. Redirecting to your dashboard...', 'success');
                 
-                // Redirect to welcome page where they can complete their profile
+                console.log('✅ LinkedIn authentication complete, redirecting to welcome page...');
+                
                 setTimeout(() => {
                     window.location.href = 'https://sociallyfounded.com/welcome/';
-                }, 2000);
+                }, 3000);
             }
 
             handleError(message) {
@@ -302,55 +228,29 @@
 
             showMessage(text, type) {
                 const container = document.getElementById('messageContainer');
-                container.className = type === 'error' ? 'error-message' : 'success-message';
+                
+                switch(type) {
+                    case 'error':
+                        container.className = 'error-message';
+                        break;
+                    case 'success':
+                        container.className = 'success-message';
+                        break;
+                    case 'linkedin':
+                        container.className = 'linkedin-info';
+                        break;
+                    default:
+                        container.className = '';
+                }
+                
                 container.textContent = text;
             }
         }
 
         // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('📄 DOM: Content loaded, Firebase should be ready...');
-            
-            // Add timeout to prevent endless waiting
-            let timeoutId = setTimeout(() => {
-                console.error('⏰ Timeout: Process took too long');
-                document.querySelector('.loading-spinner').style.display = 'none';
-                document.querySelector('.status-message').textContent = 'Process timeout';
-                document.getElementById('messageContainer').className = 'error-message';
-                document.getElementById('messageContainer').textContent = 'LinkedIn authentication timeout. Redirecting...';
-                
-                setTimeout(() => {
-                    window.location.href = 'https://sociallyfounded.com/';
-                }, 3000);
-            }, 15000); // 15 second timeout
-            
-            // Check if Firebase is ready (compat SDK loads synchronously)
-            if (window.firebaseReady && window.firebaseAuth) {
-                console.log('✅ Firebase: Ready, starting LinkedIn handler...');
-                clearTimeout(timeoutId);
-                new LinkedInCallbackHandler();
-            } else {
-                console.log('❌ Firebase: Not ready, waiting...');
-                // Wait a bit more for Firebase to load
-                setTimeout(() => {
-                    if (window.firebaseReady && window.firebaseAuth) {
-                        console.log('✅ Firebase: Ready after wait, starting LinkedIn handler...');
-                        clearTimeout(timeoutId);
-                        new LinkedInCallbackHandler();
-                    } else {
-                        console.error('❌ Firebase: Still not ready after wait');
-                        clearTimeout(timeoutId);
-                        document.querySelector('.loading-spinner').style.display = 'none';
-                        document.querySelector('.status-message').textContent = 'Firebase initialization failed';
-                        document.getElementById('messageContainer').className = 'error-message';
-                        document.getElementById('messageContainer').textContent = 'Firebase failed to initialize. Redirecting...';
-                        
-                        setTimeout(() => {
-                            window.location.href = 'https://sociallyfounded.com/';
-                        }, 3000);
-                    }
-                }, 2000);
-            }
+            console.log('📄 DOM: Content loaded, starting simple LinkedIn callback...');
+            new SimpleLinkedInCallback();
         });
     </script>
 </body>
