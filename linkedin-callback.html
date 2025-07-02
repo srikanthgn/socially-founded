@@ -181,7 +181,7 @@
             }
 
             async fetchLinkedInProfile(accessToken) {
-                // Use modern LinkedIn OpenID Connect userinfo endpoint
+                // Use LinkedIn OpenID Connect userinfo endpoint (you have this product!)
                 const userInfoResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -189,17 +189,18 @@
                 });
 
                 if (!userInfoResponse.ok) {
-                    throw new Error('Failed to fetch LinkedIn profile data');
+                    throw new Error(`Failed to fetch LinkedIn profile: ${userInfoResponse.status} ${userInfoResponse.statusText}`);
                 }
 
                 const userInfo = await userInfoResponse.json();
+                console.log('LinkedIn userInfo response:', userInfo);
                 
                 return {
                     id: userInfo.sub,
-                    firstName: userInfo.given_name,
-                    lastName: userInfo.family_name,
-                    email: userInfo.email,
-                    profilePicture: userInfo.picture
+                    firstName: userInfo.given_name || '',
+                    lastName: userInfo.family_name || '',
+                    email: userInfo.email || '',
+                    profilePicture: userInfo.picture || ''
                 };
             }
 
