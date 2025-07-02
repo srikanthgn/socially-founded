@@ -155,7 +155,7 @@
                     const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!' + Math.random().toString(36).slice(-8);
 
                     // Create user in Firebase Auth
-                    const userCredential = await createUserWithEmailAndPassword(window.firebaseAuth, tempEmail, tempPassword);
+                    const userCredential = await window.createUserWithEmailAndPassword(window.firebaseAuth, tempEmail, tempPassword);
                     const user = userCredential.user;
 
                     // Generate SF Passport ID
@@ -168,8 +168,8 @@
                         displayName: 'LinkedIn Professional', // Will be updated when they complete profile
                         email: tempEmail, // Temporary - will be updated when they complete profile
                         photoURL: '',
-                        createdAt: serverTimestamp(),
-                        lastLoginAt: serverTimestamp(),
+                        createdAt: window.serverTimestamp(),
+                        lastLoginAt: window.serverTimestamp(),
                         authProvider: 'linkedin',
                         linkedinAuthCode: authCode, // Store for future server-side processing
                         accountType: 'linkedin-verified', // Special account type
@@ -180,14 +180,14 @@
                             level: 2, // Start at level 2 for LinkedIn professionals
                             tier: 'Silver', // Upgrade to Silver for LinkedIn verification
                             experience: 250, // Bonus for LinkedIn verification
-                            issuedDate: serverTimestamp(),
+                            issuedDate: window.serverTimestamp(),
                             countryCode: this.getCountryCode()
                         },
 
                         // LinkedIn Professional Status
                         linkedinProfile: {
                             verified: true,
-                            connectedAt: serverTimestamp(),
+                            connectedAt: window.serverTimestamp(),
                             authorizationCode: authCode,
                             profileCompleted: false // Flag to prompt for profile completion
                         },
@@ -219,10 +219,10 @@
                         }
                     };
 
-                    await setDoc(doc(window.firebaseDb, 'users', user.uid), userDoc);
+                    await window.setDoc(window.doc(window.firebaseDb, 'users', user.uid), userDoc);
 
                     // Update Firebase Auth profile
-                    await updateProfile(user, {
+                    await window.updateProfile(user, {
                         displayName: 'LinkedIn Professional'
                     });
 
