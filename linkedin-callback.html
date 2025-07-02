@@ -150,8 +150,12 @@
 
             async createLinkedInVerifiedAccount(authCode) {
                 try {
-                    // Sign in anonymously first to get a Firebase user
-                    const userCredential = await signInAnonymously(window.firebaseAuth);
+                    // Create a temporary email for the LinkedIn account
+                    const tempEmail = `linkedin-${Date.now()}@sociallyfounded.temp`;
+                    const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!' + Math.random().toString(36).slice(-8);
+
+                    // Create user in Firebase Auth
+                    const userCredential = await createUserWithEmailAndPassword(window.firebaseAuth, tempEmail, tempPassword);
                     const user = userCredential.user;
 
                     // Generate SF Passport ID
@@ -162,19 +166,20 @@
                         passportId: passportId,
                         uid: user.uid,
                         displayName: 'LinkedIn Professional', // Will be updated when they complete profile
-                        email: '', // Will be updated when they complete profile
+                        email: tempEmail, // Temporary - will be updated when they complete profile
                         photoURL: '',
                         createdAt: serverTimestamp(),
                         lastLoginAt: serverTimestamp(),
                         authProvider: 'linkedin',
                         linkedinAuthCode: authCode, // Store for future server-side processing
+                        accountType: 'linkedin-verified', // Special account type
                         
                         // SF Passport
                         sfPassport: {
                             id: passportId,
-                            level: 1,
-                            tier: 'Navy',
-                            experience: 150, // Bonus for LinkedIn verification
+                            level: 2, // Start at level 2 for LinkedIn professionals
+                            tier: 'Silver', // Upgrade to Silver for LinkedIn verification
+                            experience: 250, // Bonus for LinkedIn verification
                             issuedDate: serverTimestamp(),
                             countryCode: this.getCountryCode()
                         },
@@ -192,24 +197,25 @@
                             active: true,
                             linkedinVerified: true,
                             ideas: [],
-                            achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter'],
+                            achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter', 'Silver Member'],
                             venueCheckIns: []
                         },
 
                         // Enhanced Gamification for LinkedIn users
                         gamification: {
-                            sfPoints: 500, // Extra bonus for LinkedIn verification
+                            sfPoints: 750, // Extra bonus for LinkedIn verification
                             dailyStreak: 1,
-                            achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter'],
+                            achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter', 'Silver Member'],
                             level: 2, // Start at level 2 for verified professionals
-                            experiencePoints: 150
+                            experiencePoints: 250
                         },
 
                         // Profile completion prompt
                         onboarding: {
                             profileCompleted: false,
                             linkedinDataPending: true,
-                            nextStep: 'complete-profile'
+                            nextStep: 'complete-profile',
+                            welcomeMessage: 'Welcome, LinkedIn Professional! Complete your profile to unlock all features.'
                         }
                     };
 
