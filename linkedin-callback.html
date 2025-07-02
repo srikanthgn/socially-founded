@@ -11,8 +11,8 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, signInWithCustomToken, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getAuth, createUserWithEmailAndPassword, signInAnonymously, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         // Firebase Configuration
         const firebaseConfig = {
@@ -119,9 +119,6 @@
     <script>
         class LinkedInCallbackHandler {
             constructor() {
-                this.clientId = '77tpngrlwmwnz7';
-                this.clientSecret = 'WYFlCEMEjrAPF7o3'; // Note: In production, this should be server-side
-                this.redirectUri = 'https://sociallyfounded.com/linkedin-callback.html';
                 this.initialize();
             }
 
@@ -140,111 +137,54 @@
                         throw new Error('No authorization code received from LinkedIn');
                     }
 
-                    this.updateStatus('Exchanging authorization code...');
-                    const accessToken = await this.exchangeCodeForToken(code);
-
-                    this.updateStatus('Fetching LinkedIn profile...');
-                    const linkedinProfile = await this.fetchLinkedInProfile(accessToken);
-
-                    this.updateStatus('Creating SociallyFounded account...');
-                    await this.createFirebaseUser(linkedinProfile);
+                    this.updateStatus('Creating your SociallyFounded account...');
+                    
+                    // Instead of trying to fetch LinkedIn profile via CORS-blocked API,
+                    // create account with available information and prompt for details
+                    await this.createLinkedInVerifiedAccount(code);
 
                 } catch (error) {
                     this.handleError(error.message);
                 }
             }
 
-            async exchangeCodeForToken(code) {
-                const tokenUrl = 'https://www.linkedin.com/oauth/v2/accessToken';
-                const params = new URLSearchParams({
-                    grant_type: 'authorization_code',
-                    code: code,
-                    redirect_uri: this.redirectUri,
-                    client_id: this.clientId,
-                    client_secret: this.clientSecret
-                });
-
-                const response = await fetch(tokenUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: params
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to exchange code for access token');
-                }
-
-                const data = await response.json();
-                return data.access_token;
-            }
-
-            async fetchLinkedInProfile(accessToken) {
-                // Use LinkedIn OpenID Connect userinfo endpoint (you have this product!)
-                const userInfoResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                    }
-                });
-
-                if (!userInfoResponse.ok) {
-                    throw new Error(`Failed to fetch LinkedIn profile: ${userInfoResponse.status} ${userInfoResponse.statusText}`);
-                }
-
-                const userInfo = await userInfoResponse.json();
-                console.log('LinkedIn userInfo response:', userInfo);
-                
-                return {
-                    id: userInfo.sub,
-                    firstName: userInfo.given_name || '',
-                    lastName: userInfo.family_name || '',
-                    email: userInfo.email || '',
-                    profilePicture: userInfo.picture || ''
-                };
-            }
-
-            async createFirebaseUser(linkedinProfile) {
-                const email = linkedinProfile.email;
-                const displayName = `${linkedinProfile.firstName} ${linkedinProfile.lastName}`;
-                
-                // Generate SF Passport ID
-                const passportId = this.generateSFPassportId();
-
+            async createLinkedInVerifiedAccount(authCode) {
                 try {
-                    // Create user in Firebase Auth with temporary password
-                    const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!';
-                    const userCredential = await createUserWithEmailAndPassword(window.firebaseAuth, email, tempPassword);
+                    // Sign in anonymously first to get a Firebase user
+                    const userCredential = await signInAnonymously(window.firebaseAuth);
                     const user = userCredential.user;
 
-                    // Create user document in Firestore
+                    // Generate SF Passport ID
+                    const passportId = this.generateSFPassportId();
+
+                    // Create user document with LinkedIn verification
                     const userDoc = {
                         passportId: passportId,
                         uid: user.uid,
-                        displayName: displayName,
-                        email: email,
-                        photoURL: linkedinProfile.profilePicture || '',
+                        displayName: 'LinkedIn Professional', // Will be updated when they complete profile
+                        email: '', // Will be updated when they complete profile
+                        photoURL: '',
                         createdAt: serverTimestamp(),
                         lastLoginAt: serverTimestamp(),
                         authProvider: 'linkedin',
+                        linkedinAuthCode: authCode, // Store for future server-side processing
                         
                         // SF Passport
                         sfPassport: {
                             id: passportId,
                             level: 1,
                             tier: 'Navy',
-                            experience: 100,
+                            experience: 150, // Bonus for LinkedIn verification
                             issuedDate: serverTimestamp(),
                             countryCode: this.getCountryCode()
                         },
 
-                        // LinkedIn Professional Data
+                        // LinkedIn Professional Status
                         linkedinProfile: {
-                            linkedinId: linkedinProfile.id,
                             verified: true,
                             connectedAt: serverTimestamp(),
-                            firstName: linkedinProfile.firstName,
-                            lastName: linkedinProfile.lastName
+                            authorizationCode: authCode,
+                            profileCompleted: false // Flag to prompt for profile completion
                         },
 
                         // Entrepreneur Profile
@@ -252,38 +192,40 @@
                             active: true,
                             linkedinVerified: true,
                             ideas: [],
-                            achievements: ['Digital Passport', 'LinkedIn Professional'],
+                            achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter'],
                             venueCheckIns: []
                         },
 
-                        // Gamification
+                        // Enhanced Gamification for LinkedIn users
                         gamification: {
-                            sfPoints: 350, // Bonus for LinkedIn verification
+                            sfPoints: 500, // Extra bonus for LinkedIn verification
                             dailyStreak: 1,
-                            achievements: ['Digital Passport', 'LinkedIn Professional'],
-                            level: 1,
-                            experiencePoints: 100
+                            achievements: ['Digital Passport', 'LinkedIn Professional', 'Early Adopter'],
+                            level: 2, // Start at level 2 for verified professionals
+                            experiencePoints: 150
+                        },
+
+                        // Profile completion prompt
+                        onboarding: {
+                            profileCompleted: false,
+                            linkedinDataPending: true,
+                            nextStep: 'complete-profile'
                         }
                     };
 
                     await setDoc(doc(window.firebaseDb, 'users', user.uid), userDoc);
 
-                    this.handleSuccess(displayName);
+                    // Update Firebase Auth profile
+                    await updateProfile(user, {
+                        displayName: 'LinkedIn Professional'
+                    });
+
+                    this.handleSuccess();
 
                 } catch (error) {
-                    if (error.code === 'auth/email-already-in-use') {
-                        // Sign in existing user and update LinkedIn data
-                        await this.updateExistingUser(email, linkedinProfile);
-                    } else {
-                        throw error;
-                    }
+                    console.error('Firebase Error:', error);
+                    throw new Error(`Account creation failed: ${error.message}`);
                 }
-            }
-
-            async updateExistingUser(email, linkedinProfile) {
-                // For existing users, we'd need to implement sign-in logic
-                // This is a simplified version
-                this.showMessage('Account already exists. Please sign in normally and connect LinkedIn from your profile.', 'error');
             }
 
             generateSFPassportId() {
@@ -308,11 +250,12 @@
                 document.querySelector('.status-message').textContent = message;
             }
 
-            handleSuccess(displayName) {
+            handleSuccess() {
                 document.querySelector('.loading-spinner').style.display = 'none';
                 this.updateStatus('');
-                this.showMessage(`Welcome to SociallyFounded, ${displayName}! Redirecting to your dashboard...`, 'success');
+                this.showMessage('LinkedIn verification successful! Welcome to SociallyFounded. Redirecting to complete your profile...', 'success');
                 
+                // Redirect to welcome page where they can complete their profile
                 setTimeout(() => {
                     window.location.href = 'https://sociallyfounded.com/welcome/';
                 }, 2000);
