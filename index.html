@@ -3,545 +3,923 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SociallyFounded - Where Entrepreneurs Build Together</title>
-    
-    <!-- Brand Fonts -->
+    <title>SociallyFounded - Where Entrepreneurs, Communities & Venues Build Together</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Shared Brand Styles -->
-    <link rel="stylesheet" href="/shared/styling/brand-styles.css">
-    <link rel="stylesheet" href="/shared/styling/component-base.css">
-    
-    <!-- Homepage Specific Styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* SF Brand Font Application - Poppins Throughout */
         * {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
+            box-sizing: border-box;
         }
 
-        /* Homepage Layout - Brand Compliant */
-        .homepage-container {
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #F5F5F5;
             min-height: 100vh;
-            background: #F5F5F5; /* Off-white background for logo compatibility */
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            color: #003554;
             overflow-x: hidden;
-            font-family: 'Poppins', sans-serif;
         }
 
-        /* Header with Logo */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
         .header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
+            background: rgba(245, 245, 245, 0.95);
+            backdrop-filter: blur(10px);
             z-index: 1000;
-            background: #FFFFFF; /* Pure white header */
-            box-shadow: 0 2px 10px rgba(0, 53, 84, 0.1);
-            padding: 15px 20px;
-            border-bottom: 1px solid #E0E0E0;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 53, 84, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 40px;
             height: 40px;
-            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #003554;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #003554;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #D4AF37;
+        }
+
+        .notify-btn {
+            background: #D4AF37;
+            color: #003554;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid #D4AF37;
+        }
+
+        .notify-btn:hover {
+            background: #003554;
+            color: #F5F5F5;
+            transform: translateY(-2px);
         }
 
         /* Hero Section */
-        .hero-section {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 100px 20px 50px;
+        .hero {
+            padding: 120px 0 80px;
             text-align: center;
-            background: #F5F5F5; /* Light gray background */
+            position: relative;
+            background: linear-gradient(135deg, #F5F5F5 0%, #ffffff 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23003554' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-60px); }
         }
 
         .hero-content {
-            max-width: 600px;
-            color: #003554; /* Navy text on light background */
-            font-family: 'Poppins', sans-serif;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #D4AF37;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .hero-title {
-            font-size: 3rem;
-            font-weight: 700; /* Poppins Bold */
-            margin-bottom: 20px;
+            font-size: 3.5rem;
+            font-weight: 700;
             line-height: 1.2;
-            color: #003554; /* Navy text */
-            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #003554 0%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero-subtitle {
-            font-size: 1.25rem;
-            font-weight: 400; /* Poppins Regular */
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: rgba(0, 53, 84, 0.8);
             margin-bottom: 40px;
-            color: #003554; /* Navy text */
-            opacity: 0.8;
-            line-height: 1.5;
-            font-family: 'Poppins', sans-serif;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
         }
 
-        /* Authentication Section - Brand Compliant */
-        .auth-section {
-            background: #FFFFFF; /* Pure white card */
-            border: 2px solid #D4AF37; /* Gold border accent */
-            border-radius: 16px;
-            padding: 40px;
-            margin: 20px 0;
-            box-shadow: 0 8px 32px rgba(0, 53, 84, 0.1);
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 80px;
         }
 
-        .auth-title {
-            font-size: 1.5rem;
-            font-weight: 600; /* Poppins SemiBold */
-            color: #003554; /* Navy text */
-            margin-bottom: 30px;
+        .cta-primary {
+            background: #D4AF37;
+            color: #003554;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid #D4AF37;
+            font-size: 16px;
+        }
+
+        .cta-primary:hover {
+            background: #003554;
+            color: #F5F5F5;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.3);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: #003554;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(0, 53, 84, 0.3);
+            font-size: 16px;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(0, 53, 84, 0.1);
+            border-color: #003554;
+            transform: translateY(-3px);
+        }
+
+        /* Passport Showcase */
+        .passport-showcase {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            perspective: 1000px;
+        }
+
+        .passport-stack {
+            position: relative;
+            width: 160px;
+            height: 220px;
+            transform: rotateY(-15deg) rotateX(5deg);
+            transform-style: preserve-3d;
+            animation: gentleFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: rotateY(-15deg) rotateX(5deg) translateY(0px); }
+            50% { transform: rotateY(-15deg) rotateX(5deg) translateY(-10px); }
+        }
+
+        .passport-card {
+            position: absolute;
+            width: 140px;
+            height: 200px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .passport-card:nth-child(1) {
+            background: linear-gradient(145deg, #003554 0%, #004a6b 100%);
+            transform: translateZ(0px);
+            z-index: 4;
+        }
+
+        .passport-card:nth-child(2) {
+            background: linear-gradient(145deg, #64748b 0%, #94a3b8 100%);
+            transform: translateZ(-8px) translateY(4px);
+            z-index: 3;
+        }
+
+        .passport-card:nth-child(3) {
+            background: linear-gradient(145deg, #D4AF37 0%, #f59e0b 100%);
+            transform: translateZ(-16px) translateY(8px);
+            z-index: 2;
+        }
+
+        .passport-card:nth-child(4) {
+            background: linear-gradient(145deg, #e5e7eb 0%, #f3f4f6 100%);
+            transform: translateZ(-24px) translateY(12px);
+            z-index: 1;
+        }
+
+        .passport-stack:hover .passport-card {
+            transform: translateZ(10px) rotateY(5deg);
+        }
+
+        .passport-content {
+            padding: 25px 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: #F5F5F5;
+        }
+
+        .passport-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .passport-logo {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .passport-title {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            opacity: 0.9;
             text-align: center;
-            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
         }
 
-        /* Atomic Component Containers */
-        .auth-component {
+        .passport-number {
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            text-align: center;
             margin-bottom: 20px;
-            opacity: 0;
-            transform: translateY(20px);
+        }
+
+        .passport-icon {
+            text-align: center;
+            font-size: 16px;
+            color: #D4AF37;
+            margin-top: auto;
+        }
+
+        /* Alternative Headlines */
+        .alternative-headlines {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .headline-option {
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .headline-option.active {
+            display: block;
+        }
+
+        .headline-option h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #003554 0%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .headline-option p {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: rgba(0, 53, 84, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 80px 0;
+            background: #ffffff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: #F5F5F5;
+            border: 1px solid rgba(0, 53, 84, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 53, 84, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #D4AF37;
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #D4AF37 0%, #f4d03f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            color: #003554;
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #003554;
+        }
+
+        .feature-description {
+            color: rgba(0, 53, 84, 0.8);
+            line-height: 1.6;
+        }
+
+        /* Email Signup */
+        .signup {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #003554 0%, #004a6b 100%);
+            text-align: center;
+        }
+
+        .signup-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #F5F5F5;
+        }
+
+        .signup-description {
+            font-size: 1.1rem;
+            color: rgba(245, 245, 245, 0.9);
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .signup-form {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .signup-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid rgba(245, 245, 245, 0.2);
+            border-radius: 30px;
+            background: rgba(245, 245, 245, 0.1);
+            color: #F5F5F5;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            backdrop-filter: blur(10px);
+            min-width: 250px;
+        }
+
+        .signup-input::placeholder {
+            color: rgba(245, 245, 245, 0.6);
+        }
+
+        .signup-input:focus {
+            outline: none;
+            border-color: #D4AF37;
+            background: rgba(245, 245, 245, 0.15);
+        }
+
+        .signup-btn {
+            background: #D4AF37;
+            color: #003554;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Poppins', sans-serif;
         }
 
-        .auth-component.loaded {
-            opacity: 1;
-            transform: translateY(0);
+        .signup-btn:hover {
+            background: #f4d03f;
+            transform: translateY(-2px);
         }
 
-        .component-loader {
+        /* Footer */
+        .footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 53, 84, 0.1);
+            background: #ffffff;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-text {
+            color: rgba(0, 53, 84, 0.6);
+            font-size: 14px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 53, 84, 0.1);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 15px;
-            color: #003554; /* Navy text */
-            font-size: 0.9rem;
-            opacity: 0.7;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400; /* Poppins Regular */
+            color: #003554;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
 
-        .component-loader i {
-            margin-right: 10px;
-            animation: spin 1s linear infinite;
-            color: #D4AF37; /* Gold spinner */
+        .social-link:hover {
+            background: #D4AF37;
+            color: #003554;
+            transform: translateY(-2px);
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        /* Responsive */
+            @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
 
-        /* Features Section - Brand Compliant */
-        .features-section {
-            background: #E0E0E0; /* Light gray section */
-            padding: 60px 20px;
-            border-top: 1px solid #D4AF37; /* Gold accent border */
-        }
-
-        .features-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            background: #FFFFFF; /* White cards */
-            border: 1px solid #E0E0E0;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            color: #003554; /* Navy text */
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 53, 84, 0.15);
-            border-color: #D4AF37; /* Gold border on hover */
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: #D4AF37; /* Gold icons */
-            margin-bottom: 20px;
-        }
-
-        .feature-title {
-            font-size: 1.25rem;
-            font-weight: 600; /* Poppins SemiBold */
-            margin-bottom: 15px;
-            color: #003554; /* Navy text */
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .feature-description {
-            font-size: 0.95rem;
-            color: #003554; /* Navy text */
-            opacity: 0.8;
-            line-height: 1.5;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400; /* Poppins Regular */
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
             .hero-title {
-                font-size: 2.25rem;
+                font-size: 2.5rem;
             }
 
-            .auth-section {
-                margin: 20px;
-                padding: 30px 20px;
+            .hero-subtitle {
+                font-size: 1.1rem;
             }
 
-            .features-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            .hero-cta {
+                flex-direction: column;
+                gap: 15px;
             }
-        }
 
-        /* Component Loading States - Brand Compliant */
-        .component-error {
-            background: rgba(239, 68, 68, 0.1); /* Light red background */
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            color: #dc2626; /* Red text */
-            text-align: center;
-            margin: 10px 0;
-        }
+            .passport-stack {
+                transform: rotateY(0deg) rotateX(0deg);
+                width: 140px;
+                height: 200px;
+            }
 
-        .component-error i {
-            margin-right: 8px;
-            color: #dc2626;
+            .passport-card {
+                position: relative;
+                margin-bottom: 10px;
+            }
+
+            .passport-card:nth-child(1) { transform: none; }
+            .passport-card:nth-child(2) { transform: translateY(4px); }
+            .passport-card:nth-child(3) { transform: translateY(8px); }
+            .passport-card:nth-child(4) { transform: translateY(12px); }
+
+            .headline-option h1 {
+                font-size: 2.5rem;
+            }
+
+            .headline-option p {
+                font-size: 1.1rem;
+            }
+
+            .signup-form {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .signup-input {
+                min-width: 100%;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header with SF Logo -->
+    <!-- Header -->
     <header class="header">
-        <img src="/assets/sf-logo.png" alt="SociallyFounded" class="logo">
+        <nav class="nav container">
+            <div class="logo">
+                <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SociallyFounded Logo" class="logo-img">
+                <div class="logo-text">SociallyFounded</div>
+            </div>
+            <div class="nav-links">
+                <a href="#features">About</a>
+                <a href="#signup">Join Waitlist</a>
+            </div>
+        </nav>
     </header>
 
-    <!-- Homepage Container -->
-    <div class="homepage-container">
-        <!-- Hero Section -->
-        <section class="hero-section">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">Where Entrepreneurs Build Together</h1>
-                <p class="hero-subtitle">
-                    Get your Digital Passport, check in at venues worldwide, 
-                    track your ideas, and join a global community of founders.
-                </p>
-
-                <!-- Authentication Section - Atomic Component Container -->
-                <div class="auth-section">
-                    <h2 class="auth-title">Join the Global Entrepreneurial Community</h2>
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles"></i> Coming Soon
+                </div>
+                
+                <!-- Alternative Headlines -->
+                <div class="alternative-headlines">
+                    <!-- Option 1: Expanded Focus -->
+                    <div class="headline-option active">
+                        <h1>Where Entrepreneurs, Communities & Venues Build Together</h1>
+                        <p>Get your Digital Passport, connect globally, and build meaningful ventures with AI-powered guidance and community support.</p>
+                    </div>
                     
-                    <!-- Google Auth Atomic Component -->
-                    <div id="google-auth-component" class="auth-component">
-                        <div class="component-loader">
-                            <i class="fas fa-spinner"></i>
-                            Loading Google Authentication...
-                        </div>
+                    <!-- Option 2: Communities Connect -->
+                    <div class="headline-option">
+                        <h1>Communities Connect</h1>
+                        <p>From startups to NGOs, social circles to business ventures - every great foundation begins with the right community connections.</p>
                     </div>
-
-                    <!-- LinkedIn Auth Atomic Component -->
-                    <div id="linkedin-auth-component" class="auth-component">
-                        <div class="component-loader">
-                            <i class="fas fa-spinner"></i>
-                            Loading LinkedIn Authentication...
-                        </div>
+                    
+                    <!-- Option 3: Innovation Focus -->
+                    <div class="headline-option">
+                        <h1>Your Ideas Deserve a Global Stage</h1>
+                        <p>Register breakthrough concepts, connect with fellow innovators, and turn your vision into reality with AI-powered guidance.</p>
                     </div>
+                    
+                    <!-- Option 4: Founding Focus -->
+                    <div class="headline-option">
+                        <h1>The Global Founding Platform</h1>
+                        <p>Whether founding businesses, communities, or social change - connect with the people and places that fuel your ambition.</p>
+                    </div>
+                </div>
 
-                    <!-- Email Auth Atomic Component -->
-                    <div id="email-auth-component" class="auth-component">
-                        <div class="component-loader">
-                            <i class="fas fa-spinner"></i>
-                            Loading Email Authentication...
+                <div class="hero-cta">
+                    <a href="#signup" class="cta-primary">
+                        <i class="fas fa-passport"></i> Get Your Passport
+                    </a>
+                    <a href="#features" class="cta-secondary">
+                        <i class="fas fa-play"></i> See How It Works
+                    </a>
+                </div>
+
+                <!-- Passport Showcase -->
+                <div class="passport-showcase">
+                    <div class="passport-stack">
+                        <div class="passport-card">
+                            <div class="passport-content">
+                                <div class="passport-header">
+                                    <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SF" class="passport-logo">
+                                </div>
+                                <div class="passport-title">PASSPORT</div>
+                                <div class="passport-number">SF-1234567-AE</div>
+                                <div class="passport-icon">
+                                    <i class="fas fa-passport"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="passport-card">
+                            <div class="passport-content">
+                                <div class="passport-header">
+                                    <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SF" class="passport-logo">
+                                </div>
+                                <div class="passport-title">PASSPORT</div>
+                                <div class="passport-number">SF-2345678-US</div>
+                                <div class="passport-icon">
+                                    <i class="fas fa-passport"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="passport-card">
+                            <div class="passport-content">
+                                <div class="passport-header">
+                                    <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SF" class="passport-logo">
+                                </div>
+                                <div class="passport-title">PASSPORT</div>
+                                <div class="passport-number">SF-3456789-UK</div>
+                                <div class="passport-icon">
+                                    <i class="fas fa-passport"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="passport-card">
+                            <div class="passport-content">
+                                <div class="passport-header">
+                                    <img src="https://sociallyfounded.com/assets/sf-logo.png" alt="SF" class="passport-logo">
+                                </div>
+                                <div class="passport-title">PASSPORT</div>
+                                <div class="passport-number">SF-4567890-CA</div>
+                                <div class="passport-icon">
+                                    <i class="fas fa-passport"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Features Section -->
-        <section class="features-section">
-            <div class="features-container">
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="timeline-title">What is SociallyFounded?</h2>
+                <p class="timeline-subtitle">The global platform where entrepreneurs, communities & venues build together</p>
+            </div>
+            
+            <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-passport"></i>
                     </div>
-                    <h3 class="feature-title">Digital SF Passport</h3>
+                    <h3 class="feature-title">Digital Passport</h3>
                     <p class="feature-description">
-                        Get your unique SF-ID and build your entrepreneurial identity with achievements and milestones.
+                        Your global identity with SF-XXXXXXX-XX format. 
+                        Check in at venues worldwide and build your professional credibility across communities.
                     </p>
                 </div>
-
+                
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <img src="https://sociallyfounded.com/assets/diana-avatar-64.png" alt="DIANA AI" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #003554;">
+                    </div>
+                    <h3 class="feature-title">DIANA AI Co-Founder</h3>
+                    <p class="feature-description">
+                        Your personal AI advisor. Build your MVP with no tech, get idea validation, 
+                        market analysis, and strategic guidance powered by advanced AI.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
                     </div>
                     <h3 class="feature-title">Global Venue Network</h3>
                     <p class="feature-description">
-                        Check in at entrepreneur-friendly venues worldwide and unlock exclusive benefits and connections.
+                        Access founder-friendly venues worldwide. Earn rewards, 
+                        connect with communities, and build your ventures anywhere.
                     </p>
                 </div>
-
+                
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-lightbulb"></i>
+                        <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3 class="feature-title">AI-Powered Ideas</h3>
+                    <h3 class="feature-title">Idea Protection</h3>
                     <p class="feature-description">
-                        Track your ideas with unique SF-IDs and get AI assistance from DIANA to develop your concepts.
+                        Protect and secure your concepts with unique SF-IDs. 
+                        Print digital certificates and build your innovation portfolio with timestamp protection.
                     </p>
                 </div>
-
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Investor Room</h3>
+                    <p class="feature-description">
+                        Present your AI-assisted deal room to investors. 
+                        Create cap tables, pitch decks, and funding materials with professional-grade tools and community validation.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="feature-title">Mentor Circle</h3>
+                    <p class="feature-description">
+                        Join circles of experienced mentors across industries. 
+                        Get guidance, feedback, and strategic advice from successful founders and experts.
+                    </p>
+                </div>
+                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h3 class="feature-title">Founder Community</h3>
+                    <h3 class="feature-title">Community</h3>
                     <p class="feature-description">
-                        Connect with like-minded entrepreneurs, share experiences, and build lasting business relationships.
+                        Access incubation centers, founder communities, and entrepreneurial ecosystems. 
+                        Connect across sectors - from startups to NGOs, social ventures to business initiatives.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="feature-title">Rewards</h3>
+                    <p class="feature-description">
+                        Earn rewards through engagement and turn them into entrepreneurial benefits. 
+                        Build your reputation through meaningful community contributions and achievements.
                     </p>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
-    <!-- Firebase CDN Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    <!-- Email Signup Section -->
+    <section class="signup" id="signup">
+        <div class="container">
+            <h2 class="signup-title">Be the First to Know</h2>
+            <p class="signup-description">
+                Join our exclusive waitlist and get early access to the platform that's revolutionizing 
+                how entrepreneurs, communities, and venues build together globally.
+            </p>
+            
+            <form class="signup-form" id="waitlistForm">
+                <input 
+                    type="email" 
+                    class="signup-input" 
+                    placeholder="Enter your email address"
+                    required
+                >
+                <button type="submit" class="signup-btn">
+                    <i class="fas fa-paper-plane"></i> Join Waitlist
+                </button>
+            </form>
+        </div>
+    </section>
 
-    <!-- Shared Core Scripts -->
-    <script src="/shared/firebase-config.js"></script>
-    <script src="/shared/component-loader.js"></script>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    © 2025 SociallyFounded. Building the future of global communities.
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    <!-- Homepage Component Loader Script -->
     <script>
-        class HomepageComponentLoader {
-            constructor() {
-                this.componentLoader = null;
-                this.loadedComponents = new Set();
-                this.initialize();
-            }
+        // Headline rotation
+        const headlines = document.querySelectorAll('.headline-option');
+        let currentHeadline = 0;
 
-            async initialize() {
-                console.log('🏠 Homepage: Initializing atomic component loader...');
-                
-                // Wait for ComponentLoader to be available
-                await this.waitForComponentLoader();
-                
-                // Wait for Firebase to be ready
-                await this.waitForFirebase();
-                
-                // Load authentication atomic components in parallel
-                await this.loadAuthenticationComponents();
-                
-                console.log('✅ Homepage: All atomic components loaded successfully');
-            }
-
-            async waitForComponentLoader() {
-                return new Promise((resolve) => {
-                    const checkLoader = () => {
-                        if (window.SFComponentLoader && window.loadComponent) {
-                            console.log('✅ SFComponentLoader ready');
-                            resolve();
-                        } else {
-                            // Check again in 100ms
-                            setTimeout(checkLoader, 100);
-                        }
-                    };
-                    checkLoader();
-                });
-            }
-
-            async waitForFirebase() {
-                return new Promise((resolve) => {
-                    if (window.firebase && window.db) {
-                        resolve();
-                    } else {
-                        const checkFirebase = setInterval(() => {
-                            if (window.firebase && window.db) {
-                                clearInterval(checkFirebase);
-                                resolve();
-                            }
-                        }, 100);
-                    }
-                });
-            }
-
-            async loadAuthenticationComponents() {
-                console.log('🔐 Homepage: Loading authentication atomic components...');
-
-                // Load authentication components in parallel
-                const authPromises = [
-                    this.loadGoogleAuth(),
-                    this.loadLinkedInAuth(),
-                    this.loadEmailAuth()
-                ];
-
-                // Wait for all auth components to load
-                const results = await Promise.allSettled(authPromises);
-                
-                // Log detailed results
-                results.forEach((result, index) => {
-                    const componentNames = ['Google Auth', 'LinkedIn Auth', 'Email Auth'];
-                    if (result.status === 'fulfilled') {
-                        console.log(`✅ ${componentNames[index]} component loaded successfully`);
-                    } else {
-                        console.error(`❌ ${componentNames[index]} component failed to load:`, result.reason);
-                        // Show user-friendly error for missing components
-                        const componentIds = ['google-auth-component', 'linkedin-auth-component', 'email-auth-component'];
-                        this.showComponentNotReady(componentIds[index], componentNames[index]);
-                    }
-                });
-            }
-
-            showComponentNotReady(componentId, componentName) {
-                const container = document.getElementById(componentId);
-                if (container) {
-                    container.innerHTML = `
-                        <div style="
-                            background: rgba(255, 193, 7, 0.1);
-                            border: 2px solid rgba(255, 193, 7, 0.3);
-                            border-radius: 8px;
-                            padding: 20px;
-                            color: #856404;
-                            text-align: center;
-                            font-family: 'Poppins', sans-serif;
-                        ">
-                            <i class="fas fa-tools" style="margin-bottom: 10px; font-size: 1.5rem; color: #D4AF37;"></i>
-                            <div style="font-weight: 600; margin-bottom: 5px;">${componentName} Coming Soon</div>
-                            <div style="font-size: 0.9rem; opacity: 0.8;">This authentication method is being set up.</div>
-                        </div>
-                    `;
-                    this.markComponentLoaded(componentId);
-                }
-            }
-
-            async loadGoogleAuth() {
-                try {
-                    await window.loadComponent(
-                        'google-auth-component',
-                        '/components/authentication/google-auth/google-auth.html'
-                    );
-                    
-                    this.markComponentLoaded('google-auth-component');
-                    this.loadedComponents.add('google-auth');
-                } catch (error) {
-                    this.handleComponentError('google-auth-component', 'Google Authentication', error);
-                }
-            }
-
-            async loadLinkedInAuth() {
-                try {
-                    await window.loadComponent(
-                        'linkedin-auth-component',
-                        '/components/authentication/linkedin-auth/linkedin-auth.html'
-                    );
-                    
-                    this.markComponentLoaded('linkedin-auth-component');
-                    this.loadedComponents.add('linkedin-auth');
-                } catch (error) {
-                    this.handleComponentError('linkedin-auth-component', 'LinkedIn Authentication', error);
-                }
-            }
-
-            async loadEmailAuth() {
-                try {
-                    await window.loadComponent(
-                        'email-auth-component',
-                        '/components/authentication/email-auth/email-auth.html'
-                    );
-                    
-                    this.markComponentLoaded('email-auth-component');
-                    this.loadedComponents.add('email-auth');
-                } catch (error) {
-                    this.handleComponentError('email-auth-component', 'Email Authentication', error);
-                }
-            }
-
-            markComponentLoaded(componentId) {
-                const element = document.getElementById(componentId);
-                if (element) {
-                    element.classList.add('loaded');
-                }
-            }
-
-            handleComponentError(componentId, componentName, error) {
-                console.error(`❌ Failed to load ${componentName}:`, error);
-                
-                const errorHtml = `
-                    <div class="component-error">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        ${componentName} temporarily unavailable
-                    </div>
-                `;
-                
-                document.getElementById(componentId).innerHTML = errorHtml;
-                this.markComponentLoaded(componentId);
-            }
-
-            // Public method to check if components are loaded
-            isComponentLoaded(componentName) {
-                return this.loadedComponents.has(componentName);
-            }
-
-            // Public method to get loaded components
-            getLoadedComponents() {
-                return Array.from(this.loadedComponents);
-            }
+        function rotateHeadlines() {
+            headlines[currentHeadline].classList.remove('active');
+            currentHeadline = (currentHeadline + 1) % headlines.length;
+            headlines[currentHeadline].classList.add('active');
         }
 
-        // Initialize Homepage Component Loader when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            window.homepageLoader = new HomepageComponentLoader();
+        // Rotate headlines every 5 seconds
+        setInterval(rotateHeadlines, 5000);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
 
-        // Global authentication success handler
-        window.onAuthSuccess = function(authData) {
-            console.log('🎉 Authentication successful:', authData);
+        // Waitlist form submission
+        document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
             
-            // Redirect to welcome page with SF Passport
-            window.location.href = '/welcome/';
+            alert('Thank you for joining our waitlist! We\'ll notify you when SociallyFounded launches.');
+            this.reset();
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
 
-        // Global authentication error handler
-        window.onAuthError = function(error) {
-            console.error('❌ Authentication failed:', error);
-            
-            // Show user-friendly error message
-            if (window.errorHandler) {
-                window.errorHandler.showError('Authentication failed. Please try again.');
-            }
-        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
     </script>
 </body>
 </html>
