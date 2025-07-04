@@ -100,7 +100,7 @@
 
         /* Hero Section */
         .hero {
-            padding: 120px 0 80px;
+            padding: 120px 0 60px;
             text-align: center;
             position: relative;
             background: linear-gradient(135deg, #F5F5F5 0%, #ffffff 100%);
@@ -173,7 +173,7 @@
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-            margin-bottom: 80px;
+            margin-bottom: 50px;
         }
 
         .cta-primary {
@@ -326,6 +326,10 @@
             text-align: center;
             margin-bottom: 40px;
             padding: 0 20px;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .headline-option {
@@ -370,7 +374,7 @@
 
         /* Features Grid */
         .features {
-            padding: 80px 0;
+            padding: 60px 0;
             background: #ffffff;
         }
 
@@ -379,6 +383,12 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 40px;
             margin-top: 50px;
+        }
+
+        @media (min-width: 1200px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .feature-card {
@@ -542,7 +552,7 @@
         }
 
         /* Responsive */
-            @media (max-width: 768px) {
+                @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
@@ -558,6 +568,10 @@
             .hero-cta {
                 flex-direction: column;
                 gap: 15px;
+            }
+
+            .alternative-headlines {
+                min-height: 160px;
             }
 
             .passport-stack {
@@ -582,6 +596,10 @@
 
             .headline-option p {
                 font-size: 1.1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
             }
 
             .signup-form {
@@ -797,8 +815,19 @@
                     </div>
                     <h3 class="feature-title">Community</h3>
                     <p class="feature-description">
-                        Access incubation centers, founder communities, and entrepreneurial ecosystems. 
-                        Connect across sectors - from startups to NGOs, social ventures to business initiatives.
+                        Build any community - residential groups, lifestyle circles, interest-based networks. 
+                        Connect with like-minded founders across all sectors, from startups to social initiatives.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="feature-title">Partners</h3>
+                    <p class="feature-description">
+                        Access innovation hubs, entrepreneur support programs, and essential business tools. 
+                        Connect with accelerators, incubators, and service providers globally.
                     </p>
                 </div>
                 
@@ -850,12 +879,6 @@
                     <a href="#" class="social-link">
                         <i class="fab fa-linkedin"></i>
                     </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fab fa-instagram"></i>
-                    </a>
                 </div>
             </div>
         </div>
@@ -894,7 +917,18 @@
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
             
+            // Send email to partnerships@4sqcapital.com
+            const subject = encodeURIComponent('SociallyFounded Waitlist Signup');
+            const body = encodeURIComponent(`New waitlist signup: ${email}\n\nTimestamp: ${new Date().toISOString()}`);
+            const mailtoLink = `mailto:partnerships@4sqcapital.com?subject=${subject}&body=${body}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
             alert('Thank you for joining our waitlist! We\'ll notify you when SociallyFounded launches.');
+            
+            // Clear the form
             this.reset();
         });
 
